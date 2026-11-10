@@ -1,0 +1,12 @@
+.git
+node_modules
+.env*
+**/.env*
+selfhost/secrets
+selfhost/data
+selfhost/generated
+dist
+*.dump
+warehouse-*/
+
+selfhost/local-demo-data/

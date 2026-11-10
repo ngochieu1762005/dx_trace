@@ -1,0 +1,9 @@
+node_modules/
+selfhost/generated/
+selfhost/data/
+.env
+selfhost/.env
+*.dump
+warehouse-*/
+
+selfhost/local-demo-data/
