@@ -1,0 +1,34 @@
+<!doctype html>
+<!--
+DX-TRACE | Training scenario selector
+
+@Project DX-TRACE
+@Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+@File public/demo/index.html
+SPDX-License-Identifier: MIT
+
+MIT License
+
+Copyright (c) 2026 DX-TRACE contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Diễn tập vận hành · DX-TRACE</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f5f8fc;color:#182538;font:16px/1.55 system-ui,sans-serif}main{max-width:920px;margin:auto;padding:32px 20px}a{color:#164fa4}h1{font-size:clamp(30px,5vw,48px);margin:24px 0 0}nav{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0}button{font:inherit;cursor:pointer;border:1px solid #a1b4cb;background:white;border-radius:8px;padding:9px 14px;color:#17344e}button[aria-pressed=true],.action{background:#174f9b;color:white}article{background:white;border:1px solid #d6dee8;border-radius:16px;padding:clamp(20px,4vw,36px)}h2{margin:5px 0}small{color:#496076}output{display:block;background:#eff5fc;padding:14px;margin:14px 0}button:disabled{opacity:.55;cursor:default}footer{margin-top:20px}li{margin:6px 0}
+</style><main><a href="/?area=training#overview">← Kho thực hành DX-TRACE</a><h1>Diễn tập vận hành</h1><p>Chọn tình huống, thực hiện từng bước và theo dõi kết quả. Dữ liệu mô phỏng chỉ tồn tại trong trang này.</p><nav aria-label="Chọn tình huống"></nav><article><small id="code"></small><h2 id="title"></h2><p id="intro"></p><output aria-live="polite"></output><button class="action"></button> <button id="reset">Làm lại</button><footer><strong>Nhật ký diễn tập</strong><ol></ol></footer></article></main><script src="scenarios.js"></script></html>
