@@ -1,0 +1,105 @@
+# DX-TRACE | Self-hosted application and identity services
+#
+# @Project DX-TRACE
+# @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+# @File selfhost/compose.yaml
+# SPDX-License-Identifier: MIT
+#
+# MIT License
+#
+# Copyright (c) 2026 DX-TRACE contributors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+services:
+  gateway:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80","443:443"]
+    environment:
+      APP_HOST: ${APP_HOST:?}
+      ID_HOST: ${ID_HOST:?}
+    volumes: ["./Caddyfile:/etc/caddy/Caddyfile:ro","tls:/data"]
+    networks: [edge, appnet]
+  identitydb:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: identity
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?}
+    volumes: ["identitydata:/var/lib/postgresql/data"]
+    networks: [dbnet]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U keycloak -d identity"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  identity:
+    image: quay.io/keycloak/keycloak:26.4.7
+    restart: unless-stopped
+    command: ["start","--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://identitydb:5432/identity
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${DB_PASSWORD:?}
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${ADMIN_PASSWORD:?}
+      KC_HOSTNAME: https://${ID_HOST:?}
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:?}
+      APP_HOST: ${APP_HOST:?}
+    volumes: ["./realm.json:/opt/keycloak/data/import/warehouse.json:ro"]
+    depends_on:
+      identitydb:
+        condition: service_healthy
+    networks: [edge, dbnet]
+  signin:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.12.0
+    restart: unless-stopped
+    environment:
+      OAUTH2_PROXY_PROVIDER: oidc
+      OAUTH2_PROXY_OIDC_ISSUER_URL: https://${ID_HOST:?}/realms/warehouse
+      OAUTH2_PROXY_CLIENT_ID: dx-trace
+      OAUTH2_PROXY_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:?}
+      OAUTH2_PROXY_COOKIE_SECRET: ${COOKIE_SECRET:?}
+      OAUTH2_PROXY_COOKIE_SECURE: "true"
+      OAUTH2_PROXY_COOKIE_SAMESITE: lax
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_USER_ID_CLAIM: sub
+      OAUTH2_PROXY_SCOPE: "openid email profile"
+      OAUTH2_PROXY_REDIRECT_URL: https://${APP_HOST:?}/oauth2/callback
+      OAUTH2_PROXY_UPSTREAMS: http://app:8080/
+      OAUTH2_PROXY_HTTP_ADDRESS: 0.0.0.0:4180
+      OAUTH2_PROXY_REVERSE_PROXY: "true"
+      OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      OAUTH2_PROXY_PASS_USER_HEADERS: "true"
+      OAUTH2_PROXY_PASS_BASIC_AUTH: "false"
+      OAUTH2_PROXY_CODE_CHALLENGE_METHOD: S256
+    networks: [edge, appnet]
+  app:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    restart: unless-stopped
+    environment:
+      PUBLIC_ORIGIN: https://${APP_HOST:?}
+    volumes: ["warehouse:/app/data"]
+    networks: [appnet]
+volumes: {tls: {}, identitydata: {}, warehouse: {}}
+networks: {edge: {}, appnet: {}, dbnet: {internal: true}}
