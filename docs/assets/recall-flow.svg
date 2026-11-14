@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1100 509" role="img"><title>Thu hồi  /  Đầu dò, phiếu giao và hàng trả</title><desc>Sự cố bám theo mã lô; số cần thu được tính riêng cho từng điểm nhận.</desc><defs>
+<marker id="a0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#164d78"/></marker>
+<marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#166a58"/></marker>
+<marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#734584"/></marker>
+<marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9b541b"/></marker>
+</defs><g font-family="DejaVu Sans, sans-serif">
+<rect x="0" y="0" width="1100" height="509" rx="8" fill="#fff" stroke="none"/>
+<text x="22" y="35" font-size="26" fill="#193146" font-weight="700">Thu hồi  /  Đầu dò, phiếu giao và hàng trả</text>
+<text x="22" y="62" font-size="16" fill="#193146" font-weight="400">Sự cố bám theo mã lô; số cần thu được tính riêng cho từng điểm nhận.</text>
+<rect x="12" y="83" width="1076" height="116" rx="8" fill="#eef5fa" stroke="none"/>
+<text x="24" y="107" font-size="15" fill="#164d78" font-weight="700">Phát hiện và cách ly</text>
+<rect x="25" y="117" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(37 139)"><path d="M9 14V5a3 3 0 0 1 6 0v9a5 5 0 1 1-6 0z M12 8v9" fill="none" stroke="#164d78" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="81" y="139" font-size="17" fill="#193146" font-weight="700">Tiếp nhận số đo</text>
+<text x="81" y="160" font-size="14" fill="#193146" font-weight="400">Mã phép đo · UTC · nhiệt độ</text>
+<text x="81" y="178" font-size="13" fill="#41576a" font-weight="400">Kiểm tra khóa và phép đo trùng</text>
+<rect x="384" y="117" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(396 139)"><path d="M2 3h7v5H2z M15 16h7v5h-7z M5 8v10h10 M9 5h10v11" fill="none" stroke="#164d78" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="440" y="139" font-size="17" fill="#193146" font-weight="700">Kiểm tra ba số đo</text>
+<text x="440" y="160" font-size="14" fill="#193146" font-weight="400">Ba lần liên tiếp vượt ngưỡng</text>
+<text x="440" y="178" font-size="13" fill="#41576a" font-weight="400">Trong cửa sổ 10 phút</text>
+<rect x="743" y="117" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(755 139)"><path d="M12 2l9 4v6q0 6-9 10-9-4-9-10V6z M7 12l3 3 6-7" fill="none" stroke="#164d78" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="799" y="139" font-size="17" fill="#193146" font-weight="700">Mở sự cố nếu đủ điều kiện</text>
+<text x="799" y="160" font-size="14" fill="#193146" font-weight="400">Cách ly lô, chặn xuất tiếp</text>
+<text x="799" y="178" font-size="13" fill="#41576a" font-weight="400">Quản lý xem xét và duyệt thu hồi</text>
+<rect x="12" y="218" width="1076" height="116" rx="8" fill="#eef7f2" stroke="none"/>
+<text x="24" y="242" font-size="15" fill="#166a58" font-weight="700">Sau khi phê duyệt: ba kết quả cần theo dõi</text>
+<rect x="25" y="252" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(37 274)"><path d="M2 7l10-5 10 5-10 5z M2 7v11l10 5 10-5V7 M12 12v11" fill="none" stroke="#166a58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="81" y="274" font-size="17" fill="#193146" font-weight="700">Phiếu đang chờ giao</text>
+<text x="81" y="295" font-size="14" fill="#193146" font-weight="400">Hủy phiếu, giữ hàng tại kho</text>
+<text x="81" y="313" font-size="13" fill="#41576a" font-weight="400">SUA-005: 12 hộp ở Thanh Xuân</text>
+<rect x="384" y="252" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(396 274)"><path d="M3 8l2-6h14l2 6 M3 8h18v4H3z M5 12v9h14v-9" fill="none" stroke="#166a58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="440" y="274" font-size="17" fill="#193146" font-weight="700">Phiếu đã giao</text>
+<text x="440" y="295" font-size="14" fill="#193146" font-weight="400">Nhận trả theo số thực nhận</text>
+<text x="440" y="313" font-size="13" fill="#41576a" font-weight="400">50 đã giao − 17 đã trả = 33</text>
+<rect x="743" y="252" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(755 274)"><path d="M2 12l6 6L22 4" fill="none" stroke="#166a58" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="799" y="274" font-size="17" fill="#193146" font-weight="700">Điều kiện đóng</text>
+<text x="799" y="295" font-size="14" fill="#193146" font-weight="400">Xử lý hết phiếu và hàng cần thu</text>
+<text x="799" y="313" font-size="13" fill="#41576a" font-weight="400">Lô tiếp tục bị chặn xuất</text>
+<rect x="12" y="353" width="1076" height="116" rx="8" fill="#f5f0f8" stroke="none"/>
+<text x="24" y="377" font-size="15" fill="#734584" font-weight="700">Đối chiếu trong mã</text>
+<rect x="25" y="387" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(37 409)"><path d="M2 3h7v5H2z M15 16h7v5h-7z M5 8v10h10 M9 5h10v11" fill="none" stroke="#734584" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="81" y="409" font-size="17" fill="#193146" font-weight="700">lib/domain.mjs</text>
+<text x="81" y="430" font-size="14" fill="#193146" font-weight="400">Quyền và chuyển trạng thái</text>
+<text x="81" y="448" font-size="13" fill="#41576a" font-weight="400">Từ chối trả vượt số còn lại</text>
+<rect x="384" y="387" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<g transform="translate(396 409)"><path d="M7 5l-5 7 5 7 M17 5l5 7-5 7 M14 3l-4 18" fill="none" stroke="#734584" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="440" y="409" font-size="17" fill="#193146" font-weight="700">lib/impact.mjs</text>
+<text x="440" y="430" font-size="14" fill="#193146" font-weight="400">Nhóm theo lô và điểm nhận</text>
+<text x="440" y="448" font-size="13" fill="#41576a" font-weight="400">Long Biên: 13 · Tây Hồ: 20</text>
+<rect x="743" y="387" width="327" height="70" rx="8" fill="white" stroke="#d0d9df"/>
+<image x="753" y="403" width="37" height="36" xlink:href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTI4IDEyOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNxbGl0ZS1vcmlnaW5hbC1hIiB4MT0iLTE1LjYxNSIgeDI9Ii02Ljc0MSIgeTE9Ii05LjEwOCIgeTI9Ii05LjEwOCIgZ3JhZGllbnRUcmFuc2Zvcm09InJvdGF0ZSg5MCAtOTAuNDg2IDY0LjYzNCkgc2NhbGUoOS4yNzEyKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiM5NWQ3ZjQiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiMwZjdmY2MiIG9mZnNldD0iLjkyIi8+PHN0b3Agc3RvcC1jb2xvcj0iIzBmN2ZjYyIgb2Zmc2V0PSIxIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZD0iTTY5LjUgOTkuMTc2Yy0uMDU5LS43My0uMDk0LTEuMi0uMDk0LTEuMlM2Ny4yIDgzLjA4NyA2NC41NyA3OC42NDJjLS40MTQtLjcwNy4wNDMtMy41OTQgMS4yMDctNy44OC42OCAxLjE2OSAzLjU0IDYuMTkyIDQuMTE4IDcuODEuNjQ4IDEuODI0Ljc4IDIuMzQ3Ljc4IDIuMzQ3cy0xLjU3LTguMDgyLTQuMTQ0LTEyLjc5N2ExNjIuMjg2IDE2Mi4yODYgMCAwMTIuMDA0LTYuMjY1Yy45NzMgMS43MSAzLjMxMyA1Ljg1OSAzLjgyOCA3LjMuMTAyLjI5My4xOTIuNTQzLjI3Ljc3NC4wMjMtLjEzNy4wNS0uMjc0LjA3NC0uNDE0LS41OS0yLjUwNC0xLjc1LTYuODYtMy4zMzYtMTAuMDgyIDMuNTItMTguMzI4IDE1LjUzMS00Mi44MjQgMjcuODQtNTMuNzU0SDE2LjljLTUuMzg3IDAtOS43ODkgNC40MDYtOS43ODkgOS43ODl2ODguNTdjMCA1LjM4MyA0LjQwNiA5Ljc4OSA5Ljc5IDkuNzg5aDUyLjg5N2ExMTguNjU3IDExOC42NTcgMCAwMS0uMjk3LTE0LjY1MiIgZmlsbD0iIzBiN2ZjYyIvPjxwYXRoIGQ9Ik02NS43NzcgNzAuNzYyYy42OCAxLjE2OCAzLjU0IDYuMTg4IDQuMTE3IDcuODA5LjY0OSAxLjgyNC43ODEgMi4zNDcuNzgxIDIuMzQ3cy0xLjU3LTguMDgyLTQuMTQ0LTEyLjc5N2ExNjQuNTM1IDE2NC41MzUgMCAwMTIuMDA0LTYuMjdjLjg4NyAxLjU2NyAyLjkyMiA1LjE2OSAzLjY1MiA2Ljg3MmwuMDgyLS45NjFjLS42NDgtMi40OTYtMS42MzMtNS43NjYtMi44OTgtOC4zMjggMy4yNDItMTYuODcxIDEzLjY4LTM4Ljk3IDI0LjkyNi01MC44OThIMTYuODk5YTYuOTQgNi45NCAwIDAwLTYuOTM0IDYuOTMzdjgyLjExYzE3LjUyNy02LjczMSAzOC42NjQtMTIuODggNTYuODU1LTEyLjYxNC0uNjcyLTIuNjA1LTEuNDQxLTQuOTYtMi4yNS02LjMyNC0uNDE0LS43MDcuMDQzLTMuNTk3IDEuMjA3LTcuODc5IiBmaWxsPSJ1cmwoI3NxbGl0ZS1vcmlnaW5hbC1hKSIvPjxwYXRoIGQ9Ik0xMTUuOTUgMi43ODFjLTUuNS00LjkwNi0xMi4xNjQtMi45MzMtMTguNzM0IDIuODk5YTQ0LjM0NyA0NC4zNDcgMCAwMC0yLjkxNCAyLjg1OWMtMTEuMjUgMTEuOTI2LTIxLjY4NCAzNC4wMjMtMjQuOTI2IDUwLjg5NSAxLjI2MiAyLjU2MyAyLjI1IDUuODMyIDIuODk0IDguMzI4LjE2OC42NC4zMiAxLjI0Mi40NDIgMS43NTQuMjg1IDEuMjA3LjQzNyAxLjk5Ni40MzcgMS45OTZzLS4xMDEtLjM4My0uNTE1LTEuNTgyYy0uMDc4LS4yMy0uMTY4LS40ODQtLjI3LS43NzMtLjA0My0uMTI1LS4xMDUtLjI3NC0uMTcyLS40MzQtLjczNC0xLjcwMy0yLjc2NS01LjMwNS0zLjY1Ni02Ljg2Ny0uNzYyIDIuMjUtMS40MzcgNC4zNi0yLjAwNCA2LjI2NSAyLjU3OCA0LjcxNSA0LjE0OSAxMi43OTcgNC4xNDkgMTIuNzk3cy0uMTM3LS41MjMtLjc4Mi0yLjM0N2MtLjU3OC0xLjYyMS0zLjQ0MS02LjY0LTQuMTE3LTcuODA5LTEuMTY0IDQuMjgxLTEuNjI1IDcuMTcyLTEuMjA3IDcuODguODA5IDEuMzYyIDEuNTc0IDMuNzIyIDIuMjUgNi4zMjMgMS41MjQgNS44NjcgMi41ODYgMTMuMDEyIDIuNTg2IDEzLjAxMnMuMDMxLjQ2OS4wOTQgMS4yYTExOC42NTMgMTE4LjY1MyAwIDAwLjI5NyAxNC42NTFjLjUwNCA2LjExIDEuNDUzIDExLjM2MyAyLjY2NCAxNC4xNzJsLjgyOC0uNDQ5Yy0xLjc4MS01LjUzNS0yLjUwNC0xMi43OTMtMi4xODgtMjEuMTU2LjQ4LTEyLjc5MyAzLjQyMi0yOC4yMTUgOC44NTYtNDQuMjg5IDkuMTkxLTI0LjI3IDIxLjkzOC00My43MzggMzMuNjAyLTUzLjAzNS0xMC42MzMgOS42MDItMjUuMDIzIDQwLjY4NC0yOS4zMzIgNTIuMTk1LTQuODIgMTIuODkxLTguMjM4IDI0Ljk4NC0xMC4zMDEgMzYuNTc0IDMuNTUtMTAuODYzIDE1LjA0Ny0xNS41MyAxNS4wNDctMTUuNTNzNS42MzctNi45NTggMTIuMjI3LTE2Ljg4OGMtMy45NS45MDMtMTAuNDMgMi40NDItMTIuNTk4IDMuMzUyLTMuMiAxLjM0NC00LjA2NyAxLjgtNC4wNjcgMS44czEwLjM3MS02LjMxMiAxOS4yNy05LjE3MWMxMi4yMzQtMTkuMjcgMjUuNTYyLTQ2LjY0OCAxMi4xNDEtNTguNjIxIiBmaWxsPSIjMDAzOTU2Ii8+PC9zdmc+Cg=="/>
+<text x="799" y="409" font-size="17" fill="#193146" font-weight="700">lib/server.ts</text>
+<text x="799" y="430" font-size="14" fill="#193146" font-weight="400">Kiểm tra revision và mã yêu cầu</text>
+<text x="799" y="448" font-size="13" fill="#41576a" font-weight="400">Lưu trạng thái và nhật ký</text>
+<path d="M352 152h31" fill="none" stroke="#164d78" stroke-width="2" marker-end="url(#a0)"/>
+<path d="M711 152h31" fill="none" stroke="#164d78" stroke-width="2" marker-end="url(#a0)"/>
+</g></svg>
