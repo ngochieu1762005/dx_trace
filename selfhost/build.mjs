@@ -31,4 +31,4 @@
 import { build } from 'vite';
 import path from 'node:path';
 const out='selfhost/generated';
-await build({configFile:false,root:'selfhost/ui',publicDir:path.resolve('public'),resolve:{alias:{'@':process.cwd()}},oxc:{jsx:{runtime:'automatic'}},build:{outDir:path.resolve(out,'web'),emptyOutDir:true}});
+await build({configFile:false,root:'selfhost/ui',publicDir:path.resolve('public'),resolve:{alias:{'@':process.cwd()}},oxc:{jsx:{runtime:'automatic'}},css:{postcss:{plugins:[]}},build:{outDir:path.resolve(out,'web'),emptyOutDir:true}});
