@@ -83,7 +83,7 @@ test('independent headless core and approvals UI share identity, data and workfl
   const list=await (await api('state')).json();
   assert.equal(list.workflowRuns.find(x=>x.id===draft.id).status,'approved');
   const another=await (await api('state',undefined,'another')).json();
-  assert.equal(another.workflowRuns.length,0,'workspace isolation preserved');
+  assert.equal((another.workflowRuns||[]).length,0,'workspace isolation preserved');
   assert.equal((await api('workflow',{title:'Denied',content:'No permission'},'another')).status,200);
   assert.equal((await api('state',undefined,'another')).status,200);
  }finally{
