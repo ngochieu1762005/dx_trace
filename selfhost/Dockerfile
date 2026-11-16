@@ -39,6 +39,7 @@ COPY --from=build /app/lib lib
 COPY --from=build /app/app/api app/api
 COPY --from=build /app/package.json .
 COPY --from=build /app/LICENSE .
+# This image runs either the isolated core or the presentation server via Compose command.
 COPY --from=build /app/drizzle drizzle
 RUN mkdir -p node_modules data && chown node:node data
 COPY --from=build /app/node_modules/.pnpm/zod@3.25.76/node_modules/zod node_modules/zod
