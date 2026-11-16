@@ -1,25 +1,28 @@
 # DX-TRACE
 
-**Truy xuất lô thực phẩm và điều phối thu hồi** · Phiên bản 0.0.1 · [MIT License](LICENSE)
+**DX-OS Open-Core · Food Traceability & Recall Management**
 
-[Dựng kho trên máy chủ](#quick-setup) · [Xem kiến trúc](#architecture) · [Diễn tập SUA-005](#features) · [Tra cứu API](docs/API.md)
+Nền tảng nguồn mở phục vụ **truy xuất nguồn gốc theo lô, giám sát điều kiện bảo quản và điều phối thu hồi thực phẩm**. DX-TRACE tách **lõi dịch vụ không giao diện (headless Core API)** khỏi **hai ứng dụng nghiệp vụ**; các ứng dụng dùng chung định danh, phân quyền, kho dữ liệu và API quy trình.
+
+[Kiến trúc DX-OS](#architecture) · [Hai ứng dụng](#applications) · [Cài đặt & demo](#quick-setup) · [Đối chiếu đề thi](REQUIREMENTS.md) · [API](docs/API.md) · [MIT License](LICENSE)
+
+> **Trạng thái phát hành:** [v0.0.1](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.1) là bản phát hành công khai đầu tiên. Kiến trúc headless tách dịch vụ và ứng dụng Approvals đã nằm trên nhánh `main` nhưng **chưa có release phiên bản mới**. Các tính năng trên `main` cần được triển khai và kiểm chứng đầy đủ trước khi đưa vào môi trường vận hành.
 
 <a id="contents"></a>
 
 ## 📋 Table of Contents
 
-- [Introduction](#introduction)
-- [System Architecture](#architecture)
-- [Technologies Used](#technologies)
-- [Features](#features)
-- [System Requirements](#requirements)
-- [Headless Core & Separate Apps](docs/HEADLESS-CORE.md)
-- [Quick Setup](#quick-setup)
-- [Detailed Setup](#detailed-setup)
-- [Changelog](#changelog)
-- [Contribution](#contribution)
-- [License](#license)
-- [Contact](#contact)
+- [Giới thiệu](#introduction)
+- [Kiến trúc DX-OS Open-Core](#architecture)
+- [Hai ứng dụng dùng chung nền tảng](#applications)
+- [Công nghệ sử dụng](#technologies)
+- [Chức năng và dữ liệu mẫu](#features)
+- [Yêu cầu hệ thống](#requirements)
+- [Cài đặt nhanh](#quick-setup)
+- [Hướng dẫn & kiểm thử](#detailed-setup)
+- [Trạng thái phát hành](#changelog)
+- [Đóng góp và giấy phép](#contribution)
+- [Liên hệ](#contact)
 
 <a id="introduction"></a>
 
@@ -29,13 +32,46 @@ DX-TRACE giúp đội vận hành kho thực phẩm xác định phạm vi ảnh
 
 Ví dụ, khi một lô sữa đã đến hai điểm nhận, người quản lý có thể xem số phải thu tại từng nơi và những phiếu chưa giao cần hủy. Cùng một hồ sơ lô liên kết số đo nhiệt độ, chứng từ và lịch sử xử lý.
 
+DX-TRACE được phát triển theo định hướng đề thi **Olympic Phần mềm nguồn mở 2026 — DX-OS Open-Core**. Mục tiêu là minh chứng các dịch vụ nền tảng dùng chung (Identity/SSO, API, dữ liệu có cấu trúc/phi cấu trúc, Workflow) bằng một bài toán truy xuất và thu hồi thực tế. [Đối chiếu cụ thể các yêu cầu và giới hạn hiện tại](REQUIREMENTS.md).
+
 <a id="architecture"></a>
 
 ## 🏗️ System Architecture
 
-### Bản đồ toàn dự án
+### Kiến trúc triển khai trên máy chủ
 
-![Toàn cảnh DX-TRACE từ trình duyệt và đầu dò tới lõi nghiệp vụ, dịch vụ ngoài và phát hành](docs/assets/project-overview.svg)
+```mermaid
+flowchart TB
+    User["Người dùng trình duyệt"] --> Gateway["Caddy · HTTPS / API edge"]
+    Sensor["Thiết bị cảm biến"] --> Gateway
+    Gateway --> SignIn["OAuth2 Proxy · OIDC"]
+    SignIn <--> Keycloak["Keycloak · Identity/SSO"]
+    Keycloak --> IDDB[("PostgreSQL · danh tính")]
+    SignIn --> Web["Web app · UI và reverse proxy"]
+    Gateway -->|"POST /api/ingest"| Web
+    Web --> Warehouse["Ứng dụng 01 · DX-TRACE Warehouse"]
+    Web --> Approvals["Ứng dụng 02 · DX Approvals"]
+    Web -->|"DX_CORE_TOKEN · mạng Docker"| Core["Headless Core API · Node.js"]
+    Core --> Data[("SQLite · workspace & giao dịch")]
+    Core --> Files[("Kho tệp · SHA-256")]
+    Core --> Workflow["Workflow · RBAC & audit"]
+```
+
+**Phân tách trách nhiệm:** `gateway` và `signin` cung cấp biên truy cập/SSO; `app` phục vụ giao diện và chuyển tiếp API; `core` chạy API độc lập, giữ volume dữ liệu, **không cung cấp giao diện và không công bố cổng ra host**. Quy tắc nghiệp vụ và phân quyền được kiểm tra phía Core. Chế độ demo trên máy cá nhân là ngoại lệ, chạy backend cùng tiến trình để không cần Docker/Keycloak.
+
+[Chi tiết ranh giới bảo mật, cách triển khai và giới hạn](docs/HEADLESS-CORE.md) · [Compose](selfhost/compose.yaml) · [Core server](selfhost/core-server.mjs)
+
+### Ánh xạ ba tầng và H–P–D–I
+
+| Tầng DX-OS | Triển khai trong dự án |
+| --- | --- |
+| **Tầng 1 — Headless Core** | OIDC/SSO (Keycloak), cổng HTTPS (Caddy), API nội bộ, SQLite, tệp và Workflow |
+| **Tầng 2 — Năng lực H–P–D–I** | **H**: tài khoản/vai trò; **P**: đề xuất và duyệt; **D**: thống kê lô, đối soát, cảm biến; **I**: tra cứu SOP, kết nối AI tùy chọn |
+| **Tầng 3 — Ứng dụng nghiệp vụ** | Truy xuất thực phẩm, quản lý lô, giao nhận và điều phối thu hồi |
+
+### Bản đồ mô-đun nghiệp vụ
+
+![Các mô-đun và luồng nghiệp vụ DX-TRACE](docs/assets/project-overview.svg)
 
 | Câu hỏi | Điểm bắt đầu trong mã |
 | --- | --- |
@@ -47,12 +83,11 @@ Ví dụ, khi một lô sữa đã đến hai điểm nhận, người quản l�
 
 ### Triển khai và ranh giới xác thực
 
-**Bản triển khai mới:** `core` là máy chủ API headless riêng, chỉ sử dụng mạng Docker nội bộ và giữ volume kho; `app` chỉ phục vụ web, chuyển API tới `core`. Giao diện kho và [ứng dụng phê duyệt độc lập](/apps/approvals/index.html) dùng chung SSO và dữ liệu. [Đọc kiến trúc và giới hạn xác minh](docs/HEADLESS-CORE.md).
+Máy chủ sử dụng hai tên miền: một cho ứng dụng và một cho Keycloak. Caddy là thành phần duy nhất công bố cổng 80/443 ra ngoài. Người dùng đi qua OAuth2 Proxy và OIDC, trong khi cảm biến gửi số đo bằng khóa thiết bị thông qua `POST /api/ingest`.
 
+**Lưu ý:** sơ đồ SVG dưới đây được thiết kế trước khi tách container `core`; để xem **luồng triển khai hiện tại**, sử dụng biểu đồ Mermaid ở đầu mục này và [cấu hình Compose](selfhost/compose.yaml).
 
-DX-TRACE chạy trên một máy chủ với hai tên miền: một cho kho, một cho đăng nhập. Caddy là dịch vụ duy nhất công bố cổng ra ngoài. Điểm cần đọc trên sơ đồ là chỗ hai luồng tách nhau: nhân viên vào kho bằng phiên OIDC, còn đầu dò gửi nhiệt độ bằng khóa thiết bị gắn với một lô hàng.
-
-![Sơ đồ triển khai DX-TRACE: hai nguồn truy cập, năm dịch vụ và hai vùng dữ liệu độc lập](docs/assets/architecture.svg)
+![Sơ đồ luồng xác thực và dữ liệu ở bản thiết kế trước khi tách Core](docs/assets/architecture.svg)
 
 ### Khi quét mã vạch, yêu cầu đi đâu?
 
@@ -100,6 +135,21 @@ Các nhãn dưới tên dịch vụ trong hình là **tuyến phía DX-TRACE**. 
 
 Một tag phiên bản xác định **mã nguồn**; bản sao lưu xác định **trạng thái kho tại một thời điểm**. Muốn dựng lại hệ thống đang vận hành, cần cả hai, kèm cấu hình tên miền, bí mật OIDC và dữ liệu danh tính. [Hướng dẫn phục hồi trên máy chủ mới](selfhost/README.md).
 
+<a id="applications"></a>
+
+## 🧩 Hai ứng dụng dùng chung nền tảng
+
+| Ứng dụng | Đường dẫn (sau khi triển khai) | Chức năng |
+| --- | --- | --- |
+| **DX-TRACE Warehouse** | `https://kho.example.org/` | Lô hàng, nhà cung cấp, giao nhận, QR/mã vạch, cảnh báo nhiệt độ, sự cố và thu hồi |
+| **DX Approvals** | `https://kho.example.org/apps/approvals/index.html` | Tạo đề xuất, gửi duyệt, phê duyệt/từ chối và theo dõi trạng thái |
+
+Hai ứng dụng có **giao diện độc lập** nhưng truy cập cùng `/api`, cùng danh tính OIDC, quyền theo workspace và dữ liệu lưu trên Core. Đề xuất tạo ở Approvals có thể xem trong mục **Đề xuất nội bộ** của Warehouse.
+
+Workflow hiện hỗ trợ các bước **draft → submitted → approved / rejected** và kiểm soát vai trò ở backend. Đây là quy trình được định nghĩa trong mã, **chưa phải BPMN engine cho phép thiết kế quy trình động**.
+
+**Thử nhanh (sau khi khởi động hệ thống):** đăng nhập Warehouse → mở Approvals → tạo và gửi đề xuất → dùng tài khoản có quyền quản lý để phê duyệt → trở lại Warehouse kiểm tra trạng thái và nhật ký.
+
 <a id="technologies"></a>
 
 ## 🛠️ Technologies Used
@@ -137,7 +187,7 @@ flowchart TD
 
 | Thành phần | Trách nhiệm trong mã |
 | --- | --- |
-| Node.js 24, TypeScript, JavaScript ES modules | [Máy chủ HTTP](selfhost/server.mjs) phục vụ giao diện và chuyển yêu cầu API đến [bộ định tuyến](app/api/%5B...path%5D/route.ts). |
+| Node.js 24, TypeScript, JavaScript ES modules | [Máy chủ web](selfhost/server.mjs) chỉ phục vụ UI/chuyển tiếp API; [Core API](selfhost/core-server.mjs) là tiến trình riêng xử lý [bộ định tuyến nghiệp vụ](app/api/%5B...path%5D/route.ts). |
 | Zod 3.25.76 | Kiểm tra đầu vào theo từng tuyến, gồm câu hỏi tra cứu, email, vai trò và tham số phân trang. Các điều kiện tồn và thu hồi được kiểm tra tiếp ở tầng nghiệp vụ. |
 | Xử lý kho và vai trò | [domain.mjs](lib/domain.mjs) xử lý nhập lô, giữ hàng, giao, hủy, nhận trả, sự cố và số đo. [workflow.mjs](lib/workflow.mjs) định nghĩa bước nháp, gửi duyệt, duyệt hoặc từ chối của ứng dụng đề xuất. |
 | Tổng hợp tác động | [impact.mjs](lib/impact.mjs) nhóm phiếu theo điểm nhận. Phiếu hủy được loại khỏi tổng; phiếu giao một phần trả vẫn giữ số còn phải thu. |
@@ -167,7 +217,8 @@ SQLite chạy qua `node:sqlite`. Hai migration SQL tạo **sáu bảng** dưới
 | `signin` | OAuth2 Proxy 7.12.0 | Phiên web, cookie và callback OIDC. |
 | `identity` | Keycloak 26.4.7 | Đăng nhập cho realm warehouse. |
 | `identitydb` | PostgreSQL 17 | Lưu tài khoản và cấu hình realm trên mạng nội bộ. |
-| `app` | Node.js 24 và SQLite | Chạy API, phục vụ giao diện, đọc và ghi dữ liệu kho. |
+| `app` | Node.js 24 | Phục vụ giao diện Warehouse/Approvals, chuyển tiếp API đã xác thực; **không** mount kho dữ liệu. |
+| `core` | Node.js 24 và SQLite | Headless Core API, xử lý dữ liệu và workflow, mount volume `warehouse`; không mở cổng host. |
 
 [Cấu hình Compose](selfhost/compose.yaml) · [Realm](selfhost/realm.json) · [Cổng HTTPS](selfhost/Caddyfile)
 
@@ -179,7 +230,7 @@ SQLite chạy qua `node:sqlite`. Hai migration SQL tạo **sáu bảng** dưới
 | Tra cứu SOP / Groq | Người dùng hỏi trợ lý nghiệp vụ | Mặc định tìm trong SOP và thống kê của kho. Khi ứng dụng được cấp `AI_API_KEY`, bộ kết nối có thể gửi câu hỏi và ngữ cảnh đến Groq. |
 | Bộ kiểm dịch tệp | Khi tải lên và ứng dụng được cấu hình `FILE_SCAN_URL` | Gửi nội dung tệp tới dịch vụ quét. Tệp chờ kiểm dịch bị hạn chế tải xuống. |
 
-Compose mặc định không khai báo dịch vụ Groq hoặc máy quét tệp. Nếu dùng các tích hợp tùy chọn, quản trị viên cần truyền biến môi trường tương ứng vào container ứng dụng. [Xử lý tích hợp trong API](app/api/%5B...path%5D/route.ts).
+Compose mặc định không khai báo dịch vụ Groq hoặc máy quét tệp. Nếu dùng các tích hợp tùy chọn, quản trị viên cần truyền biến môi trường tương ứng vào **container `core`** (không phải `app`). [Xử lý tích hợp trong API](app/api/%5B...path%5D/route.ts).
 
 ### Build, kiểm thử, vận hành và phát hành
 
@@ -205,6 +256,7 @@ Compose mặc định không khai báo dịch vụ Groq hoặc máy quét tệp.
 | Thiết bị | Gắn đầu dò với một lô, cấp hoặc thu hồi khóa gửi số đo, xem lịch sử nhiệt độ. |
 | Sự cố & thu hồi | Cách ly, duyệt thu hồi, đối soát từng điểm nhận và đóng hồ sơ. |
 | Công cụ & quản trị | Tra quy trình SOP, quản lý đề xuất nội bộ, xem nhật ký và phân quyền thành viên. |
+| Ứng dụng Approvals độc lập | Gửi và xét duyệt đề xuất dùng chung Core API, danh tính và quyền. |
 
 Lô hết hạn hoặc bị cách ly sẽ bị chặn xuất. Thu hồi chỉ hoàn tất sau khi xử lý hết phiếu đang giữ và hàng đã giao. Đóng sự cố vẫn giữ lô ở trạng thái chặn xuất. Mã QR chứa định danh lô; người quét cần quyền truy cập kho để xem hồ sơ.
 
@@ -252,10 +304,10 @@ Kho thực hành ban đầu có 16 lô, 40 phiếu giao nhận và 4 đầu dò 
    npm run demo
    ```
 
-3. Khi terminal in **Mở kho thực hành**, mở [DX-TRACE trên PC này](http://127.0.0.1:8080/?area=training#overview). Trang tổng quan ban đầu có **16 lô**; chọn **Truy xuất lô** tại SUA-005 để kiểm tra hành trình phân phối. Phiên demo dùng sẵn quyền chủ kho cục bộ.
+3. Khi terminal in **Mở kho thực hành**, mở [DX-TRACE trên PC này](http://127.0.0.1:8080/?area=training#overview). Trang tổng quan ban đầu có **16 lô**; chọn **Truy xuất lô** tại SUA-005 để kiểm tra hành trình phân phối. Có thể mở thêm [DX Approvals cục bộ](http://127.0.0.1:8080/apps/approvals/index.html). Phiên demo dùng sẵn quyền chủ kho cục bộ.
 4. Giữ cửa sổ terminal mở trong khi trình bày. Nhấn **Ctrl+C** để dừng. Những lần sau chỉ cần mở lại terminal trong thư mục dự án và chạy `npm run demo`. Các thao tác đã thực hiện được lưu tại `selfhost/local-demo-data/`.
 
-Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi chạy lại. Chế độ này chỉ lắng nghe tại `127.0.0.1`. Để nhiều người truy cập bằng tài khoản riêng, triển khai theo cách B.
+Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi chạy lại. Chế độ này chỉ lắng nghe tại `127.0.0.1`. **Chế độ demo không chứng minh SSO hay tách tiến trình Core**; để trình diễn kiến trúc triển khai thực tế và nhiều tài khoản, sử dụng cách B.
 
 ### B. Dựng server cho nhiều người và đăng nhập bằng Keycloak
 
@@ -266,7 +318,9 @@ Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi ch�
    node selfhost/setup.mjs kho.example.org id.example.org
    ```
 
-3. **Dựng hệ thống.**
+3. **Lưu ý khi nâng cấp máy chủ cũ.** Tệp `selfhost/.env` đã tồn tại sẽ không bị ghi đè; cần thêm `DX_CORE_TOKEN` là khóa ngẫu nhiên riêng, tối thiểu 32 ký tự (không commit vào Git). Khi cài mới, lệnh `setup.mjs` tạo khóa này tự động.
+
+4. **Dựng hệ thống.**
 
    ```sh
    cd selfhost
@@ -275,13 +329,14 @@ Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi ch�
    docker compose ps
    ```
 
-4. **Đăng nhập lần đầu.** Tại trang quản trị danh tính, dùng username `admin` và mật khẩu khởi tạo trong `selfhost/.env`. Tạo tài khoản chủ kho ở realm **warehouse**, đặt mật khẩu và xác minh email. Dùng tài khoản vừa tạo để mở kho.
+5. **Đăng nhập lần đầu.** Tại trang quản trị danh tính, dùng username `admin` và mật khẩu khởi tạo trong `selfhost/.env`. Tạo tài khoản chủ kho ở realm **warehouse**, đặt mật khẩu và xác minh email. Dùng tài khoản vừa tạo để mở kho.
 
 | Địa chỉ sau khi thay tên miền | Mục đích |
 | --- | --- |
 | `https://id.example.org/admin/` | Quản trị tài khoản Keycloak. |
 | `https://kho.example.org/` | Đăng nhập kho vận hành. |
 | `https://kho.example.org/?area=training#overview` | Trình diễn bằng dữ liệu mẫu. |
+| `https://kho.example.org/apps/approvals/index.html` | Ứng dụng phê duyệt dùng chung SSO và workflow. |
 
 <a id="detailed-setup"></a>
 
@@ -292,7 +347,8 @@ Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi ch�
 | Triển khai, DNS, HTTPS, tài khoản, sao lưu, phục hồi | [Sổ tay máy chủ riêng](selfhost/README.md) |
 | Giao diện, điều hướng, camera, quy trình nhận trả | [Frontend](app/README.md) |
 | API, kho thực hành, điều kiện đóng sự cố | [Backend và nghiệp vụ](lib/README.md) |
-| Kiến trúc lõi và minh chứng cho đề thi | [Đối chiếu yêu cầu](REQUIREMENTS.md) |
+| Kiến trúc lõi và minh chứng cho đề thi | [Đối chiếu yêu cầu](REQUIREMENTS.md) · [Headless Core & hai ứng dụng](docs/HEADLESS-CORE.md) |
+| Tài liệu các tuyến API | [Danh mục API](docs/API.md) |
 
 ### Phát triển và kiểm thử
 
@@ -305,7 +361,7 @@ node selfhost/build.mjs
 node --test tests/*.test.mjs
 ```
 
-Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 chạy API TypeScript trực tiếp. Bài kiểm thử HTTP khởi tạo máy chủ tạm trên cổng 38469, kiểm tra phân quyền, xử lý đồng thời và đọc lại tệp sau phục hồi. Các bài còn lại kiểm tra tồn kho, đối soát nhận trả, cảnh báo nhiệt độ và giải mã tem PNG. Muốn kiểm tra toàn bộ luồng đăng nhập và HTTPS, chạy bộ Docker Compose theo [hướng dẫn triển khai](selfhost/README.md).
+Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 chạy API TypeScript trực tiếp. Bộ kiểm thử kiểm tra phân quyền, xử lý đồng thời, phục hồi tệp, tồn kho, thu hồi, cảm biến và tem QR. Bài [headless-core.test.mjs](tests/headless-core.test.mjs) chạy **hai tiến trình Node.js riêng**, kiểm tra token nội bộ, Core không phục vụ giao diện và hai ứng dụng cùng dùng Workflow API. Lượt kiểm thử được ghi nhận sau thay đổi kiến trúc: **18/18 bài đạt** ([GitHub Actions](https://github.com/ngochieu1762005/dx_trace/actions/runs/43940284167)). **Chưa thay thế** việc kiểm tra Docker, HTTPS và đăng nhập Keycloak thực tế.
 
 ### Phạm vi tích hợp
 
@@ -319,11 +375,20 @@ Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 ch�
 
 ## 📝 Changelog
 
-**0.0.1 là bản phát hành đầu tiên của DX-TRACE.** Từ thư mục gốc, chạy `node -p "require('./package.json').version"` để kiểm tra bản đang dùng. [Xem lịch sử thay đổi](CHANGELOG.md).
+**Bản phát hành mới nhất đã xác minh: [v0.0.1](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.1)**. Nâng cấp headless Core và ứng dụng Approvals đã gộp vào `main` và được ghi ở mục **Unreleased** trong [CHANGELOG.md](CHANGELOG.md), **chưa phát hành thành phiên bản kế tiếp**. Trường `version` trong `package.json` hiện vẫn là `0.0.1`; không sử dụng riêng trường này để suy ra release chứa những commit mới.
 
 **Cập nhật máy chủ.** Sao lưu kho và cơ sở dữ liệu danh tính theo sổ tay triển khai. Đọc changelog của phiên bản đích, giữ cấu hình `selfhost/.env` cùng các volume hiện có, rồi chạy lại `docker compose up -d --build` trong thư mục `selfhost/`. Kiểm tra đăng nhập, số liệu một lô và một tệp đính kèm sau khi cập nhật.
 
 **Theo dõi bản phát hành.** Workflow xử lý tag dạng `v*` và tạo gói nguồn kèm `SHA256SUMS` khi bước kiểm thử thành công. [Quy trình phát hành](.github/workflows/release.yml).
+
+### Giới hạn hiện tại và hướng phát triển
+
+- Caddy hiện đảm nhiệm cổng HTTPS và định tuyến. Đây **chưa phải API Gateway đa ứng dụng đầy đủ** với khả năng tự đăng ký bên thứ ba hoặc quản lý chính sách API nâng cao.
+- Quy trình đang được định nghĩa trong mã; chưa có BPMN designer/engine động.
+- Chưa có Lakehouse, Data Lineage, GitOps tự phục hồi hay kiểm dịch mã độc luôn bật. Các dịch vụ AI và quét tệp là tích hợp **tùy chọn**.
+- Chế độ tự triển khai cần xác minh thủ công toàn bộ OIDC/HTTPS, sao lưu–phục hồi và vận hành Docker; CI hiện kiểm tra build và các bài test.
+
+[Xem kế hoạch và giới hạn chi tiết](docs/HEADLESS-CORE.md).
 
 <a id="contribution"></a>
 
