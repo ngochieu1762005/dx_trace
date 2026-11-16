@@ -59,7 +59,7 @@ test('independent headless core and approvals UI share identity, data and workfl
   await ready(core+'/api/health',{'x-dx-core-token':secret});
   assert.equal((await fetch(core+'/api/health')).status,403,'internal token required');
   assert.equal((await fetch(core+'/api/health',{'x-dx-core-token':'bad'})).status,403);
-  assert.equal((await fetch(core+'/apps/approvals/index.html',{'x-dx-core-token':secret})).status,404,
+  assert.equal((await fetch(core+'/apps/approvals/index.html',{headers:{'x-dx-core-token':secret}})).status,404,
    'core must never serve user interfaces');
   webProcess=spawn(process.execPath,['selfhost/server.mjs'],{
    env:{...process.env,PUBLIC_ORIGIN:web,PORT:String(webPort),DX_CORE_URL:core,DX_CORE_TOKEN:secret},
