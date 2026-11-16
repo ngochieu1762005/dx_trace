@@ -34,6 +34,6 @@ const [app,id]=process.argv.slice(2);
 if(![app,id].every(s=>s&&/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(s))||app===id)throw Error('Nhập hai tên miền hợp lệ, khác nhau.');
 const secret=()=>randomBytes(32).toString('hex');
 writeFileSync(new URL('.env',import.meta.url),[
- 'APP_HOST='+app,'ID_HOST='+id,'DB_PASSWORD='+secret(),'ADMIN_PASSWORD='+secret(),'OIDC_CLIENT_SECRET='+secret(),'COOKIE_SECRET='+randomBytes(32).toString('base64url')
+ 'APP_HOST='+app,'ID_HOST='+id,'DB_PASSWORD='+secret(),'ADMIN_PASSWORD='+secret(),'OIDC_CLIENT_SECRET='+secret(),'COOKIE_SECRET='+randomBytes(32).toString('base64url'),'DX_CORE_TOKEN='+secret()
 ].join('\n')+'\n',{mode:0o600,flag:'wx'});
 console.log('Đã tạo selfhost/.env, chỉ người sở hữu đọc được.');
