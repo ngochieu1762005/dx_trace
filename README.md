@@ -13,6 +13,7 @@
 - [Technologies Used](#technologies)
 - [Features](#features)
 - [System Requirements](#requirements)
+- [Headless Core & Separate Apps](docs/HEADLESS-CORE.md)
 - [Quick Setup](#quick-setup)
 - [Detailed Setup](#detailed-setup)
 - [Changelog](#changelog)
@@ -46,6 +47,9 @@ Ví dụ, khi một lô sữa đã đến hai điểm nhận, người quản l�
 
 ### Triển khai và ranh giới xác thực
 
+**Bản triển khai mới:** `core` là máy chủ API headless riêng, chỉ sử dụng mạng Docker nội bộ và giữ volume kho; `app` chỉ phục vụ web, chuyển API tới `core`. Giao diện kho và [ứng dụng phê duyệt độc lập](/apps/approvals/index.html) dùng chung SSO và dữ liệu. [Đọc kiến trúc và giới hạn xác minh](docs/HEADLESS-CORE.md).
+
+
 DX-TRACE chạy trên một máy chủ với hai tên miền: một cho kho, một cho đăng nhập. Caddy là dịch vụ duy nhất công bố cổng ra ngoài. Điểm cần đọc trên sơ đồ là chỗ hai luồng tách nhau: nhân viên vào kho bằng phiên OIDC, còn đầu dò gửi nhiệt độ bằng khóa thiết bị gắn với một lô hàng.
 
 ![Sơ đồ triển khai DX-TRACE: hai nguồn truy cập, năm dịch vụ và hai vùng dữ liệu độc lập](docs/assets/architecture.svg)
@@ -77,7 +81,8 @@ Các nhãn dưới tên dịch vụ trong hình là **tuyến phía DX-TRACE**. 
 | `gateway` · Caddy | `edge`, `appnet` | Nhận HTTPS, loại bỏ header danh tính do client gửi, chuyển yêu cầu web tới `signin`. Tuyến `POST /api/ingest` đi thẳng tới ứng dụng để kiểm tra khóa đầu dò. Chứng chỉ được lưu trong volume `tls`. |
 | `signin` · OAuth2 Proxy | `edge`, `appnet` | Xác thực phiên qua Keycloak, chuyển tiếp danh tính đã xác minh đến `app:8080`. |
 | `identity` và `identitydb` | Keycloak nối `edge` với `dbnet`; PostgreSQL chỉ thuộc `dbnet` | Keycloak quản lý realm `warehouse`. PostgreSQL lưu dữ liệu danh tính trong `identitydata`. API của kho kiểm tra vai trò thành viên trên từng yêu cầu nghiệp vụ. |
-| `app` · Node.js 24 | `appnet` | Phục vụ giao diện đã build và API. Volume `warehouse` gắn tại `/app/data` chứa SQLite và các tệp đính kèm. |
+| `app` · Node.js 24 | `appnet`, `corenet` | Phục vụ giao diện đã build và chuyển tiếp các yêu cầu API được xác thực tới lõi. Không gắn dữ liệu kho. |
+| `core` · Node.js 24 | `corenet` | Máy chủ API headless riêng; chỉ dịch vụ này gắn volume `warehouse` chứa SQLite và các tệp đính kèm. Không mở cổng ra host. |
 
 ### Lần theo một sự cố từ đầu dò đến phiếu trả
 

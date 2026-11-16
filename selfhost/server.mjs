@@ -31,10 +31,21 @@
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
-import {identity} from './runtime.mjs';
-import {GET,POST} from '../app/api/[...path]/route.ts';
 const origin=new URL(process.env.PUBLIC_ORIGIN).origin;
 const localDemo = process.env.DX_LOCAL_DEMO === '1';
+const coreUrl = process.env.DX_CORE_URL;
+if (coreUrl && (!process.env.DX_CORE_TOKEN || process.env.DX_CORE_TOKEN.length < 32)) {
+ throw new Error('Missing strong DX_CORE_TOKEN for isolated core');
+}
+// Only the local workstation demo uses in-process backend. The production web
+// process loads no database driver, secret store or warehouse domain logic.
+const localBackend = coreUrl ? null : await (async () => {
+ const [{identity}, api] = await Promise.all([
+  import('./runtime.mjs'), import('../app/api/[...path]/route.ts')
+ ]);
+ return {identity, GET:api.GET, POST:api.POST};
+})();
+
 if (localDemo && (process.env.BIND_ADDRESS !== '127.0.0.1' || origin !== 'http://127.0.0.1:8080')) {
  throw new Error('Chế độ demo yêu cầu địa chỉ loopback.');
 }
@@ -55,14 +66,41 @@ createServer(async(req,res)=>{
  if(!['GET','POST'].includes(req.method)){res.writeHead(405).end();return}
  const subject=req.headers['x-forwarded-user'],email=req.headers['x-forwarded-email'];
  const user=localDemo ? {userId:'demo:local',email:'demo@localhost.invalid',displayName:'Quản lý kho mẫu'} : typeof subject==='string'&&typeof email==='string'&&email.includes('@')?{userId:'oidc:'+subject,email,displayName:email}:null;
+ if(coreUrl){
+  // The inbound proxy identity is trusted only after Caddy + OAuth2 Proxy.
+  // Never forward a browser-supplied internal access token.
+  const upstream=new URL(url.pathname+url.search,coreUrl);
+  const headers=new Headers();
+  for(const name of ['content-type','content-length','idempotency-key','authorization','origin','sec-fetch-site','x-forwarded-user','x-forwarded-email']){
+   const v=req.headers[name];if(typeof v==='string')headers.set(name,v);
+  }
+  headers.set('x-dx-core-token',process.env.DX_CORE_TOKEN);
+  // Do not let a browser-selected Host become the internal origin.
+  const body=req.method==='GET'?undefined:Buffer.concat(await (async()=>{
+   const chunks=[];let size=0;
+   for await(const chunk of req){
+    size+=chunk.length;
+    if(size>6*1024*1024)throw Object.assign(new Error('Request too large'),{status:413});
+    chunks.push(chunk);
+   }
+   return chunks;
+  })());
+  const upstreamResponse=await fetch(upstream,{method:req.method,headers,body,redirect:'manual',signal:AbortSignal.timeout(25000)});
+  const responseHeaders={};
+  for(const name of ['content-type','content-disposition','cache-control','x-content-type-options']){
+   const value=upstreamResponse.headers.get(name);
+   if(value)responseHeaders[name]=value;
+  }
+  res.writeHead(upstreamResponse.status,responseHeaders).end(Buffer.from(await upstreamResponse.arrayBuffer()));return;
+ }
  const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>6*1024*1024){res.writeHead(413).end();return}chunks.push(chunk)}
  const request=new Request(url,{method:req.method,headers:req.headers,body:req.method==='GET'?undefined:Buffer.concat(chunks)});
- const result=await identity.run(user,()=>(req.method==='GET'?GET:POST)(request));
+ const result=await localBackend.identity.run(user,()=>(req.method==='GET'?localBackend.GET:localBackend.POST)(request));
  res.writeHead(result.status,Object.fromEntries(result.headers));res.end(Buffer.from(await result.arrayBuffer()));return;
  }
  if(req.method!=='GET'){res.writeHead(405).end();return}
  const file=path.resolve(root,'.'+decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname));
  if(!file.startsWith(root+path.sep)){res.writeHead(404).end();return}
  const data=await readFile(file);res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream','x-content-type-options':'nosniff'}).end(data);
- }catch(e){res.writeHead(e.code==='ENOENT'?404:500).end()}
+ }catch(e){res.writeHead(e.code==='ENOENT'?404:e.status===413?413:500).end()}
 }).listen(Number(process.env.PORT||8080),process.env.BIND_ADDRESS||'127.0.0.1',()=>{if(localDemo)console.log('Mở kho thực hành: '+origin+'/?area=training#overview')});

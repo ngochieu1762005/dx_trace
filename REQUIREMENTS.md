@@ -1,14 +1,14 @@
 # Đối chiếu DX-TRACE với bài toán DX-OS Open-Core
 
-Bảng dưới dẫn đến phần triển khai và cách kiểm tra cho từng hạng mục. Môi trường tham chiếu là [bản chạy trên server riêng](selfhost/README.md).
+Bảng dưới dẫn đến phần triển khai và cách kiểm tra cho từng hạng mục. [Kiến trúc headless độc lập và ứng dụng thứ hai](docs/HEADLESS-CORE.md). Môi trường tham chiếu là [bản chạy trên server riêng](selfhost/README.md).
 
 | Hạng mục | Minh chứng trong mã | Cách kiểm tra |
 | --- | --- | --- |
 | Danh tính và phân quyền | [Realm OIDC](selfhost/realm.json), [kiểm tra quyền nghiệp vụ](lib/domain.mjs) | Dùng hai tài khoản quản lý và chỉ xem để mở cùng kho. Kiểm tra quyền duyệt sự cố. |
-| Cổng truy cập | [Caddyfile](selfhost/Caddyfile), [Compose](selfhost/compose.yaml) | Kiểm tra tuyến web qua proxy đăng nhập và tuyến gửi nhiệt độ xác thực bằng khóa. |
+| Cổng truy cập | [Caddyfile](selfhost/Caddyfile), [Compose](selfhost/compose.yaml), [core-server](selfhost/core-server.mjs) | Kiểm tra tuyến web qua proxy đăng nhập, core chạy nội bộ không giao diện và tuyến gửi nhiệt độ xác thực bằng khóa. |
 | Dữ liệu cấu trúc và tệp | [Migration](drizzle/), [runtime tự triển khai](selfhost/runtime.mjs) | Truy xuất một lô, đính kèm tệp, kiểm tra snapshot cùng các đối tượng sau phục hồi. |
 | Quy trình | [Quy trình đề xuất](lib/workflow.mjs), [quy trình thu hồi](lib/domain.mjs) | Thử duyệt đề xuất bằng hai vai trò. Thử đóng sự cố khi vẫn còn hàng phải thu. |
-| Dùng chung giữa ứng dụng | [API](app/api/%5B...path%5D/route.ts) | Trong cùng phiên, mở Truy xuất và Đề xuất nội bộ. Kiểm tra danh mục tại `/api/platform`. |
+| Dùng chung giữa ứng dụng | [API](app/api/%5B...path%5D/route.ts), [ứng dụng phê duyệt độc lập](public/apps/approvals/index.html) | Dùng cùng phiên, tạo đề xuất ở ứng dụng phê duyệt và kiểm tra trong DX-TRACE Warehouse. Xem `/api/platform`. |
 | H–P–D–I trong kho | [Bộ mẫu](lib/demo.mjs), [tổng hợp tác động](lib/impact.mjs) | Theo dõi vai trò người xử lý, đầu dò gắn lô, phiếu phân phối và kết quả tính phạm vi thu hồi. |
 
 ## Hồ sơ nguồn mở
@@ -22,4 +22,4 @@ Bảng dưới dẫn đến phần triển khai và cách kiểm tra cho từng 
 
 ## Giới hạn cần thể hiện khi trình diễn
 
-Dữ liệu kho thực hành được tạo bằng bộ mẫu. Việc gửi số đo từ một đầu dò vật lý, cấp chứng chỉ cho tên miền công cộng và phục hồi toàn bộ realm danh tính cần được kiểm tra trên máy chủ triển khai. Quy trình duyệt hiện được định nghĩa trong mã. Lịch sử thao tác dùng cho đối chiếu nghiệp vụ; quản trị viên cơ sở dữ liệu vẫn có quyền truy cập dữ liệu gốc.
+Dữ liệu kho thực hành được tạo bằng bộ mẫu. Việc gửi số đo từ một đầu dò vật lý, cấp chứng chỉ cho tên miền công cộng và phục hồi toàn bộ realm danh tính cần được kiểm tra trên máy chủ triển khai. Quy trình duyệt hiện được định nghĩa trong mã, chưa hỗ trợ BPMN động. Máy chủ core tách biệt ở cấp tiến trình/containers, nhưng chưa phải một bộ lõi dùng chung cho mọi ứng dụng bên ngoài. Hệ thống chưa có GitOps tự phục hồi, lakehouse hoặc malware scanner mặc định. Lịch sử thao tác dùng cho đối chiếu nghiệp vụ; quản trị viên cơ sở dữ liệu vẫn có quyền truy cập dữ liệu gốc.

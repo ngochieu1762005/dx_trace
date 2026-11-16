@@ -1,6 +1,6 @@
 # Triển khai DX-TRACE trên máy chủ riêng
 
-Tài liệu dành cho người cài đặt kho lần đầu hoặc tiếp quản một máy chủ đang vận hành. Các lệnh cài đặt bắt đầu từ thư mục gốc của DX-TRACE. Sau bước chuyển vào `selfhost/`, chạy các lệnh Docker Compose tại thư mục đó.
+Tài liệu dành cho người cài đặt kho lần đầu hoặc tiếp quản một máy chủ đang vận hành. Các lệnh cài đặt bắt đầu từ thư mục gốc của DX-TRACE. Sau bước chuyển vào `selfhost/`, chạy các lệnh Docker Compose tại thư mục đó. Bản triển khai tách hai tiến trình: web proxy và [API headless nội bộ](../docs/HEADLESS-CORE.md).
 
 ## Sơ đồ cài đặt và phục hồi
 
@@ -40,14 +40,16 @@ Trình thiết lập tạo `.env` với quyền đọc/ghi cho chủ sở hữu 
 | `DB_PASSWORD` | Mật khẩu PostgreSQL của dịch vụ danh tính. |
 | `OIDC_CLIENT_SECRET` | Bí mật dùng chung giữa OAuth2 Proxy và OIDC client `dx-trace`. |
 | `COOKIE_SECRET` | Khóa bảo vệ cookie phiên đăng nhập. |
+| `DX_CORE_TOKEN` | Mật mã nội bộ ủy quyền cho web chuyển tiếp API tới core. Cần thêm khi nâng cấp từ bản `.env` cũ. |
 
-Giữ bản sao `.env` trong kho bí mật của đơn vị. Việc thay mật khẩu quản trị sau khi Keycloak đã khởi tạo được thực hiện trong Keycloak.
+Giữ bản sao `.env` trong kho bí mật của đơn vị. Nếu cập nhật từ bản trước, tạo thêm `DX_CORE_TOKEN` có ít nhất 32 ký tự ngẫu nhiên (ví dụ 64 ký tự hex) rồi mới khởi động lại Compose. `core` không khai báo cổng public, chỉ phục vụ web trong mạng Docker.
+ Việc thay mật khẩu quản trị sau khi Keycloak đã khởi tạo được thực hiện trong Keycloak.
 
 ## 3. Tạo chủ kho và tài khoản giám khảo
 
 1. Đăng nhập trang quản trị danh tính bằng `admin`. Chọn realm **warehouse**.
 2. Trong **Users → Add user**, tạo tài khoản chủ kho có email. Xác minh email, bật **Email verified** và đặt mật khẩu tại **Credentials**. Bật **Temporary** nếu cần đổi mật khẩu ở lần đăng nhập đầu tiên.
-3. Dùng **tài khoản chủ kho** đăng nhập tên miền ứng dụng. Hệ thống khởi tạo không gian làm việc.
+3. Dùng **tài khoản chủ kho** đăng nhập tên miền ứng dụng. Có thể mở thêm `https://kho.example.org/apps/approvals/index.html` để thử ứng dụng phê duyệt độc lập. Hệ thống khởi tạo không gian làm việc.
 4. Tạo tài khoản giám khảo trong cùng realm. Trong DX-TRACE, chủ kho vào **Cài đặt không gian → Thêm thành viên** và nhập đúng email đó **trước khi giám khảo đăng nhập lần đầu**.
 5. Chọn quyền theo bảng dưới. Gửi giám khảo địa chỉ `https://kho.example.org/?area=training#overview` để mở kho thực hành.
 

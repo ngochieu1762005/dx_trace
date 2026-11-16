@@ -21,3 +21,7 @@
 | POST | `/api/workspace`, `/api/members`, `/api/members/{id}/role` | Đổi tên kho, cấp quyền theo email, cập nhật vai trò thành viên. |
 
 [Kiến trúc và đích API bên ngoài](../README.md#architecture) · [Mã xử lý HTTP](../app/api/%5B...path%5D/route.ts)
+
+## Headless API và hai ứng dụng
+
+Trong Docker, `selfhost/core-server.mjs` xử lý các API ở một tiến trình riêng và xác thực yêu cầu chuyển tiếp bằng `DX_CORE_TOKEN` nội bộ. Không công bố cổng của core. Giao diện kho `/` và ứng dụng phê duyệt `/apps/approvals/index.html` dùng cùng API và phiên OIDC. **Không** gửi `DX_CORE_TOKEN` từ trình duyệt; API công khai đi qua Caddy, OAuth2 Proxy và web reverse proxy. [Chi tiết](HEADLESS-CORE.md).

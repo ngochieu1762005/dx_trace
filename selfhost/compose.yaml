@@ -94,12 +94,27 @@ services:
       OAUTH2_PROXY_PASS_BASIC_AUTH: "false"
       OAUTH2_PROXY_CODE_CHALLENGE_METHOD: S256
     networks: [edge, appnet]
+  # API / identity domain: only the web application can reach the core.
+  core:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    restart: unless-stopped
+    command: ["node", "selfhost/core-server.mjs"]
+    environment:
+      PUBLIC_ORIGIN: https://${APP_HOST:?}
+      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+      PORT: "8081"
+      BIND_ADDRESS: 0.0.0.0
+    volumes: ["warehouse:/app/data"]
+    networks: [corenet]
+  # Presentation-only application: no warehouse volume or direct database access.
   app:
     build: {context: "..", dockerfile: selfhost/Dockerfile}
     restart: unless-stopped
     environment:
       PUBLIC_ORIGIN: https://${APP_HOST:?}
-    volumes: ["warehouse:/app/data"]
-    networks: [appnet]
+      DX_CORE_URL: http://core:8081
+      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+    networks: [appnet, corenet]
+    depends_on: [core]
 volumes: {tls: {}, identitydata: {}, warehouse: {}}
-networks: {edge: {}, appnet: {}, dbnet: {internal: true}}
+networks: {edge: {}, appnet: {}, corenet: {}, dbnet: {internal: true}}
