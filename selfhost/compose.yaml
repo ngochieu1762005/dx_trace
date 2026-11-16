@@ -117,4 +117,4 @@ services:
     networks: [appnet, corenet]
     depends_on: [core]
 volumes: {tls: {}, identitydata: {}, warehouse: {}}
-networks: {edge: {}, appnet: {}, corenet: {internal: true}, dbnet: {internal: true}}
+networks: {edge: {}, appnet: {}, corenet: {}, dbnet: {internal: true}}
