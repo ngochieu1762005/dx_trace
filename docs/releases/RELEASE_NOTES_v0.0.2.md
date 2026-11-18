@@ -15,7 +15,7 @@ DX-TRACE v0.0.2 nâng cấp nền tảng truy xuất và điều phối thu hồ
 
 ## Upgrade / Nâng cấp
 
-> Đọc [CHANGELOG.md](CHANGELOG.md) và [sổ tay triển khai SaaS trên Ubuntu](selfhost/DEPLOY_SAAS_UBUNTU.md) trước khi thay đổi máy chủ.
+> Đọc [CHANGELOG.md](../../CHANGELOG.md) và [sổ tay triển khai SaaS trên Ubuntu](../../selfhost/DEPLOY_SAAS_UBUNTU.md) trước khi thay đổi máy chủ.
 
 Không chạy lại setup và không xóa volumes. Sao lưu `selfhost/.env`, Keycloak PostgreSQL và dữ liệu kho ra ngoài VPS. Nếu chuyển subdomain, bổ sung `https://app.example.org/oauth2/callback` vào Keycloak client `dx-trace` trước khi sửa `APP_HOST`.
 

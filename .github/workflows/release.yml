@@ -108,11 +108,11 @@ jobs:
           if gh release view "$RELEASE_TAG" >/dev/null; then
             echo "Release $RELEASE_TAG already exists; updating assets."
           else
-            if [ -f "RELEASE_NOTES_${RELEASE_TAG}.md" ]; then
+            if [ -f "docs/releases/RELEASE_NOTES_${RELEASE_TAG}.md" ]; then
               gh release create "$RELEASE_TAG" \
                 --verify-tag \
                 --title "DX-TRACE $RELEASE_TAG" \
-                --notes-file "RELEASE_NOTES_${RELEASE_TAG}.md"
+                --notes-file "docs/releases/RELEASE_NOTES_${RELEASE_TAG}.md"
             else
               gh release create "$RELEASE_TAG" \
                 --verify-tag \

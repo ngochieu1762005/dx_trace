@@ -16,9 +16,9 @@ Bản 0.0.3 nâng cấp giao diện giới thiệu và củng cố đường d�
 
 1. Sao lưu cấu hình `.env`, dữ liệu kho, Keycloak/PostgreSQL và các tệp đính kèm trước khi triển khai. **Không xóa Docker volumes**.
 2. Cập nhật repository, build lại `core`, `app` và `signin`.
-3. Landing là tệp tĩnh: đồng bộ thư mục `landing/` lên thư mục static được Caddy phục vụ; nếu dùng host Caddy, cập nhật route `/login`, `/try`, `/approvals` theo tài liệu [selfhost/DEPLOY_SAAS_UBUNTU.md](selfhost/DEPLOY_SAAS_UBUNTU.md).
+3. Landing là tệp tĩnh: đồng bộ thư mục `landing/` lên thư mục static được Caddy phục vụ; nếu dùng host Caddy, cập nhật route `/login`, `/try`, `/approvals` theo tài liệu [selfhost/DEPLOY_SAAS_UBUNTU.md](../../selfhost/DEPLOY_SAAS_UBUNTU.md).
 4. Kiểm tra landing HTTP 200, các đường dẫn đăng nhập HTTP 302, và luồng đăng nhập thực tế quay đúng trang đích.
 
 **Mã nguồn này không kèm IP, thông tin VPS cá nhân, mật khẩu, `.env`, cơ sở dữ liệu hay dữ liệu người dùng.** Ba website của nhóm chỉ được mô tả trong README dưới dạng demo tham khảo, không phải cấu hình mặc định để người khác sao chép.
 
-Chi tiết thay đổi: [CHANGELOG.md](CHANGELOG.md). Đối chiếu thay đổi với bản trước: [v0.0.2...v0.0.3](https://github.com/ngochieu1762005/dx_trace/compare/v0.0.2...v0.0.3).
+Chi tiết thay đổi: [CHANGELOG.md](../../CHANGELOG.md). Đối chiếu thay đổi với bản trước: [v0.0.2...v0.0.3](https://github.com/ngochieu1762005/dx_trace/compare/v0.0.2...v0.0.3).

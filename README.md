@@ -33,7 +33,7 @@ DX-TRACE kết nối **lô hàng, giao nhận, số đo bảo quản và quy tr�
 
 Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai, dùng tên miền và thông tin xác thực của đơn vị bạn. Tài khoản truy cập do quản trị viên cấp. Giấy phép MIT áp dụng cho mã nguồn dự án; thư viện và dữ liệu ngoài có giấy phép riêng.
 
-**Phiên bản mã nguồn: `0.0.3`.** Xem [bản phát hành mới nhất](https://github.com/ngochieu1762005/dx_trace/releases/latest) và [Changelog](CHANGELOG.md). Những cải tiến trên `main` được công bố trong GitHub Releases sau khi kiểm thử đạt yêu cầu.
+**Phiên bản: [v0.0.3](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.3).** Xem [ghi chú phát hành](docs/releases/README.md) và [Changelog](CHANGELOG.md) để theo dõi cập nhật.
 
 <details>
 <summary><strong>Xem trước giao diện giới thiệu</strong></summary>
@@ -409,7 +409,7 @@ Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 ch�
 
 ## 📝 Changelog
 
-**v0.0.2 đã phát hành:** tải mã nguồn và checksum tại [GitHub Releases](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.2). [CHANGELOG.md](CHANGELOG.md) ghi lại thay đổi đã phát hành và mục Unreleased trên nhánh `main`. `v0.0.1` là bản phát hành đầu tiên.
+**Bản phát hành mới nhất: [v0.0.3](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.3).** Xem [thư mục ghi chú phát hành](docs/releases/README.md) cho v0.0.2 và v0.0.3; [CHANGELOG.md](CHANGELOG.md) ghi lại các thay đổi đã phát hành và mục Unreleased.
 
 **Cập nhật máy chủ.** Sao lưu kho và cơ sở dữ liệu danh tính theo sổ tay triển khai. Đọc changelog của phiên bản đích, giữ cấu hình `selfhost/.env` cùng các volume hiện có, rồi chạy lại `docker compose up -d --build` trong thư mục `selfhost/`. Kiểm tra đăng nhập, số liệu một lô và một tệp đính kèm sau khi cập nhật.
 
