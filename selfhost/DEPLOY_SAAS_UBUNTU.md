@@ -113,3 +113,41 @@ Chờ đợi: landing `200`, app yêu cầu đăng nhập (thường `302`), OID
 **Đây là hướng dẫn cài chung.** Ba website demo được giới thiệu riêng trong README và **không** phải giá trị cấu hình mặc định.
 
 > **SEO:** `landing/sitemap.xml` chứa URL ví dụ `https://landing.example.org/`. Hãy thay bằng tên miền landing của bạn trước khi đưa website lên production.
+
+## Cập nhật trang giới thiệu và điều hướng
+
+Các nút trên landing dùng `/login` (kho vận hành), `/try` (kho thực hành), `/approvals` (phê duyệt). Caddy chuyển sang domain `app` do người triển khai cấu hình và truyền đích đến qua `rd`. Không dựng URL Keycloak trực tiếp, không đoán hostname trong JavaScript. **Cập nhật cả landing lẫn Caddy snippet** khi nâng cấp giao diện.
+
+Nếu checkout đặt dưới `/root` hoặc thư mục riêng, xuất landing sang đường dẫn Caddy đọc được:
+
+```bash
+# Chạy tại thư mục repository sau khi git pull --ff-only.
+sudo install -d -m 755 /srv/dx-trace/landing
+sudo cp -R landing/. /srv/dx-trace/landing/
+sudo find /srv/dx-trace/landing -type d -exec chmod 755 {} +
+sudo find /srv/dx-trace/landing -type f -exec chmod 644 {} +
+sudo -u caddy test -r /srv/dx-trace/landing/index.html
+```
+
+Sau đó dùng công cụ `install-saas-caddy.py` ở bước 3 với `--landing-root /srv/dx-trace/landing`. Nếu đã tách ba miền, `--old-app-host` là **miền landing hiện tại**, `--landing-host` cũng là miền đó; hai đối số còn lại là app và identity hiện tại. Kiểm tra `--dry-run`, rồi chạy lại bỏ cờ đó. Không sửa tên miền trong source, không thay mật khẩu và không xóa volume.
+
+Build lại ứng dụng để nhận bản sửa phục hồi phiên:
+
+```bash
+cd selfhost
+docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build app core signin
+```
+
+### Kiểm tra sau nâng cấp
+
+| Thao tác | Kết quả cần có |
+| --- | --- |
+| Mở `/` trên landing | HTTP 200, tiêu đề DX-TRACE; không phải trang 404 |
+| Mở `/assets/site.css?v=3` | HTTP 200, Content-Type CSS |
+| Bấm Đăng nhập | Đi qua SSO rồi tới tổng quan kho vận hành |
+| Bấm Mở kho thực hành | Sau SSO, URL app giữ `?area=training#overview` |
+| Mở Approvals | Sau SSO, giữ `/apps/approvals/index.html` |
+| Phiên hết hạn tại hồ sơ một lô | Hiện nút đăng nhập lại; quay về đúng hồ sơ và vùng dữ liệu |
+| Sai quyền (403) | Hiển thị lỗi quyền, không tự đăng nhập vòng lặp |
+
+Nếu `/` vẫn hiện 404, kiểm tra `root` trong block **đúng domain landing**, vị trí thực của `index.html`, quyền đọc của user chạy Caddy và kết quả reload. `docker compose up` không tự cập nhật cấu hình Caddy trên host. Không ghi đè toàn bộ Caddyfile nếu máy chủ đang phục vụ các website khác.

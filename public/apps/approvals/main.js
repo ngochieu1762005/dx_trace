@@ -4,15 +4,17 @@
  * Copyright (c) 2026 DX-TRACE contributors
  * Licensed under the MIT License; see LICENSE at the repository root.
  */
+import {signInUrl, sessionRequest} from '/shared/session.mjs';
 const $=(id)=>document.getElementById(id);
 const statuses={draft:'Bản nháp',submitted:'Chờ duyệt',approved:'Đã duyệt',rejected:'Từ chối'};
 let role='viewer';
 const route=(path)=>'/api/'+path+($('training').checked?'?area=training':'');
 async function api(path,data){
- const res=await fetch(route(path),{method:data===undefined?'GET':'POST',credentials:'same-origin',headers:data===undefined?{}:{'content-type':'application/json','idempotency-key':crypto.randomUUID()},body:data===undefined?undefined:JSON.stringify(data)});
- const payload=await res.json();
- if(!res.ok)throw Error(payload.error||'Không thể thực hiện yêu cầu');
- return payload;
+ try { return await sessionRequest(route(path),{method:data===undefined?'GET':'POST',credentials:'same-origin',headers:data===undefined?{}:{'content-type':'application/json','idempotency-key':crypto.randomUUID()},body:data===undefined?undefined:JSON.stringify(data)});
+ } catch(err) {
+  if(err.status===401){role='viewer';$('save').disabled=true;$('reauth').href=signInUrl(window.location);$('reauth').hidden=false;}
+  throw err;
+ }
 }
 function text(node,value){node.textContent=String(value??'')}
 function btn(label,callback,secondary=false){
@@ -40,6 +42,7 @@ function display(run){
 }
 async function load(){
  text($('message'),'');
+ $('reauth').hidden=true;
  try{
   const [state,platform]=await Promise.all([api('state'),api('platform')]);
   role=state.me.role;
@@ -51,6 +54,8 @@ async function load(){
   if(!list.children.length)text(list,'Chưa có đề xuất nào. Tạo bản nháp để bắt đầu.');
   if(!platform.applications?.some(x=>x.id==='requests'))throw Error('Core API chưa khai báo ứng dụng phê duyệt');
  }catch(err){
+  $('save').disabled=true;
+  if(err.status===401){role='viewer';$('reauth').href=signInUrl(window.location);$('reauth').hidden=false;}
   text($('message'),err.message);
   text($('items'),'Không thể đọc dữ liệu chung. Hãy đăng nhập vào DX-TRACE trước.');
  }
@@ -59,8 +64,9 @@ $('form').addEventListener('submit',async(e)=>{
  e.preventDefault();$('save').disabled=true;
  try{await api('workflow',{title:$('title').value.trim(),content:$('content').value.trim()});$('form').reset();await load()}
  catch(err){text($('message'),err.message)}
- finally{$('save').disabled=false}
+ finally{$('save').disabled=!['owner','manager','warehouse'].includes(role)}
 });
 $('refresh').addEventListener('click',load);
-$('training').addEventListener('change',load);
+$('training').checked=new URLSearchParams(location.search).get('area')!=='live';
+$('training').addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('area',$('training').checked?'training':'live');history.replaceState(null,'',url);load();});
 await load();

@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import os
+import pwd
 import re
 import shutil
 import stat
@@ -91,6 +92,16 @@ def main() -> int:
     landing_root = args.landing_root.resolve()
     if not (landing_root / "index.html").is_file():
         raise ValueError("Landing root must contain index.html; no changes made")
+    # Catch the common /root or private checkout deployment before changing Caddy.
+    try:
+        pwd.getpwnam("caddy")
+    except KeyError:
+        pass  # Custom service account: operator verifies access in the deployment guide.
+    else:
+        if os.geteuid() == 0:
+            readable = subprocess.run(["runuser", "-u", "caddy", "--", "test", "-r", str(landing_root / "index.html")])
+            if readable.returncode:
+                raise ValueError("Caddy cannot read landing/index.html. Publish landing under /srv with readable parent directories; no configuration changed.")
     original = args.caddyfile.read_text(encoding="utf-8")
     retained, removed = remove_exact_blocks(original, (args.old_app_host, args.id_host, args.app_host))
     template = args.snippet.read_text(encoding="utf-8")
