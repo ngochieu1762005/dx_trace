@@ -19,7 +19,7 @@ DX-TRACE v0.0.2 nâng cấp nền tảng truy xuất và điều phối thu hồ
 
 Không chạy lại setup và không xóa volumes. Sao lưu `selfhost/.env`, Keycloak PostgreSQL và dữ liệu kho ra ngoài VPS. Nếu chuyển subdomain, bổ sung `https://app.example.org/oauth2/callback` vào Keycloak client `dx-trace` trước khi sửa `APP_HOST`.
 
-**Requirements:** Node.js 24 + pnpm 11.25.0 khi build/demo; Docker Engine + Docker Compose v2 cho tự triển khai; DNS và HTTPS hợp lệ. VPS 4 GB RAM là môi trường hạn chế tài nguyên.
+**Requirements:** Node.js 24 + pnpm 11.25.0 khi build/demo; Docker Engine + Docker Compose v2 cho tự triển khai; DNS và HTTPS hợp lệ. Dung lượng CPU/RAM cần được tính theo số người dùng và tài nguyên máy chủ thực tế.
 
 **Notes:** Chỉ phát hành khi nguồn tải và kiểm thử CI đã qua; màn hình/login SSO trên môi trường thực cần kiểm tra với tài khoản `warehouse`. Chưa công bố khả năng tuân thủ pháp lý hoặc các thành phần DX-OS chưa triển khai.
 
