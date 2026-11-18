@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(node -p 'JSON.parse(require("fs").readFileSync("package.json","utf8")).version')" = "0.0.2"
+          test "$(node -p 'JSON.parse(require("fs").readFileSync("package.json","utf8")).version')" = "0.0.3"
           test -f CHANGELOG.md
           test -f RELEASE_NOTES_v0.0.3.md
           test -f SECURITY.md
