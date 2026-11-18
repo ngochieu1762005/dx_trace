@@ -1,14 +1,46 @@
-# DX-TRACE
+<div align="center">
 
-**DX-OS Open-Core · Food Traceability & Recall Management**
+<img src="docs/assets/project-banner.svg" alt="DX-TRACE — Food traceability and recall management on DX-OS Open-Core" width="100%">
 
-Nền tảng nguồn mở phục vụ **truy xuất nguồn gốc theo lô, giám sát điều kiện bảo quản và điều phối thu hồi thực phẩm**. DX-TRACE tách **lõi dịch vụ không giao diện (headless Core API)** khỏi **hai ứng dụng nghiệp vụ**; các ứng dụng dùng chung định danh, phân quyền, kho dữ liệu và API quy trình.
+**Truy xuất đến cùng. Thu hồi có kiểm soát.**
 
-[Hướng dẫn triển khai cho mọi tên miền](selfhost/DEPLOY_SAAS_UBUNTU.md) · [Kiến trúc DX-OS](#architecture) · [Hai ứng dụng](#applications) · [Cài đặt & demo](#quick-setup) · [Đối chiếu đề thi](REQUIREMENTS.md) · [API](docs/API.md) · [MIT License](LICENSE)
+[![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases/latest)
+[![MIT License](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/ngochieu1762005/dx_trace)](https://github.com/ngochieu1762005/dx_trace/issues)
 
-> **Demo trực tuyến (chỉ tham khảo, không phải tên miền mẫu để sao chép):** [Giới thiệu](https://dxtrace.hieuds.com) · [Ứng dụng](https://app.dxtrace.hieuds.com) · [SSO](https://dxauth.hieuds.com). Khi tự triển khai, **sử dụng tên miền, địa chỉ IP và mật khẩu của chính bạn** theo [hướng dẫn cấu hình chung](selfhost/DEPLOY_SAAS_UBUNTU.md).
+![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-24-417e38?logo=nodedotjs&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
+![Keycloak](https://img.shields.io/badge/SSO-Keycloak-326ce5?logo=keycloak&logoColor=white)
+![SQLite](https://img.shields.io/badge/Data-SQLite-003b57?logo=sqlite&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/Identity_DB-PostgreSQL_17-4169e1?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Deploy-Docker_Compose-2496ed?logo=docker&logoColor=white)
 
-> **Bản chuẩn bị phát hành:** `v0.0.2` — DX-OS Open-Core, ứng dụng Approvals, landing page công khai và triển khai SaaS Ubuntu. Đọc [CHANGELOG.md](CHANGELOG.md) và [Release notes](RELEASE_NOTES_v0.0.2.md). **Bản v0.0.1 vẫn là release đã phát hành gần nhất cho tới khi tạo tag/release v0.0.2.**
+[**Cài đặt nhanh**](#quick-setup) · [**Kiến trúc**](#architecture) · [**API**](docs/API.md) · [**Bản phát hành**](https://github.com/ngochieu1762005/dx_trace/releases) · [**Báo lỗi**](https://github.com/ngochieu1762005/dx_trace/issues/new/choose)
+
+</div>
+
+DX-TRACE kết nối **lô hàng, giao nhận, số đo bảo quản và quy trình thu hồi** trong một hồ sơ xuyên suốt. Khi có sự cố, đội vận hành xác định được hàng đã đến đâu, đã nhận trả bao nhiêu và còn thiếu bao nhiêu tại mỗi điểm nhận.
+
+Được xây dựng theo định hướng **DX-OS Open-Core**, nền tảng có **Headless Core API** độc lập và hai ứng dụng **Warehouse** / **Approvals**, dùng chung Identity/SSO, phân quyền, dữ liệu và workflow.
+
+| Khám phá sản phẩm | Dành cho người triển khai |
+| --- | --- |
+| [Website giới thiệu](https://dxtrace.hieuds.com/) | [Chạy demo trên PC](#quick-setup) |
+| [Ứng dụng Warehouse](https://app.dxtrace.hieuds.com/) | [Triển khai ba tên miền trên Ubuntu](selfhost/DEPLOY_SAAS_UBUNTU.md) |
+| [Dịch vụ SSO của bản demo](https://dxauth.hieuds.com/) | [Cấu hình và kiểm tra đăng nhập](selfhost/BRANDED_LOGIN.md) |
+
+Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai, dùng tên miền và thông tin xác thực của đơn vị bạn. Tài khoản truy cập do quản trị viên cấp. Giấy phép MIT áp dụng cho mã nguồn dự án; thư viện và dữ liệu ngoài có giấy phép riêng.
+
+**Phiên bản phát hành:** [v0.0.2](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.2). Nhánh `main` có thể chứa các cải tiến chưa phát hành; xem [Changelog](CHANGELOG.md).
+
+<details>
+<summary><strong>Xem trước giao diện giới thiệu</strong></summary>
+
+![Giao diện DX-TRACE với hồ sơ thu hồi mẫu SUA-005](docs/assets/landing-preview.jpg)
+
+</details>
 
 <a id="contents"></a>
 
@@ -377,7 +409,7 @@ Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 ch�
 
 ## 📝 Changelog
 
-**Chuẩn bị phát hành v0.0.2:** [CHANGELOG.md](CHANGELOG.md) và [Release notes](RELEASE_NOTES_v0.0.2.md) đã mô tả các thay đổi kể từ v0.0.1. Mã nguồn đặt version `0.0.2`; **chưa phải bản phát hành công khai cho tới khi tag `v0.0.2` và GitHub Release được tạo**. `v0.0.1` là bản phát hành đầu tiên.
+**v0.0.2 đã phát hành:** tải mã nguồn và checksum tại [GitHub Releases](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.2). [CHANGELOG.md](CHANGELOG.md) ghi lại thay đổi đã phát hành và mục Unreleased trên nhánh `main`. `v0.0.1` là bản phát hành đầu tiên.
 
 **Cập nhật máy chủ.** Sao lưu kho và cơ sở dữ liệu danh tính theo sổ tay triển khai. Đọc changelog của phiên bản đích, giữ cấu hình `selfhost/.env` cùng các volume hiện có, rồi chạy lại `docker compose up -d --build` trong thư mục `selfhost/`. Kiểm tra đăng nhập, số liệu một lô và một tệp đính kèm sau khi cập nhật.
 
@@ -416,7 +448,7 @@ Kho thực hành dùng dữ liệu mô phỏng do dự án tạo. Dữ liệu s�
 
 ### Team Members
 
-**DX-TRACE contributors** · Xem danh sách đóng góp và lịch sử phát triển trên GitHub. Không công bố thông tin liên hệ hay hạ tầng cá nhân trong tài liệu mã nguồn.
+**DX-TRACE contributors** · [Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Lịch sử phát triển](https://github.com/ngochieu1762005/dx_trace/commits/main/)
 
 ### Bug Reports and Suggestions
 

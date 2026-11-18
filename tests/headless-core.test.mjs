@@ -67,6 +67,9 @@ test('independent headless core and approvals UI share identity, data and workfl
   });
   await ready(web+'/api/health');
   assert.equal((await fetch(web+'/api/state')).status,401);
+  const helper=await fetch(web+'/shared/session.mjs');
+  assert.equal(helper.status,200);
+  assert.match(helper.headers.get('content-type'),/javascript/,'shared ES module must have a JavaScript MIME type');
   const page=await fetch(web+'/apps/approvals/index.html');
   assert.equal(page.status,200);
   assert.match(await page.text(),/DX Approvals/);

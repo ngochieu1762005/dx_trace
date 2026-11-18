@@ -120,3 +120,11 @@ Các đường dẫn dưới đây trỏ tới tệp được phân phối. Thư
 | [package.json.license](../package.json.license) | Application manifest |
 | [pnpm-lock.yaml](../pnpm-lock.yaml) | Phiên bản và quan hệ phụ thuộc |
 | [pnpm-workspace.yaml](../pnpm-workspace.yaml) | Dependency build policy |
+
+## Website giới thiệu và phục hồi phiên
+
+- `landing/index.html`, `landing/assets/site.css`, `landing/assets/site.js`: trang giới thiệu và tình huống SUA-005 tương tác.
+- `landing/assets/fonts/`: phông tự lưu trữ, kèm giấy phép.
+- `public/shared/session.mjs`: API client nhận biết phiên hết hạn và giữ đích đến khi đăng nhập lại; dùng chung Warehouse/Approvals.
+- `tests/session.test.mjs`, `tests/landing_routing_test.py`: kiểm thử phục hồi phiên và định tuyến.
+- `.github/workflows/ci.yml`: kiểm tra main/PR và cung cấp trạng thái CI trên README.

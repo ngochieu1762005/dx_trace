@@ -36,8 +36,9 @@ button:disabled{opacity:.5;cursor:not-allowed}.tools{display:flex;gap:8px;align-
 <h1>Đề xuất và phê duyệt</h1>
 <p class="muted">Ứng dụng độc lập sử dụng cùng tài khoản OIDC, quyền hạn, workspace, Core API và kho dữ liệu với DX-TRACE Warehouse. Không có cơ sở dữ liệu hoặc backend riêng.</p>
 <div class="tools"><label style="margin:0"><input style="width:auto" id="training" type="checkbox" checked/> Không gian thực hành</label><span id="who" class="muted"></span></div>
+<p><a id="reauth" class="button" href="/oauth2/start" hidden>Đăng nhập lại để tiếp tục phê duyệt</a></p>
 <div class="panels">
-<section class="card"><h2>Tạo đề xuất</h2><form id="form"><label for="title">Tiêu đề</label><input id="title" maxlength="140" required/><label for="content">Nội dung</label><textarea id="content" maxlength="4000" required></textarea><p><button id="save">Tạo bản nháp</button></p></form><p class="status" id="message" role="status" aria-live="polite"></p></section>
+<section class="card"><h2>Tạo đề xuất</h2><form id="form"><label for="title">Tiêu đề</label><input id="title" maxlength="140" required/><label for="content">Nội dung</label><textarea id="content" maxlength="4000" required></textarea><p><button id="save" disabled>Tạo bản nháp</button></p></form><p class="status" id="message" role="status" aria-live="polite"></p></section>
 <section class="card"><div class="row"><h2>Luồng xử lý</h2><span id="count" class="muted"></span></div><div id="items" aria-live="polite">Đang tải...</div></section>
 </div>
 </main>

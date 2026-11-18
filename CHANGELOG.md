@@ -2,6 +2,20 @@
 
 Nhật ký thay đổi của DX-TRACE. Theo dõi các chức năng được đưa vào mã nguồn; **việc hoạt động ổn định trên một VPS cụ thể vẫn cần kiểm thử sau triển khai**.
 
+## Unreleased
+
+### Added
+- Trang giới thiệu mới với hồ sơ SUA-005, tình huống thu hồi tương tác và bố cục responsive.
+- README có banner, badge CI/Release/License/Issues và công nghệ; CI kiểm tra nhánh main và pull request.
+- Các điểm vào `/login`, `/try`, `/approvals` được định tuyến tại Caddy theo tên miền triển khai.
+
+### Fixed
+- Đăng nhập lại giữ nguyên đường dẫn, vùng dữ liệu và mã lô trên URL.
+- Hai ứng dụng nhận biết phiên hết hạn mà không cố đọc trang đăng nhập HTML thành JSON.
+- Bỏ tên miền ứng dụng hard-code trong trang 404 và cách suy đoán hostname trong JavaScript.
+- Công cụ cài Caddy xác định rõ index.html và báo lỗi khi user caddy không đọc được trang giới thiệu.
+
+
 ## [Unreleased]
 
 - Chưa có mục mới sau bản chuẩn bị phát hành `v0.0.2`.

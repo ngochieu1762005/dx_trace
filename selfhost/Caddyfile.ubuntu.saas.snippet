@@ -14,9 +14,19 @@ landing.example.org {
         Referrer-Policy "strict-origin-when-cross-origin"
         Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
     }
+    # Fixed entry points; do not derive the app hostname in browser JavaScript.
+    @workspace path /login
+    redir @workspace https://app.example.org/oauth2/start?rd=%2F%23overview 302
+    @training path /try
+    redir @training https://app.example.org/oauth2/start?rd=%2F%3Farea%3Dtraining%23overview 302
+    @approvals path /approvals
+    redir @approvals https://app.example.org/oauth2/start?rd=%2Fapps%2Fapprovals%2Findex.html 302
     @oldApp path /apps/*
     redir @oldApp https://app.example.org{uri} 308
+    @home path /
+    rewrite @home /index.html
     file_server {
+        index index.html
         hide .git *.env *.sqlite *.dump
     }
     handle_errors {

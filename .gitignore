@@ -27,3 +27,7 @@ identity-*.dump
 selfhost/Caddyfile.local
 selfhost/Caddyfile.production
 selfhost/.env.*
+
+# Python helper caches
+__pycache__/
+*.pyc

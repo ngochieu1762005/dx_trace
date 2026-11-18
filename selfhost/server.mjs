@@ -50,7 +50,7 @@ if (localDemo && (process.env.BIND_ADDRESS !== '127.0.0.1' || origin !== 'http:/
  throw new Error('Chế độ demo yêu cầu địa chỉ loopback.');
 }
 const root=path.resolve('selfhost/generated/web');
-const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2'};
+const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2'};
 createServer(async(req,res)=>{
  try{
  if (localDemo && (req.headers.host !== new URL(origin).host ||
