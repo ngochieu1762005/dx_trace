@@ -27,7 +27,7 @@ import path from 'node:path';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {once} from 'node:events';
 
-test('independent headless core and approvals UI share identity, data and workflow securely',async()=>{
+test('headless core preserves identity, isolation and integrated approvals',async()=>{
  const dir=await mkdtemp(path.join(tmpdir(),'dx-headless-'));
  const corePort=38681,webPort=38682;
  const web='http://127.0.0.1:'+webPort,core='http://127.0.0.1:'+corePort;
@@ -70,9 +70,13 @@ test('independent headless core and approvals UI share identity, data and workfl
   const helper=await fetch(web+'/shared/session.mjs');
   assert.equal(helper.status,200);
   assert.match(helper.headers.get('content-type'),/javascript/,'shared ES module must have a JavaScript MIME type');
-  const page=await fetch(web+'/apps/approvals/index.html');
-  assert.equal(page.status,200);
-  assert.match(await page.text(),/DX Approvals/);
+  for(const [old,target] of [['/apps/approvals/index.html','/#requests'],['/demo/index.html','/#overview'],['/try','/#overview']]){
+   const page=await fetch(web+old,{redirect:'manual'});
+   assert.equal(page.status,302);
+   assert.equal(page.headers.get('location'),target);
+  }
+  const invalid=await fetch(web+'/api/state',{headers:{'x-forwarded-user':'subject','x-forwarded-email':'subject'}});
+  assert.equal(invalid.status,401,'UUID cannot substitute for an email');
   const state=await (await api('state')).json();
   assert.equal(state.me.role,'owner');
   const platform=await (await api('platform')).json();

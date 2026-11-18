@@ -12,7 +12,7 @@ does **not** mount the warehouse data volume.
 | DX-OS layer | Code / process | Responsibility |
 | --- | --- | --- |
 | Layer 1: headless PaaS | `selfhost/core-server.mjs`, `app/api/[...path]/route.ts`, `lib/` | Identity-aware API, workflow, tenant/workspace data, attachments and device ingestion |
-| Layer 2: H-P-D-I applications | `app/console.tsx`, `public/apps/approvals/` | Web UIs for human users and digital processes |
+| Layer 2: H-P-D-I applications | `app/console.tsx` | Unified warehouse UI with integrated requests and approvals |
 | Layer 3: business example | Lot tracking and food recall functions in DX-TRACE Warehouse | Batch traceability, distribution, environmental monitoring and recalls |
 
 ## Data flow / trust boundary
@@ -48,7 +48,7 @@ and persisted workflow rows. Both use the **same API**, rather than duplicating
 data or reimplementing access rules.
 
 * Warehouse UI: `https://APP_HOST/`
-* Standalone approvals UI: `https://APP_HOST/apps/approvals/index.html`
+* Integrated approvals: `https://APP_HOST/#requests`
 * Core discovery: `GET https://APP_HOST/api/platform` (authenticated)
 * Workflow creation: `POST /api/workflow` with JSON `{ "title", "content" }`
 * Workflow transition: `POST /api/workflow/{id}/transition` with JSON `{ "target": "submitted" }`
@@ -109,3 +109,7 @@ and OAuth2 Proxy in a real deployed stack.
   GitOps self-healing, and always-on malware scanning are not implemented.
 * For AI answers using Groq, the operator must intentionally supply a key and
   determine whether third-party processing of workspace content is acceptable.
+
+## Interface consolidation
+
+The standalone Approvals UI and scenario playground have been retired. Requests and approval actions remain in the warehouse navigation. Legacy `/apps/approvals/` URLs redirect to `/#requests`; `/demo/` redirects to `/#overview`. The core API, access controls and stored data remain available. Older diagrams showing separate UIs describe the previous presentation layer.

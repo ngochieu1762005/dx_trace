@@ -1,5 +1,13 @@
 # Changelog
 
+## Chưa phát hành
+
+- Hợp nhất điều hướng kho; gỡ giao diện diễn tập và ứng dụng phê duyệt riêng, giữ phê duyệt trong kho.
+- Chuyển các địa chỉ cũ về màn hình tương ứng; hướng dẫn thu hồi thao tác trên kho hiện tại.
+- Sửa claim email OIDC và quyền đọc mã nguồn cho tài khoản chạy container.
+- Không cho chọn lô đã hết tồn để lập phiếu xuất; không mở nhầm lô khác khi liên kết truy xuất không tồn tại.
+
+
 Nhật ký thay đổi của DX-TRACE. Theo dõi các chức năng được đưa vào mã nguồn; **việc hoạt động ổn định trên một VPS cụ thể vẫn cần kiểm thử sau triển khai**.
 
 ## [Unreleased]

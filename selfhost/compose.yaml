@@ -83,7 +83,7 @@ services:
       OAUTH2_PROXY_COOKIE_SECURE: "true"
       OAUTH2_PROXY_COOKIE_SAMESITE: lax
       OAUTH2_PROXY_EMAIL_DOMAINS: "*"
-      OAUTH2_PROXY_USER_ID_CLAIM: sub
+      OAUTH2_PROXY_OIDC_EMAIL_CLAIM: email
       OAUTH2_PROXY_SCOPE: "openid email profile"
       OAUTH2_PROXY_REDIRECT_URL: https://${APP_HOST:?}/oauth2/callback
       OAUTH2_PROXY_UPSTREAMS: http://app:8080/

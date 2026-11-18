@@ -101,7 +101,7 @@ curl -sS -o /dev/null -w "App: %{http_code}\n" https://app.example.org/
 curl -sS -o /dev/null -w "OIDC: %{http_code}\n" https://id.example.org/realms/warehouse/.well-known/openid-configuration
 ```
 
-Chờ đợi: landing `200`, app yêu cầu đăng nhập (thường `302`), OIDC `200`. Sau đó xác nhận đăng nhập thực tế rồi truy cập DX-TRACE Warehouse và DX Approvals. HTTP 302 **chưa** xác nhận callback hoặc session hoạt động.
+Chờ đợi: landing `200`, app yêu cầu đăng nhập (thường `302`), OIDC `200`. Sau đó xác nhận đăng nhập thực tế rồi truy cập kho và mục Đề xuất nội bộ. HTTP 302 **chưa** xác nhận callback hoặc session hoạt động.
 
 ## 7. Cập nhật, sao lưu và phục hồi
 
@@ -146,8 +146,12 @@ docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build app cor
 | Mở `/assets/site.css?v=3` | HTTP 200, Content-Type CSS |
 | Bấm Đăng nhập | Đi qua SSO rồi tới tổng quan kho vận hành |
 | Bấm Mở kho thực hành | Sau SSO, URL app giữ `?area=training#overview` |
-| Mở Approvals | Sau SSO, giữ `/apps/approvals/index.html` |
+| Mở đề xuất | Sau SSO, vào `/#requests` |
 | Phiên hết hạn tại hồ sơ một lô | Hiện nút đăng nhập lại; quay về đúng hồ sơ và vùng dữ liệu |
 | Sai quyền (403) | Hiển thị lỗi quyền, không tự đăng nhập vòng lặp |
 
 Nếu `/` vẫn hiện 404, kiểm tra `root` trong block **đúng domain landing**, vị trí thực của `index.html`, quyền đọc của user chạy Caddy và kết quả reload. `docker compose up` không tự cập nhật cấu hình Caddy trên host. Không ghi đè toàn bộ Caddyfile nếu máy chủ đang phục vụ các website khác.
+
+### Cập nhật giao diện thống nhất
+
+Build lại `core app` và tạo lại `signin` sau khi cập nhật mã. Cài lại đoạn Caddy của dự án bằng hướng dẫn ở trên để `/try` chuyển về kho và `/approvals` chuyển về `#requests`; sao chép lại thư mục landing đến document root đang dùng. Không xóa volume dữ liệu. Với cấu hình cũ, bỏ `OAUTH2_PROXY_USER_ID_CLAIM` và dùng `OAUTH2_PROXY_OIDC_EMAIL_CLAIM: email`. Kiểm tra bằng phiên trình duyệt mới: `/oauth2/userinfo` phải chứa email thật và `/api/state` trả HTTP 200.

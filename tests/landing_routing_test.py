@@ -19,8 +19,8 @@ class RoutingTests(unittest.TestCase):
         source = (ROOT / 'selfhost/Caddyfile.ubuntu.saas.snippet').read_text()
         self.assertIn('rewrite @home /index.html', source)
         self.assertIn('https://app.example.org/oauth2/start?rd=%2F%23overview', source)
-        self.assertIn('rd=%2F%3Farea%3Dtraining%23overview', source)
-        self.assertIn('rd=%2Fapps%2Fapprovals%2Findex.html', source)
+        self.assertNotIn('area%3Dtraining', source)
+        self.assertIn('rd=%2F%23requests', source)
 
     def test_duplicate_blocks_abort_instead_of_overwriting(self):
         source = 'old.example.org {\n}\nold.example.org {\n}\nid.example.org {\n}\n'

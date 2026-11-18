@@ -1,6 +1,6 @@
 # Danh mục API DX-TRACE
 
-Đường dẫn có tiền tố `/api`. Tài khoản sử dụng phiên OIDC của ứng dụng; khi diễn tập, thêm `?area=training` cho yêu cầu nghiệp vụ. Đầu dò dùng Bearer token riêng. Với lệnh cập nhật đi qua bộ xử lý nghiệp vụ, dùng cùng `Idempotency-Key` khi gửi lại cùng nội dung.
+Đường dẫn có tiền tố `/api`. Tài khoản sử dụng phiên OIDC của ứng dụng; khi truy cập dữ liệu mẫu cục bộ hoặc dữ liệu mẫu cũ, thêm `?area=training` cho yêu cầu nghiệp vụ. Đầu dò dùng Bearer token riêng. Với lệnh cập nhật đi qua bộ xử lý nghiệp vụ, dùng cùng `Idempotency-Key` khi gửi lại cùng nội dung.
 
 | Phương thức | Đường dẫn | Công việc |
 | --- | --- | --- |
@@ -24,4 +24,4 @@
 
 ## Headless API và hai ứng dụng
 
-Trong Docker, `selfhost/core-server.mjs` xử lý các API ở một tiến trình riêng và xác thực yêu cầu chuyển tiếp bằng `DX_CORE_TOKEN` nội bộ. Không công bố cổng của core. Giao diện kho `/` và ứng dụng phê duyệt `/apps/approvals/index.html` dùng cùng API và phiên OIDC. **Không** gửi `DX_CORE_TOKEN` từ trình duyệt; API công khai đi qua Caddy, OAuth2 Proxy và web reverse proxy. [Chi tiết](HEADLESS-CORE.md).
+Trong Docker, `selfhost/core-server.mjs` xử lý các API ở một tiến trình riêng và xác thực yêu cầu chuyển tiếp bằng `DX_CORE_TOKEN` nội bộ. Không công bố cổng của core. Giao diện kho `/`, bao gồm mục `#requests`, dùng cùng API và phiên OIDC. **Không** gửi `DX_CORE_TOKEN` từ trình duyệt; API công khai đi qua Caddy, OAuth2 Proxy và web reverse proxy. [Chi tiết](HEADLESS-CORE.md).

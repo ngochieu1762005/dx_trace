@@ -54,7 +54,7 @@ Giữ bản sao `.env` trong kho bí mật của đơn vị. Nếu cập nhật 
 
 1. Đăng nhập trang quản trị danh tính bằng `admin`. Chọn realm **warehouse**.
 2. Trong **Users → Add user**, tạo tài khoản chủ kho có email. Xác minh email, bật **Email verified** và đặt mật khẩu tại **Credentials**. Bật **Temporary** nếu cần đổi mật khẩu ở lần đăng nhập đầu tiên.
-3. Dùng **tài khoản chủ kho** đăng nhập tên miền ứng dụng. Có thể mở thêm `https://kho.example.org/apps/approvals/index.html` để thử ứng dụng phê duyệt độc lập. Hệ thống khởi tạo không gian làm việc.
+3. Dùng **tài khoản chủ kho** đăng nhập tên miền ứng dụng. Mở mục **Đề xuất nội bộ** để tạo và phê duyệt đề xuất ngay trong kho. Hệ thống khởi tạo không gian làm việc.
 4. Tạo tài khoản giám khảo trong cùng realm. Trong DX-TRACE, chủ kho vào **Cài đặt không gian → Thêm thành viên** và nhập đúng email đó **trước khi giám khảo đăng nhập lần đầu**.
 5. Chọn quyền theo bảng dưới. Gửi giám khảo địa chỉ `https://kho.example.org/?area=training#overview` để mở kho thực hành.
 
