@@ -39,7 +39,7 @@ jobs:
             echo "Refusing to release: a private/local file is Git-tracked." >&2
             exit 1
           fi
-          if git grep -I -n -E '103\.77\.172\.235|PharmaVision|pharmavision\.hieuds\.com' -- . ':!README.md'; then
+          if git grep -I -n -E '103\.77\.172\.235|Pharma[V]ision|pharmavision\.hieuds\.com' -- . ':!README.md'; then
             echo "Refusing to release: personal hosting information remains in tracked source." >&2
             exit 1
           fi
