@@ -23,12 +23,12 @@ Hướng dẫn **chung cho người tự triển khai**, không liên quan đế
 ## 1. Lấy mã nguồn và khởi tạo
 
 ```bash
-git clone https://github.com/<YOUR-ACCOUNT>/dx_trace.git dx-trace
+git clone https://github.com/OWNER/REPOSITORY.git dx-trace
 cd dx-trace
 node selfhost/setup.mjs app.example.org id.example.org
 ```
 
-Thay URL clone bằng URL repository hiện hành. Nếu đã có `selfhost/.env`, **không** chạy lại setup và không tạo khóa/người dùng mới. `APP_HOST` phải là domain workspace, `ID_HOST` là domain Keycloak. Không commit `selfhost/.env` lên GitHub.
+Thay `OWNER/REPOSITORY` bằng đường dẫn repository GitHub của bạn; ví dụ này không gắn cố định vào tài khoản cá nhân của người phát triển. Nếu đã có `selfhost/.env`, **không** chạy lại setup và không tạo khóa/người dùng mới. `APP_HOST` phải là domain workspace, `ID_HOST` là domain Keycloak. Không commit `selfhost/.env` lên GitHub.
 
 ### 2. Chạy Compose cùng Caddy host
 
@@ -111,3 +111,5 @@ Chờ đợi: landing `200`, app yêu cầu đăng nhập (thường `302`), OID
 - Không đưa dữ liệu khách hàng, địa chỉ IP, token, mật khẩu hay cấu hình nội bộ vào Git.
 
 **Đây là hướng dẫn cài chung.** Ba website demo được giới thiệu riêng trong README và **không** phải giá trị cấu hình mặc định.
+
+> **SEO:** `landing/sitemap.xml` chứa URL ví dụ `https://landing.example.org/`. Hãy thay bằng tên miền landing của bạn trước khi đưa website lên production.
