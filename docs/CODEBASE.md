@@ -14,7 +14,6 @@ Các đường dẫn dưới đây trỏ tới tệp được phân phối. Thư
 | [app/globals.css](../app/globals.css) | Warehouse dashboard layout and responsive styles |
 | [app/impact.tsx](../app/impact.tsx) | Recall reconciliation by destination |
 | [app/scanner.tsx](../app/scanner.tsx) | Camera scanning and printable lot labels |
-| [app/training-overview.tsx](../app/training-overview.tsx) | Training dashboard for the sample recall |
 
 <a id="lib"></a>
 
@@ -65,8 +64,6 @@ Các đường dẫn dưới đây trỏ tới tệp được phân phối. Thư
 
 | Tệp | Chức năng |
 | --- | --- |
-| [public/demo/index.html](../public/demo/index.html) | Training scenario selector |
-| [public/demo/scenarios.js](../public/demo/scenarios.js) | Interactive supply-chain training scenarios |
 | [public/favicon.svg](../public/favicon.svg) | DX-TRACE application icon |
 | [public/fonts/google-sans/LICENSE.txt](../public/fonts/google-sans/LICENSE.txt) | Văn bản đi kèm |
 | [public/fonts/google-sans/google-sans-latin-ext-standard-normal.woff2](../public/fonts/google-sans/google-sans-latin-ext-standard-normal.woff2) | Phông chữ phân phối kèm |

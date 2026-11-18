@@ -59,6 +59,13 @@ createServer(async(req,res)=>{
  }
  const url=new URL(req.url,origin);
  if(url.origin!==origin){res.writeHead(400).end();return}
+ // Retired interfaces keep bookmarks useful without exposing a second UI.
+ const retired = url.pathname.startsWith('/apps/approvals/') || url.pathname==='/approvals'
+   ? 'requests' : url.pathname.startsWith('/demo/') || url.pathname==='/try' ? 'overview' : null;
+ if(retired && req.method==='GET'){
+   const area=url.searchParams.get('area')==='training'?'?area=training':'';
+   res.writeHead(302,{location:'/'+area+'#'+retired,'cache-control':'no-store'}).end();return;
+ }
  if(localDemo && (url.pathname.startsWith('/oauth2/'))){
    res.writeHead(302,{location:'/?area=training#overview'}).end();return;
  }

@@ -5,7 +5,6 @@ Giao diện React phục vụ hai nhóm thao tác chính: xử lý hàng trong k
 | Tệp | Khi nào cần mở |
 | --- | --- |
 | [console.tsx](console.tsx) | Điều hướng, tìm kiếm, phân trang, biểu mẫu và các thao tác giao nhận. |
-| [training-overview.tsx](training-overview.tsx) | Biểu đồ nhiệt độ và tình hình thu hồi SUA-005 trên trang tổng quan kho thực hành. |
 | [impact.tsx](impact.tsx) | Số đã giao, đã trả, còn phải thu và chờ giao tại từng điểm nhận. |
 | [scanner.tsx](scanner.tsx) | Đọc tem bằng camera hoặc ảnh, tạo tem QR. |
 | [globals.css](globals.css) | Kiểu hiển thị, các cột trên tổng quan, bảng cuộn và bố cục màn hình nhỏ. |

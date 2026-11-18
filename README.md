@@ -48,7 +48,7 @@ Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai
 
 - [Giới thiệu](#introduction)
 - [Kiến trúc DX-OS Open-Core](#architecture)
-- [Hai ứng dụng dùng chung nền tảng](#applications)
+- [Một giao diện vận hành thống nhất](#applications)
 - [Công nghệ sử dụng](#technologies)
 - [Chức năng và dữ liệu mẫu](#features)
 - [Yêu cầu hệ thống](#requirements)
@@ -84,7 +84,7 @@ flowchart TB
     SignIn --> Web["Web app · UI và reverse proxy"]
     Gateway -->|"POST /api/ingest"| Web
     Web --> Warehouse["Ứng dụng 01 · DX-TRACE Warehouse"]
-    Web --> Approvals["Ứng dụng 02 · DX Approvals"]
+    Warehouse --> Approvals["Đề xuất & phê duyệt tích hợp"]
     Web -->|"DX_CORE_TOKEN · mạng Docker"| Core["Headless Core API · Node.js"]
     Core --> Data[("SQLite · workspace & giao dịch")]
     Core --> Files[("Kho tệp · SHA-256")]
@@ -171,18 +171,13 @@ Một tag phiên bản xác định **mã nguồn**; bản sao lưu xác định
 
 <a id="applications"></a>
 
-## 🧩 Hai ứng dụng dùng chung nền tảng
+## 🧩 Một giao diện vận hành thống nhất
 
-| Ứng dụng | Đường dẫn (sau khi triển khai) | Chức năng |
-| --- | --- | --- |
-| **DX-TRACE Warehouse** | `https://kho.example.org/` | Lô hàng, nhà cung cấp, giao nhận, QR/mã vạch, cảnh báo nhiệt độ, sự cố và thu hồi |
-| **DX Approvals** | `https://kho.example.org/apps/approvals/index.html` | Tạo đề xuất, gửi duyệt, phê duyệt/từ chối và theo dõi trạng thái |
+DX-TRACE tích hợp quản lý kho, giao nhận, truy xuất, thu hồi và **Đề xuất nội bộ** trong cùng giao diện. Tạo đề xuất → gửi duyệt → quản lý phê duyệt hoặc từ chối → xem nhật ký, không chuyển sang ứng dụng khác.
 
-Hai ứng dụng có **giao diện độc lập** nhưng truy cập cùng `/api`, cùng danh tính OIDC, quyền theo workspace và dữ liệu lưu trên Core. Đề xuất tạo ở Approvals có thể xem trong mục **Đề xuất nội bộ** của Warehouse.
+Các đường dẫn cũ `/apps/approvals/index.html` và `/demo/index.html` chuyển về mục Đề xuất nội bộ và Tổng quan. Menu diễn tập và bộ bốn kịch bản đã được gỡ bỏ. Dữ liệu mẫu cũ được giữ riêng, không xóa hoặc trộn với dữ liệu vận hành. Chế độ chạy cục bộ vẫn dùng dữ liệu mẫu để kiểm tra mà không cần SSO.
 
-Workflow hiện hỗ trợ các bước **draft → submitted → approved / rejected** và kiểm soát vai trò ở backend. Đây là quy trình được định nghĩa trong mã, **chưa phải BPMN engine cho phép thiết kế quy trình động**.
-
-**Thử nhanh (sau khi khởi động hệ thống):** đăng nhập Warehouse → mở Approvals → tạo và gửi đề xuất → dùng tài khoản có quyền quản lý để phê duyệt → trở lại Warehouse kiểm tra trạng thái và nhật ký.
+Workflow kiểm soát vai trò ở backend; đây chưa phải BPMN engine thiết kế động.
 
 <a id="technologies"></a>
 
@@ -206,7 +201,7 @@ flowchart TD
     Objects --> Backup
 ```
 
-### Frontend, QR và diễn tập
+### Frontend và QR
 
 | Thư viện hoặc công nghệ | Nơi sử dụng | Vai trò |
 | --- | --- | --- |
@@ -214,8 +209,7 @@ flowchart TD
 | Lucide React 1.31.0 | [Điều hướng](app/console.tsx), [màn hình quét](app/scanner.tsx) | Bộ biểu tượng dùng chung cho thao tác kho, camera và trạng thái sự cố. |
 | ZXing Browser 0.2.1 | [Scanner](app/scanner.tsx), [xử lý nội dung tem](lib/scan.mjs) | Giải mã ảnh hoặc luồng camera; đối chiếu kết quả với mã lô và mã vạch sản phẩm. |
 | qrcode 1.5.4 | [Tạo tem](app/scanner.tsx) | Sinh tem PNG chứa định danh lô để in hoặc quét lại. |
-| CSS Grid, SVG, Google Sans | [CSS](app/globals.css), [tổng quan kho mẫu](app/training-overview.tsx) | Căn các hàng cảnh báo, vẽ biểu đồ nhiệt độ và hiển thị tiếng Việt bằng phông tự lưu trữ. |
-| HTML và JavaScript | [Bộ diễn tập](public/demo/scenarios.js) | Bốn kịch bản tương tác có thể làm lại. Kho thực hành có lưu trạng thái sử dụng [bộ dữ liệu mẫu riêng](lib/demo.mjs). |
+| CSS Grid, SVG, Google Sans | [CSS](app/globals.css), [giao diện kho](app/console.tsx) | Căn các hàng cảnh báo, vẽ biểu đồ nhiệt độ và hiển thị tiếng Việt bằng phông tự lưu trữ. |
 
 ### Backend và lõi nghiệp vụ
 
@@ -310,7 +304,7 @@ Mở **Kho thực hành → Tổng quan** và chọn **Truy xuất lô** ở th�
 3. Theo dõi số còn phải thu sau mỗi lần nhận. Khi tất cả phiếu đã được xử lý, người có quyền quản lý có thể đóng sự cố.
 4. Mở **Nhật ký** để đối chiếu người thực hiện và thời điểm cập nhật.
 
-Kho thực hành ban đầu có 16 lô, 40 phiếu giao nhận và 4 đầu dò với 32 số đo mẫu. Thao tác trong kho này được lưu giữa các lần đăng nhập. Để tập lại một kịch bản từ đầu, vào **Công cụ & quản trị → Hướng dẫn sử dụng → Mở 4 kịch bản diễn tập**. Các kịch bản tương tác này có nút **Làm lại**. Kho vận hành sử dụng vùng dữ liệu riêng.
+Dữ liệu mẫu cục bộ có 16 lô, 40 phiếu giao nhận và 4 đầu dò với 32 số đo. Thao tác được lưu riêng với kho vận hành; không còn bộ kịch bản diễn tập trên web.
 
 <a id="requirements"></a>
 
@@ -338,7 +332,7 @@ Kho thực hành ban đầu có 16 lô, 40 phiếu giao nhận và 4 đầu dò 
    npm run demo
    ```
 
-3. Khi terminal in **Mở kho thực hành**, mở [DX-TRACE trên PC này](http://127.0.0.1:8080/?area=training#overview). Trang tổng quan ban đầu có **16 lô**; chọn **Truy xuất lô** tại SUA-005 để kiểm tra hành trình phân phối. Có thể mở thêm [DX Approvals cục bộ](http://127.0.0.1:8080/apps/approvals/index.html). Phiên demo dùng sẵn quyền chủ kho cục bộ.
+3. Khi terminal in **Mở kho thực hành**, mở [DX-TRACE trên PC này](http://127.0.0.1:8080/?area=training#overview). Trang tổng quan ban đầu có **16 lô**; chọn **Truy xuất lô** tại SUA-005 để kiểm tra hành trình phân phối. Phê duyệt đề xuất ngay trong mục **Đề xuất nội bộ**. Phiên demo dùng sẵn quyền chủ kho cục bộ.
 4. Giữ cửa sổ terminal mở trong khi trình bày. Nhấn **Ctrl+C** để dừng. Những lần sau chỉ cần mở lại terminal trong thư mục dự án và chạy `npm run demo`. Các thao tác đã thực hiện được lưu tại `selfhost/local-demo-data/`.
 
 Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi chạy lại. Chế độ này chỉ lắng nghe tại `127.0.0.1`. **Chế độ demo không chứng minh SSO hay tách tiến trình Core**; để trình diễn kiến trúc triển khai thực tế và nhiều tài khoản, sử dụng cách B.
@@ -370,7 +364,7 @@ Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi ch�
 | `https://id.example.org/admin/` | Quản trị tài khoản Keycloak. |
 | `https://kho.example.org/` | Đăng nhập kho vận hành. |
 | `https://kho.example.org/?area=training#overview` | Trình diễn bằng dữ liệu mẫu. |
-| `https://kho.example.org/apps/approvals/index.html` | Ứng dụng phê duyệt dùng chung SSO và workflow. |
+| `https://kho.example.org/apps/approvals/index.html` | Đường dẫn cũ, chuyển về mục Đề xuất nội bộ. |
 
 <a id="detailed-setup"></a>
 

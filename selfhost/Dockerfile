@@ -44,5 +44,6 @@ COPY --from=build /app/drizzle drizzle
 RUN mkdir -p node_modules data && chown node:node data
 COPY --from=build /app/node_modules/.pnpm/zod@3.25.76/node_modules/zod node_modules/zod
 ENV DATA_DIR=/app/data BIND_ADDRESS=0.0.0.0
+RUN chmod -R a+rX /app/selfhost /app/lib /app/app /app/drizzle /app/node_modules && chmod a+r /app/package.json /app/LICENSE
 USER node
 CMD ["node","selfhost/server.mjs"]

@@ -8,7 +8,7 @@ Bảng dưới dẫn đến phần triển khai và cách kiểm tra cho từng 
 | Cổng truy cập | [Caddyfile](selfhost/Caddyfile), [Compose](selfhost/compose.yaml), [core-server](selfhost/core-server.mjs) | Kiểm tra tuyến web qua proxy đăng nhập, core chạy nội bộ không giao diện và tuyến gửi nhiệt độ xác thực bằng khóa. |
 | Dữ liệu cấu trúc và tệp | [Migration](drizzle/), [runtime tự triển khai](selfhost/runtime.mjs) | Truy xuất một lô, đính kèm tệp, kiểm tra snapshot cùng các đối tượng sau phục hồi. |
 | Quy trình | [Quy trình đề xuất](lib/workflow.mjs), [quy trình thu hồi](lib/domain.mjs) | Thử duyệt đề xuất bằng hai vai trò. Thử đóng sự cố khi vẫn còn hàng phải thu. |
-| Dùng chung giữa ứng dụng | [API](app/api/%5B...path%5D/route.ts), [ứng dụng phê duyệt độc lập](public/apps/approvals/index.html) | Dùng cùng phiên, tạo đề xuất ở ứng dụng phê duyệt và kiểm tra trong DX-TRACE Warehouse. Xem `/api/platform`. |
+| Dùng chung giữa phân hệ | [API](app/api/%5B...path%5D/route.ts), [giao diện kho](app/console.tsx) | Kho và đề xuất dùng chung danh tính, dữ liệu và workflow. Giao diện phê duyệt độc lập đã được hợp nhất; không còn dùng làm bằng chứng hai UI riêng. |
 | H–P–D–I trong kho | [Bộ mẫu](lib/demo.mjs), [tổng hợp tác động](lib/impact.mjs) | Theo dõi vai trò người xử lý, đầu dò gắn lô, phiếu phân phối và kết quả tính phạm vi thu hồi. |
 
 ## Hồ sơ nguồn mở
