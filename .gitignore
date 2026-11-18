@@ -7,3 +7,23 @@ selfhost/.env
 warehouse-*/
 
 selfhost/local-demo-data/
+
+# Never commit host-specific configuration or database snapshots
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+*.bak
+identity-*.dump
+selfhost/Caddyfile.local
+selfhost/Caddyfile.production
+selfhost/.env.*

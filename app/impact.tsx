@@ -2,7 +2,7 @@
  * DX-TRACE | Recall reconciliation by destination
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File app/impact.tsx
  * SPDX-License-Identifier: MIT
  *

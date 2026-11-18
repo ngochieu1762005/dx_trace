@@ -2,7 +2,7 @@
  * DX-TRACE | Interactive supply-chain training scenarios
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File public/demo/scenarios.js
  * SPDX-License-Identifier: MIT
  *

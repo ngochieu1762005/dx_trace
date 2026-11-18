@@ -2,7 +2,7 @@
  * DX-TRACE | Workspace isolation, revisions and command persistence
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File lib/server.ts
  * SPDX-License-Identifier: MIT
  *

@@ -2,7 +2,7 @@
  * DX-TRACE | First-run configuration and secret generation
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File selfhost/setup.mjs
  * SPDX-License-Identifier: MIT
  *

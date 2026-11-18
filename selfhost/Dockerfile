@@ -1,7 +1,7 @@
 # DX-TRACE | Multi-stage Node.js application image
 #
 # @Project DX-TRACE
-# @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+# @Maintainer DX-TRACE contributors
 # @File selfhost/Dockerfile
 # SPDX-License-Identifier: MIT
 #

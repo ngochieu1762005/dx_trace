@@ -1,0 +1,24 @@
+# DX-TRACE | Windows Caddy edge + Linux Docker workload (optional override)
+# @Project DX-TRACE
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 DX-TRACE contributors
+#
+# Use with: docker compose -f compose.yaml -f compose.windows-edge.yaml up -d --build
+# Existing Windows Caddy on 80/443 owns public TLS and routes to the ports below.
+# This overlay disables the in-container gateway so it will not compete for 80/443.
+# Keep all published ports on loopback only. NEVER expose core or the database.
+services:
+  gateway:
+    profiles:
+      - standalone-linux-gateway
+  signin:
+    ports:
+      - "127.0.0.1:8180:4180"
+  identity:
+    ports:
+      - "127.0.0.1:8181:8080"
+  app:
+    # Only the authenticated edge route and device-ingest edge may reach this port.
+    # Do not open this port on the public firewall.
+    ports:
+      - "127.0.0.1:8182:8080"

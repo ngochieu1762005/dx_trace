@@ -2,7 +2,7 @@
  * DX-TRACE | Training dashboard for the sample recall
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File app/training-overview.tsx
  * SPDX-License-Identifier: MIT
  *

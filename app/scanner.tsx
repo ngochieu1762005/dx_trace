@@ -2,7 +2,7 @@
  * DX-TRACE | Camera scanning and printable lot labels
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File app/scanner.tsx
  * SPDX-License-Identifier: MIT
  *

@@ -1,0 +1,48 @@
+# DX-TRACE | Append these site blocks to C:\caddy\Caddyfile on Windows.
+# @Project DX-TRACE
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 DX-TRACE contributors
+#
+# Preserve all unrelated websites already configured on Caddy.
+# Only use after all 3 Linux service ports respond from Windows.
+# Do NOT start the Docker Compose "gateway" service on the same public ports.
+
+app.example.org {
+    encode gzip
+    header Strict-Transport-Security "max-age=31536000"
+    header X-Content-Type-Options "nosniff"
+
+    @device {
+        method POST
+        path /api/ingest
+    }
+    handle @device {
+        reverse_proxy 127.0.0.1:8182 {
+            header_up -X-Forwarded-User
+            header_up -X-Forwarded-Email
+            header_up -X-Forwarded-Groups
+            header_up -X-Forwarded-Preferred-Username
+            header_up -X-DX-Core-Token
+        }
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8180 {
+            header_up -X-Forwarded-User
+            header_up -X-Forwarded-Email
+            header_up -X-Forwarded-Groups
+            header_up -X-Forwarded-Preferred-Username
+            header_up -X-DX-Core-Token
+        }
+    }
+}
+
+id.example.org {
+    encode gzip
+    reverse_proxy 127.0.0.1:8181 {
+        header_up -X-Forwarded-User
+        header_up -X-Forwarded-Email
+        header_up -X-Forwarded-Groups
+        header_up -X-Forwarded-Preferred-Username
+        header_up -X-DX-Core-Token
+    }
+}

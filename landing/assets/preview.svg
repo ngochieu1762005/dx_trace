@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+<rect width="1200" height="630" fill="#092E30"/>
+<circle cx="1010" cy="-80" r="360" fill="#155B58"/><circle cx="1090" cy="690" r="420" fill="#124846"/>
+<rect x="85" y="90" width="70" height="70" rx="21" fill="#1EAD92"/>
+<path d="m102 116 18-10 18 10v19l-18 10-18-10z" stroke="white" stroke-width="3"/>
+<path d="m102 116 18 11 18-11m-18 11v18" stroke="#CAFFF0" stroke-width="2"/>
+<text x="178" y="143" fill="white" font-size="40" font-weight="700" font-family="Arial,sans-serif">DX-TRACE</text>
+<text x="85" y="318" fill="white" font-size="69" font-weight="700" font-family="Arial,sans-serif">Truy xuất minh bạch.</text>
+<text x="85" y="403" fill="#ACEDD9" font-size="69" font-weight="700" font-family="Arial,sans-serif">Vận hành tin cậy.</text>
+<text x="85" y="481" fill="#D1E4DE" font-size="25" font-family="Arial,sans-serif">Open-core traceability &amp; recall management</text>
+</svg>

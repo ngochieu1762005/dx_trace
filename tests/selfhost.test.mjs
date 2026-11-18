@@ -2,7 +2,7 @@
  * DX-TRACE | HTTP isolation, authorization and restore tests
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File tests/selfhost.test.mjs
  * SPDX-License-Identifier: MIT
  *

@@ -1,7 +1,7 @@
 # DX-TRACE | Verification and tagged source releases
 #
 # @Project DX-TRACE
-# @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+# @Maintainer DX-TRACE contributors
 # @File .github/workflows/release.yml
 # SPDX-License-Identifier: MIT
 #
@@ -37,7 +37,7 @@ on:
       tag:
         description: 'Release tag to verify and publish'
         required: true
-        default: 'v0.0.1'
+        default: 'v0.0.2'
         type: string
 
 permissions:
@@ -88,13 +88,14 @@ jobs:
           git check-ref-format "refs/tags/$RELEASE_TAG"
           git rev-parse --verify "refs/tags/$RELEASE_TAG^{commit}"
 
+          ARCHIVE="DX-TRACE-${RELEASE_TAG}.tar.gz"
           git archive \
             --format=tar.gz \
-            --prefix=dx-trace/ \
-            -o dx-trace-source.tar.gz \
+            --prefix="DX-TRACE-${RELEASE_TAG}/" \
+            -o "$ARCHIVE" \
             "refs/tags/$RELEASE_TAG"
 
-          sha256sum dx-trace-source.tar.gz > SHA256SUMS
+          sha256sum "$ARCHIVE" > SHA256SUMS
 
       - name: Create or update release assets
         env:
@@ -107,13 +108,20 @@ jobs:
           if gh release view "$RELEASE_TAG" >/dev/null; then
             echo "Release $RELEASE_TAG already exists; updating assets."
           else
-            gh release create "$RELEASE_TAG" \
-              --verify-tag \
-              --title "DX-TRACE $RELEASE_TAG" \
-              --generate-notes
+            if [ -f "RELEASE_NOTES_${RELEASE_TAG}.md" ]; then
+              gh release create "$RELEASE_TAG" \
+                --verify-tag \
+                --title "DX-TRACE $RELEASE_TAG" \
+                --notes-file "RELEASE_NOTES_${RELEASE_TAG}.md"
+            else
+              gh release create "$RELEASE_TAG" \
+                --verify-tag \
+                --title "DX-TRACE $RELEASE_TAG" \
+                --generate-notes
+            fi
           fi
 
           gh release upload "$RELEASE_TAG" \
-            dx-trace-source.tar.gz \
+            "DX-TRACE-${RELEASE_TAG}.tar.gz" \
             SHA256SUMS \
             --clobber

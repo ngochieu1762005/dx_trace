@@ -1,0 +1,66 @@
+# DX-TRACE | Example host Caddy routing (NOT production domain configuration)
+# SPDX-License-Identifier: MIT
+# Copy to your own Caddyfile and replace *.example.org with YOUR domains.
+# The script install-saas-caddy.py can substitute these placeholders for you.
+# Existing unrelated Caddy sites stay in the original file.
+
+landing.example.org {
+    encode zstd gzip
+    root * /srv/dx-trace/landing
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+    }
+    @oldApp path /apps/*
+    redir @oldApp https://app.example.org{uri} 308
+    file_server {
+        hide .git *.env *.sqlite *.dump
+    }
+    handle_errors {
+        @notFound expression {err.status_code} == 404
+        rewrite @notFound /404.html
+        file_server
+    }
+}
+
+app.example.org {
+    encode zstd gzip
+    header Strict-Transport-Security "max-age=31536000"
+    header X-Content-Type-Options "nosniff"
+    @device {
+        method POST
+        path /api/ingest
+    }
+    handle @device {
+        reverse_proxy 127.0.0.1:8182 {
+            header_up -X-Forwarded-User
+            header_up -X-Forwarded-Email
+            header_up -X-Forwarded-Groups
+            header_up -X-Forwarded-Preferred-Username
+            header_up -X-DX-Core-Token
+        }
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8180 {
+            header_up -X-Forwarded-User
+            header_up -X-Forwarded-Email
+            header_up -X-Forwarded-Groups
+            header_up -X-Forwarded-Preferred-Username
+            header_up -X-DX-Core-Token
+        }
+    }
+}
+
+id.example.org {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:8181 {
+        header_up -X-Forwarded-User
+        header_up -X-Forwarded-Email
+        header_up -X-Forwarded-Groups
+        header_up -X-Forwarded-Preferred-Username
+        header_up -X-DX-Core-Token
+    }
+}

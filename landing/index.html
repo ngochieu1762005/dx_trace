@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c554c">
+  <meta name="description" content="DX-TRACE là nền tảng nguồn mở giúp quản lý lô hàng, truy xuất nguồn gốc, theo dõi điều kiện bảo quản và điều phối thu hồi thực phẩm. Khám phá kiến trúc DX-OS Open-Core.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:site_name" content="DX-TRACE">
+  <meta property="og:title" content="DX-TRACE — Truy xuất minh bạch. Vận hành tin cậy.">
+  <meta property="og:description" content="Nền tảng open-core quản lý truy xuất, giám sát điều kiện bảo quản và điều phối thu hồi thực phẩm.">
+  <meta property="og:image" content="/assets/preview.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>DX-TRACE — Truy xuất minh bạch. Vận hành tin cậy.</title>
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/site.css?v=1">
+  <script defer src="/assets/site.js?v=1"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
+  <svg class="icon-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 0 1 1-1h4m6 0h4a1 1 0 0 1 1 1v4m0 6v4a1 1 0 0 1-1 1h-4m-6 0H5a1 1 0 0 1-1-1v-4M4 12h16"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7M12 11v10"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Zm-4-11 3 3 5-5"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h5l3-7 4 14 3-7h5"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24"><rect x="2" y="3" width="7" height="7" rx="2"/><rect x="15" y="14" width="7" height="7" rx="2"/><path d="M9 6h6a3 3 0 0 1 3 3v5M6 10v6a3 3 0 0 0 3 3h6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5Zm-9 10 9 5 9-5M3 17l9 5 9-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1-4-2-6-3m12 6v-3a3 3 0 0 0-1-2c4 0 7-2 7-7a5 5 0 0 0-1-3 5 5 0 0 0 0-4s-2 0-4 2a14 14 0 0 0-8 0C6 3 4 3 4 3a5 5 0 0 0 0 4 5 5 0 0 0-1 3c0 5 3 7 7 7a3 3 0 0 0-1 2v3"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
+  </svg>
+
+  <header class="site-header" id="top">
+    <div class="container nav-shell">
+      <a class="brand" href="/" aria-label="DX-TRACE — trang chủ"><img src="/assets/mark.svg" alt="" width="42" height="42"><span class="brand-name">DX-TRACE<span class="brand-caption">OPEN-CORE PLATFORM</span></span></a>
+      <nav class="site-nav" id="site-nav" aria-label="Điều hướng chính">
+        <a href="#nang-luc">Năng lực</a><a href="#quy-trinh">Quy trình</a><a href="#kien-truc">Kiến trúc</a><a href="#cau-hoi">Câu hỏi thường gặp</a>
+        <a class="nav-login" href="#login" data-dxtrace-login>Đăng nhập <svg class="icon"><use href="#i-arrow"/></svg></a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="site-nav" aria-expanded="false"><svg class="icon menu-icon"><use href="#i-menu"/></svg><svg class="icon close-icon"><use href="#i-x"/></svg></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow light"><span class="eyebrow-dot"></span> NỀN TẢNG TRUY XUẤT NGUỒN MỞ</span>
+          <h1 id="hero-title">Truy xuất minh bạch.<br><span>Vận hành tin cậy.</span></h1>
+          <p class="hero-desc">Từ quản lý lô hàng đến điều phối thu hồi, DX-TRACE kết nối dữ liệu, con người và quy trình trong một không gian làm việc rõ ràng, có kiểm soát.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#login" data-dxtrace-login>Vào hệ thống <svg class="icon"><use href="#i-arrow"/></svg></a>
+            <a class="button button-outline" href="#nang-luc">Khám phá nền tảng <svg class="icon"><use href="#i-chevron"/></svg></a>
+          </div>
+          <div class="hero-trust"><span><svg class="icon"><use href="#i-check"/></svg> Tự triển khai</span><span><svg class="icon"><use href="#i-check"/></svg> Có mã nguồn</span><span><svg class="icon"><use href="#i-check"/></svg> Vai trò &amp; nhật ký</span></div>
+        </div>
+        <div class="hero-visual" aria-label="Bản minh họa bảng điều hành DX-TRACE với dữ liệu giả lập">
+          <div class="preview-badge"><span class="preview-live"></span> MINH HỌA GIAO DIỆN</div>
+          <div class="dashboard">
+            <div class="dash-sidebar"><div class="dash-logo"><img src="/assets/mark.svg" alt="" width="26" height="26"><b>DX-TRACE</b></div><span class="dash-side active">◫ <span>Tổng quan</span></span><span class="dash-side">▤ <span>Quản lý lô</span></span><span class="dash-side">◈ <span>Truy xuất</span></span><span class="dash-side">◉ <span>Sự cố</span></span><span class="dash-side">▦ <span>Phê duyệt</span></span><div class="dash-side-bottom">Workspace / Demo</div></div>
+            <div class="dash-main">
+              <div class="dash-top"><span>Không gian làm việc <b>/ Tổng quan</b></span><span class="dash-avatar">DX</span></div>
+              <div class="dash-heading"><div><span class="dash-kicker">BẢNG ĐIỀU HÀNH</span><h3>Tổng quan vận hành</h3><p>Trạng thái truy xuất và chất lượng lô hàng</p></div><span class="dash-filter">30 ngày qua ▾</span></div>
+              <div class="dash-stat-grid"><div class="dash-stat"><span>Đang theo dõi</span><strong>128</strong><small>lô hàng</small></div><div class="dash-stat"><span>Cần chú ý</span><strong>04</strong><small>cảnh báo mở</small></div><div class="dash-stat"><span>Đã xử lý</span><strong>96%</strong><small>theo kịch bản</small></div></div>
+              <div class="dash-panels"><div class="dash-chart"><div class="dash-panel-title">Điều kiện bảo quản <span>7 ngày gần đây</span></div><div class="chart-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="dash-chart-footer">Dữ liệu minh họa · Không phải số liệu vận hành thực tế</span></div><div class="dash-lots"><div class="dash-panel-title">Hoạt động gần đây</div><div class="dash-item"><span class="dash-dot green"></span><div>LOT-2026-041 <small>Đã xác thực</small></div></div><div class="dash-item"><span class="dash-dot amber"></span><div>LOT-2026-039 <small>Cần kiểm tra</small></div></div><div class="dash-item"><span class="dash-dot green"></span><div>LOT-2026-038 <small>Đã cập nhật</small></div></div></div></div>
+            </div>
+          </div>
+          <div class="float-card"><span class="float-icon"><svg class="icon"><use href="#i-shield"/></svg></span><span><b>Kiểm soát theo vai trò</b><small>Định danh · Phân quyền · Lưu vết</small></span></div>
+        </div>
+      </div>
+      <div class="hero-bottom-bar"><div class="container"><span>DX-OS OPEN-CORE</span><span>TRACEABILITY / QUALITY / WORKFLOW</span><span>SELF-HOSTED</span></div></div>
+    </section>
+
+    <section class="problem section-pad" id="van-de" aria-labelledby="problem-title"><div class="container problem-layout"><div class="section-intro"><span class="eyebrow">TỪ THỰC TẾ VẬN HÀNH</span><h2 id="problem-title">Một sự cố nhỏ không nên biến thành cuộc truy tìm dữ liệu.</h2><p>Khi thông tin nằm rải rác trong bảng tính, tin nhắn và các công cụ độc lập, việc xác định lô ảnh hưởng, điểm nhận và trách nhiệm xử lý trở nên chậm chạp.</p></div><div class="problem-points"><div><span class="problem-index">01</span><div><h3>Khó theo dõi hành trình lô hàng</h3><p>Thông tin nhập, xuất, điểm nhận và hồ sơ lô không được kết nối.</p></div></div><div><span class="problem-index">02</span><div><h3>Thiếu bối cảnh khi có cảnh báo</h3><p>Nhóm vận hành mất thời gian tổng hợp chứng cứ trước khi hành động.</p></div></div><div><span class="problem-index">03</span><div><h3>Khó đối soát tiến độ thu hồi</h3><p>Không biết chính xác số lượng đã thu, còn thiếu và ai chịu trách nhiệm.</p></div></div></div></div></section>
+
+    <section class="features section-pad" id="nang-luc" aria-labelledby="features-title"><div class="container"><div class="section-heading center"><span class="eyebrow">NĂNG LỰC NỀN TẢNG</span><h2 id="features-title">Một hệ thống. Những mắt xích vận hành được kết nối.</h2><p>Tập trung vào bài toán truy xuất thực phẩm và điều phối thu hồi; các thành phần lõi được thiết kế để có thể tái sử dụng và mở rộng.</p></div><div class="feature-grid"><article class="feature-card"><span class="feature-icon mint"><svg class="icon"><use href="#i-box"/></svg></span><h3>Quản lý lô và giao nhận</h3><p>Liên kết nhà cung cấp, lô sản phẩm, phiếu giao và từng điểm nhận trên cùng hồ sơ.</p><span class="feature-meta">WAREHOUSE</span></article><article class="feature-card"><span class="feature-icon blue"><svg class="icon"><use href="#i-scan"/></svg></span><h3>QR và truy xuất nguồn gốc</h3><p>Quét tem, mở hồ sơ lô, tra cứu mã vạch và lần theo lịch sử luân chuyển.</p><span class="feature-meta">TRACEABILITY</span></article><article class="feature-card"><span class="feature-icon yellow"><svg class="icon"><use href="#i-pulse"/></svg></span><h3>Giám sát điều kiện bảo quản</h3><p>Tiếp nhận số đo từ thiết bị, đối chiếu ngưỡng và nhận biết những tình huống cần chú ý.</p><span class="feature-meta">MONITORING</span></article><article class="feature-card"><span class="feature-icon coral"><svg class="icon"><use href="#i-flow"/></svg></span><h3>Điều phối sự cố và thu hồi</h3><p>Xác định phạm vi ảnh hưởng, theo dõi xử lý và đối soát số lượng theo từng nơi nhận.</p><span class="feature-meta">RECALL</span></article><article class="feature-card"><span class="feature-icon mint"><svg class="icon"><use href="#i-user"/></svg></span><h3>Phân quyền và lịch sử thao tác</h3><p>Đăng nhập tập trung, vai trò theo không gian làm việc và lưu vết những thay đổi quan trọng.</p><span class="feature-meta">IDENTITY / AUDIT</span></article><article class="feature-card"><span class="feature-icon blue"><svg class="icon"><use href="#i-layers"/></svg></span><h3>API lõi và ứng dụng mở rộng</h3><p>Kiến trúc headless cho phép nhiều giao diện nghiệp vụ chia sẻ danh tính và dữ liệu.</p><span class="feature-meta">OPEN-CORE</span></article></div></div></section>
+
+    <section class="workflow section-pad" id="quy-trinh" aria-labelledby="workflow-title"><div class="container"><div class="section-heading split"><div><span class="eyebrow">MỘT QUY TRÌNH, TOÀN CẢNH</span><h2 id="workflow-title">Từ lô hàng đến quyết định có thể kiểm chứng.</h2></div><p>Không chỉ ghi nhận dữ liệu. DX-TRACE kết nối các bước cần thiết để đội ngũ phản ứng có trình tự khi có vấn đề phát sinh.</p></div><div class="step-grid"><article class="step"><span class="step-num">01 / RECORD</span><div class="step-line"></div><h3>Ghi nhận</h3><p>Tạo hồ sơ lô, khai báo giao nhận và bổ sung minh chứng theo nghiệp vụ.</p></article><article class="step"><span class="step-num">02 / TRACE</span><div class="step-line"></div><h3>Truy xuất</h3><p>Tra hành trình và điểm nhận dựa trên lịch sử dữ liệu có liên kết.</p></article><article class="step"><span class="step-num">03 / RESPOND</span><div class="step-line"></div><h3>Xử lý</h3><p>Ghi nhận cảnh báo, xác định mức ảnh hưởng và phối hợp thu hồi.</p></article><article class="step"><span class="step-num">04 / VERIFY</span><div class="step-line"></div><h3>Đối soát</h3><p>Kiểm tra số lượng còn lại, trạng thái nhiệm vụ và nhật ký thao tác.</p></article></div></div></section>
+
+    <section class="architecture section-pad" id="kien-truc" aria-labelledby="architecture-title"><div class="container arch-grid"><div class="arch-copy"><span class="eyebrow light">NỀN TẢNG KỸ THUẬT</span><h2 id="architecture-title">Open-core từ thiết kế. Linh hoạt khi triển khai.</h2><p>DX-TRACE tách lớp xác thực, ứng dụng và API nghiệp vụ. Tổ chức có thể tự lưu trữ hệ thống, kiểm tra mã nguồn và tiếp tục phát triển theo nhu cầu riêng.</p><div class="arch-facts"><span><svg class="icon"><use href="#i-check"/></svg> Identity / SSO</span><span><svg class="icon"><use href="#i-check"/></svg> Headless Core API</span><span><svg class="icon"><use href="#i-check"/></svg> Structured + file storage</span><span><svg class="icon"><use href="#i-check"/></svg> Workflow &amp; audit</span></div><a class="text-link inverted" href="https://github.com/ngochieu1762005/dx_trace" target="_blank" rel="noopener noreferrer">Xem mã nguồn trên GitHub <svg class="icon"><use href="#i-arrow"/></svg></a></div><div class="arch-visual" role="img" aria-label="Minh họa luồng: người dùng qua SSO vào ứng dụng, ứng dụng kết nối API lõi và kho dữ liệu"><div class="arch-node arch-top">Giao diện và các ứng dụng nghiệp vụ</div><div class="arch-line"></div><div class="arch-middle"><div class="arch-node">Identity / SSO</div><div class="arch-node">API Gateway / Proxy</div></div><div class="arch-line"></div><div class="arch-node arch-core">Headless Core <span>Workflow · Business API · RBAC</span></div><div class="arch-line"></div><div class="arch-middle"><div class="arch-node">Dữ liệu có cấu trúc</div><div class="arch-node">Kho tệp &amp; minh chứng</div></div><p class="arch-note">Sơ đồ khái quát · Chi tiết kiến trúc có tại repository</p></div></div></section>
+
+    <section class="audience section-pad" aria-labelledby="audience-title"><div class="container audience-grid"><div><span class="eyebrow">DÀNH CHO CÁC ĐỘI NGŨ</span><h2 id="audience-title">Dữ liệu rõ ràng hơn.<br>Phối hợp hiệu quả hơn.</h2><p>Một không gian làm việc có cấu trúc cho những bộ phận tham gia vào chất lượng và khả năng truy xuất sản phẩm.</p><a href="#login" data-dxtrace-login class="text-link">Truy cập workspace <svg class="icon"><use href="#i-arrow"/></svg></a></div><div class="audience-list"><div><span>01</span><strong>Vận hành kho và giao nhận</strong><svg class="icon"><use href="#i-arrow"/></svg></div><div><span>02</span><strong>Đảm bảo chất lượng</strong><svg class="icon"><use href="#i-arrow"/></svg></div><div><span>03</span><strong>Quản lý chuỗi cung ứng</strong><svg class="icon"><use href="#i-arrow"/></svg></div><div><span>04</span><strong>Nhóm phát triển chuyển đổi số</strong><svg class="icon"><use href="#i-arrow"/></svg></div></div></div></section>
+
+    <section class="faq section-pad" id="cau-hoi" aria-labelledby="faq-title"><div class="container faq-grid"><div><span class="eyebrow">TÌM HIỂU THÊM</span><h2 id="faq-title">Câu hỏi thường gặp</h2><p>Nếu bạn mới biết đến DX-TRACE, đây là những thông tin quan trọng trước khi bắt đầu.</p></div><div class="faq-items"><details><summary>DX-TRACE là phần mềm gì?<svg class="icon"><use href="#i-chevron"/></svg></summary><p>DX-TRACE là dự án nền tảng nguồn mở dành cho truy xuất nguồn gốc theo lô, giám sát điều kiện bảo quản và phối hợp xử lý thu hồi thực phẩm. Hệ thống minh họa kiến trúc DX-OS Open-Core.</p></details><details><summary>Có cần tạo tài khoản mới để sử dụng?<svg class="icon"><use href="#i-chevron"/></svg></summary><p>Bạn cần tài khoản được quản trị viên cấp quyền trong Keycloak và không gian làm việc. Hệ thống không bật tự đăng ký công khai.</p></details><details><summary>DX-TRACE có thể tự triển khai không?<svg class="icon"><use href="#i-chevron"/></svg></summary><p>Có. Mã nguồn và hướng dẫn triển khai qua Docker Compose được công bố trên GitHub. Người triển khai chịu trách nhiệm bảo mật, vận hành và sao lưu dữ liệu.</p></details><details><summary>Có thể tích hợp thiết bị và hệ thống khác không?<svg class="icon"><use href="#i-chevron"/></svg></summary><p>DX-TRACE có API lõi và API tiếp nhận số đo có xác thực bằng khóa thiết bị. Mức tích hợp thực tế phụ thuộc thiết bị, quy trình và cấu hình hạ tầng.</p></details><details><summary>Đây đã là hệ thống chứng nhận tiêu chuẩn ngành chưa?<svg class="icon"><use href="#i-chevron"/></svg></summary><p>Chưa. DX-TRACE là nền tảng phát triển theo hướng thử nghiệm và minh chứng kỹ thuật; không tuyên bố có chứng nhận quản lý chất lượng hay bảo đảm tuân thủ cho mọi tổ chức.</p></details></div></div></section>
+
+    <section class="last-cta"><div class="container cta-panel"><div><span class="eyebrow light">BẮT ĐẦU VỚI DX-TRACE</span><h2>Sẵn sàng kết nối toàn bộ hành trình truy xuất?</h2><p>Truy cập ứng dụng để làm việc với kho hàng, hồ sơ lô và quy trình xử lý trong một không gian thống nhất.</p></div><div class="cta-actions"><a class="button button-white" href="#login" data-dxtrace-login>Đăng nhập vào hệ thống <svg class="icon"><use href="#i-arrow"/></svg></a><a class="cta-github" href="https://github.com/ngochieu1762005/dx_trace" target="_blank" rel="noopener noreferrer">Xem dự án nguồn mở</a></div></div></section>
+  </main>
+
+  <footer class="footer"><div class="container footer-grid"><div><a class="brand footer-brand" href="/"><img src="/assets/mark.svg" alt="" width="39" height="39"><span class="brand-name">DX-TRACE<span class="brand-caption">OPEN-CORE PLATFORM</span></span></a><p>Truy xuất minh bạch. Vận hành tin cậy.</p></div><div><h3>Khám phá</h3><a href="#nang-luc">Năng lực</a><a href="#quy-trinh">Quy trình</a><a href="#kien-truc">Kiến trúc</a></div><div><h3>Tài nguyên</h3><a href="https://github.com/ngochieu1762005/dx_trace" target="_blank" rel="noopener noreferrer">Mã nguồn</a><a href="https://github.com/ngochieu1762005/dx_trace/blob/main/selfhost/README.md" target="_blank" rel="noopener noreferrer">Tài liệu</a><a href="#login" data-dxtrace-login>Vào ứng dụng</a></div><div><h3>Nền tảng</h3><p>Self-hosted · OIDC SSO<br>DX-OS Open-Core</p></div></div><div class="container foot-bottom"><span>© 2026 DX-TRACE Contributors. MIT License.</span><span>Built for traceability, accountability and open technology.</span></div></footer>
+</body>
+</html>

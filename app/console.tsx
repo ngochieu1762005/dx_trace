@@ -2,7 +2,7 @@
  * DX-TRACE | Warehouse operations console and navigation
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File app/console.tsx
  * SPDX-License-Identifier: MIT
  *

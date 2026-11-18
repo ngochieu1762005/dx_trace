@@ -2,7 +2,7 @@
  * DX-TRACE | QR image round-trip test
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File tests/label-image.test.mjs
  * SPDX-License-Identifier: MIT
  *

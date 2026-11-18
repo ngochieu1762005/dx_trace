@@ -2,7 +2,7 @@
  * DX-TRACE | Partial-return reconciliation tests
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File tests/impact.test.mjs
  * SPDX-License-Identifier: MIT
  *

@@ -4,9 +4,11 @@
 
 Nền tảng nguồn mở phục vụ **truy xuất nguồn gốc theo lô, giám sát điều kiện bảo quản và điều phối thu hồi thực phẩm**. DX-TRACE tách **lõi dịch vụ không giao diện (headless Core API)** khỏi **hai ứng dụng nghiệp vụ**; các ứng dụng dùng chung định danh, phân quyền, kho dữ liệu và API quy trình.
 
-[Kiến trúc DX-OS](#architecture) · [Hai ứng dụng](#applications) · [Cài đặt & demo](#quick-setup) · [Đối chiếu đề thi](REQUIREMENTS.md) · [API](docs/API.md) · [MIT License](LICENSE)
+[Hướng dẫn triển khai cho mọi tên miền](selfhost/DEPLOY_SAAS_UBUNTU.md) · [Kiến trúc DX-OS](#architecture) · [Hai ứng dụng](#applications) · [Cài đặt & demo](#quick-setup) · [Đối chiếu đề thi](REQUIREMENTS.md) · [API](docs/API.md) · [MIT License](LICENSE)
 
-> **Trạng thái phát hành:** [v0.0.1](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.1) là bản phát hành công khai đầu tiên. Kiến trúc headless tách dịch vụ và ứng dụng Approvals đã nằm trên nhánh `main` nhưng **chưa có release phiên bản mới**. Các tính năng trên `main` cần được triển khai và kiểm chứng đầy đủ trước khi đưa vào môi trường vận hành.
+> **Demo trực tuyến (chỉ tham khảo, không phải tên miền mẫu để sao chép):** [Giới thiệu](https://dxtrace.hieuds.com) · [Ứng dụng](https://app.dxtrace.hieuds.com) · [SSO](https://dxauth.hieuds.com). Khi tự triển khai, **sử dụng tên miền, địa chỉ IP và mật khẩu của chính bạn** theo [hướng dẫn cấu hình chung](selfhost/DEPLOY_SAAS_UBUNTU.md).
+
+> **Bản chuẩn bị phát hành:** `v0.0.2` — DX-OS Open-Core, ứng dụng Approvals, landing page công khai và triển khai SaaS Ubuntu. Đọc [CHANGELOG.md](CHANGELOG.md) và [Release notes](RELEASE_NOTES_v0.0.2.md). **Bản v0.0.1 vẫn là release đã phát hành gần nhất cho tới khi tạo tag/release v0.0.2.**
 
 <a id="contents"></a>
 
@@ -375,7 +377,7 @@ Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 ch�
 
 ## 📝 Changelog
 
-**Bản phát hành mới nhất đã xác minh: [v0.0.1](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.1)**. Nâng cấp headless Core và ứng dụng Approvals đã gộp vào `main` và được ghi ở mục **Unreleased** trong [CHANGELOG.md](CHANGELOG.md), **chưa phát hành thành phiên bản kế tiếp**. Trường `version` trong `package.json` hiện vẫn là `0.0.1`; không sử dụng riêng trường này để suy ra release chứa những commit mới.
+**Chuẩn bị phát hành v0.0.2:** [CHANGELOG.md](CHANGELOG.md) và [Release notes](RELEASE_NOTES_v0.0.2.md) đã mô tả các thay đổi kể từ v0.0.1. Mã nguồn đặt version `0.0.2`; **chưa phải bản phát hành công khai cho tới khi tag `v0.0.2` và GitHub Release được tạo**. `v0.0.1` là bản phát hành đầu tiên.
 
 **Cập nhật máy chủ.** Sao lưu kho và cơ sở dữ liệu danh tính theo sổ tay triển khai. Đọc changelog của phiên bản đích, giữ cấu hình `selfhost/.env` cùng các volume hiện có, rồi chạy lại `docker compose up -d --build` trong thư mục `selfhost/`. Kiểm tra đăng nhập, số liệu một lô và một tệp đính kèm sau khi cập nhật.
 
@@ -414,7 +416,7 @@ Kho thực hành dùng dữ liệu mô phỏng do dự án tạo. Dữ liệu s�
 
 ### Team Members
 
-**Nguyễn Ngọc Hiếu** · Trưởng nhóm DX-TRACE, ngành Khoa học dữ liệu, Trường Đại học Khoa học và Công nghệ Hà Nội (USTH).
+**DX-TRACE contributors** · Xem danh sách đóng góp và lịch sử phát triển trên GitHub. Không công bố thông tin liên hệ hay hạ tầng cá nhân trong tài liệu mã nguồn.
 
 ### Bug Reports and Suggestions
 

@@ -2,7 +2,7 @@
  * DX-TRACE | Authenticated warehouse API and device ingestion
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File app/api/[...path]/route.ts
  * SPDX-License-Identifier: MIT
  *

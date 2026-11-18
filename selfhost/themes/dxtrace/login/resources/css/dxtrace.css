@@ -1,0 +1,580 @@
+/*
+ * DX-TRACE | Identity Design System
+ * Keycloak 26 legacy (PatternFly v4) login templates.
+ * Copyright (c) 2026 DX-TRACE contributors. SPDX-License-Identifier: MIT.
+ *
+ * No web fonts or JavaScript. Built-in Keycloak login flows remain intact.
+ * Scope covers the master admin login and warehouse OIDC login.
+ */
+:root{
+  color-scheme:light;
+  --dx-ink:#142a30;
+  --dx-muted:#687e83;
+  --dx-green:#098d72;
+  --dx-green-dark:#08735e;
+  --dx-border:#dce8e7;
+  --dx-paper:#ffffff;
+  --dx-canvas:#f3f7f7;
+  --dx-ring:rgba(20,150,119,.15);
+}
+html,html.login-pf{
+  margin:0!important;
+  padding:0!important;
+  min-height:100%;
+  background:#f3f7f7!important;
+  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  -webkit-text-size-adjust:100%;
+}
+html.login-pf body,
+body.login-pf,
+#keycloak-bg{
+  min-height:100dvh!important;
+  min-width:0;
+  margin:0!important;
+  padding:0!important;
+  color:var(--dx-ink);
+  background:var(--dx-canvas)!important;
+  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  font-size:14px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+*,*::before,*::after{box-sizing:border-box}
+button,input,select,textarea{
+  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+}
+a{color:var(--dx-green-dark);text-decoration:none}
+a:hover{color:#075847;text-decoration:underline}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:3px solid #28b693!important;
+  outline-offset:3px!important;
+}
+.login-pf-page{
+  display:grid!important;
+  grid-template-columns:minmax(330px,44%) minmax(0,56%);
+  align-items:center;
+  align-content:center;
+  width:100%;
+  max-width:100%!important;
+  min-height:100dvh;
+  padding:54px 5vw!important;
+  position:relative;
+  isolation:isolate;
+  background:transparent!important;
+  overflow-x:clip;
+}
+/* Left brand canvas: graphic/presentation only, no authentication logic */
+.login-pf-page::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:44%;
+  z-index:-2;
+  background:
+    radial-gradient(ellipse at 81% 18%,rgba(40,198,154,.18),transparent 44%),
+    radial-gradient(ellipse at 17% 90%,rgba(32,119,120,.26),transparent 43%),
+    linear-gradient(155deg,#083b3b 0%,#064b46 47%,#062d35 100%);
+}
+.login-pf-page::after{
+  content:"NỀN TẢNG CHUYỂN ĐỔI SỐ\A\A Truy xuất minh bạch.\A Vận hành tin cậy.\A\A Quản lý lô hàng, giám sát bảo quản\A và phối hợp xử lý sự cố trong\A một không gian làm việc thống nhất.";
+  display:block;
+  position:absolute;
+  left:clamp(30px,5.4vw,100px);
+  top:50%;
+  width:min(550px,34vw);
+  transform:translateY(-28%);
+  z-index:-1;
+  white-space:pre-wrap;
+  color:#e3f8f0;
+  font-size:clamp(14px,1.15vw,18px);
+  line-height:1.9;
+  letter-spacing:0;
+  pointer-events:none;
+}
+#kc-header,.login-pf-page-header{
+  grid-column:1;
+  grid-row:1;
+  position:absolute!important;
+  top:clamp(40px,7.1vh,85px);
+  left:clamp(30px,5.4vw,100px);
+  width:calc(44vw - 80px);
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  text-align:left!important;
+  z-index:3;
+}
+#kc-header-wrapper{
+  display:flex!important;
+  align-items:center;
+  gap:16px;
+  max-width:100%;
+  min-height:54px;
+  padding:0!important;
+  margin:0!important;
+  background:none!important;
+  font-size:0!important;
+  line-height:1!important;
+  text-align:left!important;
+  color:transparent!important;
+  letter-spacing:0!important;
+}
+#kc-header-wrapper::before{
+  content:"";
+  display:inline-block;
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  border:1px solid #ffffff2b;
+  border-radius:15px;
+  box-shadow:0 10px 30px #00150f38;
+  background:#ffffff18 url("../img/dxtrace-mark.svg") center/30px 30px no-repeat;
+}
+#kc-header-wrapper::after{
+  content:"DX-TRACE";
+  display:inline-block;
+  white-space:nowrap;
+  font-size:clamp(23px,2.1vw,32px);
+  line-height:1.25;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:-.04em;
+}
+.login-pf-page>.container-fluid{
+  grid-column:2;
+  grid-row:1;
+  width:100%;
+  max-width:640px;
+  margin:0 auto!important;
+  padding:0!important;
+  position:relative;
+  z-index:2;
+}
+#kc-content{
+  width:100%!important;
+  max-width:560px!important;
+  float:none!important;
+  margin:0 auto!important;
+  padding:0!important;
+}
+#kc-content-wrapper{
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+}
+.login-pf-page .card-pf,
+.card-pf{
+  width:100%!important;
+  max-width:560px!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:clamp(28px,3.6vw,53px)!important;
+  background:#fff!important;
+  border:1px solid #e1ebe7!important;
+  border-radius:24px!important;
+  box-shadow:0 28px 80px rgba(11,47,42,.11),0 3px 12px rgba(11,47,42,.04)!important;
+  text-align:left!important;
+  color:var(--dx-ink);
+}
+.card-pf::before{
+  content:"ĐĂNG NHẬP AN TOÀN";
+  display:block;
+  margin-bottom:13px;
+  color:var(--dx-green-dark);
+  font-size:11px;
+  font-weight:800;
+  line-height:1.45;
+  letter-spacing:.05em;
+}
+.login-pf-page .login-pf-header,
+.login-pf-header{
+  display:block!important;
+  margin:0 0 26px!important;
+  padding:0!important;
+  background:none!important;
+}
+#kc-page-title,
+.login-pf-header h1{
+  margin:0!important;
+  padding:0!important;
+  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  font-size:clamp(24px,2.2vw,35px)!important;
+  font-weight:750!important;
+  line-height:1.27!important;
+  letter-spacing:-.025em!important;
+  color:#17332f!important;
+  text-align:left!important;
+}
+#kc-page-title::after{
+  content:"Sử dụng tài khoản của bạn để tiếp tục vào hệ thống.";
+  display:block;
+  padding-top:10px;
+  color:#788d89;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.7;
+  letter-spacing:0;
+}
+#kc-form,#kc-form-wrapper,#kc-form-login{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+}
+.form-horizontal .form-group,
+#kc-form .form-group{
+  margin:0 0 19px!important;
+  padding:0!important;
+}
+.form-horizontal .form-group>div,
+#kc-form .form-group>div,
+#kc-form .form-group .col-xs-12,
+#kc-form .form-group .col-sm-12,
+#kc-form .form-group .col-md-12,
+#kc-form .form-group .col-lg-12{
+  position:static!important;
+  width:100%!important;
+  max-width:100%!important;
+  float:none!important;
+  margin:0!important;
+  padding:0!important;
+}
+#kc-form label,
+.form-horizontal label,
+.pf-c-form__label-text{
+  display:inline-block;
+  margin:0 0 8px!important;
+  padding:0!important;
+  color:#36574e!important;
+  font-weight:700!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+#kc-form input[type="text"],
+#kc-form input[type="email"],
+#kc-form input[type="password"],
+#kc-form input[type="tel"],
+#kc-form input[type="number"],
+#kc-form select,
+#kc-form input.pf-c-form-control,
+#kc-form input.input-lg,
+#kc-form input.form-control,
+#kc-form input[autocomplete]{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  height:52px!important;
+  padding:12px 15px!important;
+  border:1px solid #d5e3de!important;
+  border-radius:12px!important;
+  background:#f9fcfa!important;
+  box-shadow:none!important;
+  color:#153c35!important;
+  font-size:15px!important;
+  font-weight:500;
+  line-height:1.5!important;
+  transition:border-color .17s ease,box-shadow .17s ease,background .17s ease;
+}
+#kc-form input:focus,
+#kc-form select:focus,
+#kc-form .pf-c-form-control:focus{
+  border-color:#099775!important;
+  box-shadow:0 0 0 4px var(--dx-ring)!important;
+  background:#fff!important;
+  outline:none!important;
+}
+#kc-form input::placeholder{color:#9baea8}
+#kc-form input[type="checkbox"],
+#kc-form input[type="radio"]{
+  width:17px!important;
+  height:17px!important;
+  accent-color:#087f63;
+  vertical-align:middle;
+}
+#kc-form-options,
+#kc-form-options .checkbox,
+#kc-form-options span,
+#kc-form-options a,
+#kc-registration,#kc-registration span{
+  font-size:12px!important;
+  line-height:1.65!important;
+}
+#kc-form-options{margin:9px 0 22px!important}
+#kc-form-buttons{margin:24px 0 0!important;padding:0!important}
+#kc-form-buttons .pf-c-button,
+#kc-form-buttons .btn,
+#kc-login,
+#kc-form input[type="submit"],
+#kc-form button[type="submit"]{
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  width:100%!important;
+  min-height:52px!important;
+  margin:0!important;
+  padding:13px 22px!important;
+  border:1px solid #086c58!important;
+  border-radius:12px!important;
+  background:linear-gradient(120deg,#087a63,#0b9a78)!important;
+  box-shadow:0 8px 20px rgba(7,117,86,.18)!important;
+  color:#fff!important;
+  font-weight:750!important;
+  font-size:14px!important;
+  letter-spacing:0!important;
+  line-height:1.55!important;
+  text-transform:none!important;
+  cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
+}
+#kc-form-buttons .pf-c-button:hover,
+#kc-form-buttons .btn:hover,#kc-login:hover,
+#kc-form input[type="submit"]:hover{
+  filter:brightness(.94);
+  box-shadow:0 11px 24px rgba(7,117,86,.24)!important;
+}
+#kc-form-buttons button:disabled,
+#kc-form-buttons input:disabled,
+#kc-login:disabled{opacity:.65;cursor:not-allowed}
+#kc-form-buttons .pf-c-button:active,
+#kc-form-buttons .btn:active,#kc-login:active{transform:translateY(1px)}
+#kc-form .pf-c-input-group,#kc-form .input-group{
+  display:flex!important;
+  flex-wrap:nowrap;
+  align-items:stretch;
+  width:100%!important;
+}
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input{
+  flex:1!important;
+  min-width:0!important;
+  border-top-right-radius:0!important;
+  border-bottom-right-radius:0!important;
+}
+#kc-form .pf-c-input-group button,
+#kc-form .input-group button{
+  display:grid!important;
+  place-items:center;
+  flex:0 0 50px!important;
+  min-width:48px!important;
+  height:52px!important;
+  padding:8px!important;
+  background:#f4f8f5!important;
+  border:1px solid #d5e3de!important;
+  border-left:0!important;
+  border-radius:0 12px 12px 0!important;
+  color:#406c5a!important;
+  box-shadow:none!important;
+}
+#kc-form .pf-c-input-group button:hover,
+#kc-form .input-group button:hover{background:#e5f4ea!important;color:#086c58!important}
+#kc-form .pf-c-input-group input:focus,
+#kc-form .input-group input:focus{position:relative;z-index:2}
+#kc-info,#kc-info-wrapper{
+  width:100%;
+  max-width:100%;
+  margin:17px 0 0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  font-size:12px;
+  color:#718780;
+}
+#kc-registration{padding-top:8px!important}
+#kc-social-providers{padding-top:15px}
+#kc-content .alert,
+#kc-content .pf-c-alert,
+#kc-content .kc-feedback-text{
+  border-radius:10px!important;
+  font-size:12px!important;
+  line-height:1.6!important;
+}
+#kc-content .pf-c-alert{margin-bottom:19px!important}
+#kc-content .alert-error,
+#kc-content .pf-m-danger{border-color:#f0bdb9;background:#fff3f2;color:#a3363a}
+#kc-reset-password-form .form-group{margin-bottom:18px}
+#kc-locale{margin-top:20px}
+#kc-locale ul{max-width:240px}
+#kc-locale-dropdown,
+#kc-locale-dropdown a{color:#416d5f}
+#kc-username{overflow-wrap:anywhere}
+/* Alternative authenticators and recovery forms retain the parent markup. */
+#kc-select-try-another-way-form,
+#kc-otp-login-form,
+#kc-reset-password-form,
+#kc-update-password-form,
+#kc-passkey-login-form{max-width:100%}
+#kc-form-options .checkbox label{font-weight:500!important}
+#kc-webauthn-authenticate-button,
+#kc-passkey-login-form button{min-height:44px;border-radius:10px}
+
+/* Slightly larger layouts: keep graphic left and form right. */
+@media(min-width:1400px){
+  .login-pf-page{padding:65px 6vw!important}
+  .login-pf-page::before{width:45%}
+  .login-pf-page::after{width:34vw}
+  .login-pf-page>.container-fluid{max-width:670px}
+}
+/* Tablet: brand above, sign-in below; avoid overlays over fields. */
+@media(max-width:980px){
+  .login-pf-page{
+    grid-template-columns:1fr!important;
+    display:flex!important;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    min-height:100dvh;
+    padding:31px 22px 55px!important;
+    background:linear-gradient(180deg,#063e3c 0,#0b5951 195px,#f4f8f7 196px)!important;
+  }
+  .login-pf-page::before{display:none}
+  .login-pf-page::after{display:none}
+  #kc-header,.login-pf-page-header{
+    display:block!important;
+    position:relative!important;
+    top:auto;left:auto;
+    flex:none;
+    width:min(100%,540px);
+    margin:0 auto 28px!important;
+  }
+  #kc-header-wrapper{min-height:45px}
+  #kc-header-wrapper::before{
+    width:43px;height:43px;flex-basis:43px;
+    background-size:27px 27px;border-radius:12px
+  }
+  #kc-header-wrapper::after{font-size:25px}
+  .login-pf-page>.container-fluid{width:100%!important;max-width:560px!important}
+  #kc-content{max-width:560px!important}
+  .login-pf-page .card-pf{border-radius:20px!important}
+}
+@media(max-width:540px){
+  html,html.login-pf{overflow-x:hidden}
+  .login-pf-page{padding:25px 15px calc(45px + env(safe-area-inset-bottom,0px))!important}
+  #kc-header,.login-pf-page-header{margin-bottom:23px!important}
+  #kc-header-wrapper::after{font-size:22px}
+  #kc-header-wrapper::before{width:41px;height:41px;flex-basis:41px}
+  .login-pf-page .card-pf,.card-pf{
+    padding:26px 21px 29px!important;
+    border-radius:19px!important;
+    box-shadow:0 14px 35px rgba(11,47,42,.1)!important;
+  }
+  #kc-page-title,.login-pf-header h1{font-size:25px!important}
+  #kc-page-title::after{font-size:12px}
+  #kc-form input[type="text"],
+  #kc-form input[type="email"],
+  #kc-form input[type="password"],
+  #kc-form input[type="tel"],
+  #kc-form input[autocomplete]{font-size:16px!important}
+  #kc-form .form-group{margin-bottom:17px!important}
+  #kc-form-buttons{margin-top:21px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #kc-form input,#kc-form-buttons .btn,#kc-login{transition:none!important}
+}
+
+
+/* ----------------------------------------------------------------------
+ * DX-TRACE login layout correction — Keycloak 26.4.7
+ *
+ * Keycloak's base/login/template.ftl renders:
+ *   <div class="login-pf-page">
+ *     <div id="kc-header">...</div>
+ *     <div class="card-pf">...</div>
+ *   </div>
+ * The old stylesheet erroneously targeted a non-existent .container-fluid
+ * child. Because #kc-header was positioned absolutely, .card-pf became the
+ * first in-flow grid item and rendered on top of the left marketing panel.
+ * Set its grid area explicitly. Keep Keycloak's secure form markup intact.
+ * ---------------------------------------------------------------------- */
+@media (min-width: 981px) {
+  .login-pf-page > .card-pf {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: center !important;
+    align-self: center !important;
+    position: relative !important;
+    z-index: 4 !important;
+    width: min(100%, 560px) !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    transform: none !important;
+  }
+  .login-pf-page > #kc-header {
+    display: block !important;
+    position: absolute !important;
+    top: clamp(38px, 7vh, 78px) !important;
+    left: clamp(32px, 5.4vw, 100px) !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(520px, 34vw) !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 3 !important;
+    transform: none !important;
+  }
+  .login-pf-page > #kc-header #kc-header-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+  }
+  .login-pf-page::after {
+    left: clamp(32px, 5.4vw, 100px) !important;
+    top: 44% !important;
+    transform: translateY(-18%) !important;
+    max-width: min(520px, 32vw) !important;
+    width: 32vw !important;
+    overflow-wrap: break-word;
+  }
+}
+@media (max-width: 980px) {
+  .login-pf-page > .card-pf {
+    display: block !important;
+    position: relative !important;
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    flex: 0 0 auto !important;
+    align-self: center !important;
+    justify-self: center !important;
+    width: 100% !important;
+    max-width: 560px !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    z-index: 2 !important;
+  }
+  .login-pf-page > #kc-header {
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: 560px !important;
+    height: auto !important;
+    margin: 0 auto 24px !important;
+    padding: 0 !important;
+    z-index: 2 !important;
+    transform: none !important;
+  }
+  .login-pf-page > #kc-header #kc-header-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 44px !important;
+  }
+  .login-pf-page::after { display: none !important; }
+}
+/* Avoid long (localized) headings running out of the card. */
+.login-pf-page > .card-pf h1#kc-page-title {
+  max-width: 100% !important;
+  overflow-wrap: break-word;
+  word-break: normal;
+}

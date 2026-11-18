@@ -2,7 +2,7 @@
  * DX-TRACE | HTTP server and authenticated request dispatch
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File selfhost/server.mjs
  * SPDX-License-Identifier: MIT
  *

@@ -2,7 +2,7 @@
  * DX-TRACE | React application entry point
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File selfhost/ui/main.jsx
  * SPDX-License-Identifier: MIT
  *

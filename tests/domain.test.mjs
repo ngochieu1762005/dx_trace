@@ -2,7 +2,7 @@
  * DX-TRACE | Stock, permissions and state transition tests
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File tests/domain.test.mjs
  * SPDX-License-Identifier: MIT
  *

@@ -10,6 +10,11 @@ Khi chuyển máy chủ, kiểm tra riêng ba phần: dịch vụ đăng nhập,
 
 [Kiến trúc toàn dự án](../README.md#architecture) · [Danh mục API](../docs/API.md)
 
+
+
+
+> **Triển khai trên máy chủ có Caddy sẵn:** xem [hướng dẫn dùng tên miền riêng](DEPLOY_SAAS_UBUNTU.md). Không sao chép IP, domain, mật khẩu từ bản demo của bên khác.
+
 ## 1. Chuẩn bị
 
 | Thành phần | Yêu cầu |
@@ -99,8 +104,8 @@ Có ba phần cần giữ cùng một đợt sao lưu: dữ liệu nghiệp vụ
 ```sh
 umask 077
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
-docker compose exec -T app node selfhost/backup.mjs "/tmp/warehouse-${stamp}"
-docker compose cp "app:/tmp/warehouse-${stamp}" "./warehouse-${stamp}"
+docker compose exec -T core node selfhost/backup.mjs "/tmp/warehouse-${stamp}"
+docker compose cp "core:/tmp/warehouse-${stamp}" "./warehouse-${stamp}"
 docker compose exec -T identitydb pg_dump -U keycloak -Fc identity > "identity-${stamp}.dump"
 test -f "./warehouse-${stamp}/COMPLETE"
 ```

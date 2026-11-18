@@ -2,7 +2,7 @@
  * DX-TRACE | SQLite storage, file objects and request identity
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File selfhost/runtime.mjs
  * SPDX-License-Identifier: MIT
  *

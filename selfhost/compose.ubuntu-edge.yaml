@@ -1,0 +1,29 @@
+# DX-TRACE | Ubuntu host Caddy on 80/443; Docker only on loopback.
+# @Project DX-TRACE
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 DX-TRACE contributors
+#
+# docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build
+# Do not run the Docker gateway: an existing host Caddy already owns 80/443.
+services:
+  gateway:
+    profiles: ["use-container-gateway-instead"]
+  signin:
+    ports: ["127.0.0.1:8180:4180"]
+    mem_limit: 192m
+  identity:
+    ports: ["127.0.0.1:8181:8080"]
+    volumes:
+      - "./themes/dxtrace:/opt/keycloak/themes/dxtrace:ro"
+    # Example memory limits only. Size according to your host and Keycloak requirements.
+    # Monitor container memory and increase limits as needed.
+    mem_limit: 1536m
+    environment:
+      JAVA_OPTS_KC_HEAP: "-XX:InitialRAMPercentage=25 -XX:MaxRAMPercentage=65"
+  identitydb:
+    mem_limit: 320m
+  core:
+    mem_limit: 448m
+  app:
+    ports: ["127.0.0.1:8182:8080"]
+    mem_limit: 384m

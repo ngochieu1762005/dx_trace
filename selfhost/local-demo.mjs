@@ -2,7 +2,7 @@
  * DX-TRACE | School workstation demo launcher
  *
  * @Project DX-TRACE
- * @Maintainer Nguyễn Ngọc Hiếu and DX-TRACE contributors
+ * @Maintainer DX-TRACE contributors
  * @File selfhost/local-demo.mjs
  * SPDX-License-Identifier: MIT
  *

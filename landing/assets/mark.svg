@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="DX-TRACE">
+<rect width="64" height="64" rx="18" fill="#0C7566"/>
+<path d="M15.5 21 32 12l16.5 9v21L32 52l-16.5-10V21Z" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+<path d="M15.5 21 32 30l16.5-9M32 30v22" stroke="#AAEBDD" stroke-width="2.7" stroke-linejoin="round"/>
+<circle cx="32" cy="30" r="4.4" fill="#F6C177" stroke="#0C7566" stroke-width="1.5"/>
+</svg>
