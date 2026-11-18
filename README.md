@@ -33,7 +33,7 @@ DX-TRACE kết nối **lô hàng, giao nhận, số đo bảo quản và quy tr�
 
 Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai, dùng tên miền và thông tin xác thực của đơn vị bạn. Tài khoản truy cập do quản trị viên cấp. Giấy phép MIT áp dụng cho mã nguồn dự án; thư viện và dữ liệu ngoài có giấy phép riêng.
 
-**Phiên bản phát hành:** [v0.0.2](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.2). Nhánh `main` có thể chứa các cải tiến chưa phát hành; xem [Changelog](CHANGELOG.md).
+**Phiên bản mã nguồn: `0.0.3`.** Xem [bản phát hành mới nhất](https://github.com/ngochieu1762005/dx_trace/releases/latest) và [Changelog](CHANGELOG.md). Những cải tiến trên `main` được công bố trong GitHub Releases sau khi kiểm thử đạt yêu cầu.
 
 <details>
 <summary><strong>Xem trước giao diện giới thiệu</strong></summary>

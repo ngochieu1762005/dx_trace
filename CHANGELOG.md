@@ -2,23 +2,34 @@
 
 Nhật ký thay đổi của DX-TRACE. Theo dõi các chức năng được đưa vào mã nguồn; **việc hoạt động ổn định trên một VPS cụ thể vẫn cần kiểm thử sau triển khai**.
 
-## Unreleased
-
-### Added
-- Trang giới thiệu mới với hồ sơ SUA-005, tình huống thu hồi tương tác và bố cục responsive.
-- README có banner, badge CI/Release/License/Issues và công nghệ; CI kiểm tra nhánh main và pull request.
-- Các điểm vào `/login`, `/try`, `/approvals` được định tuyến tại Caddy theo tên miền triển khai.
-
-### Fixed
-- Đăng nhập lại giữ nguyên đường dẫn, vùng dữ liệu và mã lô trên URL.
-- Hai ứng dụng nhận biết phiên hết hạn mà không cố đọc trang đăng nhập HTML thành JSON.
-- Bỏ tên miền ứng dụng hard-code trong trang 404 và cách suy đoán hostname trong JavaScript.
-- Công cụ cài Caddy xác định rõ index.html và báo lỗi khi user caddy không đọc được trang giới thiệu.
-
-
 ## [Unreleased]
 
-- Chưa có mục mới sau bản chuẩn bị phát hành `v0.0.2`.
+- Chưa có thay đổi mới sau v0.0.3.
+
+## [0.0.3] — 2026-11-18 — Product Experience & Session Recovery
+
+Bản cập nhật giao diện giới thiệu, điều hướng đến hai ứng dụng DX-OS và khả năng phục hồi phiên đăng nhập. Phần lõi, dữ liệu và triển khai self-hosted vẫn tuân theo kiến trúc ở v0.0.2.
+
+### Added
+- Trang landing thiết kế lại, bố cục responsive và mô phỏng quá trình truy xuất, thu hồi mẫu SUA-005 theo ba bước.
+- Bộ nhận diện và tài liệu GitHub mới: banner dự án, ảnh xem trước landing, badge build/release, sơ đồ chức năng.
+- Các lối vào công khai `/login`, `/try`, `/approvals` được Caddy điều hướng tới đúng ứng dụng và giữ nguyên đích cần mở sau đăng nhập.
+- Bộ kiểm thử Node.js cho phục hồi session và Python cho định tuyến Caddy/giữ nguyên website khác; thêm CI cho `main` và pull request.
+
+### Fixed
+- Khôi phục phiên đăng nhập giữ nguyên đường dẫn, vùng dữ liệu, tham số truy xuất và hash mã lô.
+- Xử lý rõ 401 khi phiên hết hạn, 403 khi thiếu quyền; API không đọc nhầm HTML trang đăng nhập thành JSON và không tự động lặp đăng nhập.
+- Loại URL Keycloak và tên miền app cố định khỏi giao diện 404 / logic JavaScript công khai.
+- Hướng dẫn cài Caddy kiểm tra tệp `index.html`, quyền đọc của tài khoản `caddy`, định tuyến trang gốc và quyền truy cập các tài nguyên CSS/JS.
+
+### Upgrade notes từ v0.0.2
+- Sao lưu `selfhost/.env`, dữ liệu kho/đính kèm và PostgreSQL Keycloak trước khi triển khai; không xóa Docker volumes.
+- Đồng bộ mã nguồn và build lại `core`/`app`/`signin`. Trang landing public là tệp static: cập nhật riêng vào thư mục được Caddy đọc, không thể chỉ build Docker.
+- Khi sử dụng Caddy trên host, áp dụng các route mới từ `selfhost/Caddyfile.ubuntu.saas.snippet` bằng công cụ dry-run/backup/validate; giữ các website không liên quan.
+- Kiểm tra `/` là HTTP 200; `/login`, `/try`, `/approvals` là HTTP 302; xác minh đăng nhập thật và quay về đúng màn hình.
+- Địa chỉ website demo của nhóm chỉ được nêu trong README như ví dụ trực tuyến. Mọi hướng dẫn cài đặt đều dùng tên miền riêng của người triển khai.
+
+**So sánh:** `v0.0.2...v0.0.3`. Không thay đổi giấy phép MIT, không thêm dữ liệu sản xuất hoặc bí mật vào mã nguồn.
 
 ## [0.0.2] — 2026-11-18 — DX-OS Open-Core & SaaS Experience
 
