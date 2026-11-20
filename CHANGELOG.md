@@ -1,18 +1,29 @@
 # Changelog
 
-## Chưa phát hành
-
-- Hợp nhất điều hướng kho; gỡ giao diện diễn tập và ứng dụng phê duyệt riêng, giữ phê duyệt trong kho.
-- Chuyển các địa chỉ cũ về màn hình tương ứng; hướng dẫn thu hồi thao tác trên kho hiện tại.
-- Sửa claim email OIDC và quyền đọc mã nguồn cho tài khoản chạy container.
-- Không cho chọn lô đã hết tồn để lập phiếu xuất; không mở nhầm lô khác khi liên kết truy xuất không tồn tại.
-
-
-Nhật ký thay đổi của DX-TRACE. Theo dõi các chức năng được đưa vào mã nguồn; **việc hoạt động ổn định trên một VPS cụ thể vẫn cần kiểm thử sau triển khai**.
+Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
-- Chưa có thay đổi mới sau v0.0.3.
+- Chưa có thay đổi mới.
+
+## [0.0.4] — 2026-11-20 — Warehouse Navigation & Scanner Fixes
+
+### Changed
+- Hợp nhất điều hướng kho; bỏ giao diện diễn tập và ứng dụng phê duyệt riêng, giữ chức năng đề xuất/phê duyệt trong kho.
+- Chuyển các đường dẫn cũ về giao diện kho tương ứng; cập nhật hướng dẫn thao tác thu hồi.
+
+### Fixed
+- Cải thiện đọc QR/mã vạch bằng camera và ảnh với ZXing TRY_HARDER, ưu tiên camera sau.
+- Chuẩn hóa mã lô, tiền tố DXTRACE:LOT và mã UPC/EAN/GTIN khi đối chiếu; hiển thị kết quả chưa khớp thay vì đóng trình quét.
+- Cho phép chọn lại cùng một ảnh để quét; bỏ kết quả ảnh trả về sau khi đóng trình quét.
+- Không mở nhầm lô khi liên kết truy xuất không tồn tại; không cho chọn lô hết tồn để lập phiếu xuất.
+- Sửa cấu hình claim email OIDC và quyền đọc mã nguồn của tài khoản chạy container.
+
+### Tests
+- Bổ sung kiểm thử hồi quy cho chuẩn hóa mã quét và đối chiếu lô.
+- Build và 26 kiểm thử Node.js đã đạt trên bản sửa scanner; kiểm thử camera thực tế và SSO trên VPS cần thực hiện sau triển khai.
+
+Xem [ghi chú phát hành và hướng dẫn nâng cấp](docs/releases/RELEASE_NOTES_v0.0.4.md).
 
 ## [0.0.3] — 2026-11-18 — Product Experience & Session Recovery
 
