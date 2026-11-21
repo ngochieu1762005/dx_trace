@@ -4,7 +4,7 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
-- Chưa có thay đổi mới.
+- Khôi phục nút chuyển đổi Kho thực hành / Kho vận hành; mở lại dữ liệu của từng kho qua vùng dữ liệu hiện có, không đặt lại dữ liệu.
 
 ## [0.0.4] — 2026-11-20 — Warehouse Navigation & Scanner Fixes
 
