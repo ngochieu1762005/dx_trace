@@ -12,6 +12,7 @@
 | Hiểu kiến trúc và ranh giới tin cậy | [Headless Core](HEADLESS-CORE.md) |
 | Tích hợp API | [Danh mục HTTP API](API.md) |
 | Tạo mô hình, workflow, webhook | [Nghiệp vụ mở rộng](PLATFORM.md) |
+| Nhập/xuất BPMN 2.0 (tập con) | [Giao thức và giới hạn BPMN](BPMN.md) |
 | Tìm tệp cần sửa | [Bản đồ mã nguồn](CODEBASE.md), [giao diện](../app/README.md), [nghiệp vụ](../lib/README.md) |
 | Kiểm tra thư viện và phiên bản | [Phụ thuộc](DEPENDENCIES.md) |
 | Đối chiếu triển khai, test và giới hạn | [Minh chứng](EVIDENCE.md), [benchmark](BENCHMARK.md), [yêu cầu](../REQUIREMENTS.md) |
