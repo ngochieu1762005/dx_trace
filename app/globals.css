@@ -175,3 +175,12 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #42
 .bpmn-import input[type=file]{display:block;width:100%;padding:12px;border:1px dashed var(--line);border-radius:8px;margin-top:7px;background:#fff}
 .bpmn-import .model-source{min-height:132px;max-height:320px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
 @media(max-width:760px){.bpmn-import{padding:14px}.bpmn-import .actions{gap:8px}}
+
+/* Curated declarative application install panel; no executable code is loaded. */
+.appkit-panel{margin:18px 0 26px;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
+.appkit-panel summary{cursor:pointer;font-size:15px;font-weight:700;list-style-position:inside}
+.appkit-panel .muted{max-width:70ch;margin:12px 0}
+.appkit-panel label{display:block;margin:14px 0}
+.appkit-panel .actions{flex-wrap:wrap;gap:10px}
+.appkit-panel .model-source{min-height:150px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
+@media(max-width:760px){.appkit-panel{padding:14px}}
