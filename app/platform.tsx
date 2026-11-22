@@ -8,7 +8,7 @@ export default function Platform({api,role}:any){
  const pending=useRef<any>(null);
  const load=async()=>{try{setView(await api('models'));setError('')}catch(e:any){setError(e.message)}};
  useEffect(()=>{load();const t=setInterval(()=>{if(document.visibilityState==='visible')load()},30000);return()=>clearInterval(t)},[]);
- const run=async(fn:()=>Promise<any>)=>{setBusy(true);setError('');try{await fn()}catch(e:any){setError(e.message)}finally{setBusy(false)}};
+ const run=async(fn:()=>Promise<any>)=>{setBusy(true);setError('');setMessage('');try{await fn()}catch(e:any){setError(e.message)}finally{setBusy(false)}};
  const mutate=async(path:string,body:any)=>{const fingerprint=JSON.stringify([path,body]);if(pending.current?.fingerprint!==fingerprint)pending.current={fingerprint,key:crypto.randomUUID()};const r=await api(path,body,pending.current.key);pending.current=null;await load();return r};
  const model=view.models.find((m:any)=>m.id===modelId)||view.models[0],def=model?.definition;
  const records=view.records.filter((r:any)=>r.model===model?.id&&(status==='all'||status==='overdue'?status==='all'||r.overdue:r.status===status));
