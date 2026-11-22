@@ -29,6 +29,7 @@
  * SOFTWARE.
  */
 import {PlatformError,modelOpenApi} from '../../../lib/platform.mjs';
+import {workflowToBpmn,bpmnToWorkflow} from '../../../lib/bpmn.mjs';
 import {recallImpact} from '../../../lib/impact.mjs';
 import {defaultWorkflow} from '../../../lib/workflow.mjs';
 
@@ -55,12 +56,32 @@ async function route(req:Request){try{
     const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
     if(!model)throw new DomainError('Không tìm thấy mô hình',404);return json(modelOpenApi(model.definition));
    }
+   if(action==='bpmn'){
+    const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
+    if(!model)throw new DomainError('Không tìm thấy mô hình',404);
+    return new Response(workflowToBpmn(model.definition),{headers:{
+     'content-type':'application/xml; charset=utf-8',
+     'content-disposition':'attachment; filename="workflow-'+model.id+'.bpmn"',
+     'cache-control':'no-store','x-content-type-options':'nosniff'
+    }});
+   }
    const params=new URL(req.url).searchParams;if(key)params.set('model',key);
    return json(await queryRecords(c,params));
   }
   if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
   const body:any=await req.json();
   if(!body||typeof body!=='object'||Array.isArray(body))throw new DomainError('Nội dung phải là đối tượng JSON',422);
+  if(key==='bpmn'&&(action==='plan'||action==='apply')){
+   if(c.role!=='owner')throw new DomainError('Chỉ chủ không gian được cập nhật quy trình',403);
+   const parsed=bpmnToWorkflow(body.xml);
+   const existing=(await storedModels(c)).find((model:any)=>model.id===parsed.modelId);
+   const base=body.definition||existing?.definition;
+   if(!base||base.id!==parsed.modelId)throw new DomainError('Mã process không khớp mô hình',422);
+   const definition={...base,workflow:parsed.workflow};
+   if(action==='plan')return json(await modelPlan(c,definition));
+   return json(await changePlatform(c,'platform.apply',{definition,baseVersion:body.baseVersion},
+    req.headers.get('idempotency-key')||''));
+  }
   if(key==='plan')return json(await modelPlan(c,body.definition));
   const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':null;
   if(!command)throw new DomainError('Không tìm thấy API mô hình',404);
