@@ -1,51 +1,39 @@
-# DX-TRACE branded Keycloak sign-in theme
+# Giao diện đăng nhập Keycloak
 
-DX-TRACE uses an original login theme that inherits Keycloak's stock secure forms. It is compatible with Keycloak `26.4.7`, ships no third-party scripts or fonts, and can be enabled on both the `warehouse` realm (end-user sign-in) and `master` realm (admin console).
+Áp dụng cho Keycloak 26.4.7 trong cấu hình v0.0.5. **Theme mặc định của Keycloak dùng được đầy đủ**; theme `dxtrace` là lựa chọn trình bày, không phải cơ chế đăng nhập khác.
 
-The theme source is at `selfhost/themes/dxtrace/login/`. It uses stock Keycloak FreeMarker templates and only overrides the colors, backgrounds, labels, spacing, typography, and identity mark. All existing authentication flows remain Keycloak-managed.
+Theme nằm tại [themes/dxtrace/login](themes/dxtrace/login). Nó kế thừa biểu mẫu Keycloak; không thay thế quy trình xác thực. Không đồng nhất theme login với giao diện Admin Console sau đăng nhập.
 
-## Install on an existing Ubuntu deployment
+## Dùng lại giao diện mặc định
+
+1. Mở `https://id.example.org/admin/` bằng tài khoản quản trị.
+2. Chọn realm `warehouse` → Realm settings → Themes.
+3. Đặt Login theme về theme mặc định khả dụng (`keycloak` trong cấu hình tham chiếu), Save.
+4. Nếu muốn đổi cả trang đăng nhập quản trị, lặp lại ở realm `master`.
+5. Kiểm bằng cửa sổ riêng tư. Không cần xóa tài khoản, realm hoặc database.
+
+## Bật theme DX-TRACE khi cần
+
+Override Ubuntu gắn thư mục theme vào container. Tại `selfhost/`:
 
 ```bash
-cd /path/to/dx-trace
-git pull --ff-only
-cd selfhost
-
-# Confirm bind mount exists without printing .env secrets
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml config --quiet
-
-# Recreate ONLY the identity container so the new theme directory is mounted.
-# Does not remove the database, identity realm, or app data.
-docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --no-deps --force-recreate identity
-
-# Check that theme is visible inside Keycloak.
-docker compose -f compose.yaml -f compose.ubuntu-edge.yaml exec identity ls -l /opt/keycloak/themes/dxtrace/login/theme.properties
+docker compose -f compose.yaml -f compose.ubuntu-edge.yaml \
+  up -d --no-deps --force-recreate identity
+docker compose -f compose.yaml -f compose.ubuntu-edge.yaml \
+  exec identity ls -l /opt/keycloak/themes/dxtrace/login/theme.properties
 ```
 
-Then open `https://id.example.org/admin/` and log in with Keycloak admin credentials.
+Sau đó chọn Login theme `dxtrace` trong realm cần thay. Với Compose mặc định không có override Ubuntu, phải thêm mount tương ứng trước; không kỳ vọng theme tự xuất hiện chỉ vì pull code.
 
-To apply the new login design to **DX-TRACE users**:
+## Kiểm tra và xử lý lỗi
 
-1. At the top of the Keycloak admin console, select the `warehouse` realm.
-2. Navigate to **Realm settings → Themes**.
-3. Set **Login theme = dxtrace** and click Save.
-4. Open a private browser window and test a DX-TRACE login.
+| Hiện tượng | Cách kiểm |
+| --- | --- |
+| Không thấy theme | Kiểm mount và theme.properties, tạo lại identity |
+| Theme không đổi | Cửa sổ riêng tư, cache tài nguyên; khởi động lại identity khi cần |
+| Muốn quay lại | Đổi theme trong Realm settings, không sửa DB tài khoản |
+| Sai mật khẩu admin | Theme không giải quyết; phục hồi tài khoản theo quy trình quản trị Keycloak của đơn vị |
+| Đăng nhập kho 401/502 | Kiểm OIDC/proxy/Core theo [OPERATIONS](OPERATIONS.md), không quy lỗi cho theme |
 
-To change the **admin login from the screenshot**:
-
-1. Switch the realm selector to **master**.
-2. Go to **Realm settings → Themes**.
-3. Set **Login theme = dxtrace** and Save.
-4. Open `https://id.example.org/admin/` in an incognito window.
-
-This affects the login screen for admins; it does not replace or skin the Keycloak admin console *after* login (that requires a separate `admin` theme).
-
-### Troubleshooting
-
-- No `dxtrace` choice: verify the mount with the command above, recreate identity and reload the admin page.
-- Theme selected but unchanged: force refresh `Ctrl+Shift+R`, or open Incognito. In case of cached themes, restart `identity`; production mode caches resources by default.
-- Missing CSS: inspect Network tab for `dxtrace.css` status; the path is relative to Keycloak's login resource URL.
-- Emergency rollback: in realm settings, change Login theme to **keycloak**, Save. No account data is touched.
-- Validate language selection: theme adds Vietnamese wording to the most common login labels; other Keycloak messages and flows remain inherited from stock Keycloak. For full Vietnamese localization enable localization in Realm settings and set supported locales.
-
-This file is documentation for a running server. A repository commit on GitHub **does not** change live styles until `git pull`, container recreation, and realm theme selection have been performed.
+Commit trên GitHub không tự đổi theme đang chọn trong realm hoặc nội dung đang phục vụ trên VPS.

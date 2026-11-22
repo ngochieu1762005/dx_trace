@@ -1,6 +1,6 @@
 # Ma trận minh chứng kỹ thuật
 
-Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
+Phạm vi **v0.0.5**: 40 kiểm thử Node.js, 3 kiểm thử Python và job kiểm container đã đạt ở phát hành. Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
 
 | Năng lực | Mã / tài liệu | Minh chứng | Giới hạn |
 | --- | --- | --- | --- |
@@ -13,7 +13,7 @@ Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần
 | Vượt giới hạn lưu hồ sơ trong JSON | bảng `platform_records` | 1.000 hồ sơ lớn hơn tổng 1,8 MB, workspace JSON không tăng theo số hồ sơ | Kho truyền thống chưa được tách toàn bộ |
 | Chống cập nhật đè và yêu cầu trùng | version + idempotency + hàng đợi theo kho | `platform-api`, `platform-storage`, `workspace-queue` tests | Hàng đợi trong một process; không tuyên bố HA |
 | Nhật ký và webhook | ledger SHA-256, HMAC + persistent retries | Kiểm phát hiện sửa payload, retry, ký đúng body | Không có neo hash bên ngoài; không bảo đảm thứ tự giao |
-| Sao lưu/khôi phục | `backup.mjs`, `verify-backup.mjs` | API dựng lại server từ bản sao lưu, hồ sơ/ledger còn nguyên | PostgreSQL Keycloak phải sao lưu riêng |
+| Sao lưu/khôi phục | [Quy trình vận hành](../selfhost/OPERATIONS.md), `backup.mjs`, `verify-backup.mjs` | API dựng lại server từ bản sao lưu, hồ sơ/ledger còn nguyên | PostgreSQL Keycloak phải sao lưu riêng |
 | Chức năng kho | domain, impact, scanner, inventory-view | Các test nghiệp vụ, thu hồi, đối chiếu mã và CSV trong `tests/` | Camera thật cần kiểm trên từng thiết bị |
 | Hiệu năng | `tools/benchmark-platform.mjs` | [Kết quả và phạm vi đo](BENCHMARK.md) | Không đo SSO/TLS/gateway, không so trực tiếp với hệ thống khác |
 

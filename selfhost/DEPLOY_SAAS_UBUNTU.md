@@ -1,127 +1,35 @@
-# DX-TRACE — triển khai landing, workspace và SSO trên Ubuntu
+# Ubuntu: Caddy trên host và ba tên miền
 
-Hướng dẫn **chung cho người tự triển khai**, không liên quan đến nhà cung cấp hosting hay tên miền của tác giả. Mỗi người tự chuẩn bị DNS, IP, chứng chỉ TLS, mật khẩu, đường dẫn ứng dụng và chính sách sao lưu.
+Áp dụng cho v0.0.5, máy đã dùng Caddy hệ thống. Không khởi động gateway Docker cạnh tranh cổng 80/443.
 
-## Kiến trúc và các tên miền mẫu
-
-| Tên miền bạn tự cấu hình | Vai trò |
+| Domain ví dụ | Đích |
 | --- | --- |
-| `landing.example.org` | Landing công khai, static HTML/CSS/JS trong `landing/` |
-| `app.example.org` | Workspace sau đăng nhập, OAuth2 Proxy phía trước web |
-| `id.example.org` | Keycloak cung cấp OIDC, cơ sở dữ liệu PostgreSQL riêng |
+| `landing.example.org` | Trang giới thiệu tĩnh `/srv/dx-trace/landing` |
+| `app.example.org` | OAuth2 Proxy ở `127.0.0.1:8180`; ingest riêng qua app `127.0.0.1:8182` |
+| `id.example.org` | Keycloak ở `127.0.0.1:8181` |
 
-**Quan trọng:** `example.org` là tên miền mẫu theo chuẩn tài liệu. **Không sao chép tên miền demo hoặc IP người phát triển** vào hệ thống của bạn. Nếu đang vận hành website khác trên Caddy, cấu hình mới không được ghi đè các site đó.
+Thay domain bằng tên miền của bạn; giữ nguyên các website khác đang nằm trong Caddyfile. Chuẩn bị Docker, Compose v2, Node.js 24, Git và DNS cho cả ba domain.
 
-### Yêu cầu
-
-- Ubuntu Linux, Docker Engine, Docker Compose v2, Caddy đang chạy trên host và cổng 80/443 mở.
-- Node.js 24 để tạo `.env` lần đầu; Git để cập nhật mã nguồn.
-- Bản ghi DNS A/AAAA do **bạn** quản lý cho cả ba tên miền tới IP máy chủ **của bạn**.
-- Đủ RAM/dung lượng cho Keycloak, PostgreSQL, web, core và sao lưu.
-- Đối với máy chủ đã cài: sao lưu `selfhost/.env`, dữ liệu kho, file upload, database Keycloak trước khi cập nhật. **Không dùng `docker compose down -v`**.
-
-## 1. Lấy mã nguồn và khởi tạo
+## 1. Lấy mã và tạo cấu hình lần đầu
 
 ```bash
-git clone https://github.com/OWNER/REPOSITORY.git dx-trace
-cd dx-trace
+git clone --branch v0.0.5 https://github.com/ngochieu1762005/dx_trace.git
+cd dx_trace
 node selfhost/setup.mjs app.example.org id.example.org
-```
-
-Thay `OWNER/REPOSITORY` bằng đường dẫn repository GitHub của bạn; ví dụ này không gắn cố định vào tài khoản cá nhân của người phát triển. Nếu đã có `selfhost/.env`, **không** chạy lại setup và không tạo khóa/người dùng mới. `APP_HOST` phải là domain workspace, `ID_HOST` là domain Keycloak. Không commit `selfhost/.env` lên GitHub.
-
-### 2. Chạy Compose cùng Caddy host
-
-```bash
 cd selfhost
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml config --quiet
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build \
   identitydb identity core app signin
-docker compose -f compose.yaml -f compose.ubuntu-edge.yaml ps
 cd ..
 ```
 
-Override `compose.ubuntu-edge.yaml` bind các cổng `8180`, `8181`, `8182` ở `127.0.0.1` và vô hiệu hóa container gateway. **Không** chạy gateway Docker nếu Caddy trên host đã chiếm 80/443. Chạy Caddy cùng user có thể đọc được `landing/index.html`.
+Máy đã có `.env` không chạy setup. Override bind các cổng 8180/8181/8182 vào loopback; Core không publish cổng. Giới hạn RAM trong override là cấu hình tham khảo cần theo dõi, không phải kết quả đo tải.
 
-## 3. Caddy: cài đặt mới hoặc chuyển đổi từ miền cũ
+## 2. Đặt trang giới thiệu ở thư mục Caddy đọc được
 
-Xem [mẫu 3 site](Caddyfile.ubuntu.saas.snippet) trước. Thay `landing.example.org`, `app.example.org`, `id.example.org`, `/srv/dx-trace/landing` bằng thông tin thực tế **của bạn**. Thêm block mới vào Caddyfile khi **chưa** có các block trùng tên, kiểm tra trước bằng:
-
-```bash
-sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
-sudo systemctl reload caddy
-```
-
-Nếu **đang chuyển một website đã tồn tại** sang mô hình landing + app riêng, dùng công cụ an toàn với **đầy đủ các đối số** thay vì copy IP/domain của một triển khai khác:
+Tại gốc repository:
 
 ```bash
-sudo python3 selfhost/scripts/install-saas-caddy.py \
-  --old-app-host app-old.example.org \
-  --landing-host landing.example.org \
-  --app-host app.example.org \
-  --id-host id.example.org \
-  --landing-root "$PWD/landing" \
-  --dry-run
-```
-
-Lưu ý khi di chuyển: `--old-app-host` là website cũ đã chứa app; `--landing-host` là domain landing mới; nếu dùng lại chính domain cũ cho landing, đặt hai giá trị bằng nhau. Sau khi kiểm tra kỹ kết quả `--dry-run`, bỏ cờ `--dry-run` để áp dụng. Script có sao lưu Caddyfile, validate và rollback khi reload thất bại; bảo toàn các site không được nhắm tới.
-
-**Không bắt buộc dùng script này.** Với cài đặt mới không có site cũ, cấu hình Caddy thủ công bằng mẫu là phù hợp hơn.
-
-## 4. Sửa OIDC callback
-
-Keycloak realm: `warehouse`, client: `dx-trace`. Trong **Valid redirect URIs** phải có:
-
-```text
-https://app.example.org/oauth2/callback
-```
-
-Trên máy chủ, sau khi `.env` đã khai báo `APP_HOST=app.example.org`:
-
-```bash
-python3 selfhost/scripts/fix-oidc-redirect.py
-python3 selfhost/scripts/fix-oidc-redirect.py --apply
-```
-
-Script chỉ cập nhật client trong Keycloak qua REST API localhost. Nếu cần giữ callback cũ để quay lui, thêm `--old-app-host app-old.example.org`. **Không** chia sẻ `.env`, access token hay password qua chat, issue hoặc log công khai.
-
-### 5. Tạo tài khoản thử và giao diện SSO
-
-```bash
-python3 selfhost/scripts/create-warehouse-user.py
-```
-
-Nhập email do bạn kiểm soát, username và mật khẩu mạnh ở prompt. Tài khoản được tạo trong realm `warehouse`, không phải realm `master`. Hướng dẫn cài giao diện xem [BRANDED_LOGIN.md](BRANDED_LOGIN.md).
-
-### 6. Kiểm tra triển khai
-
-```bash
-curl -sS -o /dev/null -w "Landing: %{http_code}\n" https://landing.example.org/
-curl -sS -o /dev/null -w "App: %{http_code}\n" https://app.example.org/
-curl -sS -o /dev/null -w "OIDC: %{http_code}\n" https://id.example.org/realms/warehouse/.well-known/openid-configuration
-```
-
-Chờ đợi: landing `200`, app yêu cầu đăng nhập (thường `302`), OIDC `200`. Sau đó xác nhận đăng nhập thực tế rồi truy cập kho và mục Đề xuất nội bộ. HTTP 302 **chưa** xác nhận callback hoặc session hoạt động.
-
-## 7. Cập nhật, sao lưu và phục hồi
-
-- Sao lưu dữ liệu kho từ container `core`, PostgreSQL `identitydb`, tệp upload và `selfhost/.env` ở nơi riêng.
-- Nâng cấp: `git pull --ff-only` rồi `docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build` sau khi đã kiểm tra changelog.
-- Khi rollback: phục hồi cấu hình Caddy từ tệp sao lưu; khôi phục `APP_HOST` cũ và tái tạo `signin`/`app` nếu hostname thay đổi.
-- Không đưa dữ liệu khách hàng, địa chỉ IP, token, mật khẩu hay cấu hình nội bộ vào Git.
-
-**Đây là hướng dẫn cài chung.** Ba website demo được giới thiệu riêng trong README và **không** phải giá trị cấu hình mặc định.
-
-> **SEO:** `landing/sitemap.xml` chứa URL ví dụ `https://landing.example.org/`. Hãy thay bằng tên miền landing của bạn trước khi đưa website lên production.
-
-## Cập nhật trang giới thiệu và điều hướng
-
-Các nút trên landing dùng `/login` (kho vận hành), `/try` (kho thực hành), `/approvals` (phê duyệt). Caddy chuyển sang domain `app` do người triển khai cấu hình và truyền đích đến qua `rd`. Không dựng URL Keycloak trực tiếp, không đoán hostname trong JavaScript. **Cập nhật cả landing lẫn Caddy snippet** khi nâng cấp giao diện.
-
-Nếu checkout đặt dưới `/root` hoặc thư mục riêng, xuất landing sang đường dẫn Caddy đọc được:
-
-```bash
-# Chạy tại thư mục repository sau khi git pull --ff-only.
 sudo install -d -m 755 /srv/dx-trace/landing
 sudo cp -R landing/. /srv/dx-trace/landing/
 sudo find /srv/dx-trace/landing -type d -exec chmod 755 {} +
@@ -129,29 +37,65 @@ sudo find /srv/dx-trace/landing -type f -exec chmod 644 {} +
 sudo -u caddy test -r /srv/dx-trace/landing/index.html
 ```
 
-Sau đó dùng công cụ `install-saas-caddy.py` ở bước 3 với `--landing-root /srv/dx-trace/landing`. Nếu đã tách ba miền, `--old-app-host` là **miền landing hiện tại**, `--landing-host` cũng là miền đó; hai đối số còn lại là app và identity hiện tại. Kiểm tra `--dry-run`, rồi chạy lại bỏ cờ đó. Không sửa tên miền trong source, không thay mật khẩu và không xóa volume.
+Khi nâng cấp, sao lưu document root hiện tại trước khi chép. Thay URL ví dụ trong sitemap bằng tên miền triển khai. Không phục vụ toàn bộ checkout, `.env` hoặc thư mục backup như static files.
 
-Build lại ứng dụng để nhận bản sửa phục hồi phiên:
+## 3. Cấu hình Caddy
+
+Dùng [Caddyfile.ubuntu.saas.snippet](Caddyfile.ubuntu.saas.snippet), thay domain và root, thêm các block chưa tồn tại vào Caddyfile hiện có. Không dán đè toàn bộ file khi máy chạy website khác.
 
 ```bash
-cd selfhost
-docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build app core signin
+sudo cp -a /etc/caddy/Caddyfile "/etc/caddy/Caddyfile.backup-$(date +%Y%m%d-%H%M%S)"
+# Chỉnh các block theo snippet trước khi validate.
+sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+sudo systemctl reload caddy
 ```
 
-### Kiểm tra sau nâng cấp
+Nếu đang chuyển website app cũ sang landing/app riêng, có script chuyên dụng. Đọc kết quả dry-run trước:
 
-| Thao tác | Kết quả cần có |
+```bash
+sudo python3 selfhost/scripts/install-saas-caddy.py \
+  --old-app-host app-old.example.org \
+  --landing-host landing.example.org \
+  --app-host app.example.org \
+  --id-host id.example.org \
+  --landing-root /srv/dx-trace/landing \
+  --dry-run
+```
+
+Chỉ bỏ `--dry-run` khi các site đích đúng. Script có backup/validate/rollback; cài mới không có site cũ thì dùng snippet thủ công. `--old-app-host` là domain site cần thay, không phải một domain bất kỳ trên máy.
+
+### Đường dẫn hiện tại
+
+| Lối vào | Kết quả theo snippet v0.0.5 |
 | --- | --- |
-| Mở `/` trên landing | HTTP 200, tiêu đề DX-TRACE; không phải trang 404 |
-| Mở `/assets/site.css?v=3` | HTTP 200, Content-Type CSS |
-| Bấm Đăng nhập | Đi qua SSO rồi tới tổng quan kho vận hành |
-| Bấm Mở kho thực hành | Sau SSO, URL app giữ `?area=training#overview` |
-| Mở đề xuất | Sau SSO, vào `/#requests` |
-| Phiên hết hạn tại hồ sơ một lô | Hiện nút đăng nhập lại; quay về đúng hồ sơ và vùng dữ liệu |
-| Sai quyền (403) | Hiển thị lỗi quyền, không tự đăng nhập vòng lặp |
+| `/login` | Qua SSO đến kho vận hành `/#overview` |
+| `/try` | Alias cũ, cũng về kho vận hành; không còn bộ diễn tập riêng |
+| `/approvals` | Qua SSO đến `/#requests` |
+| Kho thực hành | Chọn trong ứng dụng hoặc dùng `https://app.example.org/?area=training#overview` |
 
-Nếu `/` vẫn hiện 404, kiểm tra `root` trong block **đúng domain landing**, vị trí thực của `index.html`, quyền đọc của user chạy Caddy và kết quả reload. `docker compose up` không tự cập nhật cấu hình Caddy trên host. Không ghi đè toàn bộ Caddyfile nếu máy chủ đang phục vụ các website khác.
+## 4. OIDC và tài khoản
 
-### Cập nhật giao diện thống nhất
+Realm `warehouse`, client `dx-trace`, callback `https://app.example.org/oauth2/callback`. Cài mới setup/realm import dùng domain cấu hình; máy đã có realm không tự cập nhật client chỉ vì sửa file import.
 
-Build lại `core app` và tạo lại `signin` sau khi cập nhật mã. Cài lại đoạn Caddy của dự án bằng hướng dẫn ở trên để `/try` chuyển về kho và `/approvals` chuyển về `#requests`; sao chép lại thư mục landing đến document root đang dùng. Không xóa volume dữ liệu. Với cấu hình cũ, bỏ `OAUTH2_PROXY_USER_ID_CLAIM` và dùng `OAUTH2_PROXY_OIDC_EMAIL_CLAIM: email`. Kiểm tra bằng phiên trình duyệt mới: `/oauth2/userinfo` phải chứa email thật và `/api/state` trả HTTP 200.
+Nếu đổi domain, từ gốc repo:
+
+```bash
+python3 selfhost/scripts/fix-oidc-redirect.py
+python3 selfhost/scripts/fix-oidc-redirect.py --apply
+```
+
+Đọc thay đổi trước `--apply`; có thể giữ domain cũ bằng `--old-app-host`. Tạo tài khoản qua Admin Console theo [hướng dẫn](README.md#tạo-tài-khoản-và-cấp-quyền), hoặc dùng `python3 selfhost/scripts/create-warehouse-user.py` với prompt. Đối chiếu email thực với `OAUTH2_PROXY_OIDC_EMAIL_CLAIM=email`; `sub` là định danh người dùng, không phải email.
+
+## 5. Nghiệm thu
+
+```bash
+curl -sS -o /dev/null -w 'Landing: %{http_code}\n' https://landing.example.org/
+curl -sS -o /dev/null -w 'App: %{http_code}\n' https://app.example.org/
+curl -sS -o /dev/null -w 'OIDC: %{http_code}\n' https://id.example.org/realms/warehouse/.well-known/openid-configuration
+```
+
+Landing/OIDC mong đợi 200; app chưa đăng nhập thường 302. Sau đó phải kiểm đăng nhập thật, chuyển kho, quyền, dữ liệu cũ và thao tác ghi. HTTP 302 không chứng minh callback thành công. Nếu 502, xem log app/Core trước khi sửa tài khoản.
+
+## 6. Nâng cấp và phục hồi
+
+Dùng [OPERATIONS.md](OPERATIONS.md) với đúng hai file Compose. Luôn sao lưu SQLite+tệp, Keycloak và cấu hình trước migration. Đồng bộ landing riêng; chỉ reload Caddy sau validate. Không chạy lại setup, không xóa volume và không sửa các domain ngoài phạm vi DX-TRACE.

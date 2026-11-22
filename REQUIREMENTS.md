@@ -1,25 +1,27 @@
-# Đối chiếu DX-TRACE với bài toán DX-OS Open-Core
+# Đối chiếu triển khai với DX-OS Open-Core
 
-Bảng dưới dẫn đến phần triển khai và cách kiểm tra cho từng hạng mục. [Kiến trúc headless độc lập và ứng dụng thứ hai](docs/HEADLESS-CORE.md). Môi trường tham chiếu là [bản chạy trên server riêng](selfhost/README.md).
+Phạm vi: **DX-TRACE v0.0.5**. Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
 
-| Hạng mục | Minh chứng trong mã | Cách kiểm tra |
-| --- | --- | --- |
-| Danh tính và phân quyền | [Realm OIDC](selfhost/realm.json), [kiểm tra quyền nghiệp vụ](lib/domain.mjs) | Dùng hai tài khoản quản lý và chỉ xem để mở cùng kho. Kiểm tra quyền duyệt sự cố. |
-| Cổng truy cập | [Caddyfile](selfhost/Caddyfile), [Compose](selfhost/compose.yaml), [core-server](selfhost/core-server.mjs) | Kiểm tra tuyến web qua proxy đăng nhập, core chạy nội bộ không giao diện và tuyến gửi nhiệt độ xác thực bằng khóa. |
-| Dữ liệu cấu trúc và tệp | [Migration](drizzle/), [runtime tự triển khai](selfhost/runtime.mjs) | Truy xuất một lô, đính kèm tệp, kiểm tra snapshot cùng các đối tượng sau phục hồi. |
-| Quy trình | [Quy trình đề xuất](lib/workflow.mjs), [quy trình thu hồi](lib/domain.mjs) | Thử duyệt đề xuất bằng hai vai trò. Thử đóng sự cố khi vẫn còn hàng phải thu. |
-| Dùng chung giữa phân hệ | [API](app/api/%5B...path%5D/route.ts), [giao diện kho](app/console.tsx) | Kho và đề xuất dùng chung danh tính, dữ liệu và workflow. Giao diện phê duyệt độc lập đã được hợp nhất; không còn dùng làm bằng chứng hai UI riêng. |
-| H–P–D–I trong kho | [Bộ mẫu](lib/demo.mjs), [tổng hợp tác động](lib/impact.mjs) | Theo dõi vai trò người xử lý, đầu dò gắn lô, phiếu phân phối và kết quả tính phạm vi thu hồi. |
+| Hạng mục | Triển khai | Minh chứng / cách kiểm tra | Giới hạn |
+| --- | --- | --- | --- |
+| Identity / SSO | Keycloak + OAuth2 Proxy; quyền thành viên tại Core | `selfhost/realm.json`, `lib/server.ts`; đăng nhập hai tài khoản cùng kho | Test tự động dùng danh tính mô phỏng, chưa kiểm đầy đủ OIDC |
+| Biên API | Caddy → signin → app → Core | [Kiến trúc](docs/HEADLESS-CORE.md), test headless và container | Reverse proxy, chưa có quản trị API client bên thứ ba |
+| Dữ liệu có cấu trúc | SQLite: workspace, cảm biến, mô hình/hồ sơ | [Migration](drizzle/), test cách ly và phân trang | Kho truyền thống còn JSON, chưa PostgreSQL nghiệp vụ |
+| Dữ liệu phi cấu trúc | Tệp PNG/JPEG/PDF, hash, metadata và trạng thái quét | Upload/download/restore tests; [API](docs/API.md) | Kho tệp cục bộ; scanner ngoài là tùy chọn |
+| Workflow | Quy tắc kho và mô hình JSON có điều kiện | Test version, vai trò, chống tự duyệt, chuyển cấp theo số tiền | Không BPMN, không nhánh song song |
+| Core headless | Tiến trình/container API riêng, không UI | Test từ chối token sai, app không gắn volume kho | Demo PC là ngoại lệ chạy cùng tiến trình |
+| Tái sử dụng | Bốn mô hình dùng chung biểu mẫu, API, quyền và dữ liệu | [PLATFORM](docs/PLATFORM.md), `examples/` | Không dùng ứng dụng phê duyệt riêng đã gỡ làm bằng chứng |
+| H–P–D–I trong bài toán kho | Người/vai trò; quy trình; dữ liệu lô/số đo; tra cứu hỗ trợ | Quy trình nhập → giao → sự cố → thu hồi và đối soát | AI tùy chọn không quyết định thay người quản lý |
+| Vận hành | Sao lưu/verify, ledger, webhook, metrics | [Minh chứng](docs/EVIDENCE.md), [vận hành](selfhost/OPERATIONS.md) | Ledger chưa neo ngoài; chưa HA và giám sát toàn stack |
 
 ## Hồ sơ nguồn mở
 
-| Nội dung đối chiếu | Tệp hoặc thao tác |
-| --- | --- |
-| Giấy phép | [MIT](LICENSE); phông chữ và thành phần phân phối kèm giữ giấy phép riêng. |
-| Build từ mã nguồn | [Hướng dẫn tự triển khai](selfhost/README.md), [Dockerfile](selfhost/Dockerfile), [lockfile](pnpm-lock.yaml). |
-| Báo lỗi và theo dõi thay đổi | [Mẫu issue](.github/ISSUE_TEMPLATE/bug_report.md), [hướng dẫn đóng góp](CONTRIBUTING.md), [changelog](CHANGELOG.md). |
-| Phát hành phiên bản | [Workflow](.github/workflows/release.yml) tạo gói nguồn và checksum. Khi nộp bài, bổ sung URL kho công khai và URL release đã phát hành thực tế. |
+- [MIT](LICENSE), thông báo giấy phép thành phần và [nguồn biểu trưng](docs/assets/LOGOS.md).
+- [Build từ mã nguồn](README.md#quick-setup), lockfile và Dockerfile.
+- [Đóng góp](CONTRIBUTING.md), [bảo mật](SECURITY.md), [changelog](CHANGELOG.md).
+- [Release v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5) có gói nguồn và checksum.
+- [Benchmark](docs/BENCHMARK.md) công bố dữ liệu gốc và phạm vi đo, không dùng số liệu cục bộ làm năng lực VPS.
 
-## Giới hạn cần thể hiện khi trình diễn
+## Khi trình diễn
 
-Dữ liệu kho thực hành được tạo bằng bộ mẫu. Việc gửi số đo từ một đầu dò vật lý, cấp chứng chỉ cho tên miền công cộng và phục hồi toàn bộ realm danh tính cần được kiểm tra trên máy chủ triển khai. Quy trình duyệt hiện được định nghĩa trong mã, chưa hỗ trợ BPMN động. Máy chủ core tách biệt ở cấp tiến trình/containers, nhưng chưa phải một bộ lõi dùng chung cho mọi ứng dụng bên ngoài. Hệ thống chưa có GitOps tự phục hồi, lakehouse hoặc malware scanner mặc định. Lịch sử thao tác dùng cho đối chiếu nghiệp vụ; quản trị viên cơ sở dữ liệu vẫn có quyền truy cập dữ liệu gốc.
+Dùng Docker để chứng minh SSO và Core riêng. Dùng hai tài khoản để kiểm quyền, một hồ sơ thu hồi để chứng minh quy trình xuyên suốt, một mô hình mới để chứng minh tái sử dụng. Nêu rõ đâu là dữ liệu mẫu và đâu là số đo thật; không suy ra điểm thi hoặc cam kết triển khai thực tế chỉ từ số lượng tính năng.

@@ -1,6 +1,6 @@
 # Nghiệp vụ mở rộng và vận hành
 
-Các tính năng dưới đây thuộc nhánh `main` (Unreleased). Phiên bản phát hành gần nhất vẫn là 0.0.4. Không cần đặt lại kho hay tạo tài khoản mới.
+Tài liệu áp dụng cho **v0.0.5**. Không đặt lại kho hay tạo tài khoản mới khi nâng cấp. Đọc [quy trình backup/migration](../selfhost/OPERATIONS.md) trước khi thay phiên bản.
 
 ## Tạo một nghiệp vụ
 
@@ -27,7 +27,7 @@ Mẫu mua sắm cho phép quản lý duyệt trực tiếp số tiền đến 5 
 
 ## API
 
-Các endpoint dùng phiên đăng nhập hiện có qua OAuth2 Proxy. POST cần `Content-Type: application/json`, Origin hợp lệ và `Idempotency-Key` duy nhất cho mỗi thao tác; khi thử lại cùng thao tác giữ nguyên khóa. Không truyền danh tính giả từ trình duyệt.
+Các endpoint dùng phiên đăng nhập hiện có qua OAuth2 Proxy. POST ghi cần `Content-Type: application/json`, nguồn cùng ứng dụng và `Idempotency-Key` duy nhất cho mỗi thao tác (plan chỉ đọc, không yêu cầu khóa); khi thử lại cùng thao tác giữ nguyên khóa. Không truyền danh tính giả từ trình duyệt.
 
 | Phương thức và đường dẫn | Nội dung |
 | --- | --- |

@@ -1,6 +1,6 @@
 # DX-TRACE — Release Notes
 
-Các ghi chú phát hành được lưu tập trung tại đây để giữ thư mục gốc của dự án gọn gàng.
+**Bản phát hành hiện tại: v0.0.5.** Ghi chú mỗi phiên bản mô tả mã tại tag tương ứng; các bản cũ không phải hướng dẫn cài mới. Tài liệu hiện hành nằm ở [mục lục](../README.md); [changelog](../../CHANGELOG.md) có mục Unreleased cho thay đổi sau tag.
 
 | Phiên bản | Ghi chú | GitHub Release |
 | --- | --- | --- |

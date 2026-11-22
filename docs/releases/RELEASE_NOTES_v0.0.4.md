@@ -1,5 +1,6 @@
 # DX-TRACE v0.0.4 — Warehouse Navigation & Scanner Fixes
 
+> Tài liệu lịch sử của tag v0.0.4. Hướng dẫn hiện hành: [mục lục tài liệu](../README.md) và [vận hành](../../selfhost/OPERATIONS.md). Nội dung dưới mô tả thời điểm phát hành.
 Bản cập nhật tập trung vào giao diện kho thống nhất, quét QR/mã vạch và sửa lỗi triển khai.
 
 ### Changed

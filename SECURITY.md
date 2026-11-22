@@ -1,31 +1,32 @@
-# Responsible disclosure and self-hosting security
+# Bảo mật và báo cáo lỗ hổng
 
-DX-TRACE is open-source software. Its reference configuration is intended for use
-with **your own domains, IP addresses, user accounts and infrastructure**.
+Phạm vi tài liệu: DX-TRACE v0.0.5. Dự án chưa công bố chính sách LTS/SLA; hãy đối chiếu bản phát hành và changelog trước khi triển khai.
 
-## Never commit
-- Live `.env` files, API keys, OIDC secrets, passwords or access tokens
-- Private IP addresses, public hosting IPs, SSH keys, credentials or private DNS
-- Customer, pharmacy, warehouse or production database snapshots
-- Host-specific Caddy files, cloud provider information or raw troubleshooting logs
+## Báo cáo riêng
 
-Use `selfhost/setup.mjs` for first-time configuration. Keep the generated
-`selfhost/.env` only on your own server and include it in protected backups.
-See `selfhost/DEPLOY_SAAS_UBUNTU.md` for the portable deployment example.
+Không đưa lỗ hổng chưa khắc phục, bí mật hoặc dữ liệu người dùng vào issue công khai. Dùng chức năng private vulnerability reporting trong tab Security **nếu repository đã bật**; nếu chưa có, liên hệ maintainer qua kênh riêng đã xác minh. Không giả định một địa chỉ email hay SLA xử lý chưa được công bố.
 
-## Report a vulnerability or exposure
+Báo cáo nên có version/commit, điều kiện tái hiện, phạm vi ảnh hưởng và dữ liệu tổng hợp tối thiểu. Chỉ thử trên hệ thống bạn được phép kiểm tra.
 
-Do not post secrets, IPs or stack traces with credentials in public GitHub
-issues. Use GitHub's private security advisory reporting when enabled, or
-contact the maintainers using the repository's GitHub security/contact controls.
+## Ranh giới bảo vệ
 
-If secrets are ever committed: **rotate/revoke the credentials first**.
-Deleting files or rewriting Git commits does not invalidate an exposed secret,
-erase existing forks, or guarantee GitHub caches and external copies are removed.
+- Caddy/OAuth2 Proxy cung cấp danh tính tin cậy; chặn truy cập trực tiếp vào app/Core từ mạng không tin cậy.
+- Core không publish cổng host, yêu cầu token riêng; app không gắn volume dữ liệu kho.
+- Vai trò nằm trong DB ứng dụng. API kiểm quyền, trạng thái và version trước ghi.
+- Kho thực hành tách dữ liệu nhưng không phải môi trường sandbox cho mã tùy ý.
+- Tệp kiểm định dạng/hash; chỉ download khi scanner xác nhận sạch. Không có scanner mặc định, không coi magic bytes là quét mã độc.
+- Ledger phát hiện sửa chuỗi khi hash không được tính lại; quản trị viên có toàn quyền DB vẫn có thể viết lại. Không phải chữ ký số hoặc nhật ký bất biến có neo ngoài.
 
-## Git history cleanup
+## Bí mật và dữ liệu
 
-Git history rewrite is destructive to clone workflows, tags, PRs and release
-archives. Coordinate with contributors and ensure backups before force-updating
-refs. All release artifacts and public GitHub references must be audited
-independently. Do not publish a release before validating its source archive.
+Không commit `.env`, cookie, khóa thiết bị, token Core/OIDC, SSH keys, dump DB, file người dùng hoặc cấu hình hạ tầng riêng. Giữ backup mã hóa ngoài VPS; tránh document root. Đọc [OPERATIONS](selfhost/OPERATIONS.md) để backup đúng cả SQLite, objects và Keycloak.
+
+Nếu lộ khóa: thu hồi/đổi khóa trước, kiểm phạm vi sử dụng, sau đó xử lý bản sao và Git history có phối hợp. Xóa file hoặc force-push không làm khóa cũ mất hiệu lực và không xóa mọi fork/cache.
+
+## Tích hợp ngoài
+
+Groq có thể nhận câu hỏi, SOP và ngữ cảnh kho khi bật. Scanner nhận nội dung tệp. Webhook gửi sự kiện của workspace đã chọn, gồm cả lịch sử chưa giao; bên nhận kiểm HMAC, timestamp và chống trùng theo event ID. Quản trị viên phải kiểm đích dịch vụ, quyền dữ liệu và vòng đời bí mật trước khi bật.
+
+## Trước vận hành
+
+Kiểm OIDC/HTTPS, hai vai trò khác nhau, cô lập hai vùng kho, phục hồi và camera thật. CI không thay kiểm toán bảo mật toàn diện. Theo dõi upstream dependencies và image; chưa có tuyên bố tuân thủ pháp lý, HA, chống mọi kiểu tấn công hoặc tự động vá hạ tầng.

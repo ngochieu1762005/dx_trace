@@ -1,461 +1,241 @@
 <div align="center">
 
-<img src="docs/assets/project-banner.svg" alt="DX-TRACE — Food traceability and recall management on DX-OS Open-Core" width="100%">
+<img src="docs/assets/project-banner.svg" alt="DX-TRACE — Truy xuất và điều phối thu hồi thực phẩm" width="100%">
 
 **Truy xuất đến cùng. Thu hồi có kiểm soát.**
 
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases/latest)
-[![MIT License](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
+[![MIT](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/ngochieu1762005/dx_trace)](https://github.com/ngochieu1762005/dx_trace/issues)
 
 ![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-24-417e38?logo=nodedotjs&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-24-417e38?logo=nodedotjs&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
 ![Keycloak](https://img.shields.io/badge/SSO-Keycloak-326ce5?logo=keycloak&logoColor=white)
 ![SQLite](https://img.shields.io/badge/Data-SQLite-003b57?logo=sqlite&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/Identity_DB-PostgreSQL_17-4169e1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Deploy-Docker_Compose-2496ed?logo=docker&logoColor=white)
 
-[**Cài đặt nhanh**](#quick-setup) · [**Kiến trúc**](#architecture) · [**API**](docs/API.md) · [**Minh chứng**](docs/EVIDENCE.md) · [**Đo tải**](docs/BENCHMARK.md) · [**Bản phát hành**](https://github.com/ngochieu1762005/dx_trace/releases) · [**Báo lỗi**](https://github.com/ngochieu1762005/dx_trace/issues/new/choose)
+[Cài đặt nhanh](#quick-setup) · [Kiến trúc](#architecture) · [API](docs/API.md) · [Tài liệu](docs/README.md) · [Minh chứng](docs/EVIDENCE.md) · [Tải v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5)
 
 </div>
 
-DX-TRACE kết nối **lô hàng, giao nhận, số đo bảo quản và quy trình thu hồi** trong một hồ sơ xuyên suốt. Khi có sự cố, đội vận hành xác định được hàng đã đến đâu, đã nhận trả bao nhiêu và còn thiếu bao nhiêu tại mỗi điểm nhận.
+DX-TRACE kết nối **lô hàng, giao nhận, điều kiện bảo quản và thu hồi** trong một quy trình thống nhất. Khi một lô gặp sự cố, người quản lý xác định được hàng đã đến đâu, còn nằm trong kho bao nhiêu, đã nhận trả bao nhiêu và ai đang xử lý.
 
-Được xây dựng theo định hướng **DX-OS Open-Core**, nền tảng có **Headless Core API** độc lập và giao diện kho thống nhất, dùng chung Identity/SSO, phân quyền, dữ liệu và workflow. Mục **Nghiệp vụ mở rộng** cho phép khai báo biểu mẫu và quy trình bằng JSON, xem kế hoạch thay đổi trước khi áp dụng và quản lý hồ sơ theo quyền.
+Nền tảng theo định hướng **DX-OS Open-Core**: Core API chạy độc lập, giao diện dùng chung danh tính, quyền, dữ liệu và workflow. Ngoài nghiệp vụ kho, người quản trị có thể khai báo mô hình JSON để tạo biểu mẫu và quy trình mới mà không viết lại giao diện cho từng loại hồ sơ.
 
-| Khám phá sản phẩm | Dành cho người triển khai |
+**Tài liệu hiện tại áp dụng cho v0.0.5.** Nhánh `main` có thể có sửa đổi sau phát hành; dùng tag để tái lập đúng mã nguồn. Các bản phát hành cũ giữ nguyên lịch sử tại [CHANGELOG](CHANGELOG.md).
+
+| Trải nghiệm | Triển khai và kiểm chứng |
 | --- | --- |
-| [Website giới thiệu](https://dxtrace.hieuds.com/) | [Chạy demo trên PC](#quick-setup) |
-| [Ứng dụng Warehouse](https://app.dxtrace.hieuds.com/) | [Triển khai ba tên miền trên Ubuntu](selfhost/DEPLOY_SAAS_UBUNTU.md) |
-| [Dịch vụ SSO của bản demo](https://dxauth.hieuds.com/) | [Cấu hình và kiểm tra đăng nhập](selfhost/BRANDED_LOGIN.md) |
+| [Website giới thiệu](https://dxtrace.hieuds.com/) | [Chạy trên PC](#quick-setup) |
+| [Ứng dụng kho](https://app.dxtrace.hieuds.com/) | [Máy chủ Docker](selfhost/README.md) |
+| [Dịch vụ danh tính demo](https://dxauth.hieuds.com/) | [Ubuntu có Caddy sẵn](selfhost/DEPLOY_SAAS_UBUNTU.md) |
 
-Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai, dùng tên miền và thông tin xác thực của đơn vị bạn. Tài khoản truy cập do quản trị viên cấp. Giấy phép MIT áp dụng cho mã nguồn dự án; thư viện và dữ liệu ngoài có giấy phép riêng.
-
-**Phiên bản: [v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5).** Xem [ghi chú phát hành](docs/releases/README.md) và [Changelog](CHANGELOG.md) để theo dõi cập nhật.
-
-<details>
-<summary><strong>Xem trước giao diện giới thiệu</strong></summary>
-
-![Giao diện DX-TRACE với hồ sơ thu hồi mẫu SUA-005](docs/assets/landing-preview.jpg)
-
-</details>
+Tài khoản demo do quản trị viên cấp; repository không chứa mật khẩu dùng chung. Khi tự triển khai, dùng tên miền và tài khoản của đơn vị bạn.
 
 <a id="contents"></a>
+## Nội dung
 
-Bản trên nhánh `main` bổ sung [mô hình nghiệp vụ, webhook và công cụ vận hành](docs/PLATFORM.md). Các bổ sung này nằm trong **Unreleased**, chưa phải bản phát hành mới.
-
-## 📋 Table of Contents
-
-- [Giới thiệu](#introduction)
-- [Kiến trúc DX-OS Open-Core](#architecture)
-- [Một giao diện vận hành thống nhất](#applications)
-- [Công nghệ sử dụng](#technologies)
-- [Chức năng và dữ liệu mẫu](#features)
-- [Yêu cầu hệ thống](#requirements)
-- [Cài đặt nhanh](#quick-setup)
-- [Hướng dẫn & kiểm thử](#detailed-setup)
-- [Trạng thái phát hành](#changelog)
-- [Đóng góp và giấy phép](#contribution)
-- [Liên hệ](#contact)
+- [Bài toán và tính năng](#features)
+- [System Architecture](#architecture)
+- [Technologies Used](#technologies)
+- [System Requirements](#requirements)
+- [Quick Setup](#quick-setup)
+- [Kiểm thử và minh chứng](#detailed-setup)
+- [Nâng cấp và giới hạn](#changelog)
+- [Đóng góp, giấy phép, liên hệ](#contribution)
 
 <a id="introduction"></a>
+<a id="features"></a>
+## Bài toán và tính năng
 
-## 🌟 Introduction
+Một lô sữa đã được phân phối đến nhiều cửa hàng. Đầu dò ghi nhận vượt ngưỡng bảo quản. DX-TRACE hỗ trợ cách ly lô, xác định phiếu chưa giao, phê duyệt thu hồi và đối soát số hàng trả tại từng điểm nhận. Hệ thống chặn đóng sự cố khi các phiếu liên quan chưa được xử lý hết.
 
-DX-TRACE giúp đội vận hành kho thực phẩm xác định phạm vi ảnh hưởng khi một lô hàng gặp sự cố. Từ mã lô, người phụ trách tra được nhà cung cấp, phiếu xuất và từng điểm nhận để quyết định dừng giao, cách ly hoặc thu hồi. Mỗi lần trả hàng được ghi theo số lượng thực nhận, nên kho có thể theo dõi phần còn thiếu cho đến khi đối soát xong.
+| Phân hệ | Khả năng hiện có |
+| --- | --- |
+| Tổng quan | Cảnh báo, chỉ số kho và thao tác nhanh quét mã, nhập lô, lập phiếu xuất |
+| Lô hàng | Quản lý hạn dùng, vị trí, tồn; lọc và xuất CSV; gợi ý thứ tự FEFO khi chọn lô xuất |
+| Giao nhận | Giữ hàng, giao, hủy và nhận trả theo số lượng; kiểm tra tồn tại máy chủ |
+| Truy xuất | QR/mã vạch qua camera hoặc ảnh; đối chiếu lô, chọn nhiều kết quả, tạo tem và hồ sơ truy xuất |
+| Tra sản phẩm | Open Food Facts; dùng thông tin tham khảo để điền nhanh lô mới, người nhập xác nhận lại |
+| Thiết bị | Khóa riêng theo đầu dò, lịch sử nhiệt độ, phát hiện chuỗi số đo vượt ngưỡng |
+| Sự cố & thu hồi | Cách ly, duyệt thu hồi, đối soát theo điểm nhận, đóng hồ sơ khi đủ điều kiện |
+| Tài liệu và trợ lý | SOP, tệp đính kèm, tra cứu cục bộ; kết nối Groq tùy chọn |
+| Đề xuất nội bộ | Quy trình nháp → gửi duyệt → phê duyệt/từ chối trong giao diện kho |
+| Nghiệp vụ mở rộng | Mô hình JSON, biểu mẫu, API, điều kiện duyệt, phạm vi hồ sơ, tìm kiếm và phân trang |
+| Quản trị | Thành viên, vai trò, nhật ký; API ledger, metrics và webhook có cấu hình |
 
-Ví dụ, khi một lô sữa đã đến hai điểm nhận, người quản lý có thể xem số phải thu tại từng nơi và những phiếu chưa giao cần hủy. Cùng một hồ sơ lô liên kết số đo nhiệt độ, chứng từ và lịch sử xử lý.
+**Kho thực hành / Kho vận hành** có nút chuyển ở đầu trang. Hai vùng giữ dữ liệu riêng, cùng tổ chức và quyền thành viên; chuyển kho không đặt lại dữ liệu. Ứng dụng phê duyệt độc lập và bộ màn hình diễn tập cũ đã được hợp nhất hoặc gỡ bỏ.
 
-DX-TRACE được phát triển theo định hướng đề thi **Olympic Phần mềm nguồn mở 2026 — DX-OS Open-Core**. Mục tiêu là minh chứng các dịch vụ nền tảng dùng chung (Identity/SSO, API, dữ liệu có cấu trúc/phi cấu trúc, Workflow) bằng một bài toán truy xuất và thu hồi thực tế. [Đối chiếu cụ thể các yêu cầu và giới hạn hiện tại](REQUIREMENTS.md).
+### Ví dụ dữ liệu mẫu
+
+Trong bộ mẫu SUA-005: Long Biên đã nhận 30 hộp và trả 17; Tây Hồ nhận 20 chưa trả; Thanh Xuân có phiếu 12 hộp chưa giao. Tổng còn phải thu là **33 hộp**, còn phiếu giữ 12 hộp phải xử lý riêng. Các con số thay đổi khi người dùng thao tác. Kho thực hành là dữ liệu mô phỏng, không phải minh chứng triển khai tại doanh nghiệp.
+
+### Mở rộng sang nghiệp vụ khác
+
+Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch → Áp dụng mô hình** bằng tài khoản chủ không gian. Có mẫu bảo trì thiết bị, mua sắm, kiểm tra chất lượng và yêu cầu khách hàng. Mẫu mua sắm trên 5 triệu đồng yêu cầu chuyển cấp trước khi chủ không gian khác người tạo duyệt. [Cấu hình và giới hạn workflow](docs/PLATFORM.md).
 
 <a id="architecture"></a>
-
 ## 🏗️ System Architecture
 
-### Kiến trúc triển khai trên máy chủ
-
-```mermaid
-flowchart TB
-    User["Người dùng trình duyệt"] --> Gateway["Caddy · HTTPS / API edge"]
-    Sensor["Thiết bị cảm biến"] --> Gateway
-    Gateway --> SignIn["OAuth2 Proxy · OIDC"]
-    SignIn <--> Keycloak["Keycloak · Identity/SSO"]
-    Keycloak --> IDDB[("PostgreSQL · danh tính")]
-    SignIn --> Web["Web app · UI và reverse proxy"]
-    Gateway -->|"POST /api/ingest"| Web
-    Web --> Warehouse["Ứng dụng 01 · DX-TRACE Warehouse"]
-    Warehouse --> Approvals["Đề xuất & phê duyệt tích hợp"]
-    Web -->|"DX_CORE_TOKEN · mạng Docker"| Core["Headless Core API · Node.js"]
-    Core --> Data[("SQLite · workspace & giao dịch")]
-    Core --> Files[("Kho tệp · SHA-256")]
-    Core --> Workflow["Workflow · RBAC & audit"]
-```
-
-**Phân tách trách nhiệm:** `gateway` và `signin` cung cấp biên truy cập/SSO; `app` phục vụ giao diện và chuyển tiếp API; `core` chạy API độc lập, giữ volume dữ liệu, **không cung cấp giao diện và không công bố cổng ra host**. Quy tắc nghiệp vụ và phân quyền được kiểm tra phía Core. Chế độ demo trên máy cá nhân là ngoại lệ, chạy backend cùng tiến trình để không cần Docker/Keycloak.
-
-[Chi tiết ranh giới bảo mật, cách triển khai và giới hạn](docs/HEADLESS-CORE.md) · [Compose](selfhost/compose.yaml) · [Core server](selfhost/core-server.mjs)
-
-### Ánh xạ ba tầng và H–P–D–I
-
-| Tầng DX-OS | Triển khai trong dự án |
-| --- | --- |
-| **Tầng 1 — Headless Core** | OIDC/SSO (Keycloak), cổng HTTPS (Caddy), API nội bộ, SQLite, tệp và Workflow |
-| **Tầng 2 — Năng lực H–P–D–I** | **H**: tài khoản/vai trò; **P**: đề xuất và duyệt; **D**: thống kê lô, đối soát, cảm biến; **I**: tra cứu SOP, kết nối AI tùy chọn |
-| **Tầng 3 — Ứng dụng nghiệp vụ** | Truy xuất thực phẩm, quản lý lô, giao nhận và điều phối thu hồi |
-
-### Bản đồ mô-đun nghiệp vụ
-
-![Các mô-đun và luồng nghiệp vụ DX-TRACE](docs/assets/project-overview.svg)
-
-| Câu hỏi | Điểm bắt đầu trong mã |
-| --- | --- |
-| Một tài khoản được vào kho nào và được làm gì? | [Ngữ cảnh người dùng và workspace](lib/server.ts), [quyền thực hiện lệnh](lib/domain.mjs). |
-| Ai có quyền đổi đề xuất từ đã gửi thành đã duyệt? | [Định nghĩa và điều kiện chuyển bước](lib/workflow.mjs). Cùng một phiên có thể mở cả Đề xuất nội bộ lẫn Truy xuất. |
-| Vì sao hai cửa hàng nhận cùng lô nhưng có số phải thu khác nhau? | [Tính tác động theo từng phiếu](lib/impact.mjs), [bảng đối soát](app/impact.tsx). |
-| Mất kết nối sau khi bấm nhận trả thì sao? | Máy chủ đối chiếu mã yêu cầu, nội dung và revision trước khi ghi. [Xử lý đồng thời và gửi lại](lib/server.ts). |
-| Số đo và ảnh minh chứng được lưu ở đâu? | [Schema SQLite](drizzle/), [giao dịch và kho tệp](selfhost/runtime.mjs), [công cụ sao lưu](selfhost/backup.mjs). |
-
-### Triển khai và ranh giới xác thực
-
-Máy chủ sử dụng hai tên miền: một cho ứng dụng và một cho Keycloak. Caddy là thành phần duy nhất công bố cổng 80/443 ra ngoài. Người dùng đi qua OAuth2 Proxy và OIDC, trong khi cảm biến gửi số đo bằng khóa thiết bị thông qua `POST /api/ingest`.
-
-**Lưu ý:** sơ đồ SVG dưới đây được thiết kế trước khi tách container `core`; để xem **luồng triển khai hiện tại**, sử dụng biểu đồ Mermaid ở đầu mục này và [cấu hình Compose](selfhost/compose.yaml).
-
-![Sơ đồ luồng xác thực và dữ liệu ở bản thiết kế trước khi tách Core](docs/assets/architecture.svg)
-
-### Khi quét mã vạch, yêu cầu đi đâu?
-
-![Đọc QR cục bộ, đối chiếu mã lô, rồi tra cache hoặc Product API v3 khi cần](docs/assets/barcode-flow.svg)
-
-ZXing giải mã ảnh ngay trên trình duyệt. Nếu mã khớp lô trong kho, giao diện mở hồ sơ hoặc danh sách lô để chọn. Với mã sản phẩm chưa khớp, hoặc khi người dùng tra cứu thủ công, trình duyệt gọi **`GET /api/barcode/{code}`** bằng phiên đăng nhập hiện tại.
-
-1. API nhận mã gồm **8–14 chữ số** và tra bảng SQLite `external_cache` theo khóa `off:{code}`. Nếu kết quả còn hạn, máy chủ trả dữ liệu ngay.
-2. Khi cần tra bên ngoài, máy chủ gọi **`GET https://world.openfoodfacts.org/api/v3/product/{code}?fields=code,product_name,brands,quantity`** với thời gian chờ 12 giây.
-3. Khi tìm thấy, DX-TRACE trả mã vạch, tên, nhãn hiệu, lượng đóng gói, nguồn và giấy phép ODbL. Kết quả được lưu 24 giờ. Người dùng có thể dùng thông tin đó khi nhập lô; nhà cung cấp và hành trình giao hàng vẫn lấy từ hồ sơ kho.
-
-### Các kết nối ra ngoài từ API nghiệp vụ
-
-| API nội bộ | Đích mà máy chủ gọi | Điều kiện và kết quả |
-| --- | --- | --- |
-| `GET /api/barcode/{code}` | Open Food Facts Product API v3 | Tra khi chưa có cache hợp lệ. Chỉ gửi mã và danh sách trường cần lấy. |
-| `POST /api/assistant` | `POST https://api.groq.com/openai/v1/chat/completions` | Khi có `AI_API_KEY`, gửi câu hỏi cùng ngữ cảnh kho và SOP. Khi chưa cấu hình, ứng dụng tra cứu bằng quy tắc cục bộ. |
-| `POST /api/files` | `POST {FILE_SCAN_URL}` | Nếu cấu hình dịch vụ quét, gửi nội dung tệp tới URL của quản trị viên. Chỉ tệp được xác nhận sạch mới được tải xuống. |
-
-Các nhãn dưới tên dịch vụ trong hình là **tuyến phía DX-TRACE**. Danh mục dưới đây gồm cả các tuyến chỉ xử lý trong kho. [Xem danh mục API](docs/API.md) · [Đối chiếu bộ định tuyến](app/api/%5B...path%5D/route.ts).
-
-### Biên truy cập và nơi lưu dữ liệu
-
-| Thành phần trong Compose | Kết nối | Trách nhiệm |
-| --- | --- | --- |
-| `gateway` · Caddy | `edge`, `appnet` | Nhận HTTPS, loại bỏ header danh tính do client gửi, chuyển yêu cầu web tới `signin`. Tuyến `POST /api/ingest` đi thẳng tới ứng dụng để kiểm tra khóa đầu dò. Chứng chỉ được lưu trong volume `tls`. |
-| `signin` · OAuth2 Proxy | `edge`, `appnet` | Xác thực phiên qua Keycloak, chuyển tiếp danh tính đã xác minh đến `app:8080`. |
-| `identity` và `identitydb` | Keycloak nối `edge` với `dbnet`; PostgreSQL chỉ thuộc `dbnet` | Keycloak quản lý realm `warehouse`. PostgreSQL lưu dữ liệu danh tính trong `identitydata`. API của kho kiểm tra vai trò thành viên trên từng yêu cầu nghiệp vụ. |
-| `app` · Node.js 24 | `appnet`, `corenet` | Phục vụ giao diện đã build và chuyển tiếp các yêu cầu API được xác thực tới lõi. Không gắn dữ liệu kho. |
-| `core` · Node.js 24 | `corenet` | Máy chủ API headless riêng; chỉ dịch vụ này gắn volume `warehouse` chứa SQLite và các tệp đính kèm. Không mở cổng ra host. |
-
-### Lần theo một sự cố từ đầu dò đến phiếu trả
-
-![Điều kiện tạo sự cố, duyệt thu hồi và đóng hồ sơ](docs/assets/recall-flow.svg)
-
-1. **Nhận số đo.** Đầu dò gửi mã phép đo, nhiệt độ và thời gian UTC. API xác thực khóa, tìm lô tương ứng và kiểm tra số đo trùng. Ba lần đo liên tiếp vượt ngưỡng trong cửa sổ 10 phút có thể tạo sự cố và cách ly lô.
-2. **Xác định nơi phải thu.** Trong kho thực hành, SUA-005 có 50 hộp đã giao và 12 hộp đang chờ giao. Hàm `recallImpact` nhóm các phiếu theo điểm nhận. Sau khi Long Biên trả 17 hộp, màn hình hiển thị Long Biên còn 13 và Tây Hồ còn 20. Phiếu 12 hộp tại kho được xử lý riêng bằng thao tác hủy.
-3. **Đối soát trước khi đóng.** Mỗi lần nhận trả, máy chủ kiểm tra quyền, trạng thái phiếu và số còn phải thu. Mã yêu cầu giúp tránh ghi hai lần khi nhân viên gửi lại. Kho chỉ đóng được sự cố khi đã xử lý hết các phiếu liên quan.
-
-Để kiểm tra tuyến mạng, xem [Caddyfile](selfhost/Caddyfile) và [Compose](selfhost/compose.yaml). Để theo dõi một lần ghi từ API xuống dữ liệu, xem [xử lý yêu cầu](app/api/%5B...path%5D/route.ts), [quy tắc kho](lib/domain.mjs) và [phép tính đối soát](lib/impact.mjs).
-
-### Vòng đời bản phát hành và dữ liệu
-
-![Từ kiểm thử tới triển khai Compose và phục hồi kho](docs/assets/delivery.svg)
-
-Một tag phiên bản xác định **mã nguồn**; bản sao lưu xác định **trạng thái kho tại một thời điểm**. Muốn dựng lại hệ thống đang vận hành, cần cả hai, kèm cấu hình tên miền, bí mật OIDC và dữ liệu danh tính. [Hướng dẫn phục hồi trên máy chủ mới](selfhost/README.md).
-
-<a id="applications"></a>
-
-## 🧩 Một giao diện vận hành thống nhất
-
-DX-TRACE tích hợp quản lý kho, giao nhận, truy xuất, thu hồi và **Đề xuất nội bộ** trong cùng giao diện. Tạo đề xuất → gửi duyệt → quản lý phê duyệt hoặc từ chối → xem nhật ký, không chuyển sang ứng dụng khác.
-
-Các đường dẫn cũ `/apps/approvals/index.html` và `/demo/index.html` chuyển về mục Đề xuất nội bộ và Tổng quan. Menu diễn tập và bộ bốn kịch bản đã được gỡ bỏ. Dữ liệu mẫu cũ được giữ riêng, không xóa hoặc trộn với dữ liệu vận hành. Chế độ chạy cục bộ vẫn dùng dữ liệu mẫu để kiểm tra mà không cần SSO.
-
-Workflow kiểm soát vai trò ở backend; đây chưa phải BPMN engine thiết kế động.
-
-<a id="technologies"></a>
-
-## 🛠️ Technologies Used
-
-### Các mô-đun cùng tham gia một lần nhận trả
-
-Khi nhân viên bấm **Nhận trả**, giao diện gửi mã phiếu, số hộp thực nhận và mã yêu cầu. API xác định người dùng thuộc kho nào, kiểm tra quyền và gọi quy tắc nhận trả. Sau khi ghi thành công, giao diện tải lại hồ sơ. Tổng **33 hộp còn phải thu** trong ví dụ SUA-005 được tính từ các phiếu của lô.
+### Biên truy cập và dịch vụ
 
 ```mermaid
 flowchart TD
-    UI["Giao diện kho"] --> API["API nghiệp vụ"]
-    Sensor["Đầu dò"] --> Ingest["API tiếp nhận số đo"]
-    Ingest --> Server["Kho và phiên bản dữ liệu"]
-    API --> Server
-    Server --> Domain["Quy tắc kho và phê duyệt"]
-    Server --> SQLite[("SQLite")]
-    API --> Impact["Đối soát theo lô"]
-    API --> Objects["Kho tệp SHA-256"]
-    SQLite --> Backup["Sao lưu kho"]
-    Objects --> Backup
+    Browser["Trình duyệt"] --> Edge["Caddy · HTTPS"]
+    Device["Cảm biến · Bearer token"] --> Edge
+    Edge --> Signin["OAuth2 Proxy"]
+    Signin <--> Identity["Keycloak · OIDC"]
+    Identity --> IdentityDB["PostgreSQL · danh tính"]
+    Signin --> App["Web app · React và API proxy"]
+    Edge -->|"POST /api/ingest"| App
+    App -->|"Token nội bộ và danh tính"| Core["Headless Core · Node.js"]
+    Core --> SQL["SQLite · nghiệp vụ"]
+    Core --> Objects["Tệp theo SHA-256"]
+    Core --> Integration["Tích hợp ngoài có cấu hình"]
 ```
 
-### Frontend và QR
+| Dịch vụ | Trách nhiệm và dữ liệu |
+| --- | --- |
+| `gateway` | Caddy công bố 80/443 trong cấu hình Docker chuẩn; loại header danh tính không tin cậy. Khi dùng Caddy trên host, bỏ container này bằng override. |
+| `signin` | Xác thực OIDC, quản lý cookie và chuyển danh tính đã xác minh đến `app:8080`. |
+| `identity` / `identitydb` | Realm `warehouse`, client `dx-trace`; PostgreSQL chỉ lưu danh tính, không lưu lô hàng. |
+| `app` | Phục vụ giao diện và chuyển API sang Core; không gắn volume kho. |
+| `core` | API riêng ở cổng nội bộ 8081, yêu cầu `DX_CORE_TOKEN`, không phục vụ giao diện và không publish cổng host. |
 
-| Thư viện hoặc công nghệ | Nơi sử dụng | Vai trò |
+Có **một giao diện kho thống nhất**. Đề xuất, thu hồi và nghiệp vụ mở rộng dùng chung Core; không mô tả chúng thành các ứng dụng frontend độc lập. [Ranh giới bảo mật và mô hình triển khai](docs/HEADLESS-CORE.md).
+
+### Dữ liệu và giao dịch
+
+Bốn migration SQL tạo **11 bảng nghiệp vụ**:
+
+| Nhóm | Bảng | Nội dung |
 | --- | --- | --- |
-| React và React DOM 19.2.6 | [Điểm vào giao diện](selfhost/ui/main.jsx), [bảng điều hành](app/console.tsx) | Gắn ứng dụng vào trang, quản lý màn hình, biểu mẫu, bảng lọc và trạng thái yêu cầu. |
-| Lucide React 1.31.0 | [Điều hướng](app/console.tsx), [màn hình quét](app/scanner.tsx) | Bộ biểu tượng dùng chung cho thao tác kho, camera và trạng thái sự cố. |
-| ZXing Browser 0.2.1 | [Scanner](app/scanner.tsx), [xử lý nội dung tem](lib/scan.mjs) | Giải mã ảnh hoặc luồng camera; đối chiếu kết quả với mã lô và mã vạch sản phẩm. |
-| qrcode 1.5.4 | [Tạo tem](app/scanner.tsx) | Sinh tem PNG chứa định danh lô để in hoặc quét lại. |
-| CSS Grid, SVG, Google Sans | [CSS](app/globals.css), [giao diện kho](app/console.tsx) | Căn các hàng cảnh báo, vẽ biểu đồ nhiệt độ và hiển thị tiếng Việt bằng phông tự lưu trữ. |
+| Tổ chức | `workspaces`, `members`, `invitations` | Kho, thành viên và quyền theo email |
+| Tích hợp | `device_keys`, `external_cache` | Hash khóa thiết bị, cache mã vạch |
+| Cảm biến | `sensor_history` | Lịch sử số đo riêng, phân trang theo thiết bị |
+| Kiểm toán | `audit_ledger`, `webhook_delivery` | Chuỗi hash lệnh và trạng thái giao webhook |
+| Mở rộng | `platform_models`, `platform_records`, `platform_commands` | Định nghĩa mô hình, hồ sơ và kết quả yêu cầu để chống trùng |
 
-### Backend và lõi nghiệp vụ
+Nghiệp vụ kho truyền thống vẫn nằm trong JSON của `workspaces`. Hồ sơ mở rộng được lưu từng dòng có chỉ mục; quyền được lọc trước khi đếm và phân trang. Cập nhật dùng hàng đợi theo workspace, kiểm tra revision/version và transaction. Tệp nằm trong `objects/<workspace>/<sha256>` ở volume `warehouse`.
 
-| Thành phần | Trách nhiệm trong mã |
+### Các tích hợp
+
+| Tích hợp | Dữ liệu gửi và điều kiện |
 | --- | --- |
-| Node.js 24, TypeScript, JavaScript ES modules | [Máy chủ web](selfhost/server.mjs) chỉ phục vụ UI/chuyển tiếp API; [Core API](selfhost/core-server.mjs) là tiến trình riêng xử lý [bộ định tuyến nghiệp vụ](app/api/%5B...path%5D/route.ts). |
-| Zod 3.25.76 | Kiểm tra đầu vào theo từng tuyến, gồm câu hỏi tra cứu, email, vai trò và tham số phân trang. Các điều kiện tồn và thu hồi được kiểm tra tiếp ở tầng nghiệp vụ. |
-| Xử lý kho và vai trò | [domain.mjs](lib/domain.mjs) xử lý nhập lô, giữ hàng, giao, hủy, nhận trả, sự cố và số đo. [workflow.mjs](lib/workflow.mjs) định nghĩa bước nháp, gửi duyệt, duyệt hoặc từ chối của ứng dụng đề xuất. |
-| Tổng hợp tác động | [impact.mjs](lib/impact.mjs) nhóm phiếu theo điểm nhận. Phiếu hủy được loại khỏi tổng; phiếu giao một phần trả vẫn giữ số còn phải thu. |
-| Cô lập kho và ghi đồng thời | [server.ts](lib/server.ts) xác định workspace, đối chiếu mã yêu cầu khi gửi lại và cập nhật theo revision để phát hiện ghi đồng thời. |
-| Ngữ cảnh yêu cầu | [AsyncLocalStorage](selfhost/runtime.mjs) gắn danh tính của phiên với yêu cầu đang xử lý. |
+| Open Food Facts | Chỉ gửi mã sản phẩm để lấy tên, nhãn hiệu, lượng đóng gói; cache 24 giờ, timeout 12 giây. Không thay thế hồ sơ nguồn gốc của lô. |
+| Groq | Tùy chọn: câu hỏi, thống kê, cảnh báo và SOP liên quan. Cần truyền `AI_API_KEY` vào môi trường Core; Compose mặc định chưa truyền biến này. |
+| Quét tệp | Tùy chọn `FILE_SCAN_URL/TOKEN`; gửi byte tệp, yêu cầu kết quả sạch mới cho tải xuống. Không cấu hình thì tệp ở trạng thái cách ly. |
+| Webhook | Tùy chọn HTTPS, một workspace mỗi worker; payload ledger ký HMAC, thử lại có giới hạn; bên nhận phải chống trùng. |
 
-### Dữ liệu, tệp và lịch sử cảm biến
+QR được giải mã ngay trong trình duyệt. [Danh mục API](docs/API.md) · [Webhook](docs/PLATFORM.md#nhật-ký-và-webhook).
 
-SQLite chạy qua `node:sqlite`. Hai migration SQL tạo **sáu bảng** dưới đây. PostgreSQL thuộc dịch vụ danh tính Keycloak, sử dụng volume riêng.
+<a id="applications"></a>
+### Định hướng DX-OS Open-Core
 
-| Bảng SQLite | Nội dung |
-| --- | --- |
-| `workspaces` | Trạng thái nghiệp vụ của từng kho và revision. Lô, phiếu, sự cố, SOP và nhật ký nằm trong trạng thái này. |
-| `members` | Liên kết tài khoản với kho và vai trò. |
-| `invitations` | Email và quyền được cấp trước lần đăng nhập đầu tiên. |
-| `device_keys` | Giá trị băm của khóa đầu dò, thiết bị tương ứng và trạng thái hiệu lực. |
-| `sensor_history` | Lịch sử số đo; chỉ mục theo kho, thiết bị và thời gian phục vụ truy vấn phân trang. |
-| `external_cache` | Kết quả tra mã vạch và thời điểm hết hạn bộ nhớ đệm. |
+Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflow được minh họa bằng vận hành kho và mô hình mở rộng. [Bảng đối chiếu yêu cầu](REQUIREMENTS.md) dẫn đến mã và kiểm thử; đây không phải xác nhận của ban tổ chức hay cam kết điểm thi.
 
-Ảnh và PDF nằm trên hệ thống tệp theo kho và SHA-256. API chỉ cho tải xuống khi trạng thái kiểm dịch là `clean`. Số đo mới và cập nhật trạng thái kho được ghi theo giao dịch. [Schema ban đầu](drizzle/0000_watery_mad_thinker.sql) · [Migration lịch sử nhiệt độ](drizzle/0001_sensor_history.sql) · [Bộ lưu trữ](selfhost/runtime.mjs).
+<a id="technologies"></a>
+## 🛠️ Technologies Used
 
-### Infrastructure, SSO và phân quyền
-
-| Dịch vụ Compose | Công nghệ | Nhiệm vụ |
+| Lớp | Công nghệ | Vai trò |
 | --- | --- | --- |
-| `gateway` | Caddy 2 | HTTPS, định tuyến web và tuyến thiết bị; loại bỏ header danh tính từ phía client. |
-| `signin` | OAuth2 Proxy 7.12.0 | Phiên web, cookie và callback OIDC. |
-| `identity` | Keycloak 26.4.7 | Đăng nhập cho realm warehouse. |
-| `identitydb` | PostgreSQL 17 | Lưu tài khoản và cấu hình realm trên mạng nội bộ. |
-| `app` | Node.js 24 | Phục vụ giao diện Warehouse/Approvals, chuyển tiếp API đã xác thực; **không** mount kho dữ liệu. |
-| `core` | Node.js 24 và SQLite | Headless Core API, xử lý dữ liệu và workflow, mount volume `warehouse`; không mở cổng host. |
+| Giao diện | React / React DOM 19.2.6, Lucide React 1.31.0, CSS, Google Sans | Giao diện kho, biểu mẫu, bảng, biểu tượng và phông tự lưu trữ |
+| QR / mã vạch | ZXing Browser 0.2.1, ZXing Library 0.23.0, qrcode 1.5.4 | Camera, ảnh và sinh tem |
+| API | Node.js 24, TypeScript/ES modules, Zod 3.25.76 | HTTP, kiểm tra dữ liệu, quy tắc nghiệp vụ |
+| Lưu trữ | `node:sqlite`, filesystem, `node:crypto` | SQLite WAL, đối tượng tệp, hash và HMAC |
+| Danh tính | Keycloak 26.4.7, PostgreSQL 17, OAuth2 Proxy 7.12.0 | Đăng nhập và phiên OIDC |
+| Triển khai | Caddy 2, Docker Compose v2 | HTTPS, định tuyến và dịch vụ độc lập |
+| Build / CI | Vite 8.0.13, pnpm 11.25.0, GitHub Actions | Build tái lập theo lockfile và kiểm tra phát hành |
 
-[Cấu hình Compose](selfhost/compose.yaml) · [Realm](selfhost/realm.json) · [Cổng HTTPS](selfhost/Caddyfile)
-
-### Dịch vụ ngoài và điều kiện kích hoạt
-
-| Tích hợp | Khi được gọi | Cách hoạt động |
-| --- | --- | --- |
-| Open Food Facts | Người dùng tra mã vạch sản phẩm | Gửi mã sản phẩm, trả thông tin có ghi nguồn; cache kết quả 24 giờ. |
-| Tra cứu SOP / Groq | Người dùng hỏi trợ lý nghiệp vụ | Mặc định tìm trong SOP và thống kê của kho. Khi ứng dụng được cấp `AI_API_KEY`, bộ kết nối có thể gửi câu hỏi và ngữ cảnh đến Groq. |
-| Bộ kiểm dịch tệp | Khi tải lên và ứng dụng được cấu hình `FILE_SCAN_URL` | Gửi nội dung tệp tới dịch vụ quét. Tệp chờ kiểm dịch bị hạn chế tải xuống. |
-
-Compose mặc định không khai báo dịch vụ Groq hoặc máy quét tệp. Nếu dùng các tích hợp tùy chọn, quản trị viên cần truyền biến môi trường tương ứng vào **container `core`** (không phải `app`). [Xử lý tích hợp trong API](app/api/%5B...path%5D/route.ts).
-
-### Build, kiểm thử, vận hành và phát hành
-
-| Công việc | Công cụ và đầu ra |
-| --- | --- |
-| Cài thư viện | pnpm 11.25.0 và lockfile khóa các phiên bản. [Danh mục phụ thuộc trực tiếp, gián tiếp và gói theo nền tảng](docs/DEPENDENCIES.md). |
-| Build web và image | Vite 8.0.13 đóng gói React; Dockerfile nhiều giai đoạn dựng ứng dụng Node. [Build](selfhost/build.mjs) · [Dockerfile](selfhost/Dockerfile). |
-| Kiểm thử | `node:test`, `node:assert/strict`; kiểm tra quy tắc kho, phạm vi thu hồi, giải mã PNG và tích hợp HTTP. Bài kiểm thử PNG dùng thêm pngjs và ZXing Library qua các gói đã khóa. [Danh sách tệp kiểm thử](docs/CODEBASE.md#tests). |
-| Sao lưu | SQLite `VACUUM INTO`, kiểm tra toàn vẹn và đối chiếu tệp đính kèm. PostgreSQL của Keycloak sao lưu riêng bằng `pg_dump`. [Công cụ sao lưu](selfhost/backup.mjs). |
-| CI và release | GitHub Actions chạy build và test. Với tag dạng `v*`, Git, SHA-256 và GitHub CLI tạo bản nguồn nén cùng checksum. [Workflow](.github/workflows/release.yml). |
-
-**[Tra cứu toàn bộ mã nguồn theo tệp](docs/CODEBASE.md)** · **[Tra cứu phiên bản từng thư viện](docs/DEPENDENCIES.md)**
-
-<a id="features"></a>
-
-## ✨ Features
-
-| Màn hình | Công việc |
-| --- | --- |
-| Lô hàng và đối tác | Khai báo nhà cung cấp, điểm nhận, số lượng nhập, đơn vị, hạn dùng và ngưỡng nhiệt độ. |
-| Giao nhận | Lập phiếu giữ hàng, xác nhận giao, hủy phiếu chưa giao và ghi nhận trả từng phần. |
-| Truy xuất | Tìm lô bằng QR hoặc mã vạch, xem đường đi từ nhà cung cấp đến điểm nhận, in hồ sơ và tải tem QR. |
-| Thiết bị | Gắn đầu dò với một lô, cấp hoặc thu hồi khóa gửi số đo, xem lịch sử nhiệt độ. |
-| Sự cố & thu hồi | Cách ly, duyệt thu hồi, đối soát từng điểm nhận và đóng hồ sơ. |
-| Công cụ & quản trị | Tra quy trình SOP, quản lý đề xuất nội bộ, xem nhật ký và phân quyền thành viên. |
-| Ứng dụng Approvals độc lập | Gửi và xét duyệt đề xuất dùng chung Core API, danh tính và quyền. |
-
-Lô hết hạn hoặc bị cách ly sẽ bị chặn xuất. Thu hồi chỉ hoàn tất sau khi xử lý hết phiếu đang giữ và hàng đã giao. Đóng sự cố vẫn giữ lô ở trạng thái chặn xuất. Mã QR chứa định danh lô; người quét cần quyền truy cập kho để xem hồ sơ.
-
-### Diễn tập thu hồi lô SUA-005
-
-Mở **Kho thực hành → Tổng quan** và chọn **Truy xuất lô** ở thẻ **SUA-005**. Khi mới khởi tạo, lô sữa chua dâu này có số đo gần nhất là **10,8 °C**, vượt giới hạn bảo quản **8 °C**. Các con số sau cùng thuộc một lô, đơn vị là hộp.
-
-| Điểm nhận | Đã giao | Đã trả | Còn phải thu | Chờ giao |
-| --- | ---: | ---: | ---: | ---: |
-| Long Biên | 30 | 17 | 13 | 0 |
-| Tây Hồ | 20 | 0 | 20 | 0 |
-| Thanh Xuân | 0 | 0 | 0 | 12 |
-| **Tổng** | **50** | **17** | **33** | **12** |
-
-1. Tại **Truy xuất**, đối chiếu nhà cung cấp, vị trí kho và các phiếu xuất của SUA-005.
-2. Mở **Sự cố & thu hồi**. Hủy phiếu 12 hộp đang chờ giao và ghi nhận hàng trả theo từng phiếu đã giao.
-3. Theo dõi số còn phải thu sau mỗi lần nhận. Khi tất cả phiếu đã được xử lý, người có quyền quản lý có thể đóng sự cố.
-4. Mở **Nhật ký** để đối chiếu người thực hiện và thời điểm cập nhật.
-
-Dữ liệu mẫu cục bộ có 16 lô, 40 phiếu giao nhận và 4 đầu dò với 32 số đo. Thao tác được lưu riêng với kho vận hành; không còn bộ kịch bản diễn tập trên web.
+[Danh mục phụ thuộc đầy đủ](docs/DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
 
 <a id="requirements"></a>
-
 ## 💻 System Requirements
 
-| Mục đích | CPU | RAM | Dung lượng trống | Phần mềm |
+| Mục đích | CPU đề xuất | RAM | Dung lượng trống | Phần mềm |
 | --- | --- | --- | --- | --- |
-| PC phòng máy, một người chạy demo | 2 nhân trở lên | 8 GB | 5 GB | Windows 10/11 hoặc Ubuntu, Node.js 24, trình duyệt Chrome/Edge/Firefox |
-| Máy chạy đủ dịch vụ cho đội | 4 nhân hoặc 4 vCPU | 16 GB | 30 GB SSD | Linux, Node.js 24, Docker Engine và Compose v2 |
+| Demo trên PC phòng máy | 2 nhân | 8 GB | 5 GB | Windows 10/11 hoặc Linux, Node.js 24, trình duyệt hiện đại |
+| Chạy đủ dịch vụ cho đội | 4 nhân / vCPU | 16 GB | 30 GB SSD | Linux, Docker Engine, Compose v2, Node.js 24 để tạo cấu hình |
 
-Đây là cấu hình đề xuất để trình diễn với dữ liệu mẫu. Dành thêm dung lượng khi lưu nhiều ảnh, PDF hoặc bản sao lưu. Lần đầu cần Internet để tải các thư viện.
+Đây là cấu hình khởi điểm để trình diễn, không phải mức tối thiểu đã đo tải. Dành thêm dung lượng cho tệp và bản sao lưu. Lần đầu cần Internet để tải thư viện/image; tra sản phẩm và AI cần Internet khi sử dụng. Camera trên điện thoại cần HTTPS và quyền camera.
 
 <a id="quick-setup"></a>
-
 ## 🚀 Quick Setup
 
-### A. Tải về và chạy trên PC phòng máy
+### Chạy ngay trên máy cá nhân
 
-1. Cài **Node.js 24.x** (kèm npm). Giải nén ZIP. Mở thư mục **DX-TRACE** chứa `package.json`. Trên Windows, gõ `cmd` vào thanh địa chỉ của File Explorer rồi nhấn Enter. Trên Ubuntu, chọn **Open in Terminal** tại thư mục này.
-2. Kiểm tra phiên bản rồi chạy lần lượt các lệnh dưới đây. Lệnh cuối tự build giao diện và mở máy chủ trên chính PC.
+Tải [ZIP v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/download/v0.0.5/DX-TRACE-v0.0.5.zip), giải nén và mở terminal tại thư mục chứa `package.json`:
 
-   ```sh
-   node -v
-   npx --yes pnpm@11.25.0 install --frozen-lockfile
-   npm run demo
-   ```
-
-3. Khi terminal in **Mở kho thực hành**, mở [DX-TRACE trên PC này](http://127.0.0.1:8080/?area=training#overview). Trang tổng quan ban đầu có **16 lô**; chọn **Truy xuất lô** tại SUA-005 để kiểm tra hành trình phân phối. Phê duyệt đề xuất ngay trong mục **Đề xuất nội bộ**. Phiên demo dùng sẵn quyền chủ kho cục bộ.
-4. Giữ cửa sổ terminal mở trong khi trình bày. Nhấn **Ctrl+C** để dừng. Những lần sau chỉ cần mở lại terminal trong thư mục dự án và chạy `npm run demo`. Các thao tác đã thực hiện được lưu tại `selfhost/local-demo-data/`.
-
-Nếu gặp `EADDRINUSE`, dừng tiến trình đang dùng cổng 8080 rồi chạy lại. Chế độ này chỉ lắng nghe tại `127.0.0.1`. **Chế độ demo không chứng minh SSO hay tách tiến trình Core**; để trình diễn kiến trúc triển khai thực tế và nhiều tài khoản, sử dụng cách B.
-
-### B. Dựng server cho nhiều người và đăng nhập bằng Keycloak
-
-1. **Lấy mã nguồn.** Giải nén gói ZIP và mở terminal tại thư mục `DX-TRACE/` chứa `package.json`.
-2. **Tạo cấu hình.** Thay hai tên miền ví dụ bằng tên miền đã trỏ về máy chủ. Chạy một lần từ thư mục gốc.
-
-   ```sh
-   node selfhost/setup.mjs kho.example.org id.example.org
-   ```
-
-3. **Lưu ý khi nâng cấp máy chủ cũ.** Tệp `selfhost/.env` đã tồn tại sẽ không bị ghi đè; cần thêm `DX_CORE_TOKEN` là khóa ngẫu nhiên riêng, tối thiểu 32 ký tự (không commit vào Git). Khi cài mới, lệnh `setup.mjs` tạo khóa này tự động.
-
-4. **Dựng hệ thống.**
-
-   ```sh
-   cd selfhost
-   docker compose config --quiet
-   docker compose up -d --build
-   docker compose ps
-   ```
-
-5. **Đăng nhập lần đầu.** Tại trang quản trị danh tính, dùng username `admin` và mật khẩu khởi tạo trong `selfhost/.env`. Tạo tài khoản chủ kho ở realm **warehouse**, đặt mật khẩu và xác minh email. Dùng tài khoản vừa tạo để mở kho.
-
-| Địa chỉ sau khi thay tên miền | Mục đích |
-| --- | --- |
-| `https://id.example.org/admin/` | Quản trị tài khoản Keycloak. |
-| `https://kho.example.org/` | Đăng nhập kho vận hành. |
-| `https://kho.example.org/?area=training#overview` | Trình diễn bằng dữ liệu mẫu. |
-| `https://kho.example.org/apps/approvals/index.html` | Đường dẫn cũ, chuyển về mục Đề xuất nội bộ. |
-
-<a id="detailed-setup"></a>
-
-## 📖 Detailed Setup
-
-| Thành phần | Hướng dẫn |
-| --- | --- |
-| Triển khai, DNS, HTTPS, tài khoản, sao lưu, phục hồi | [Sổ tay máy chủ riêng](selfhost/README.md) |
-| Giao diện, điều hướng, camera, quy trình nhận trả | [Frontend](app/README.md) |
-| API, kho thực hành, điều kiện đóng sự cố | [Backend và nghiệp vụ](lib/README.md) |
-| Kiến trúc lõi và minh chứng cho đề thi | [Đối chiếu yêu cầu](REQUIREMENTS.md) · [Headless Core & hai ứng dụng](docs/HEADLESS-CORE.md) |
-| Tài liệu các tuyến API | [Danh mục API](docs/API.md) |
-
-### Phát triển và kiểm thử
-
-Dùng **Node.js 24** và **pnpm 11.25.0** để đồng bộ với Dockerfile và CI. Chạy từ thư mục chứa `package.json`.
-
-```sh
-npm install --global pnpm@11.25.0
-pnpm install --frozen-lockfile
-node selfhost/build.mjs
-node --test tests/*.test.mjs
+```bash
+node -v
+npx --yes pnpm@11.25.0 install --frozen-lockfile
+npm run demo
 ```
 
-Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 chạy API TypeScript trực tiếp. Bộ kiểm thử kiểm tra phân quyền, xử lý đồng thời, phục hồi tệp, tồn kho, thu hồi, cảm biến và tem QR. Bài [headless-core.test.mjs](tests/headless-core.test.mjs) chạy **hai tiến trình Node.js riêng**, kiểm tra token nội bộ, Core không phục vụ giao diện và hai ứng dụng cùng dùng Workflow API. Lượt kiểm thử được ghi nhận sau thay đổi kiến trúc: **18/18 bài đạt** ([GitHub Actions](https://github.com/ngochieu1762005/dx_trace/actions/runs/43940284167)). **Chưa thay thế** việc kiểm tra Docker, HTTPS và đăng nhập Keycloak thực tế.
+Mở **http://127.0.0.1:8080/?area=training#overview**. Phiên demo dùng danh tính chủ kho cục bộ, không cần tài khoản Keycloak. Giữ terminal mở; Ctrl+C để dừng. Lần sau chạy lại `npm run demo`; dữ liệu nằm tại `selfhost/local-demo-data/`.
 
-### Phạm vi tích hợp
+Demo chỉ bind loopback và không chứng minh SSO hoặc Core tách tiến trình. Nếu cổng 8080 đang dùng, dừng tiến trình chiếm cổng trước. Không công bố chế độ demo ra Internet.
 
-- **Cảm biến.** Ba số đo liên tiếp vượt ngưỡng của lô trong khoảng 10 phút có thể tạo sự cố. Lịch sử số đo mới được lưu riêng. Khi cần sao lưu đầy đủ, dùng bản sao cơ sở dữ liệu và kho tệp.
-- **Mã vạch.** Tra cứu thông tin sản phẩm từ Open Food Facts theo giấy phép ODbL. Nguồn gốc và điểm nhận của từng lô lấy từ phiếu nhập, xuất của kho.
-- **Tệp.** API nhận PNG, JPEG và PDF đến 5 MB, kiểm tra định dạng và tính SHA-256. Việc tải xuống phụ thuộc vào kết quả kiểm dịch.
-- **Tra cứu SOP.** Chế độ mặc định tìm trong tài liệu và cảnh báo của kho. Khi bật bộ kết nối sinh văn bản, câu hỏi cùng ngữ cảnh liên quan được gửi đến nhà cung cấp đã cấu hình.
-- **Quy mô.** Trạng thái kho có giới hạn kích thước; cập nhật dùng số phiên bản để phát hiện ghi đồng thời. Trước khi triển khai cảm biến tần suất cao, cần đo tải với số thiết bị và chu kỳ gửi dự kiến.
+### Cài máy chủ mới
+
+Nếu máy chưa có reverse proxy chiếm 80/443, trỏ hai tên miền đến máy chủ rồi chạy từ gốc repository:
+
+```bash
+node selfhost/setup.mjs app.example.org id.example.org
+cd selfhost
+docker compose config --quiet
+docker compose up -d --build
+docker compose ps
+```
+
+Thay tên miền ví dụ bằng tên miền của bạn. Setup chỉ chạy lần đầu, tạo `.env` và từ chối ghi đè. Tạo tài khoản trong realm `warehouse`; mật khẩu bootstrap quản trị nằm trong `.env`, không phải tài khoản vận hành kho.
+
+**Máy đã có Caddy:** dùng [hướng dẫn Ubuntu](selfhost/DEPLOY_SAAS_UBUNTU.md), không chạy cấu hình Docker mặc định cạnh tranh cổng 80/443. [Cấp tài khoản và phân quyền](selfhost/README.md).
+
+<a id="detailed-setup"></a>
+## Kiểm thử và minh chứng
+
+Từ gốc repository sau khi cài phụ thuộc:
+
+```bash
+npm run build
+npm test
+python3 -m unittest discover -s tests -p '*_test.py'
+```
+
+Mốc v0.0.5 có **40 kiểm thử Node.js và 3 kiểm thử Python**. CI kiểm thêm app/Core trong container. Các bài kiểm dùng dữ liệu thử, không thay thế kiểm tra camera thật, phiên OIDC hoặc diễn tập phục hồi Keycloak trên VPS.
+
+Bài đo cục bộ 10.000 hồ sơ ban đầu, 1/10/25 client đồng thời, 15 giây mỗi mức ghi nhận 0 lỗi trong lần đo được công bố. Không quy đổi thành số người dùng thực: bài đo loại trừ TLS, gateway, Keycloak và mạng Internet. [Phương pháp và dữ liệu gốc](docs/BENCHMARK.md) · [Ma trận minh chứng](docs/EVIDENCE.md).
 
 <a id="changelog"></a>
+## Nâng cấp và giới hạn
 
-## 📝 Changelog
+**v0.0.5 có migration dữ liệu hồ sơ mở rộng.** Sao lưu trước khi triển khai; sau migration không chạy image cũ trên DB mới. Quay lui cần khôi phục bản sao lưu tương ứng. [Quy trình vận hành](selfhost/OPERATIONS.md) · [Ghi chú v0.0.5](docs/releases/RELEASE_NOTES_v0.0.5.md).
 
-**Bản phát hành mới nhất: [v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5).** Xem [thư mục ghi chú phát hành](docs/releases/README.md) cho các phiên bản đã công bố; [CHANGELOG.md](CHANGELOG.md) ghi lại các thay đổi đã phát hành và mục Unreleased.
+- Workflow JSON có điều kiện và vai trò; chưa có BPMN, nhánh song song hoặc trình thiết kế kéo thả.
+- SQLite và kho tệp cục bộ; chưa có HA, PostgreSQL nghiệp vụ hoặc object storage phân tán.
+- JSON kho truyền thống vẫn có giới hạn 1,8 MB; payload từng hồ sơ/mô hình mở rộng giới hạn 512 KiB.
+- Quét mã độc và AI là tích hợp tùy chọn; AI không tự quyết định thu hồi.
+- Ledger chưa có neo hash bên ngoài, không chống được quản trị viên viết lại toàn bộ DB.
 
-**Cập nhật máy chủ.** Sao lưu kho và cơ sở dữ liệu danh tính theo sổ tay triển khai. Đọc changelog của phiên bản đích, giữ cấu hình `selfhost/.env` cùng các volume hiện có, rồi chạy lại `docker compose up -d --build` trong thư mục `selfhost/`. Kiểm tra đăng nhập, số liệu một lô và một tệp đính kèm sau khi cập nhật.
-
-**Theo dõi bản phát hành.** Workflow xử lý tag dạng `v*` và tạo gói nguồn kèm `SHA256SUMS` khi bước kiểm thử thành công. [Quy trình phát hành](.github/workflows/release.yml).
-
-### Giới hạn hiện tại và hướng phát triển
-
-- Caddy hiện đảm nhiệm cổng HTTPS và định tuyến. Đây **chưa phải API Gateway đa ứng dụng đầy đủ** với khả năng tự đăng ký bên thứ ba hoặc quản lý chính sách API nâng cao.
-- Quy trình đang được định nghĩa trong mã; chưa có BPMN designer/engine động.
-- Chưa có Lakehouse, Data Lineage, GitOps tự phục hồi hay kiểm dịch mã độc luôn bật. Các dịch vụ AI và quét tệp là tích hợp **tùy chọn**.
-- Chế độ tự triển khai cần xác minh thủ công toàn bộ OIDC/HTTPS, sao lưu–phục hồi và vận hành Docker; CI hiện kiểm tra build và các bài test.
-
-[Xem kế hoạch và giới hạn chi tiết](docs/HEADLESS-CORE.md).
+Ưu tiên tiếp theo: SSO end-to-end tự động, đo toàn stack trên VPS cố định và thử nghiệm quy trình với người vận hành. Không coi các mục này là tính năng đã có.
 
 <a id="contribution"></a>
+## Đóng góp
 
-## 🤝 Contribution
-
-Mỗi bản sửa cần nêu được bước tái hiện và cách kiểm tra kết quả. Khi thay quy tắc tồn kho hoặc thu hồi, bổ sung trường hợp kiểm thử cho số lượng trước và sau thao tác. [Hướng dẫn đóng góp](CONTRIBUTING.md).
+Đọc [CONTRIBUTING](CONTRIBUTING.md), tạo issue có bước tái hiện và gửi PR kèm kiểm chứng. Với lỗ hổng, dùng [quy trình báo cáo riêng](SECURITY.md); không công khai bí mật hoặc dữ liệu kho.
 
 <a id="license"></a>
+## Giấy phép
 
-## 📄 License
-
-### Code License
-
-Mã nguồn của đội được phân phối theo [giấy phép MIT](LICENSE). Phông chữ có [giấy phép đi kèm](public/fonts/google-sans/LICENSE.txt).
-
-### Data License
-
-Kho thực hành dùng dữ liệu mô phỏng do dự án tạo. Dữ liệu sản phẩm tra từ Open Food Facts qua mã vạch có nguồn và giấy phép ODbL riêng. Dữ liệu vận hành do từng đơn vị nhập được lưu trong kho của đơn vị đó.
+Mã nguồn dự án dùng [MIT](LICENSE). Thư viện, biểu trưng và [phông chữ](public/fonts/google-sans/LICENSE.txt) có giấy phép riêng. Dữ liệu thực hành do dự án tạo; dữ liệu Open Food Facts mang nguồn và giấy phép ODbL theo kết quả API. Đơn vị triển khai chịu trách nhiệm quản lý dữ liệu vận hành của mình.
 
 <a id="contact"></a>
+## Liên hệ
 
-## 📧 Contact
+Nguyễn Ngọc Hiếu và DX-TRACE contributors · [Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Báo lỗi](https://github.com/ngochieu1762005/dx_trace/issues/new/choose) · [Lịch sử thay đổi](CHANGELOG.md).
 
-### Team Members
-
-**DX-TRACE contributors** · [Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Lịch sử phát triển](https://github.com/ngochieu1762005/dx_trace/commits/main/)
-
-### Bug Reports and Suggestions
-
-Khi báo lỗi cho đội, dùng [mẫu báo lỗi](.github/ISSUE_TEMPLATE/bug_report.md) và gửi kèm phiên bản, vai trò tài khoản, bước tái hiện và kết quả mong đợi. Với lỗi thu hồi, ghi rõ mã lô mẫu và số đã giao, đã trả, còn phải thu để người tiếp nhận đối chiếu được.
-
-[↑ Quay lại mục lục](#contents)
-
-### Thao tác kho hằng ngày
-
-- Thanh bên hiển thị sẵn các mục nghiệp vụ và Công cụ & quản trị. Chuyển **Kho thực hành / Kho vận hành** ở đầu trang; dữ liệu hai kho được lưu riêng.
-- Tại **Tổng quan**, dùng thao tác nhanh để quét mã, nhập lô hoặc lập phiếu xuất theo quyền tài khoản.
-- Tại **Lô hàng**, tìm theo mã, sản phẩm, mã vạch, vị trí hoặc nhà cung cấp. Kết hợp trạng thái với bộ lọc hạn dùng/tồn kho; **Xuất CSV** xuất đúng danh sách đang lọc.
-- Tra mã EAN/UPC để lấy thông tin tham khảo từ Open Food Facts, kiểm tra lại thông tin rồi chọn **Tạo lô từ sản phẩm**. Cơ sở dữ liệu bên ngoài có thể chưa có sản phẩm bạn cần.
-- Khi lập phiếu xuất, lô đủ điều kiện được xếp theo hạn dùng gần nhất (FEFO). Người dùng vẫn chọn lô và số lượng; máy chủ kiểm tra tồn kho khi lưu.
+[↑ Mục lục](#contents)
