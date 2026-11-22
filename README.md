@@ -142,7 +142,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 
 | Lớp | Công nghệ | Vai trò |
 | --- | --- | --- |
-| Giao diện | React / React DOM 19.2.6, Lucide React 1.31.0, CSS, Be Vietnam Pro | Giao diện kho, biểu mẫu và biểu tượng; font qua Google Fonts, có fallback hệ thống |
+| Giao diện | React / React DOM 19.2.6, Lucide React 1.31.0, CSS, Google Sans | Giao diện kho và biểu mẫu; Google Sans từ WOFF2 có sẵn, fallback hệ thống |
 | QR / mã vạch | ZXing Browser 0.2.1, ZXing Library 0.23.0, qrcode 1.5.4 | Camera, ảnh và sinh tem |
 | API | Node.js 24, TypeScript/ES modules, Zod 3.25.76 | HTTP, kiểm tra dữ liệu, quy tắc nghiệp vụ |
 | Lưu trữ | `node:sqlite`, filesystem, `node:crypto` | SQLite WAL, đối tượng tệp, hash và HMAC |

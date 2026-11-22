@@ -22,7 +22,7 @@ Tổng **7 dependencies + 1 devDependency**, tức 8 gói trực tiếp khi tín
 - pnpm 11.25.0 quản lý gói; Python 3 dùng thư viện chuẩn cho script triển khai và kiểm thử routing.
 - Container: Node 24 bookworm-slim, Keycloak 26.4.7, PostgreSQL 17-alpine, OAuth2 Proxy v7.12.0, Caddy 2-alpine. Một số tag image là tag biến động, chưa khóa digest.
 - Open Food Facts, Groq, scanner ngoài và webhook là kết nối HTTP, không phải npm packages. Groq/scanner/webhook tùy chọn theo cấu hình.
-- Phông giao diện sử dụng **Be Vietnam Pro** tải qua Google Fonts khi có kết nối mạng (giấy phép SIL OFL 1.1); nếu bị chặn hoặc offline, trình duyệt dùng font hệ thống. Các tệp Google Sans từng đóng gói trong repository hiện không còn được tham chiếu từ CSS mới; giấy phép tệp cũ vẫn có tại [Google Sans](../public/fonts/google-sans/LICENSE.txt). Biểu trưng có [nguồn và giấy phép riêng](assets/LOGOS.md).
+- Phông gốc được khôi phục: giao diện nghiệp vụ và landing sử dụng **Google Sans** từ các tệp WOFF2 đã có trong repository (xem [giấy phép](../public/fonts/google-sans/LICENSE.txt)); Keycloak dùng stack **Segoe UI/Arial**. Trình duyệt dùng font dự phòng khi cần. Không tải font từ Google Fonts trong các stylesheet giao diện.
 
 Cài bằng `npx --yes pnpm@11.25.0 install --frozen-lockfile`. Danh mục dưới không phải SBOM hoặc báo cáo kiểm toán lỗ hổng. Khi nâng version, cập nhật lockfile và kiểm build/tests; không suy ra an toàn chỉ từ việc không đổi phụ thuộc.
 

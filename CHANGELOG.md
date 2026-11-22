@@ -14,7 +14,7 @@ Nhật ký thay đổi của DX-TRACE.
 
 ### Changed
 
-- Đồng bộ kiểu chữ Be Vietnam Pro ở giao diện nghiệp vụ, trang giới thiệu và Keycloak theme; có fallback font hệ thống.
+- Khôi phục hệ font gốc: Google Sans cho ứng dụng/landing; Segoe UI và Arial cho giao diện Keycloak. Đồng bộ logo DX-TRACE xanh #1967D2 trên website, favicon và màn hình đăng nhập.
 - So sánh mô hình theo cấu trúc thay vì thứ tự khóa JSON để tránh phát sinh phiên bản mới vô nghĩa khi nhập lại BPMN tương đương.
 - Các tài liệu API, kiến trúc và nguồn mở làm rõ tính năng đã triển khai và giới hạn chưa có (full BPMN executor, plugin chạy mã ngoài, HA).
 
