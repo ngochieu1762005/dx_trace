@@ -25,3 +25,7 @@ Phạm vi: **DX-TRACE v0.0.5**. Bảng này liên kết năng lực với mã v�
 ## Khi trình diễn
 
 Dùng Docker để chứng minh SSO và Core riêng. Dùng hai tài khoản để kiểm quyền, một hồ sơ thu hồi để chứng minh quy trình xuyên suốt, một mô hình mới để chứng minh tái sử dụng. Nêu rõ đâu là dữ liệu mẫu và đâu là số đo thật; không suy ra điểm thi hoặc cam kết triển khai thực tế chỉ từ số lượng tính năng.
+
+## Tái sử dụng lõi bằng cấu hình
+
+Có AppKit khai báo một mô hình nghiệp vụ/app và endpoint cài đặt có dry-run, version check, idempotency. Hai manifest mẫu: [`maintenance`](examples/maintenance/app.json), [`purchase`](examples/purchase/app.json). Đây chưa phải chợ ứng dụng hay hệ plugin chạy mã tùy ý; xem [giới hạn](docs/APPKIT.md).
