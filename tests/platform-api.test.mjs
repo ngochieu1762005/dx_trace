@@ -16,6 +16,13 @@ test('HTTP models are isolated, idempotent, audited and survive verified restore
  try{
  await start(dir+'/data');
  assert.equal((await call('models/apply',{definition,baseVersion:0})).status,200);
+ const appList=await (await call('apps')).json();
+ assert.deepEqual(appList.applications.map(app=>app.id),['maintenance']);
+ const appManifest=await (await call('apps/maintenance/manifest')).json();
+ assert.equal(appManifest.kind,'DeclarativeApplication');
+ assert.equal(appManifest.metadata.version,'0.0.0');
+ assert.equal((await call('apps/plan',{manifest:appManifest})).status,200);
+
  const xmlResponse=await call('models/maintenance/bpmn');
  assert.equal(xmlResponse.status,200);
  assert.match(xmlResponse.headers.get('content-type'),/application\/xml/);
