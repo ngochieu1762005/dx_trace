@@ -49,7 +49,7 @@ Tệp lưu theo SHA-256; metadata nằm trong kho. Tệp chưa có kết quả q
 - **Nghiệp vụ kho / đề xuất nội bộ:** quy tắc trong `domain.mjs` và `workflow.mjs`.
 - **Nghiệp vụ mở rộng:** định nghĩa JSON, plan/apply, kiểu trường, vai trò, phạm vi đọc, điều kiện và version. [PLATFORM](PLATFORM.md) mô tả chi tiết.
 
-Đây là máy trạng thái hữu hạn, chưa có BPMN executor, nhánh song song, lịch tác vụ tự động hoặc designer kéo thả. Tái sử dụng hiện được thể hiện qua bốn mô hình dùng cùng API/lưu trữ/phân quyền, không phải nền tảng triển khai tùy ý mọi ứng dụng.
+Đây là máy trạng thái hữu hạn có **BPMN 2.0 interchange cho tập con được định nghĩa** ([đặc tả](BPMN.md)), chưa có BPMN executor tổng quát, nhánh song song, lịch tác vụ tự động hoặc designer kéo thả. Tái sử dụng hiện được thể hiện qua bốn mô hình dùng cùng API/lưu trữ/phân quyền, không phải nền tảng triển khai tùy ý mọi ứng dụng.
 
 ## Cách kiểm chứng
 
