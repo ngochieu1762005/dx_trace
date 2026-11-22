@@ -102,6 +102,11 @@ services:
     environment:
       PUBLIC_ORIGIN: https://${APP_HOST:?}
       DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+      WEBHOOK_URL: ${WEBHOOK_URL:-}
+      WEBHOOK_WORKSPACE: ${WEBHOOK_WORKSPACE:-}
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET:-}
+      FILE_SCAN_URL: ${FILE_SCAN_URL:-}
+      FILE_SCAN_TOKEN: ${FILE_SCAN_TOKEN:-}
       PORT: "8081"
       BIND_ADDRESS: 0.0.0.0
     volumes: ["warehouse:/app/data"]

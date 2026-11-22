@@ -23,7 +23,9 @@
  */
 import {createServer} from 'node:http';
 import {timingSafeEqual} from 'node:crypto';
-import {identity} from './runtime.mjs';
+import {identity,env} from './runtime.mjs';
+import {startWebhook} from './webhook.mjs';
+startWebhook(env.DB);
 import {GET,POST} from '../app/api/[...path]/route.ts';
 
 const origin=new URL(process.env.PUBLIC_ORIGIN).origin;

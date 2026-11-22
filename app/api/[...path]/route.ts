@@ -28,6 +28,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {PlatformError,planModel,platformView,modelOpenApi} from '../../../lib/platform.mjs';
 import {recallImpact} from '../../../lib/impact.mjs';
 import {defaultWorkflow} from '../../../lib/workflow.mjs';
 
@@ -40,20 +41,54 @@ const json=(data:any,status=200)=>Response.json(data,{status,headers:{'cache-con
 const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new DomainError('Cần quyền quản lý',403)};
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
- if(kind==='health')return json({status:'ok',version:'0.0.1',database:!!env.DB});
+ if(kind==='health')return json({status:'ok',version:'0.0.4',database:!!env.DB});
  if(kind==='ingest'&&req.method==='POST'){
   const token=req.headers.get('authorization')?.replace(/^Bearer /,'');if(!token)throw new DomainError('Thiếu khóa thiết bị',401);
   const d:any=await q('SELECT * FROM device_keys WHERE hash=? AND active=1',await hash(token)).first();if(!d)throw new DomainError('Khóa thiết bị không hợp lệ',401);
   const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='models'){
+  const r=await read(c.workspace),actor={role:c.role,actor:c.email,now:new Date().toISOString()};
+  if(req.method==='GET'){
+   const view=platformView(r.data,actor);
+   if(!key)return json(view);
+   const model=view.models.find((m:any)=>m.id===key);if(!model)throw new DomainError('Không tìm thấy mô hình',404);
+   if(action==='openapi')return json(modelOpenApi(model.definition));
+   return json({...view,models:[model],records:view.records.filter((x:any)=>x.model===key)});
+  }
+  if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
+  const body:any=await req.json();
+  if(!body||typeof body!=='object'||Array.isArray(body))throw new DomainError('Nội dung phải là đối tượng JSON',422);
+  if(key==='plan'){if(c.role!=='owner')throw new DomainError('Cần quyền chủ không gian',403);return json(planModel(r.data,body.definition))}
+  const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':null;
+  if(!command)throw new DomainError('Không tìm thấy API mô hình',404);
+  return json(await change(c,command,{...body,model:key},req.headers.get('idempotency-key')||''));
+ }
+ if(kind==='audit-ledger'&&req.method==='GET'){
+  manager(c);
+  const rows=(await q('SELECT seq,previous,hash,payload FROM audit_ledger WHERE workspace=? ORDER BY seq',c.workspace).all()).results;
+  if(key==='verify'){
+   let previous='0'.repeat(64);
+   for(const row of rows){if(row.previous!==previous||row.hash!==await hash(previous+'\n'+row.seq+'\n'+row.payload))return json({valid:false,failedAt:row.seq});previous=row.hash}
+   return json({valid:true,entries:rows.length,head:previous,scope:'Commands recorded since ledger upgrade; anchor the head outside this database.'});
+  }
+  const after=z.coerce.number().int().min(0).parse(new URL(req.url).searchParams.get('after')||0);
+  const page=rows.filter((row:any)=>row.seq>after).slice(0,100);
+  return json({events:page.map((row:any)=>({...row,payload:JSON.parse(row.payload)})),cursor:page.at(-1)?.seq||after});
+ }
+ if(kind==='metrics'&&req.method==='GET'){
+  manager(c);const r=await read(c.workspace),view=platformView(r.data,{role:c.role,actor:c.email,now:new Date().toISOString()});
+  const values={lots:r.data.lots.length,open_incidents:r.data.incidents.filter((i:any)=>i.status!=='closed').length,records:view.records.length,overdue:view.summary.overdue};
+  return new Response(Object.entries(values).map(([k,v])=>'# TYPE dxtrace_'+k+' gauge\ndxtrace_'+k+' '+v).join('\n')+'\n',{headers:{'content-type':'text/plain; version=0.0.4','cache-control':'no-store'}});
+ }
  if(kind==='impact'&&req.method==='GET'){
   const workspace=await read(c.workspace);
   const report=recallImpact(workspace.data,key);
   if(!report)throw new DomainError('Không tìm thấy lô',404);
   return json({revision:workspace.revision,...report});
  }
- if(kind==='platform'&&req.method==='GET')return json({version:'0.0.1',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export']}});
+ if(kind==='platform'&&req.method==='GET')return json({version:'0.0.4',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export']}});
  if(kind==='sensor-history'&&req.method==='GET'){
   const params=new URL(req.url).searchParams;
   const offset=z.coerce.number().int().min(0).max(10000000).parse(params.get('offset')||0);
@@ -105,5 +140,5 @@ async function route(req:Request){try{
  if(kind==='members'&&!key){if(c.role!=='owner')throw new DomainError('Chỉ chủ không gian được cấp quyền',403);const body=z.object({email:z.string().email(),role:z.enum(['manager','warehouse','viewer'])}).parse(b);if(await q('SELECT id FROM members WHERE lower(email)=?',body.email.toLowerCase()).first())throw new DomainError('Tài khoản đã thuộc một không gian khác',409);await q('INSERT INTO invitations(email,workspace,role) VALUES(?,?,?)',body.email.toLowerCase(),c.organization,body.role).run();return json({ok:true})}
  const commands:any={workflow:key?'workflow.transition':'workflow.create',partners:'partner.create',lots:'lot.create',shipments:key?'shipment.'+action:'shipment.create',incidents:key?'incident.'+action:'incident.create',documents:'document.create',workspace:'workspace.rename'};
  if(!commands[kind])throw new DomainError('Không tìm thấy API',404);return json(await change(c,commands[kind],key?{...b,id:key}:b,requestId));
- }catch(e:any){if(e instanceof DomainError)return json({error:e.message},e.status);if(e instanceof z.ZodError)return json({error:e.issues.map(i=>i.message).join('; ')},422);console.error('API failure',e.name,String(e.message).slice(0,180));return json({error:'Không thể xử lý yêu cầu. Vui lòng thử lại.'},500)}}
+ }catch(e:any){if(e instanceof DomainError||e instanceof PlatformError)return json({error:e.message},e.status);if(e instanceof z.ZodError)return json({error:e.issues.map(i=>i.message).join('; ')},422);console.error('API failure',e.name,String(e.message).slice(0,180));return json({error:'Không thể xử lý yêu cầu. Vui lòng thử lại.'},500)}}
 export const GET=route;export const POST=route;

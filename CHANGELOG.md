@@ -4,6 +4,15 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+- Thêm mô hình nghiệp vụ JSON: biểu mẫu sinh tự động, API, phạm vi hồ sơ, workflow theo vai trò, hạn xử lý và bộ lọc quá hạn.
+- Xem kế hoạch và phát hiện xung đột trước khi áp dụng cấu hình; lưu lịch sử và cho phép áp dụng lại phiên bản tương thích.
+- Chặn tự phê duyệt theo cấu hình, yêu cầu lý do và bảo vệ cập nhật đồng thời bằng phiên bản hồ sơ.
+- Bổ sung sổ nhật ký lệnh nối chuỗi SHA-256, API kiểm tra chuỗi và số liệu vận hành có phân quyền.
+- Webhook HTTPS có chữ ký HMAC, hàng đợi bền vững, thử lại tối đa 12 lần và mã sự kiện chống xử lý trùng ở phía nhận.
+- Công cụ kiểm tra cấu hình và xác minh SQLite/checksum tệp của bản sao lưu; ví dụ nghiệp vụ bảo trì.
+- Kiểm thử API phân quyền, cách ly không gian, idempotency, xung đột, khôi phục bản sao lưu và webhook.
+
+
 - Thiết kế lại trang giới thiệu với hồ sơ truy xuất minh họa, quy trình vận hành và lối đăng nhập thống nhất.
 - Hiển thị sẵn toàn bộ Công cụ & quản trị trong thanh điều hướng; giữ chuyển đổi Kho thực hành / Kho vận hành.
 - Thêm thao tác nhanh quét mã, nhập lô và lập phiếu xuất ngay trên Tổng quan.
