@@ -51,3 +51,10 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 - Tự động hóa kiểm thử trình duyệt/SSO, kiểm camera trên điện thoại thật.
 - Diễn tập lỗi đĩa, phục hồi toàn bộ dịch vụ và sao lưu ngoài máy.
 - Ghi nhận hiệu quả thực tế tại kho với sự đồng ý của đơn vị thử nghiệm.
+
+## Bằng chứng trên nhánh nâng cấp (chưa phải release)
+
+- [BPMN](BPMN.md): chuyển đổi XML ↔ quy trình khai báo, kiểm soát vai trò/điều kiện trong runtime; kiểm thử `tests/bpmn.test.mjs` và `tests/platform-api.test.mjs`. Không phải engine BPMN tổng quát.
+- [AppKit](APPKIT.md): cài ứng dụng khai báo theo manifest, mô hình và quyền dùng chung; kiểm thử `tests/appkit.test.mjs` và API discovery. Không chạy mã ngoài.
+- Giao diện kho, trang giới thiệu và theme đăng nhập sử dụng Be Vietnam Pro qua Google Fonts, fallback sang font hệ thống nếu offline.
+- Các minh chứng này chỉ được tính là hoàn thành sau khi PR CI xanh, được review và đưa vào một release thực tế. Không ghép số liệu của nhánh thử nghiệm với số liệu release v0.0.5.
