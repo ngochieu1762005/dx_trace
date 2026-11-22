@@ -150,7 +150,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 | Triển khai | Caddy 2, Docker Compose v2 | HTTPS, định tuyến và dịch vụ độc lập |
 | Build / CI | Vite 8.0.13, pnpm 11.25.0, GitHub Actions | Build tái lập theo lockfile và kiểm tra phát hành |
 
-[Giao thức BPMN](docs/BPMN.md) · [Danh mục phụ thuộc đầy đủ](docs/DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
+[Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc đầy đủ](docs/DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
 
 <a id="requirements"></a>
 ## 💻 System Requirements
