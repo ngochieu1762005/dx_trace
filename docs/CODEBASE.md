@@ -22,7 +22,7 @@
 
 | Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [app/api/[...path]/route.ts](../app/api/%5B...path%5D/route.ts) | Router API kho, mô hình, ledger, metrics và tích hợp |
+| [app/api/[...path]/route.ts](../app/api/%5B...path%5D/route.ts) | Router API kho, mô hình, BPMN, AppKit, ledger, metrics và tích hợp |
 | [lib/server.ts](../lib/server.ts) | Context, vùng kho, revision và ghi kho truyền thống |
 | [lib/domain.mjs](../lib/domain.mjs) | Quy tắc tồn/giao nhận/thu hồi/cảm biến |
 | [lib/workflow.mjs](../lib/workflow.mjs) | Đề xuất nội bộ |
@@ -121,3 +121,14 @@
 ## Theo dõi một thao tác
 
 UI → session/API client → app proxy → Core router → context/quyền → domain hoặc platform → transaction SQLite và ledger → response. Với tệp, đối tượng được ghi vào filesystem và metadata vào kho. Với webhook, worker đọc ledger sau đó gửi độc lập; thành công HTTP nghiệp vụ không có nghĩa bên nhận webhook đã xử lý xong.
+
+## Mở rộng trên nhánh BPMN / AppKit
+
+| Tệp | Vai trò |
+| --- | --- |
+| [`lib/bpmn.mjs`](../lib/bpmn.mjs) | Nhập/xuất tập con BPMN 2.0 có validate và metadata quyền |
+| [`lib/appkit.mjs`](../lib/appkit.mjs) | Manifest JSON chỉ-khai-báo, không chạy code ngoài |
+| [`app/platform.tsx`](../app/platform.tsx) | UI kiểm kế hoạch, cài app, xuất/nhập BPMN |
+| [`tests/bpmn.test.mjs`](../tests/bpmn.test.mjs) | Round-trip BPMN, policy và XML nguy hiểm |
+| [`tests/appkit.test.mjs`](../tests/appkit.test.mjs) | Bảo toàn ranh giới manifest, đa app |
+| [`tools/check-secrets.mjs`](../tools/check-secrets.mjs) | Kiểm tra dấu hiệu bí mật trong file được Git theo dõi, không in nội dung nhạy cảm |
