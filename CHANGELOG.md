@@ -4,6 +4,14 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+- Tách mô hình và hồ sơ mở rộng khỏi JSON kho vào các bảng SQLite có chỉ mục; migration nguyên tử giữ dữ liệu cả hai vùng kho.
+- Thêm phân trang, đếm kết quả theo quyền và tìm kiếm phía máy chủ; CSV ghi rõ chỉ xuất trang đang xem.
+- Xếp hàng ghi theo workspace có giới hạn; giữ kiểm tra phiên bản để chặn ghi đè hồ sơ cũ.
+- Thêm điều kiện chuyển bước theo dữ liệu, giới hạn trường số và ba mẫu nghiệp vụ bổ sung.
+- Thêm kiểm thử migration rollback, dữ liệu vượt giới hạn JSON cũ, phạm vi trước phân trang và nhiều lượt ghi độc lập đồng thời.
+- Công bố script đo HTTP trên dữ liệu tạm, kết quả trước/sau sửa xung đột và ma trận minh chứng.
+
+
 - Thêm mô hình nghiệp vụ JSON: biểu mẫu sinh tự động, API, phạm vi hồ sơ, workflow theo vai trò, hạn xử lý và bộ lọc quá hạn.
 - Xem kế hoạch và phát hiện xung đột trước khi áp dụng cấu hình; lưu lịch sử và cho phép áp dụng lại phiên bản tương thích.
 - Chặn tự phê duyệt theo cấu hình, yêu cầu lý do và bảo vệ cập nhật đồng thời bằng phiên bản hồ sơ.

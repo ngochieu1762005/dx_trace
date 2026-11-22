@@ -1,0 +1,119 @@
+{
+  "generated_at": "2026-11-22T09:25:48.594Z",
+  "node": "v24.22.3",
+  "platform": "linux",
+  "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "available_parallelism": 9,
+  "host_memory_gib": 9.73,
+  "cgroup_limits": {
+    "cpu.max": "unavailable",
+    "memory.max": "unavailable"
+  },
+  "base_commit": "1b7ff4554add0df4d014ce30c932aabb4e439bf1",
+  "source_sha256": {
+    "lib/workspace-queue.mjs": "6e933bd4f3a220a4f08f710b3b91df8056f1fd8812389b13caacf3a4fa069b75",
+    "lib/server.ts": "8681d594d68c102c10a16751dde41470f06fe0a664053c2ca4b14f70b611e580",
+    "lib/platform-store.ts": "5ccd74280647aa7e7779059d7c1f9d911556f5b932de8549389086d33bf2f200",
+    "lib/platform.mjs": "021f8b54c8b018a32df39fe44dec3bf8159c897658b7264f63287c910a6db8b5",
+    "selfhost/runtime.mjs": "ccc875f756ed67e2585fd296f2335560fd51319f52a8a5b2a8b3f8865bfb128f",
+    "app/api/[...path]/route.ts": "5b19d8403903cf850dc4c9d3e192e167fd89f7b78928323431ddcb3624f9db72"
+  },
+  "initial_records": 10000,
+  "seconds_per_level": 5,
+  "scope": "Single local Node server + SQLite, HTTP loopback, synthetic trusted identity; excludes TLS, gateway, Keycloak and network. Client shares machine with server. Rows accumulate across levels. Short characterization, not production capacity.",
+  "results": [
+    {
+      "concurrency": 1,
+      "elapsed_seconds": 5.005,
+      "requests": 1188,
+      "requests_per_second": 237.35,
+      "errors": 0,
+      "error_codes": {},
+      "p50_ms": 3.03,
+      "p95_ms": 8.42,
+      "p99_ms": 11.6,
+      "operations": {
+        "create": {
+          "requests": 396,
+          "p50_ms": 2.5,
+          "p95_ms": 5.04,
+          "p99_ms": 8.21
+        },
+        "transition": {
+          "requests": 396,
+          "p50_ms": 2.39,
+          "p95_ms": 4.28,
+          "p99_ms": 8.83
+        },
+        "list": {
+          "requests": 396,
+          "p50_ms": 6.76,
+          "p95_ms": 10.54,
+          "p99_ms": 18.26
+        }
+      }
+    },
+    {
+      "concurrency": 5,
+      "elapsed_seconds": 5.035,
+      "requests": 1533,
+      "requests_per_second": 304.49,
+      "errors": 0,
+      "error_codes": {},
+      "p50_ms": 14.52,
+      "p95_ms": 31.37,
+      "p99_ms": 37.25,
+      "operations": {
+        "create": {
+          "requests": 511,
+          "p50_ms": 18.97,
+          "p95_ms": 32.03,
+          "p99_ms": 38.67
+        },
+        "transition": {
+          "requests": 511,
+          "p50_ms": 18.5,
+          "p95_ms": 33,
+          "p99_ms": 40.78
+        },
+        "list": {
+          "requests": 511,
+          "p50_ms": 8.95,
+          "p95_ms": 17.41,
+          "p99_ms": 21.82
+        }
+      }
+    },
+    {
+      "concurrency": 10,
+      "elapsed_seconds": 5.101,
+      "requests": 1503,
+      "requests_per_second": 294.64,
+      "errors": 0,
+      "error_codes": {},
+      "p50_ms": 29.98,
+      "p95_ms": 71.13,
+      "p99_ms": 81.81,
+      "operations": {
+        "create": {
+          "requests": 501,
+          "p50_ms": 45.43,
+          "p95_ms": 74.56,
+          "p99_ms": 85.54
+        },
+        "transition": {
+          "requests": 501,
+          "p50_ms": 43.3,
+          "p95_ms": 73.45,
+          "p99_ms": 84.5
+        },
+        "list": {
+          "requests": 501,
+          "p50_ms": 9.32,
+          "p95_ms": 17.41,
+          "p99_ms": 22.1
+        }
+      }
+    }
+  ]
+}
