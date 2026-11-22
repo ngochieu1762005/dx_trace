@@ -166,3 +166,12 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #42
 
 /* Declarative operations console */
 .platform-console .pad{padding:24px}.platform-console label{display:block;margin:14px 0}.platform-console label>textarea{display:block;width:100%;min-height:90px;margin:8px 0}.platform-console .model-source{min-height:300px;font-family:monospace;font-size:14px}.platform-console .form-grid{padding:12px 0}.platform-console dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}.platform-console dd{margin:6px 0 18px;overflow-wrap:anywhere}.platform-console .panel p{margin:12px 0}.platform-console select{max-width:100%}
+
+/* Declarative workflow: BPMN import stays separate from published model data. */
+.bpmn-import{margin:18px 0;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
+.bpmn-import .actions{align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.bpmn-import>p{margin:8px 0 16px;max-width:70ch}
+.bpmn-import label{display:block;margin:14px 0}
+.bpmn-import input[type=file]{display:block;width:100%;padding:12px;border:1px dashed var(--line);border-radius:8px;margin-top:7px;background:#fff}
+.bpmn-import .model-source{min-height:132px;max-height:320px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
+@media(max-width:760px){.bpmn-import{padding:14px}.bpmn-import .actions{gap:8px}}
