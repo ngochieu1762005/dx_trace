@@ -8,7 +8,7 @@ Phạm vi: **DX-TRACE v0.0.5**. Bảng này liên kết năng lực với mã v�
 | Biên API | Caddy → signin → app → Core | [Kiến trúc](docs/HEADLESS-CORE.md), test headless và container | Reverse proxy, chưa có quản trị API client bên thứ ba |
 | Dữ liệu có cấu trúc | SQLite: workspace, cảm biến, mô hình/hồ sơ | [Migration](drizzle/), test cách ly và phân trang | Kho truyền thống còn JSON, chưa PostgreSQL nghiệp vụ |
 | Dữ liệu phi cấu trúc | Tệp PNG/JPEG/PDF, hash, metadata và trạng thái quét | Upload/download/restore tests; [API](docs/API.md) | Kho tệp cục bộ; scanner ngoài là tùy chọn |
-| Workflow | Quy tắc kho và mô hình JSON có điều kiện | Test version, vai trò, chống tự duyệt, chuyển cấp theo số tiền | Không BPMN, không nhánh song song |
+| Workflow | Quy tắc kho, JSON có điều kiện và [BPMN](docs/BPMN.md) | Test version, vai trò, chống tự duyệt, chuyển cấp theo số tiền | BPMN 2.0 interchange tập con; chưa có engine BPMN tổng quát, nhánh song song hoặc editor |
 | Core headless | Tiến trình/container API riêng, không UI | Test từ chối token sai, app không gắn volume kho | Demo PC là ngoại lệ chạy cùng tiến trình |
 | Tái sử dụng | Bốn mô hình dùng chung biểu mẫu, API, quyền và dữ liệu | [PLATFORM](docs/PLATFORM.md), `examples/` | Không dùng ứng dụng phê duyệt riêng đã gỡ làm bằng chứng |
 | H–P–D–I trong bài toán kho | Người/vai trò; quy trình; dữ liệu lô/số đo; tra cứu hỗ trợ | Quy trình nhập → giao → sự cố → thu hồi và đối soát | AI tùy chọn không quyết định thay người quản lý |
