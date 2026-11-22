@@ -16,7 +16,25 @@ test('HTTP models are isolated, idempotent, audited and survive verified restore
  try{
  await start(dir+'/data');
  assert.equal((await call('models/apply',{definition,baseVersion:0})).status,200);
+ const appList=await (await call('apps')).json();
+ assert.deepEqual(appList.applications.map(app=>app.id),['maintenance']);
+ const appManifest=await (await call('apps/maintenance/manifest')).json();
+ assert.equal(appManifest.kind,'DeclarativeApplication');
+ assert.equal(appManifest.metadata.version,'0.0.0');
+ assert.equal((await call('apps/plan',{manifest:appManifest})).status,200);
+
+ const xmlResponse=await call('models/maintenance/bpmn');
+ assert.equal(xmlResponse.status,200);
+ assert.match(xmlResponse.headers.get('content-type'),/application\/xml/);
+ const bpmn=await xmlResponse.text();
+ assert.match(bpmn,/bpmn:exclusiveGateway/);
+ const planResponse=await call('models/bpmn/plan',{xml:bpmn});
+ assert.equal(planResponse.status,200);
+ assert.equal((await planResponse.json()).unchanged,true);
+ assert.equal((await call('models/bpmn/plan',{xml:'<!DOCTYPE unsafe>'+bpmn})).status,422);
+
  await call('members',{email:'staff@example.test',role:'warehouse'});
+ assert.equal((await call('models/bpmn/plan',{xml:bpmn},'staff')).status,403);
  await call('members',{email:'manager@example.test',role:'manager'});
  const body={data:{equipment:'Cold room',description:'Inspection',priority:'Thường'}},key=crypto.randomUUID();
  const a=await (await call('models/maintenance/records',body,'staff',key)).json();

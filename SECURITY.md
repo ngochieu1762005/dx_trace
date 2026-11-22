@@ -30,3 +30,7 @@ Groq có thể nhận câu hỏi, SOP và ngữ cảnh kho khi bật. Scanner nh
 ## Trước vận hành
 
 Kiểm OIDC/HTTPS, hai vai trò khác nhau, cô lập hai vùng kho, phục hồi và camera thật. CI không thay kiểm toán bảo mật toàn diện. Theo dõi upstream dependencies và image; chưa có tuyên bố tuân thủ pháp lý, HA, chống mọi kiểu tấn công hoặc tự động vá hạ tầng.
+
+## Nhập quy trình và cài ứng dụng khai báo
+
+BPMN importer chỉ chấp nhận tập con BPMN đã công bố, từ chối DTD, thực thể XML lạ, thành phần chạy mã và nhánh không hợp lệ. AppKit không chấp nhận mã thực thi, URL tự do hoặc plugin nhúng. Plan/apply đòi quyền chủ không gian và không được bỏ qua RBAC, CSRF, kiểm soát phiên bản, idempotency hay audit. Không được xem đây là cơ chế thực thi plugin bên thứ ba an toàn hoặc chứng nhận kiểm toán bảo mật.

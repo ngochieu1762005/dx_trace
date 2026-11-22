@@ -19,7 +19,7 @@ Ngoại lệ: plan chỉ đọc; assistant không ghi nghiệp vụ; members/rol
 | --- | --- | --- |
 | GET | `/health` | Phiên bản và DB binding; không phải kiểm tra toàn hệ thống |
 | GET | `/state`, `/export` | Snapshot kho theo quyền; không bao gồm mô hình/hồ sơ mở rộng hay toàn bộ lịch sử số đo |
-| GET | `/platform` | Discovery cơ bản, vai trò và workflow đề xuất; không phải OpenAPI toàn hệ thống |
+| GET | `/platform` | Discovery, vai trò, workflow đề xuất và danh sách app khai báo đã cài; không phải OpenAPI toàn hệ thống |
 | GET | `/impact/{lotId}` | Đối soát thu hồi theo lô/điểm nhận |
 | GET | `/barcode/{code}` | Mã 8–14 chữ số; cache 24 giờ và Open Food Facts |
 | POST | `/partners`, `/lots` | Tạo đối tác hoặc nhập lô |
@@ -41,6 +41,10 @@ Ngoại lệ: plan chỉ đọc; assistant không ghi nghiệp vụ; members/rol
 | POST | `/models/{modelId}/update` | `{id,version,data}`; người tạo sửa ở trạng thái đầu |
 | POST | `/models/{modelId}/transition` | `{id,version,target,reason}` |
 | GET | `/models/{modelId}/openapi` | Hợp đồng OpenAPI của mô hình có quyền đọc |
+| GET | `/models/{modelId}/bpmn` | Tải BPMN 2.0 XML (tập con) theo quyền đọc |
+| POST | `/models/bpmn/plan`, `/models/bpmn/apply` | Owner nhập BPMN, dry-run và áp dụng phiên bản |
+| GET | `/apps`, `/apps/{id}/manifest` | Liệt kê/xuất AppKit theo quyền đọc |
+| POST | `/apps/plan`, `/apps/install` | Owner kiểm kế hoạch và cài app khai báo |
 | GET | `/audit-ledger?after=0`, `/audit-ledger/verify` | Manager/owner xem trang 100 sự kiện hoặc kiểm chuỗi hash |
 | GET | `/metrics` | Manager/owner; gauges dạng Prometheus, không phải endpoint scrape công khai |
 
@@ -102,3 +106,7 @@ Barcode trả `barcode,name,brand,quantity,source,url,license`; kết quả là 
 | 503 | Kho bận hoặc dịch vụ chưa sẵn sàng; thử lại có giãn cách với cùng khóa |
 
 Lỗi nghiệp vụ trả JSON `{error: "..."}`. Lỗi proxy có thể trả HTML; không coi mọi lỗi máy chủ là hết phiên. Các API hiện có giới hạn khác nhau, chưa có hợp đồng OpenAPI duy nhất cho toàn bộ kho.
+
+## API mở rộng trên nhánh nâng cấp
+
+Các endpoint BPMN và AppKit được bổ sung trên nhánh nâng cấp, **chưa nằm trong release v0.0.5**. [Tập con BPMN và ví dụ](BPMN.md) · [AppKit khai báo](APPKIT.md). Import BPMN từ chối phần tử không hỗ trợ, không dùng XML DTD/XXE. Cả hai cơ chế đều đi qua model plan/apply và audit-ledger; không cho phép thực thi JavaScript hoặc truy cập Core bằng token từ trình duyệt.

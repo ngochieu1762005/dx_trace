@@ -142,7 +142,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 
 | Lớp | Công nghệ | Vai trò |
 | --- | --- | --- |
-| Giao diện | React / React DOM 19.2.6, Lucide React 1.31.0, CSS, Google Sans | Giao diện kho, biểu mẫu, bảng, biểu tượng và phông tự lưu trữ |
+| Giao diện | React / React DOM 19.2.6, Lucide React 1.31.0, CSS, Be Vietnam Pro | Giao diện kho, biểu mẫu và biểu tượng; font qua Google Fonts, có fallback hệ thống |
 | QR / mã vạch | ZXing Browser 0.2.1, ZXing Library 0.23.0, qrcode 1.5.4 | Camera, ảnh và sinh tem |
 | API | Node.js 24, TypeScript/ES modules, Zod 3.25.76 | HTTP, kiểm tra dữ liệu, quy tắc nghiệp vụ |
 | Lưu trữ | `node:sqlite`, filesystem, `node:crypto` | SQLite WAL, đối tượng tệp, hash và HMAC |
@@ -150,7 +150,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 | Triển khai | Caddy 2, Docker Compose v2 | HTTPS, định tuyến và dịch vụ độc lập |
 | Build / CI | Vite 8.0.13, pnpm 11.25.0, GitHub Actions | Build tái lập theo lockfile và kiểm tra phát hành |
 
-[Danh mục phụ thuộc đầy đủ](docs/DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
+[Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc đầy đủ](docs/DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
 
 <a id="requirements"></a>
 ## 💻 System Requirements
@@ -215,7 +215,7 @@ Bài đo cục bộ 10.000 hồ sơ ban đầu, 1/10/25 client đồng thời, 1
 
 **v0.0.5 có migration dữ liệu hồ sơ mở rộng.** Sao lưu trước khi triển khai; sau migration không chạy image cũ trên DB mới. Quay lui cần khôi phục bản sao lưu tương ứng. [Quy trình vận hành](selfhost/OPERATIONS.md) · [Ghi chú v0.0.5](docs/releases/RELEASE_NOTES_v0.0.5.md).
 
-- Workflow JSON có điều kiện và vai trò; chưa có BPMN, nhánh song song hoặc trình thiết kế kéo thả.
+- Workflow JSON có điều kiện và vai trò; hỗ trợ xuất/nhập **tập con BPMN 2.0** qua API. Chưa có BPMN executor đầy đủ, nhánh song song hoặc trình thiết kế kéo thả. [Chi tiết và giới hạn](docs/BPMN.md).
 - SQLite và kho tệp cục bộ; chưa có HA, PostgreSQL nghiệp vụ hoặc object storage phân tán.
 - JSON kho truyền thống vẫn có giới hạn 1,8 MB; payload từng hồ sơ/mô hình mở rộng giới hạn 512 KiB.
 - Quét mã độc và AI là tích hợp tùy chọn; AI không tự quyết định thu hồi.

@@ -29,6 +29,8 @@
  * SOFTWARE.
  */
 import {PlatformError,modelOpenApi} from '../../../lib/platform.mjs';
+import {workflowToBpmn,bpmnToWorkflow} from '../../../lib/bpmn.mjs';
+import {manifestToModel,modelToManifest,listedApplication} from '../../../lib/appkit.mjs';
 import {recallImpact} from '../../../lib/impact.mjs';
 import {defaultWorkflow} from '../../../lib/workflow.mjs';
 
@@ -49,11 +51,37 @@ async function route(req:Request){try{
   const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='apps'){
+  if(req.method==='GET'){
+   const visible=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role));
+   if(!key)return json({applications:visible.map(listedApplication)});
+   if(action!=='manifest')throw new DomainError('Không tìm thấy API ứng dụng',404);
+   const model=visible.find((m:any)=>m.id===key);
+   if(!model)throw new DomainError('Không tìm thấy ứng dụng',404);
+   return json(modelToManifest(model.definition));
+  }
+  if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
+  if(c.role!=='owner')throw new DomainError('Chỉ chủ không gian được cài ứng dụng',403);
+  if(!['plan','install'].includes(key))throw new DomainError('Không tìm thấy API ứng dụng',404);
+  const body:any=await req.json(),definition=manifestToModel(body?.manifest);
+  if(key==='plan')return json(await modelPlan(c,definition));
+  return json(await changePlatform(c,'platform.apply',{definition,baseVersion:body.baseVersion},
+   req.headers.get('idempotency-key')||''));
+ }
  if(kind==='models'){
   if(req.method==='GET'){
    if(action==='openapi'){
     const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
     if(!model)throw new DomainError('Không tìm thấy mô hình',404);return json(modelOpenApi(model.definition));
+   }
+   if(action==='bpmn'){
+    const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
+    if(!model)throw new DomainError('Không tìm thấy mô hình',404);
+    return new Response(workflowToBpmn(model.definition),{headers:{
+     'content-type':'application/xml; charset=utf-8',
+     'content-disposition':'attachment; filename="workflow-'+model.id+'.bpmn"',
+     'cache-control':'no-store','x-content-type-options':'nosniff'
+    }});
    }
    const params=new URL(req.url).searchParams;if(key)params.set('model',key);
    return json(await queryRecords(c,params));
@@ -61,6 +89,17 @@ async function route(req:Request){try{
   if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
   const body:any=await req.json();
   if(!body||typeof body!=='object'||Array.isArray(body))throw new DomainError('Nội dung phải là đối tượng JSON',422);
+  if(key==='bpmn'&&(action==='plan'||action==='apply')){
+   if(c.role!=='owner')throw new DomainError('Chỉ chủ không gian được cập nhật quy trình',403);
+   const parsed=bpmnToWorkflow(body.xml);
+   const existing=(await storedModels(c)).find((model:any)=>model.id===parsed.modelId);
+   const base=body.definition||existing?.definition;
+   if(!base||base.id!==parsed.modelId)throw new DomainError('Mã process không khớp mô hình',422);
+   const definition={...base,workflow:parsed.workflow};
+   if(action==='plan')return json(await modelPlan(c,definition));
+   return json(await changePlatform(c,'platform.apply',{definition,baseVersion:body.baseVersion},
+    req.headers.get('idempotency-key')||''));
+  }
   if(key==='plan')return json(await modelPlan(c,body.definition));
   const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':null;
   if(!command)throw new DomainError('Không tìm thấy API mô hình',404);
@@ -89,7 +128,10 @@ async function route(req:Request){try{
   if(!report)throw new DomainError('Không tìm thấy lô',404);
   return json({revision:workspace.revision,...report});
  }
- if(kind==='platform'&&req.method==='GET')return json({version:'0.0.5',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export']}});
+ if(kind==='platform'&&req.method==='GET'){
+  const installed=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role)).map(listedApplication);
+  return json({version:'0.0.5',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,installedApplications:installed,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export','apps']}});
+ }
  if(kind==='sensor-history'&&req.method==='GET'){
   const params=new URL(req.url).searchParams;
   const offset=z.coerce.number().int().min(0).max(10000000).parse(params.get('offset')||0);

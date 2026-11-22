@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap");
 /*
  * DX-TRACE | Identity Design System
  * Keycloak 26 legacy (PatternFly v4) login templates.
  * Copyright (c) 2026 DX-TRACE contributors. SPDX-License-Identifier: MIT.
  *
- * No web fonts or JavaScript. Built-in Keycloak login flows remain intact.
+ * No bundled font binaries or custom JavaScript. Built-in Keycloak login flows remain intact.
  * Scope covers the master admin login and warehouse OIDC login.
  */
 :root{
@@ -22,7 +23,7 @@ html,html.login-pf{
   padding:0!important;
   min-height:100%;
   background:#f3f7f7!important;
-  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
   -webkit-text-size-adjust:100%;
 }
 html.login-pf body,
@@ -34,14 +35,14 @@ body.login-pf,
   padding:0!important;
   color:var(--dx-ink);
   background:var(--dx-canvas)!important;
-  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
   font-size:14px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
 *,*::before,*::after{box-sizing:border-box}
 button,input,select,textarea{
-  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
 }
 a{color:var(--dx-green-dark);text-decoration:none}
 a:hover{color:#075847;text-decoration:underline}
@@ -197,7 +198,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
 .login-pf-header h1{
   margin:0!important;
   padding:0!important;
-  font-family:Arial,"Segoe UI",Roboto,"Noto Sans",sans-serif!important;
+  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
   font-size:clamp(24px,2.2vw,35px)!important;
   font-weight:750!important;
   line-height:1.27!important;

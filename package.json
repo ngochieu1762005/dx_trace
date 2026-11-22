@@ -11,7 +11,8 @@
   "scripts": {
     "build": "node selfhost/build.mjs",
     "test": "node --test tests/*.test.mjs",
-    "demo": "node selfhost/build.mjs && node selfhost/local-demo.mjs"
+    "demo": "node selfhost/build.mjs && node selfhost/local-demo.mjs",
+    "audit:secrets": "node tools/check-secrets.mjs"
   },
   "dependencies": {
     "@zxing/browser": "^0.2.1",
