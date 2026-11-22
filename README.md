@@ -449,3 +449,11 @@ Kho thực hành dùng dữ liệu mô phỏng do dự án tạo. Dữ liệu s�
 Khi báo lỗi cho đội, dùng [mẫu báo lỗi](.github/ISSUE_TEMPLATE/bug_report.md) và gửi kèm phiên bản, vai trò tài khoản, bước tái hiện và kết quả mong đợi. Với lỗi thu hồi, ghi rõ mã lô mẫu và số đã giao, đã trả, còn phải thu để người tiếp nhận đối chiếu được.
 
 [↑ Quay lại mục lục](#contents)
+
+### Thao tác kho hằng ngày
+
+- Thanh bên hiển thị sẵn các mục nghiệp vụ và Công cụ & quản trị. Chuyển **Kho thực hành / Kho vận hành** ở đầu trang; dữ liệu hai kho được lưu riêng.
+- Tại **Tổng quan**, dùng thao tác nhanh để quét mã, nhập lô hoặc lập phiếu xuất theo quyền tài khoản.
+- Tại **Lô hàng**, tìm theo mã, sản phẩm, mã vạch, vị trí hoặc nhà cung cấp. Kết hợp trạng thái với bộ lọc hạn dùng/tồn kho; **Xuất CSV** xuất đúng danh sách đang lọc.
+- Tra mã EAN/UPC để lấy thông tin tham khảo từ Open Food Facts, kiểm tra lại thông tin rồi chọn **Tạo lô từ sản phẩm**. Cơ sở dữ liệu bên ngoài có thể chưa có sản phẩm bạn cần.
+- Khi lập phiếu xuất, lô đủ điều kiện được xếp theo hạn dùng gần nhất (FEFO). Người dùng vẫn chọn lô và số lượng; máy chủ kiểm tra tồn kho khi lưu.

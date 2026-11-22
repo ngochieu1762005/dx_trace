@@ -4,6 +4,15 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+- Thiết kế lại trang giới thiệu với hồ sơ truy xuất minh họa, quy trình vận hành và lối đăng nhập thống nhất.
+- Hiển thị sẵn toàn bộ Công cụ & quản trị trong thanh điều hướng; giữ chuyển đổi Kho thực hành / Kho vận hành.
+- Thêm thao tác nhanh quét mã, nhập lô và lập phiếu xuất ngay trên Tổng quan.
+- Lọc lô sắp hết hạn trong 7 ngày, đã hết hạn hoặc hết tồn; tìm theo vị trí và nhà cung cấp.
+- Xuất danh sách lô đang lọc thành CSV UTF-8 có bảo vệ công thức bảng tính.
+- Sắp xếp lô có thể xuất theo hạn dùng gần nhất (FEFO); thống kê chỉ tính lô còn tồn khả dụng.
+- Mở sẵn tra cứu sản phẩm theo mã vạch và cho phép xem toàn bộ cảnh báo.
+- Bổ sung kiểm thử lọc tồn kho, thứ tự FEFO và xuất CSV.
+
 - Khôi phục nút chuyển đổi Kho thực hành / Kho vận hành; mở lại dữ liệu của từng kho qua vùng dữ liệu hiện có, không đặt lại dữ liệu.
 
 ## [0.0.4] — 2026-11-20 — Warehouse Navigation & Scanner Fixes
