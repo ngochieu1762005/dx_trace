@@ -4,6 +4,12 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+Chưa có thay đổi mới.
+
+## [0.0.5] — 2026-11-22 — Extensible Core & Warehouse Operations
+
+Xem [ghi chú phát hành và yêu cầu sao lưu trước nâng cấp](docs/releases/RELEASE_NOTES_v0.0.5.md).
+
 - Tách mô hình và hồ sơ mở rộng khỏi JSON kho vào các bảng SQLite có chỉ mục; migration nguyên tử giữ dữ liệu cả hai vùng kho.
 - Thêm phân trang, đếm kết quả theo quyền và tìm kiếm phía máy chủ; CSV ghi rõ chỉ xuất trang đang xem.
 - Xếp hàng ghi theo workspace có giới hạn; giữ kiểm tra phiên bản để chặn ghi đè hồ sơ cũ.
