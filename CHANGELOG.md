@@ -4,7 +4,12 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
-Chưa có thay đổi mới.
+### Documentation
+
+- Đồng bộ tài liệu với v0.0.5: kiến trúc một giao diện/Core riêng, mô hình JSON, 11 bảng SQLite và API mở rộng.
+- Bổ sung đầu mục tài liệu, quy trình backup/nâng cấp/phục hồi; sửa đường dẫn DATA_DIR khi backup trong container.
+- Cập nhật danh mục phụ thuộc, hướng dẫn đóng góp, bảo mật và phân biệt ghi chú phát hành lịch sử.
+- Không thay đổi chức năng, schema hoặc số phiên bản trong đợt chỉnh tài liệu này.
 
 ## [0.0.5] — 2026-11-22 — Extensible Core & Warehouse Operations
 

@@ -1,115 +1,69 @@
-# DX-OS Open-Core: independent headless service and applications
+# Kiến trúc Headless Core
 
-The server deployment implements two separately started Node.js processes and
-one shared identity system. The `core` process is API-only. It does **not**
-ship an end-user UI, does not expose a Docker host port, and owns the only
-mounted warehouse volume. The `app` process serves static interfaces and acts
-as a same-origin authenticated reverse proxy for API calls; its container
-does **not** mount the warehouse data volume.
+Áp dụng cho v0.0.5. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
 
-## Three layers
+## Phân tách trách nhiệm
 
-| DX-OS layer | Code / process | Responsibility |
+| Lớp | Mã / dịch vụ | Trách nhiệm |
 | --- | --- | --- |
-| Layer 1: headless PaaS | `selfhost/core-server.mjs`, `app/api/[...path]/route.ts`, `lib/` | Identity-aware API, workflow, tenant/workspace data, attachments and device ingestion |
-| Layer 2: H-P-D-I applications | `app/console.tsx` | Unified warehouse UI with integrated requests and approvals |
-| Layer 3: business example | Lot tracking and food recall functions in DX-TRACE Warehouse | Batch traceability, distribution, environmental monitoring and recalls |
+| Biên truy cập | Caddy, OAuth2 Proxy | HTTPS, định tuyến, phiên OIDC và header danh tính đã xác minh |
+| Danh tính | Keycloak, PostgreSQL | Realm `warehouse`, client `dx-trace`, tài khoản và xác thực |
+| Trình bày | `selfhost/server.mjs`, React | Giao diện thống nhất và proxy API cùng nguồn; không gắn volume kho |
+| Lõi | `selfhost/core-server.mjs`, router API, `lib/` | Kiểm quyền theo kho, quy tắc, workflow, giao dịch, tệp và tích hợp |
+| Dữ liệu | SQLite, filesystem | Một volume `warehouse` chỉ gắn ở Core |
 
-## Data flow / trust boundary
+Hai tiến trình `app` và `core` chạy riêng trong Docker. Các phân hệ Kho, Đề xuất nội bộ và Nghiệp vụ mở rộng nằm trong cùng frontend. Đường dẫn `/apps/approvals/` cũ chuyển về `/#requests`, không còn là ứng dụng độc lập để chứng minh tái sử dụng Core.
 
-```text
-Browser / sensor
-       |
-  Caddy :443
-       |
-       +--> Keycloak OIDC <--> PostgreSQL (identitydb)
-       |
-  OAuth2 Proxy (browser access only)
-       |
-  web app (React + approvals.html; NO warehouse database)
-       |
-       | Internal-only URL, DX_CORE_TOKEN, trusted identity headers
-       v
-  headless core API :8081 (NOT published)
-       |
-       +--> SQLite database, file objects (warehouse volume)
-       +--> API integrations (Open Food Facts, optional file scan, optional AI)
+## Ranh giới tin cậy
+
+```mermaid
+flowchart TD
+    Client["Trình duyệt"] --> Edge["Caddy"]
+    Edge --> Proxy["OAuth2 Proxy"]
+    Proxy <--> SSO["Keycloak"]
+    Proxy --> Web["App · không có DB kho"]
+    Sensor["Đầu dò"] -->|"Bearer token qua Caddy"| Web
+    Web -->|"DX_CORE_TOKEN và header danh tính"| Core["Core · cổng nội bộ"]
+    Core --> Rules["Quyền và quy tắc nghiệp vụ"]
+    Rules --> Storage["SQLite và tệp"]
 ```
 
-The only exception to browser OIDC is device ingestion at `POST /api/ingest`.
-Caddy routes that endpoint to the web proxy, which relays the device bearer
-token to the core. The API validates its device key itself. In production,
-Caddy removes browser-supplied identity headers before OAuth2 Proxy attaches
-an authenticated user. The core requires the strong internal token before it
-processes any API request, and does not serve `index.html` or other assets.
+1. Caddy bỏ header danh tính/token nội bộ do client gửi. OAuth2 Proxy cung cấp danh tính sau xác thực.
+2. App chuyển API đến `DX_CORE_URL`, bổ sung `DX_CORE_TOKEN`. Core kiểm token trước khi xử lý; không công bố cổng Core hoặc nối container không tin cậy vào `corenet`.
+3. Core xác định thành viên bằng danh tính, email và workspace trong DB. Vai trò ứng dụng không tự lấy từ vai trò quản trị Keycloak.
+4. Ngoại lệ OIDC là `POST /api/ingest`: Caddy đưa đến app, Core kiểm khóa đầu dò và ánh xạ workspace từ khóa đó. Tham số vùng kho không cho thiết bị đổi kho.
+5. API ghi kiểm Origin khi có và từ chối `Sec-Fetch-Site: cross-site`. Các lệnh nghiệp vụ dùng mã yêu cầu chống trùng; không đưa token Core vào JavaScript frontend.
 
-The independent applications share the same OIDC session, workspace identity
-and persisted workflow rows. Both use the **same API**, rather than duplicating
-data or reimplementing access rules.
+`database: true` ở `/api/health` cho biết runtime có DB binding; không thay thế integrity check, kiểm tra SSO hay kiểm tra nghiệp vụ.
 
-* Warehouse UI: `https://APP_HOST/`
-* Integrated approvals: `https://APP_HOST/#requests`
-* Core discovery: `GET https://APP_HOST/api/platform` (authenticated)
-* Workflow creation: `POST /api/workflow` with JSON `{ "title", "content" }`
-* Workflow transition: `POST /api/workflow/{id}/transition` with JSON `{ "target": "submitted" }`
+## Cô lập kho và mô hình dữ liệu
 
-For writes supply a unique `Idempotency-Key` request header. Available
-transitions include `draft -> submitted -> approved/rejected`; authorized
-roles are verified by the core. The workflow definition is currently
-maintained in source code; it is **not** yet a general BPMN designer or a
-dynamic user-defined workflow runtime.
+Một danh tính thành viên hiện thuộc một tổ chức. Người chưa có lời mời sẽ được tạo kho riêng khi đăng nhập lần đầu; vì vậy cần mời email trước lần đăng nhập đầu nếu muốn dùng chung kho. Hai vùng thực hành/vận hành chọn dữ liệu riêng qua `area=training`, dùng chung thành viên của tổ chức.
 
-## Deploy
+Kho truyền thống lưu JSON trong `workspaces`, lịch sử cảm biến lưu bảng riêng. Từ v0.0.5, mô hình/hồ sơ mở rộng ở `platform_models/records/commands`. Các thao tác dùng chung hàng đợi theo workspace; DB revision vẫn kiểm xung đột ngoài process. Chưa có chứng minh HA hoặc hỗ trợ nhiều writer Core trong vận hành.
 
-```sh
-node selfhost/setup.mjs kho.example.org id.example.org
-cd selfhost
-docker compose config --quiet
-docker compose up -d --build
-docker compose ps
+Tệp lưu theo SHA-256; metadata nằm trong kho. Tệp chưa có kết quả quét sạch bị chặn tải xuống. Ledger ghi lệnh thành công và webhook đọc ledger; thay đổi thành viên/cấu hình không nằm toàn bộ trong sổ lệnh này.
+
+## Hai loại workflow
+
+- **Nghiệp vụ kho / đề xuất nội bộ:** quy tắc trong `domain.mjs` và `workflow.mjs`.
+- **Nghiệp vụ mở rộng:** định nghĩa JSON, plan/apply, kiểu trường, vai trò, phạm vi đọc, điều kiện và version. [PLATFORM](PLATFORM.md) mô tả chi tiết.
+
+Đây là máy trạng thái hữu hạn, chưa có BPMN executor, nhánh song song, lịch tác vụ tự động hoặc designer kéo thả. Tái sử dụng hiện được thể hiện qua bốn mô hình dùng cùng API/lưu trữ/phân quyền, không phải nền tảng triển khai tùy ý mọi ứng dụng.
+
+## Cách kiểm chứng
+
+```bash
+npx --yes pnpm@11.25.0 install --frozen-lockfile
+npm run build
+npm test
+python3 -m unittest discover -s tests -p '*_test.py'
 ```
 
-`selfhost/setup.mjs` generates `DX_CORE_TOKEN` alongside OIDC secrets.
-For an existing installation with an older `.env`, add a **new, independent**
-`DX_CORE_TOKEN` of at least 32 unpredictable characters before deploying.
-Do not put this token in the frontend bundle or repository. Both containers
-receive it only as environment configuration; do not expose the core service's
-port or connect untrusted containers to its internal network.
+`tests/headless-core.test.mjs` kiểm hai tiến trình, token Core, không phục vụ UI từ Core và chuyển hướng đường dẫn cũ. `tests/platform-api.test.mjs` kiểm cách ly, quyền, xung đột, ledger và phục hồi. Job container CI dựng image và kiểm app → Core. Danh tính trong test là header mô phỏng trên loopback; cần kiểm OIDC/TLS với tài khoản thật sau triển khai.
 
-For a demonstration on an offline workstation use `npm run demo` as before;
-that explicit loopback-only mode uses the existing in-process backend to avoid
-requiring Docker/Keycloak. **It does not demonstrate production SSO or
-process separation**. Judges should use Docker mode to verify those features.
+## Demo cục bộ và giới hạn
 
-## Verification
+`npm run demo` dùng backend cùng tiến trình, danh tính thử và loopback để chạy được trên PC không Docker. Không dùng chế độ này làm bằng chứng SSO hay phân tách dịch vụ.
 
-```sh
-pnpm install --frozen-lockfile
-node selfhost/build.mjs
-node --test tests/*.test.mjs
-```
-
-`tests/headless-core.test.mjs` starts two independent Node processes and
-checks refusal of direct core access without a token, absence of core UI,
-second-app assets, the shared workflow API and workspace isolation.
-
-For production deployment also manually verify HTTPS, OIDC sign-in, refresh,
-two users with different roles, file upload checks and Docker-based restore.
-The automated integration test exercises simulated **trusted proxy headers**
-in a loopback environment; it is **not** a substitute for testing Keycloak
-and OAuth2 Proxy in a real deployed stack.
-
-## Limitations (explicit)
-
-* `/api/platform` documents current API resources, but is not a universal API
-  gateway with self-service external-client onboarding.
-* Workflow transitions are code-defined, not a BPMN executor.
-* Application data is currently stored in SQLite and filesystem objects.
-  Lakehouse archiving, data lineage, advanced policy engine, MFA enforcement,
-  GitOps self-healing, and always-on malware scanning are not implemented.
-* For AI answers using Groq, the operator must intentionally supply a key and
-  determine whether third-party processing of workspace content is acceptable.
-
-## Interface consolidation
-
-The standalone Approvals UI and scenario playground have been retired. Requests and approval actions remain in the warehouse navigation. Legacy `/apps/approvals/` URLs redirect to `/#requests`; `/demo/` redirects to `/#overview`. The core API, access controls and stored data remain available. Older diagrams showing separate UIs describe the previous presentation layer.
+Caddy hiện là reverse proxy/biên HTTPS, chưa có tự đăng ký API client hoặc quản trị policy nâng cao. Chưa có lakehouse, data lineage, GitOps tự phục hồi, quét mã độc mặc định, object storage phân tán hoặc PostgreSQL cho nghiệp vụ. AI là tích hợp tùy chọn, không phải thành phần bắt buộc của Core.

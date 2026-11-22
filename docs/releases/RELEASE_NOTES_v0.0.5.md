@@ -1,5 +1,6 @@
 # DX-TRACE v0.0.5 — Extensible Core & Warehouse Operations
 
+> Tài liệu lịch sử của tag v0.0.5. Hướng dẫn hiện hành: [mục lục tài liệu](../README.md) và [vận hành](../../selfhost/OPERATIONS.md). Nội dung dưới mô tả thời điểm phát hành.
 Bản phát hành ngày 22/11/2026 bổ sung nền tảng nghiệp vụ mở rộng, cải thiện thao tác kho và công bố minh chứng kiểm thử.
 
 ## Điểm mới

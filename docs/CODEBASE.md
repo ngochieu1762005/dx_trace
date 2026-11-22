@@ -1,127 +1,123 @@
-# Bản đồ mã nguồn DX-TRACE
+# Bản đồ mã nguồn — v0.0.5
 
-Các đường dẫn dưới đây trỏ tới tệp được phân phối. Thư mục sinh khi build và thư viện cài bằng pnpm được tái tạo từ mã nguồn. [Về README](../README.md) · [Danh mục phụ thuộc](DEPENDENCIES.md).
+[Tài liệu](README.md) · [Phụ thuộc](DEPENDENCIES.md) · [Giao diện](../app/README.md) · [Nghiệp vụ](../lib/README.md). Các đường dẫn dưới thuộc source; `selfhost/generated/`, `node_modules/` và dữ liệu chạy là đầu ra, không chỉnh trực tiếp để phát hành.
 
-<a id="app"></a>
+## Giao diện và website
 
-## app
-
-| Tệp | Chức năng |
+| Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [app/README.md](../app/README.md) | Hướng dẫn của thành phần |
-| [app/api/[...path]/route.ts](../app/api/%5B...path%5D/route.ts) | Authenticated warehouse API and device ingestion |
-| [app/console.tsx](../app/console.tsx) | Warehouse operations console and navigation |
-| [app/globals.css](../app/globals.css) | Warehouse dashboard layout and responsive styles |
-| [app/impact.tsx](../app/impact.tsx) | Recall reconciliation by destination |
-| [app/scanner.tsx](../app/scanner.tsx) | Camera scanning and printable lot labels |
+| [app/console.tsx](../app/console.tsx) | Điều hướng kho, tổng quan và các thao tác nghiệp vụ |
+| [app/platform.tsx](../app/platform.tsx) | Biểu mẫu mô hình, plan/apply, hồ sơ và phân trang |
+| [app/scanner.tsx](../app/scanner.tsx) | Camera/ảnh, bộ chọn lô và tạo tem |
+| [app/impact.tsx](../app/impact.tsx) | Đối soát thu hồi |
+| [app/globals.css](../app/globals.css) | Bố cục và responsive |
+| [selfhost/ui/main.jsx](../selfhost/ui/main.jsx) | Điểm vào React |
+| [selfhost/ui/index.html](../selfhost/ui/index.html) | HTML shell |
+| [public/shared/session.mjs](../public/shared/session.mjs) | API client và phục hồi phiên |
+| [landing/index.html](../landing/index.html) | Trang giới thiệu |
+| [landing/assets/site.css](../landing/assets/site.css) | Thiết kế landing |
+| [landing/assets/site.js](../landing/assets/site.js) | Tương tác landing |
 
-<a id="lib"></a>
+## Core và nghiệp vụ
 
-## lib
-
-| Tệp | Chức năng |
+| Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [lib/README.md](../lib/README.md) | Hướng dẫn của thành phần |
-| [lib/demo.mjs](../lib/demo.mjs) | Training workspace seed data and upgrades |
-| [lib/domain.mjs](../lib/domain.mjs) | Warehouse commands, stock rules and incident transitions |
-| [lib/impact.mjs](../lib/impact.mjs) | Lot-level recall reconciliation |
-| [lib/scan.mjs](../lib/scan.mjs) | Lot label and barcode decoding rules |
-| [lib/server.ts](../lib/server.ts) | Workspace isolation, revisions and command persistence |
-| [lib/workflow.mjs](../lib/workflow.mjs) | Approval states and role-based transitions |
+| [app/api/[...path]/route.ts](../app/api/%5B...path%5D/route.ts) | Router API kho, mô hình, ledger, metrics và tích hợp |
+| [lib/server.ts](../lib/server.ts) | Context, vùng kho, revision và ghi kho truyền thống |
+| [lib/domain.mjs](../lib/domain.mjs) | Quy tắc tồn/giao nhận/thu hồi/cảm biến |
+| [lib/workflow.mjs](../lib/workflow.mjs) | Đề xuất nội bộ |
+| [lib/platform.mjs](../lib/platform.mjs) | Model, điều kiện, kế hoạch thay đổi và OpenAPI |
+| [lib/platform-store.ts](../lib/platform-store.ts) | SQL theo quyền, phân trang và transaction hồ sơ |
+| [lib/workspace-queue.mjs](../lib/workspace-queue.mjs) | Hàng đợi ghi có giới hạn |
+| [lib/impact.mjs](../lib/impact.mjs) | Phép tính đối soát |
+| [lib/inventory-view.mjs](../lib/inventory-view.mjs) | Lọc lô, FEFO và CSV |
+| [lib/scan.mjs](../lib/scan.mjs) | Chuẩn hóa/đối chiếu mã |
+| [lib/demo.mjs](../lib/demo.mjs) | Dữ liệu thực hành và nâng cấp bộ mẫu |
 
-<a id="selfhost"></a>
+## Runtime và triển khai
 
-## selfhost
-
-| Tệp | Chức năng |
+| Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [selfhost/Caddyfile](../selfhost/Caddyfile) | HTTPS routing and trusted proxy boundary |
-| [selfhost/Dockerfile](../selfhost/Dockerfile) | Multi-stage Node.js application image |
-| [selfhost/README.md](../selfhost/README.md) | Hướng dẫn của thành phần |
-| [selfhost/backup.mjs](../selfhost/backup.mjs) | Verified snapshot of warehouse records and files |
-| [selfhost/build.mjs](../selfhost/build.mjs) | Production frontend build |
-| [selfhost/compose.yaml](../selfhost/compose.yaml) | Self-hosted application and identity services |
-| [selfhost/realm.json](../selfhost/realm.json) | OIDC client và realm warehouse |
-| [selfhost/realm.json.license](../selfhost/realm.json.license) | Warehouse OIDC realm and client |
-| [selfhost/runtime.mjs](../selfhost/runtime.mjs) | SQLite storage, file objects and request identity |
-| [selfhost/server.mjs](../selfhost/server.mjs) | HTTP server and authenticated request dispatch |
-| [selfhost/setup.mjs](../selfhost/setup.mjs) | First-run configuration and secret generation |
-| [selfhost/ui/index.html](../selfhost/ui/index.html) | Warehouse web application shell |
-| [selfhost/ui/main.jsx](../selfhost/ui/main.jsx) | React application entry point |
+| [selfhost/core-server.mjs](../selfhost/core-server.mjs) | Core API độc lập, token nội bộ và webhook worker |
+| [selfhost/server.mjs](../selfhost/server.mjs) | Static UI, proxy API, backend cục bộ ở demo |
+| [selfhost/runtime.mjs](../selfhost/runtime.mjs) | SQLite WAL, migration, filesystem objects và context |
+| [selfhost/migrate-platform.mjs](../selfhost/migrate-platform.mjs) | Tách model/record từ JSON cũ trong transaction |
+| [selfhost/webhook.mjs](../selfhost/webhook.mjs) | HMAC, retry và trạng thái giao sự kiện |
+| [selfhost/build.mjs](../selfhost/build.mjs) | Build Vite với cấu hình PostCSS cục bộ |
+| [selfhost/local-demo.mjs](../selfhost/local-demo.mjs) | Loopback, danh tính thử và dữ liệu demo riêng |
+| [selfhost/setup.mjs](../selfhost/setup.mjs) | Tạo .env lần đầu |
+| [selfhost/backup.mjs](../selfhost/backup.mjs) | Snapshot DB và objects |
+| [selfhost/verify-backup.mjs](../selfhost/verify-backup.mjs) | Integrity và checksum tệp |
+| [selfhost/doctor.mjs](../selfhost/doctor.mjs) | Kiểm cấu hình Ubuntu, Node/Compose và tài nguyên |
+| [selfhost/container-smoke.mjs](../selfhost/container-smoke.mjs) | Kiểm image app/Core trong CI |
+| [selfhost/Dockerfile](../selfhost/Dockerfile) | Image nhiều giai đoạn, chạy tài khoản node |
+| [selfhost/compose.yaml](../selfhost/compose.yaml) | Dịch vụ và mạng chuẩn |
+| [selfhost/compose.ubuntu-edge.yaml](../selfhost/compose.ubuntu-edge.yaml) | Caddy host, cổng loopback và giới hạn RAM tham khảo |
+| [selfhost/compose.windows-edge.yaml](../selfhost/compose.windows-edge.yaml) | Override Windows edge |
+| [selfhost/Caddyfile](../selfhost/Caddyfile) | Gateway Docker |
+| [selfhost/Caddyfile.ubuntu.saas.snippet](../selfhost/Caddyfile.ubuntu.saas.snippet) | Ví dụ landing/app/identity trên Caddy host |
+| [selfhost/Caddyfile.ubuntu.snippet](../selfhost/Caddyfile.ubuntu.snippet) | Ví dụ edge Ubuntu |
+| [selfhost/Caddyfile.windows-edge.snippet](../selfhost/Caddyfile.windows-edge.snippet) | Ví dụ edge Windows |
+| [selfhost/realm.json](../selfhost/realm.json) | Realm warehouse và OIDC client |
+| [selfhost/scripts/install-saas-caddy.py](../selfhost/scripts/install-saas-caddy.py) | Chuyển site Caddy có dry-run/backup/rollback |
+| [selfhost/scripts/fix-oidc-redirect.py](../selfhost/scripts/fix-oidc-redirect.py) | Kiểm/cập nhật callback OIDC |
+| [selfhost/scripts/create-warehouse-user.py](../selfhost/scripts/create-warehouse-user.py) | Tạo tài khoản qua prompt |
 
-<a id="drizzle"></a>
+## Dữ liệu và mẫu mở rộng
 
-## drizzle
-
-| Tệp | Chức năng |
+| Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [drizzle/0000_watery_mad_thinker.sql](../drizzle/0000_watery_mad_thinker.sql) | Warehouse schema initialization |
-| [drizzle/0001_sensor_history.sql](../drizzle/0001_sensor_history.sql) | Persistent temperature history |
+| [drizzle/0000_watery_mad_thinker.sql](../drizzle/0000_watery_mad_thinker.sql) | 5 bảng gốc: workspace, thành viên, lời mời, khóa và cache |
+| [drizzle/0001_sensor_history.sql](../drizzle/0001_sensor_history.sql) | Lịch sử số đo và chỉ mục |
+| [drizzle/0002_audit_ledger.sql](../drizzle/0002_audit_ledger.sql) | Ledger và trạng thái webhook |
+| [drizzle/0003_platform_records.sql](../drizzle/0003_platform_records.sql) | Model, record, command và chỉ mục |
+| [examples/maintenance/model.json](../examples/maintenance/model.json) | Mẫu bảo trì |
+| [examples/maintenance/client.mjs](../examples/maintenance/client.mjs) | Client quản trị Core qua môi trường tin cậy; không OAuth SDK |
+| [examples/purchase/model.json](../examples/purchase/model.json) | Mua sắm có ngưỡng chuyển cấp |
+| [examples/quality/model.json](../examples/quality/model.json) | Kiểm tra chất lượng; mã lô tham chiếu văn bản |
+| [examples/customer/model.json](../examples/customer/model.json) | Yêu cầu khách hàng |
 
-<a id="public"></a>
+## Kiểm thử và công cụ
 
-## public
-
-| Tệp | Chức năng |
+| Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [public/favicon.svg](../public/favicon.svg) | DX-TRACE application icon |
-| [public/fonts/google-sans/LICENSE.txt](../public/fonts/google-sans/LICENSE.txt) | Văn bản đi kèm |
-| [public/fonts/google-sans/google-sans-latin-ext-standard-normal.woff2](../public/fonts/google-sans/google-sans-latin-ext-standard-normal.woff2) | Phông chữ phân phối kèm |
-| [public/fonts/google-sans/google-sans-latin-standard-normal.woff2](../public/fonts/google-sans/google-sans-latin-standard-normal.woff2) | Phông chữ phân phối kèm |
-| [public/fonts/google-sans/google-sans-vietnamese-standard-normal.woff2](../public/fonts/google-sans/google-sans-vietnamese-standard-normal.woff2) | Phông chữ phân phối kèm |
+| [tests/domain.test.mjs](../tests/domain.test.mjs) | Kiểm domain |
+| [tests/headless-core.test.mjs](../tests/headless-core.test.mjs) | Kiểm headless core |
+| [tests/impact.test.mjs](../tests/impact.test.mjs) | Kiểm impact |
+| [tests/inventory-view.test.mjs](../tests/inventory-view.test.mjs) | Kiểm inventory view |
+| [tests/label-image.test.mjs](../tests/label-image.test.mjs) | Kiểm label image |
+| [tests/landing_routing_test.py](../tests/landing_routing_test.py) | Kiểm landing_routing |
+| [tests/platform-api.test.mjs](../tests/platform-api.test.mjs) | Kiểm platform api |
+| [tests/platform-storage.test.mjs](../tests/platform-storage.test.mjs) | Kiểm platform storage |
+| [tests/platform.test.mjs](../tests/platform.test.mjs) | Kiểm platform |
+| [tests/scan.test.mjs](../tests/scan.test.mjs) | Kiểm scan |
+| [tests/selfhost.test.mjs](../tests/selfhost.test.mjs) | Kiểm selfhost |
+| [tests/session.test.mjs](../tests/session.test.mjs) | Kiểm session |
+| [tests/webhook.test.mjs](../tests/webhook.test.mjs) | Kiểm webhook |
+| [tests/workspace-queue.test.mjs](../tests/workspace-queue.test.mjs) | Kiểm workspace queue |
+| [tools/benchmark-platform.mjs](../tools/benchmark-platform.mjs) | HTTP loopback với DB tạm; không nhận URL production |
 
-<a id="tests"></a>
+## Build và phát hành
 
-## tests
-
-| Tệp | Chức năng |
+| Đường dẫn | Trách nhiệm |
 | --- | --- |
-| [tests/domain.test.mjs](../tests/domain.test.mjs) | Stock, permissions and state transition tests |
-| [tests/impact.test.mjs](../tests/impact.test.mjs) | Partial-return reconciliation tests |
-| [tests/label-image.test.mjs](../tests/label-image.test.mjs) | QR image round-trip test |
-| [tests/selfhost.test.mjs](../tests/selfhost.test.mjs) | HTTP isolation, authorization and restore tests |
+| [package.json](../package.json) | Script, engine và phụ thuộc trực tiếp |
+| [pnpm-lock.yaml](../pnpm-lock.yaml) | Version/quan hệ phụ thuộc khóa |
+| [pnpm-workspace.yaml](../pnpm-workspace.yaml) | Chính sách build phụ thuộc |
+| [.github/workflows/ci.yml](../.github/workflows/ci.yml) | Build, tests và container cho main/PR |
+| [.github/workflows/release.yml](../.github/workflows/release.yml) | Kiểm tag rồi đóng gói source/checksum |
+| [.github/workflows/publish-v0.0.5.yml](../.github/workflows/publish-v0.0.5.yml) | Phát hành riêng v0.0.5: ZIP/TAR.GZ/checksum sau kiểm container |
+| [.github/ISSUE_TEMPLATE/bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md) | Mẫu báo lỗi |
 
-<a id="github"></a>
+## Tài sản và tài liệu
 
-## .github
+- `public/fonts/`, `landing/assets/fonts/`: phông tự lưu trữ và giấy phép.
+- `selfhost/themes/dxtrace/`: theme login Keycloak tùy chọn; không bắt buộc bật.
+- `docs/assets/`: banner, ảnh, sơ đồ và nguồn biểu trưng. Một số sơ đồ SVG cũ không phản ánh kiến trúc hiện tại; dùng README/HEADLESS-CORE làm chuẩn.
+- `docs/benchmarks/`: dữ liệu đo nguyên bản, giữ source hashes và giới hạn môi trường.
+- `docs/releases/`: ghi chú theo tag, giữ lịch sử phiên bản.
+- [Mục lục tài liệu](README.md) là điểm vào cho cài đặt, API, vận hành và minh chứng.
 
-| Tệp | Chức năng |
-| --- | --- |
-| [.github/ISSUE_TEMPLATE/bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md) | Tài liệu dự án |
-| [.github/workflows/release.yml](../.github/workflows/release.yml) | Verification and tagged source releases |
+## Theo dõi một thao tác
 
-<a id="docs"></a>
-
-## docs
-
-| Tệp | Chức năng |
-| --- | --- |
-| [docs/assets/DEVICON-LICENSE.txt](../docs/assets/DEVICON-LICENSE.txt) | Văn bản đi kèm |
-| [docs/assets/LOGOS.md](../docs/assets/LOGOS.md) | Tài liệu dự án |
-| [docs/assets/architecture.svg](../docs/assets/architecture.svg) | Sơ đồ triển khai và các luồng truy cập |
-
-<a id="root"></a>
-
-## root
-
-| Tệp | Chức năng |
-| --- | --- |
-| [.dockerignore](../.dockerignore) | Cấu hình hoặc thông báo của dự án |
-| [.gitignore](../.gitignore) | Cấu hình hoặc thông báo của dự án |
-| [CHANGELOG.md](../CHANGELOG.md) | Tài liệu dự án |
-| [CONTRIBUTING.md](../CONTRIBUTING.md) | Tài liệu dự án |
-| [LICENSE](../LICENSE) | Cấu hình hoặc thông báo của dự án |
-| [README.md](../README.md) | Hướng dẫn của thành phần |
-| [REQUIREMENTS.md](../REQUIREMENTS.md) | Tài liệu dự án |
-| [package.json](../package.json) | Scripts, engine và thư viện trực tiếp |
-| [package.json.license](../package.json.license) | Application manifest |
-| [pnpm-lock.yaml](../pnpm-lock.yaml) | Phiên bản và quan hệ phụ thuộc |
-| [pnpm-workspace.yaml](../pnpm-workspace.yaml) | Dependency build policy |
-
-## Website giới thiệu và phục hồi phiên
-
-- `landing/index.html`, `landing/assets/site.css`, `landing/assets/site.js`: trang giới thiệu và tình huống SUA-005 tương tác.
-- `landing/assets/fonts/`: phông tự lưu trữ, kèm giấy phép.
-- `public/shared/session.mjs`: API client nhận biết phiên hết hạn và giữ đích đến khi đăng nhập lại; dùng chung Warehouse/Approvals.
-- `tests/session.test.mjs`, `tests/landing_routing_test.py`: kiểm thử phục hồi phiên và định tuyến.
-- `.github/workflows/ci.yml`: kiểm tra main/PR và cung cấp trạng thái CI trên README.
+UI → session/API client → app proxy → Core router → context/quyền → domain hoặc platform → transaction SQLite và ledger → response. Với tệp, đối tượng được ghi vào filesystem và metadata vào kho. Với webhook, worker đọc ledger sau đó gửi độc lập; thành công HTTP nghiệp vụ không có nghĩa bên nhận webhook đã xử lý xong.

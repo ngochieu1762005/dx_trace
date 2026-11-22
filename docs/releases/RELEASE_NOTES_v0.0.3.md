@@ -1,5 +1,6 @@
 # DX-TRACE v0.0.3 — Product Experience & Session Recovery
 
+> Tài liệu lịch sử của tag v0.0.3. Hướng dẫn hiện hành: [mục lục tài liệu](../README.md) và [vận hành](../../selfhost/OPERATIONS.md). Nội dung dưới mô tả thời điểm phát hành.
 **Bản phát hành nguồn mở thứ ba · 18/11/2026 · MIT License**
 
 Bản 0.0.3 nâng cấp giao diện giới thiệu và củng cố đường dẫn đăng nhập dùng chung DX-TRACE Warehouse / DX Approvals. Nền tảng DX-OS Open-Core tiếp tục sử dụng Headless Core API, Keycloak OIDC, Docker Compose và dữ liệu kho độc lập.

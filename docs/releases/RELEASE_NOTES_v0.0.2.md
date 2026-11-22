@@ -1,5 +1,6 @@
 # DX-TRACE v0.0.2 — DX-OS Open-Core & SaaS Experience
 
+> Tài liệu lịch sử của tag v0.0.2. Hướng dẫn hiện hành: [mục lục tài liệu](../README.md) và [vận hành](../../selfhost/OPERATIONS.md). Nội dung dưới mô tả thời điểm phát hành.
 > **Bản phát hành nguồn thứ hai** · 18/11/2026 · MIT License
 
 DX-TRACE v0.0.2 nâng cấp nền tảng truy xuất và điều phối thu hồi thực phẩm thành kiến trúc **DX-OS Open-Core** có lõi nghiệp vụ headless, hai ứng dụng độc lập dùng chung danh tính và API, cùng website giới thiệu sản phẩm công khai.
@@ -23,9 +24,9 @@ Không chạy lại setup và không xóa volumes. Sao lưu `selfhost/.env`, Key
 
 **Notes:** Chỉ phát hành khi nguồn tải và kiểm thử CI đã qua; màn hình/login SSO trên môi trường thực cần kiểm tra với tài khoản `warehouse`. Chưa công bố khả năng tuân thủ pháp lý hoặc các thành phần DX-OS chưa triển khai.
 
-**Mã nguồn:** https://github.com/<YOUR-ACCOUNT>/dx_trace
+**Mã nguồn:** https://github.com/ngochieu1762005/dx_trace
 
-**Thay đổi so với v0.0.1:** https://github.com/<YOUR-ACCOUNT>/dx_trace/compare/v0.0.1...main
+**Thay đổi so với v0.0.1:** https://github.com/ngochieu1762005/dx_trace/compare/v0.0.1...main
 
 ### Release asset đề xuất
 

@@ -1,6 +1,32 @@
-# Danh mục phụ thuộc DX-TRACE 0.0.1
+# Phụ thuộc — DX-TRACE v0.0.5
 
-Đối chiếu [package.json](../package.json) và [pnpm-lock.yaml](../pnpm-lock.yaml): **7 gói trực tiếp**, **126 cặp tên–phiên bản** trong toàn bộ lockfile. Danh sách gồm các biến thể tùy chọn cho nhiều hệ điều hành; số gói thực sự được cài phụ thuộc máy. Lockfile ghi quan hệ phụ thuộc, peer dependency và mã kiểm tra toàn vẹn. Các dịch vụ Docker và thư viện tích hợp sẵn của Node được mô tả tại [Technologies Used](../README.md#technologies).
+Nguồn chuẩn: [package.json](../package.json), [pnpm-lock.yaml](../pnpm-lock.yaml), [Compose](../selfhost/compose.yaml) và [Dockerfile](../selfhost/Dockerfile). Không dùng số version trong tài liệu để thay lockfile khi cài đặt.
+
+## Gói trực tiếp
+
+| Gói | Version khóa | Vai trò |
+| --- | --- | --- |
+| React / React DOM | 19.2.6 | Giao diện |
+| Lucide React | 1.31.0 | Biểu tượng |
+| @zxing/browser | 0.2.1 | Đọc camera/ảnh |
+| @zxing/library | 0.23.0 | Bộ giải mã và cấu hình |
+| qrcode | 1.5.4 | Sinh tem |
+| Zod | 3.25.76 | Kiểm đầu vào |
+| Vite | 8.0.13 | Build frontend (devDependency) |
+
+Tổng **7 dependencies + 1 devDependency**, tức 8 gói trực tiếp khi tính React và React DOM riêng. Lockfile chứa **126 cặp tên–phiên bản**, bao gồm binary tùy chọn cho nhiều OS/CPU; số gói cài trên một máy có thể khác.
+
+## Runtime và dịch vụ
+
+- Node.js 24: HTTP, fetch, crypto, filesystem, AsyncLocalStorage và SQLite tích hợp; không cài ORM Drizzle dù thư mục SQL tên `drizzle/`.
+- pnpm 11.25.0 quản lý gói; Python 3 dùng thư viện chuẩn cho script triển khai và kiểm thử routing.
+- Container: Node 24 bookworm-slim, Keycloak 26.4.7, PostgreSQL 17-alpine, OAuth2 Proxy v7.12.0, Caddy 2-alpine. Một số tag image là tag biến động, chưa khóa digest.
+- Open Food Facts, Groq, scanner ngoài và webhook là kết nối HTTP, không phải npm packages. Groq/scanner/webhook tùy chọn theo cấu hình.
+- Phông và biểu trưng giữ giấy phép riêng: [LOGOS](assets/LOGOS.md), [Google Sans](../public/fonts/google-sans/LICENSE.txt).
+
+Cài bằng `npx --yes pnpm@11.25.0 install --frozen-lockfile`. Danh mục dưới không phải SBOM hoặc báo cáo kiểm toán lỗ hổng. Khi nâng version, cập nhật lockfile và kiểm build/tests; không suy ra an toàn chỉ từ việc không đổi phụ thuộc.
+
+## Toàn bộ gói trong lockfile
 
 | Gói | Phiên bản khóa | Quan hệ | OS / CPU theo lockfile |
 | --- | --- | --- | --- |
@@ -59,7 +85,7 @@
 | `@tybys/wasm-util` | 0.10.2 | Gián tiếp | — |
 | `@types/node` | 22.19.19 | Gián tiếp | — |
 | `@zxing/browser` | 0.2.1 | Trực tiếp | — |
-| `@zxing/library` | 0.23.0 | Gián tiếp | — |
+| `@zxing/library` | 0.23.0 | Trực tiếp | — |
 | `@zxing/text-encoding` | 0.9.0 | Gián tiếp | — |
 | `acorn` | 8.16.0 | Gián tiếp | — |
 | `ansi-regex` | 5.0.1 | Gián tiếp | — |

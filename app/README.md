@@ -1,35 +1,36 @@
-# Giao diện vận hành
+# Giao diện và router API
 
-Giao diện React phục vụ hai nhóm thao tác chính: xử lý hàng trong kho và truy vết một lô đã phân phối. Mỗi màn hình phản ánh dữ liệu do API trả về cho người dùng và kho đang chọn.
+DX-TRACE v0.0.5 dùng React/Vite, không phải ứng dụng Next.js. Thư mục `app/api` chứa router được máy chủ Node gọi trực tiếp. [Kiến trúc](../docs/HEADLESS-CORE.md) · [API](../docs/API.md).
 
-| Tệp | Khi nào cần mở |
+| Tệp | Trách nhiệm |
 | --- | --- |
-| [console.tsx](console.tsx) | Điều hướng, tìm kiếm, phân trang, biểu mẫu và các thao tác giao nhận. |
-| [impact.tsx](impact.tsx) | Số đã giao, đã trả, còn phải thu và chờ giao tại từng điểm nhận. |
-| [scanner.tsx](scanner.tsx) | Đọc tem bằng camera hoặc ảnh, tạo tem QR. |
-| [globals.css](globals.css) | Kiểu hiển thị, các cột trên tổng quan, bảng cuộn và bố cục màn hình nhỏ. |
+| [console.tsx](console.tsx) | Điều hướng, vùng kho, tổng quan, biểu mẫu và thao tác kho |
+| [platform.tsx](platform.tsx) | Mẫu mô hình, plan/apply, tạo hồ sơ, chuyển bước, lọc/tìm/phân trang |
+| [impact.tsx](impact.tsx) | Đối soát thu hồi theo phiếu và điểm nhận |
+| [scanner.tsx](scanner.tsx) | Camera/ảnh, bộ chọn kết quả, tra sản phẩm và tem QR |
+| [globals.css](globals.css) | Bố cục responsive, bảng và các thành phần giao diện |
+| [api/[...path]/route.ts](api/%5B...path%5D/route.ts) | HTTP API, kiểm đầu vào và ánh xạ lệnh ở server |
+| [main.jsx](../selfhost/ui/main.jsx) | Điểm vào React |
+| [session.mjs](../public/shared/session.mjs) | Phiên hết hạn, quay lại đúng đường dẫn/vùng kho |
 
-## Điểm vào và luồng giao diện
+## Điều hướng và trạng thái
 
-![Điểm vào và luồng giao diện](../docs/assets/barcode-flow.svg)
+Công cụ & quản trị hiển thị sẵn. Đề xuất nội bộ ở `#requests`, nghiệp vụ mở rộng ở `#platform`. Kho thực hành giữ `area=training` trên URL và API; kho vận hành bỏ tham số này. Đường dẫn phê duyệt/demo cũ chuyển hướng về giao diện thống nhất.
 
-Khi camera trả về một chuỗi, scanner giao việc chọn lô cho resolveScan. Mở hồ sơ nếu có đúng một kết quả; hiển thị bộ chọn nếu một mã ứng với nhiều lô. Kiểm tra nhánh tra sản phẩm ngoài kho khi thay đổi màn hình quét.
+Mô hình mở rộng lấy tối đa 50 hồ sơ/trang, tìm kiếm debounce 250 ms, tự tải lại mỗi 30 giây khi tab hiển thị. CSV ở màn hình này chỉ xuất trang đang xem; CSV lô hàng xuất danh sách đang lọc. Không mô tả hai chức năng xuất giống nhau.
 
-[Kiến trúc toàn dự án](../README.md#architecture) · [Danh mục API](../docs/API.md)
+## Quy tắc khi sửa giao diện
 
-## Theo một thao tác từ giao diện đến dữ liệu
+Giữ mã yêu cầu khi thử lại cùng thao tác, kiểm trạng thái busy, trình bày lỗi 403 khác lỗi hết phiên 401. Không bỏ version khi chuyển bước. Phân quyền và điều kiện cuối cùng do API quyết định; một nút có thể bị server từ chối nếu hồ sơ đã thay đổi hoặc điều kiện không đạt.
 
-1. Người dùng chọn **Nhận trả** trên một phiếu đã giao. Biểu mẫu gửi số lượng thực nhận kèm mã yêu cầu.
-2. API kiểm tra phiên, vai trò, trạng thái thu hồi và số lượng còn lại của phiếu.
-3. Khi lưu thành công, giao diện lấy lại trạng thái kho. Phần đối soát tính lại tổng số theo từng điểm nhận và theo lô.
+Scanner giải mã trong browser rồi dùng `lib/scan.mjs` đối chiếu. Một mã có nhiều lô phải cho chọn; không có lô phải hiển thị trạng thái chưa khớp hoặc tra sản phẩm, không mở nhầm bản ghi. Cơ sở dữ liệu ngoài có thể không có sản phẩm.
 
-Khi sửa biểu mẫu, giữ nguyên mã yêu cầu cho lần gửi lại của cùng một thao tác. Khi thêm liên kết điều hướng, kiểm tra tham số kho thực hành và mã lô; ví dụ đường dẫn tổng quan là `/?area=training#overview`. Các hộp thoại sửa dữ liệu cần xử lý cả lỗi API và trường hợp người dùng bấm gửi liên tiếp.
+## Kiểm tra thủ công
 
-## Kiểm tra trực quan
+- Mở cùng lô từ danh sách, cảnh báo và QR; kiểm tra đúng vùng kho.
+- Nhận trả một phần và đối chiếu số còn phải thu.
+- Áp dụng mẫu mở rộng, tạo hồ sơ, lọc không có kết quả, tìm lại và chuyển trang khi đủ dữ liệu.
+- Thử hai vai trò, phiên hết hạn, màn hình nhỏ và camera điện thoại thật.
+- Khi mô hình yêu cầu người duyệt khác người tạo, dùng hai tài khoản; demo PC một danh tính không chứng minh được bước này.
 
-- Mở cùng một lô từ danh sách, cảnh báo và tem QR; cả ba đường dẫn phải dẫn tới cùng hồ sơ.
-- So sánh số đã trả trên tổng quan với số trong **Sự cố & thu hồi** sau khi xác nhận nhận trả.
-- Thu hẹp cửa sổ, kiểm tra menu di động, cuộn bảng và đọc các mô tả dài.
-- Đăng nhập bằng tài khoản chỉ xem để kiểm tra các nút nghiệp vụ theo vai trò.
-
-[Quay lại tổng quan](../README.md)
+Build bằng `npm run build`; demo bằng `npm run demo`. Không có script dev/hot reload mặc định. [Đóng góp](../CONTRIBUTING.md).
