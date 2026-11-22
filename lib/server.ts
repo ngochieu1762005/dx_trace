@@ -61,7 +61,7 @@ export async function ctx(request:Request){
  return {...m,organization:m.workspace,workspace};
 }
 export async function read(workspace:string){const r:any=await q('SELECT * FROM workspaces WHERE id=?',workspace).first();if(!r)throw new DomainError('Không gian không tồn tại',404);return {...r,data:JSON.parse(r.state)}}
-export async function snapshot(c:any){const r=await read(c.workspace);const s=r.data;delete s.requests;return {...s,revision:r.revision,me:{name:c.name,email:c.email,role:c.role},members:(await q('SELECT id,name,email,role FROM members WHERE workspace=?',c.organization).all()).results,alerts:insights(s),capabilities:{storage:true,uploads:!!env.BUCKET,ai:!!(env as any).AI_API_KEY,scanner:!!(env as any).FILE_SCAN_URL},serverTime:new Date().toISOString()}}
+export async function snapshot(c:any){const r=await read(c.workspace);const s=r.data;delete s.requests;delete s.models;delete s.records;return {...s,revision:r.revision,me:{name:c.name,email:c.email,role:c.role},members:(await q('SELECT id,name,email,role FROM members WHERE workspace=?',c.organization).all()).results,alerts:insights(s),capabilities:{storage:true,uploads:!!env.BUCKET,ai:!!(env as any).AI_API_KEY,scanner:!!(env as any).FILE_SCAN_URL},serverTime:new Date().toISOString()}}
 export async function change(c:any,cmd:string,b:any,key:string){
  if(!key||key.length>100)throw new DomainError('Thiếu mã yêu cầu duy nhất',400);
  const fingerprint=await hash(cmd+JSON.stringify(b));const entity=cmd.split('.')[0].slice(0,3).toUpperCase()+'-'+crypto.randomUUID().slice(0,8).toUpperCase();
@@ -77,6 +77,11 @@ export async function change(c:any,cmd:string,b:any,key:string){
   }
   const out=apply(r.data,cmd,b,{role:c.role,actor:c.email||c.name,now:new Date().toISOString(),entity});
   out.state.requests[key]={fingerprint,result:out.result};const keys=Object.keys(out.state.requests);while(keys.length>600)delete out.state.requests[keys.shift()!];
+  const last:any=await q('SELECT hash FROM audit_ledger WHERE workspace=? ORDER BY seq DESC LIMIT 1',c.workspace).first();
+  const previousHash=last?.hash||'0'.repeat(64),created=new Date().toISOString();
+  const payload=JSON.stringify({action:cmd,actor:c.email||c.name,entity:out.result.id,created});
+  const digest=await hash(previousHash+'\n'+(r.revision+1)+'\n'+payload);
+  const ledger=q('INSERT INTO audit_ledger(workspace,seq,previous,hash,payload,created) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',c.workspace,r.revision+1,previousHash,digest,payload,created,c.workspace,r.revision);
   const revisionUpdate=()=>q('UPDATE workspaces SET state=?,revision=revision+1 WHERE id=? AND revision=?',JSON.stringify(out.state),c.workspace,r.revision);
   if(cmd==='sensor.ingest'&&!('duplicate' in out.result)){
    const reading=out.state.readings.find((v:any)=>v.id===out.result.id);
@@ -87,9 +92,9 @@ export async function change(c:any,cmd:string,b:any,key:string){
    if(out.state.incidents.length===r.data.incidents.length)out.state.events.shift();
    const insert=q('INSERT INTO sensor_history(key,workspace,device,recorded,fingerprint,payload) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',
     sensorKey,c.workspace,b.device,reading.recorded,fingerprint,JSON.stringify(reading),c.workspace,r.revision);
-   const results=await db().batch([insert,revisionUpdate()]);
-   if(results[1].meta.changes===1)return out.result;
-  }else if((await revisionUpdate().run()).meta.changes===1)return out.result;
+   const results=await db().batch([insert,ledger,revisionUpdate()]);
+   if(results[2].meta.changes===1)return out.result;
+  }else if((await db().batch([ledger,revisionUpdate()]))[1].meta.changes===1)return out.result;
  }
  throw new DomainError('Dữ liệu đang được cập nhật đồng thời. Vui lòng thử lại.',409)
 }

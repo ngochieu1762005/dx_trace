@@ -189,3 +189,6 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #42
 @media(max-width:1000px){.quick-actions{align-items:flex-start;flex-direction:column}}
 @media(max-width:760px){.work-context>div{gap:8px;flex-wrap:wrap}.quick-actions{padding:18px}.table-toolbar{flex-wrap:wrap}.inventory-filters>span{width:100%;margin-left:0}.sidebar{max-width:88vw}}
 @media print{.quick-actions,.inventory-filters{display:none}}
+
+/* Declarative operations console */
+.platform-console .pad{padding:24px}.platform-console label{display:block;margin:14px 0}.platform-console label>textarea{display:block;width:100%;min-height:90px;margin:8px 0}.platform-console .model-source{min-height:300px;font-family:monospace;font-size:14px}.platform-console .form-grid{padding:12px 0}.platform-console dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}.platform-console dd{margin:6px 0 18px;overflow-wrap:anywhere}.platform-console .panel p{margin:12px 0}.platform-console select{max-width:100%}

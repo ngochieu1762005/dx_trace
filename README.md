@@ -23,7 +23,7 @@
 
 DX-TRACE kết nối **lô hàng, giao nhận, số đo bảo quản và quy trình thu hồi** trong một hồ sơ xuyên suốt. Khi có sự cố, đội vận hành xác định được hàng đã đến đâu, đã nhận trả bao nhiêu và còn thiếu bao nhiêu tại mỗi điểm nhận.
 
-Được xây dựng theo định hướng **DX-OS Open-Core**, nền tảng có **Headless Core API** độc lập và hai ứng dụng **Warehouse** / **Approvals**, dùng chung Identity/SSO, phân quyền, dữ liệu và workflow.
+Được xây dựng theo định hướng **DX-OS Open-Core**, nền tảng có **Headless Core API** độc lập và giao diện kho thống nhất, dùng chung Identity/SSO, phân quyền, dữ liệu và workflow. Mục **Nghiệp vụ mở rộng** cho phép khai báo biểu mẫu và quy trình bằng JSON, xem kế hoạch thay đổi trước khi áp dụng và quản lý hồ sơ theo quyền.
 
 | Khám phá sản phẩm | Dành cho người triển khai |
 | --- | --- |
@@ -33,7 +33,7 @@ DX-TRACE kết nối **lô hàng, giao nhận, số đo bảo quản và quy tr�
 
 Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai, dùng tên miền và thông tin xác thực của đơn vị bạn. Tài khoản truy cập do quản trị viên cấp. Giấy phép MIT áp dụng cho mã nguồn dự án; thư viện và dữ liệu ngoài có giấy phép riêng.
 
-**Phiên bản: [v0.0.3](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.3).** Xem [ghi chú phát hành](docs/releases/README.md) và [Changelog](CHANGELOG.md) để theo dõi cập nhật.
+**Phiên bản: [v0.0.4](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.4).** Xem [ghi chú phát hành](docs/releases/README.md) và [Changelog](CHANGELOG.md) để theo dõi cập nhật.
 
 <details>
 <summary><strong>Xem trước giao diện giới thiệu</strong></summary>
@@ -43,6 +43,8 @@ Các địa chỉ trên là **bản demo của dự án**. Khi tự triển khai
 </details>
 
 <a id="contents"></a>
+
+Bản trên nhánh `main` bổ sung [mô hình nghiệp vụ, webhook và công cụ vận hành](docs/PLATFORM.md). Các bổ sung này nằm trong **Unreleased**, chưa phải bản phát hành mới.
 
 ## 📋 Table of Contents
 
@@ -403,7 +405,7 @@ Bước build tạo giao diện trong `selfhost/generated/web/`. Node.js 24 ch�
 
 ## 📝 Changelog
 
-**Bản phát hành mới nhất: [v0.0.3](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.3).** Xem [thư mục ghi chú phát hành](docs/releases/README.md) cho v0.0.2 và v0.0.3; [CHANGELOG.md](CHANGELOG.md) ghi lại các thay đổi đã phát hành và mục Unreleased.
+**Bản phát hành mới nhất: [v0.0.4](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.4).** Xem [thư mục ghi chú phát hành](docs/releases/README.md) cho v0.0.2 và v0.0.4; [CHANGELOG.md](CHANGELOG.md) ghi lại các thay đổi đã phát hành và mục Unreleased.
 
 **Cập nhật máy chủ.** Sao lưu kho và cơ sở dữ liệu danh tính theo sổ tay triển khai. Đọc changelog của phiên bản đích, giữ cấu hình `selfhost/.env` cùng các volume hiện có, rồi chạy lại `docker compose up -d --build` trong thư mục `selfhost/`. Kiểm tra đăng nhập, số liệu một lô và một tệp đính kèm sau khi cập nhật.
 

@@ -41,6 +41,7 @@ sql.exec('PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;');
 sql.exec(readFileSync(new URL('../drizzle/0000_watery_mad_thinker.sql',import.meta.url),'utf8').replaceAll('CREATE TABLE ','CREATE TABLE IF NOT EXISTS '));
 sql.exec(readFileSync(new URL('../drizzle/0001_sensor_history.sql',import.meta.url),'utf8')
  .replaceAll('CREATE TABLE ','CREATE TABLE IF NOT EXISTS ').replaceAll('CREATE INDEX ','CREATE INDEX IF NOT EXISTS '));
+sql.exec(readFileSync(new URL('../drizzle/0002_audit_ledger.sql',import.meta.url),'utf8'));
 function bound(query,args=[]){
  const stmt=sql.prepare(query);
  return {bind:(...values)=>bound(query,values),first:()=>stmt.get(...args)??null,

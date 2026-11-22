@@ -1,0 +1,20 @@
+{
+  "id": "maintenance",
+  "name": "Yêu cầu bảo trì thiết bị",
+  "fields": [
+    {"key":"equipment","label":"Thiết bị","type":"text","required":true},
+    {"key":"description","label":"Mô tả","type":"text","required":true},
+    {"key":"priority","label":"Ưu tiên","type":"choice","options":["Thường","Khẩn cấp"],"required":true},
+    {"key":"cost","label":"Chi phí dự kiến","type":"number"}
+  ],
+  "permissions":{"read":["owner","manager","warehouse"],"create":["owner","manager","warehouse"],"scope":"own"},
+  "workflow":{
+    "states":["draft","submitted","approved","rejected","done"],"initial":"draft","terminal":["rejected","done"],
+    "transitions":[
+      {"from":"draft","to":"submitted","roles":["owner","manager","warehouse"],"dueHours":24},
+      {"from":"submitted","to":"approved","roles":["owner","manager"],"differentActor":true,"dueHours":48},
+      {"from":"submitted","to":"rejected","roles":["owner","manager"],"differentActor":true,"reasonRequired":true},
+      {"from":"approved","to":"done","roles":["owner","manager","warehouse"],"reasonRequired":true}
+    ]
+  }
+}
