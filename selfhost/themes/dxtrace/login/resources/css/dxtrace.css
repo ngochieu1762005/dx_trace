@@ -23,7 +23,7 @@ html,html.login-pf{
   padding:0!important;
   min-height:100%;
   background:#f3f7f7!important;
-  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
+  font-family:"Be Vietnam Pro", "Segoe UI", system-ui, sans-serif!important;
   -webkit-text-size-adjust:100%;
 }
 html.login-pf body,
@@ -35,14 +35,14 @@ body.login-pf,
   padding:0!important;
   color:var(--dx-ink);
   background:var(--dx-canvas)!important;
-  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
+  font-family:"Be Vietnam Pro", "Segoe UI", system-ui, sans-serif!important;
   font-size:14px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
 *,*::before,*::after{box-sizing:border-box}
 button,input,select,textarea{
-  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
+  font-family:"Be Vietnam Pro", "Segoe UI", system-ui, sans-serif!important;
 }
 a{color:var(--dx-green-dark);text-decoration:none}
 a:hover{color:#075847;text-decoration:underline}
@@ -198,7 +198,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
 .login-pf-header h1{
   margin:0!important;
   padding:0!important;
-  font-family:"Be Vietnam Pro",system-ui,Arial,sans-serif!important;
+  font-family:"Be Vietnam Pro", "Segoe UI", system-ui, sans-serif!important;
   font-size:clamp(24px,2.2vw,35px)!important;
   font-weight:750!important;
   line-height:1.27!important;
