@@ -28,6 +28,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {withWorkspace} from './workspace-queue.mjs';
 import {env, getSessionUser} from '../selfhost/runtime.mjs';
 import {seedDemo,expandTraining} from './demo.mjs';
 import {initial,apply,DomainError,insights} from './domain.mjs';
@@ -63,6 +64,9 @@ export async function ctx(request:Request){
 export async function read(workspace:string){const r:any=await q('SELECT * FROM workspaces WHERE id=?',workspace).first();if(!r)throw new DomainError('Không gian không tồn tại',404);return {...r,data:JSON.parse(r.state)}}
 export async function snapshot(c:any){const r=await read(c.workspace);const s=r.data;delete s.requests;delete s.models;delete s.records;return {...s,revision:r.revision,me:{name:c.name,email:c.email,role:c.role},members:(await q('SELECT id,name,email,role FROM members WHERE workspace=?',c.organization).all()).results,alerts:insights(s),capabilities:{storage:true,uploads:!!env.BUCKET,ai:!!(env as any).AI_API_KEY,scanner:!!(env as any).FILE_SCAN_URL},serverTime:new Date().toISOString()}}
 export async function change(c:any,cmd:string,b:any,key:string){
+ return withWorkspace(c.workspace,()=>changeUnlocked(c,cmd,b,key));
+}
+async function changeUnlocked(c:any,cmd:string,b:any,key:string){
  if(!key||key.length>100)throw new DomainError('Thiếu mã yêu cầu duy nhất',400);
  const fingerprint=await hash(cmd+JSON.stringify(b));const entity=cmd.split('.')[0].slice(0,3).toUpperCase()+'-'+crypto.randomUUID().slice(0,8).toUpperCase();
  for(let attempt=0;attempt<6;attempt++){

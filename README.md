@@ -17,7 +17,7 @@
 ![PostgreSQL](https://img.shields.io/badge/Identity_DB-PostgreSQL_17-4169e1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Deploy-Docker_Compose-2496ed?logo=docker&logoColor=white)
 
-[**Cài đặt nhanh**](#quick-setup) · [**Kiến trúc**](#architecture) · [**API**](docs/API.md) · [**Bản phát hành**](https://github.com/ngochieu1762005/dx_trace/releases) · [**Báo lỗi**](https://github.com/ngochieu1762005/dx_trace/issues/new/choose)
+[**Cài đặt nhanh**](#quick-setup) · [**Kiến trúc**](#architecture) · [**API**](docs/API.md) · [**Minh chứng**](docs/EVIDENCE.md) · [**Đo tải**](docs/BENCHMARK.md) · [**Bản phát hành**](https://github.com/ngochieu1762005/dx_trace/releases) · [**Báo lỗi**](https://github.com/ngochieu1762005/dx_trace/issues/new/choose)
 
 </div>
 

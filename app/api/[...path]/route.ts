@@ -28,7 +28,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {PlatformError,planModel,platformView,modelOpenApi} from '../../../lib/platform.mjs';
+import {PlatformError,modelOpenApi} from '../../../lib/platform.mjs';
 import {recallImpact} from '../../../lib/impact.mjs';
 import {defaultWorkflow} from '../../../lib/workflow.mjs';
 
@@ -39,6 +39,7 @@ import {DomainError,insights} from '../../../lib/domain.mjs';
 
 const json=(data:any,status=200)=>Response.json(data,{status,headers:{'cache-control':'no-store','X-Content-Type-Options':'nosniff'}});
 const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new DomainError('Cần quyền quản lý',403)};
+import {models as storedModels,plan as modelPlan,queryRecords,changePlatform} from '../../../lib/platform-store.ts';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
  if(kind==='health')return json({status:'ok',version:'0.0.4',database:!!env.DB});
@@ -49,21 +50,21 @@ async function route(req:Request){try{
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
  if(kind==='models'){
-  const r=await read(c.workspace),actor={role:c.role,actor:c.email,now:new Date().toISOString()};
   if(req.method==='GET'){
-   const view=platformView(r.data,actor);
-   if(!key)return json(view);
-   const model=view.models.find((m:any)=>m.id===key);if(!model)throw new DomainError('Không tìm thấy mô hình',404);
-   if(action==='openapi')return json(modelOpenApi(model.definition));
-   return json({...view,models:[model],records:view.records.filter((x:any)=>x.model===key)});
+   if(action==='openapi'){
+    const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
+    if(!model)throw new DomainError('Không tìm thấy mô hình',404);return json(modelOpenApi(model.definition));
+   }
+   const params=new URL(req.url).searchParams;if(key)params.set('model',key);
+   return json(await queryRecords(c,params));
   }
   if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
   const body:any=await req.json();
   if(!body||typeof body!=='object'||Array.isArray(body))throw new DomainError('Nội dung phải là đối tượng JSON',422);
-  if(key==='plan'){if(c.role!=='owner')throw new DomainError('Cần quyền chủ không gian',403);return json(planModel(r.data,body.definition))}
+  if(key==='plan')return json(await modelPlan(c,body.definition));
   const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':null;
   if(!command)throw new DomainError('Không tìm thấy API mô hình',404);
-  return json(await change(c,command,{...body,model:key},req.headers.get('idempotency-key')||''));
+  return json(await changePlatform(c,command,{...body,model:key},req.headers.get('idempotency-key')||''));
  }
  if(kind==='audit-ledger'&&req.method==='GET'){
   manager(c);
@@ -78,8 +79,8 @@ async function route(req:Request){try{
   return json({events:page.map((row:any)=>({...row,payload:JSON.parse(row.payload)})),cursor:page.at(-1)?.seq||after});
  }
  if(kind==='metrics'&&req.method==='GET'){
-  manager(c);const r=await read(c.workspace),view=platformView(r.data,{role:c.role,actor:c.email,now:new Date().toISOString()});
-  const values={lots:r.data.lots.length,open_incidents:r.data.incidents.filter((i:any)=>i.status!=='closed').length,records:view.records.length,overdue:view.summary.overdue};
+  manager(c);const r=await read(c.workspace),view=await queryRecords(c,new URLSearchParams());
+  const values={lots:r.data.lots.length,open_incidents:r.data.incidents.filter((i:any)=>i.status!=='closed').length,records:view.summary.total,overdue:view.summary.overdue};
   return new Response(Object.entries(values).map(([k,v])=>'# TYPE dxtrace_'+k+' gauge\ndxtrace_'+k+' '+v).join('\n')+'\n',{headers:{'content-type':'text/plain; version=0.0.4','cache-control':'no-store'}});
  }
  if(kind==='impact'&&req.method==='GET'){

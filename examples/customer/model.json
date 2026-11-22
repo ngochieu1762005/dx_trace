@@ -1,0 +1,87 @@
+{
+  "id": "customer",
+  "name": "Yêu cầu khách hàng",
+  "fields": [
+    {
+      "key": "title",
+      "label": "Yêu cầu",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "detail",
+      "label": "Nội dung",
+      "type": "text",
+      "required": true
+    }
+  ],
+  "permissions": {
+    "read": [
+      "owner",
+      "manager",
+      "warehouse"
+    ],
+    "create": [
+      "owner",
+      "manager",
+      "warehouse"
+    ],
+    "scope": "own"
+  },
+  "workflow": {
+    "states": [
+      "draft",
+      "submitted",
+      "approved",
+      "rejected",
+      "done"
+    ],
+    "initial": "draft",
+    "terminal": [
+      "rejected",
+      "done"
+    ],
+    "transitions": [
+      {
+        "from": "draft",
+        "to": "submitted",
+        "roles": [
+          "owner",
+          "manager",
+          "warehouse"
+        ],
+        "dueHours": 24
+      },
+      {
+        "from": "submitted",
+        "to": "approved",
+        "roles": [
+          "owner",
+          "manager"
+        ],
+        "differentActor": true,
+        "dueHours": 48
+      },
+      {
+        "from": "submitted",
+        "to": "rejected",
+        "roles": [
+          "owner",
+          "manager"
+        ],
+        "differentActor": true,
+        "reasonRequired": true
+      },
+      {
+        "from": "approved",
+        "to": "done",
+        "roles": [
+          "owner",
+          "manager",
+          "warehouse"
+        ],
+        "reasonRequired": true
+      }
+    ]
+  }
+}

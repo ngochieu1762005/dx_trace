@@ -25,3 +25,8 @@
 ## Headless API và hai ứng dụng
 
 Trong Docker, `selfhost/core-server.mjs` xử lý các API ở một tiến trình riêng và xác thực yêu cầu chuyển tiếp bằng `DX_CORE_TOKEN` nội bộ. Không công bố cổng của core. Giao diện kho `/`, bao gồm mục `#requests`, dùng cùng API và phiên OIDC. **Không** gửi `DX_CORE_TOKEN` từ trình duyệt; API công khai đi qua Caddy, OAuth2 Proxy và web reverse proxy. [Chi tiết](HEADLESS-CORE.md).
+
+
+## Nghiệp vụ mở rộng
+
+API mô hình, plan/apply, hồ sơ có phân quyền, lọc và phân trang được mô tả tại [PLATFORM.md](PLATFORM.md#api). Hồ sơ mở rộng lưu riêng trong SQLite; GET danh sách mặc định trả tối đa 50 dòng, không trả toàn bộ kho.
