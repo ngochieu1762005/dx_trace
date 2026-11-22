@@ -24,10 +24,10 @@ test('HTTP models are isolated, idempotent, audited and survive verified restore
  const planResponse=await call('models/bpmn/plan',{xml:bpmn});
  assert.equal(planResponse.status,200);
  assert.equal((await planResponse.json()).unchanged,true);
- assert.equal((await call('models/bpmn/plan',{xml:bpmn},'staff')).status,403);
  assert.equal((await call('models/bpmn/plan',{xml:'<!DOCTYPE unsafe>'+bpmn})).status,422);
 
  await call('members',{email:'staff@example.test',role:'warehouse'});
+ assert.equal((await call('models/bpmn/plan',{xml:bpmn},'staff')).status,403);
  await call('members',{email:'manager@example.test',role:'manager'});
  const body={data:{equipment:'Cold room',description:'Inspection',priority:'Thường'}},key=crypto.randomUUID();
  const a=await (await call('models/maintenance/records',body,'staff',key)).json();
