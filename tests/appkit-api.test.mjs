@@ -72,7 +72,8 @@ test('installing a second app reuses audited Core without leaking records betwee
   const manifestOut=await (await request('apps/purchase/manifest')).json();
   assert.deepEqual(manifestOut,purchase);
 
-  const denied=await request('apps/install',{manifest:maintenance,baseVersion:1},'outsider');
+  assert.equal((await request('members',{email:'staff@example.test',role:'warehouse'})).status,200);
+  const denied=await request('apps/install',{manifest:maintenance,baseVersion:1},'staff');
   assert.equal(denied.status,403);
   const wrong=structuredClone(maintenance);
   wrong.metadata.entrypoint='https://untrusted.example/plugin.js';
