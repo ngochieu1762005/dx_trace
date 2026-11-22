@@ -8,6 +8,7 @@
 import {execFileSync} from 'node:child_process';
 import {readFileSync,statSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
+import {resolve} from 'node:path';
 
 const RULES = [
   ['private-key', /-----BEGIN (?:RSA |EC |OPENSSH |ENCRYPTED )?PRIVATE KEY-----/g],
@@ -56,8 +57,7 @@ export function auditTrackedFiles(paths) {
   return issues;
 }
 
-const invoked = process.argv[1] && fileURLToPath(import.meta.url) ===
-  fileURLToPath(new URL('file://' + process.argv[1].replace(/\\/g,'/')));
+const invoked = Boolean(process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url));
 if (invoked) {
   const tracked = execFileSync('git',['ls-files','-z'],{encoding:'utf8'})
     .split('\0').filter(Boolean);
