@@ -67,3 +67,7 @@ python3 -m unittest discover -s tests -p '*_test.py'
 `npm run demo` dùng backend cùng tiến trình, danh tính thử và loopback để chạy được trên PC không Docker. Không dùng chế độ này làm bằng chứng SSO hay phân tách dịch vụ.
 
 Caddy hiện là reverse proxy/biên HTTPS, chưa có tự đăng ký API client hoặc quản trị policy nâng cao. Chưa có lakehouse, data lineage, GitOps tự phục hồi, quét mã độc mặc định, object storage phân tán hoặc PostgreSQL cho nghiệp vụ. AI là tích hợp tùy chọn, không phải thành phần bắt buộc của Core.
+
+## Đóng gói ứng dụng khai báo
+
+`lib/appkit.mjs` và `GET/POST /api/apps` cho phép cài một mô hình nghiệp vụ theo manifest có phiên bản, không chạy mã ngoài. Các mẫu bảo trì và mua sắm được đóng gói trong `examples/*/app.json`, kế thừa SSO, quyền, workflow, transaction và audit. Giới hạn và cách tái tạo: [AppKit](APPKIT.md).
