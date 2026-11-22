@@ -4,12 +4,26 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+### Added — workflow interchange and reusable applications
+
+- Hỗ trợ xuất/nhập **tập con BPMN 2.0** (start, user task, cổng XOR, end, sequence flow) bằng XML; bảo toàn phân quyền, điều kiện dữ liệu, lý do phê duyệt và SLA trong thuộc tính riêng.
+- API tải BPMN theo quyền, owner xem kế hoạch và áp dụng qua model store hiện có; không thêm engine thực thi workflow chạy song song.
+- AppKit: manifest JSON có phiên bản để đóng gói, khám phá, lên kế hoạch và cài các ứng dụng khai báo; cung cấp manifest mẫu bảo trì và mua sắm.
+- Giao diện quản trị cho xuất/nhập BPMN, kiểm kế hoạch và cài app; thêm kiểm thử HTTP app thứ hai, bảo vệ phân quyền/workspace, chống gọi lặp và dấu vết kiểm toán.
+- Kiểm tra dấu hiệu lộ thông tin nhạy cảm trong mã nguồn được theo dõi bởi Git và chặn CI khi phát hiện; báo lỗi chỉ có đường dẫn/quy tắc, không in giá trị.
+
+### Changed
+
+- Đồng bộ kiểu chữ Be Vietnam Pro ở giao diện nghiệp vụ, trang giới thiệu và Keycloak theme; có fallback font hệ thống.
+- So sánh mô hình theo cấu trúc thay vì thứ tự khóa JSON để tránh phát sinh phiên bản mới vô nghĩa khi nhập lại BPMN tương đương.
+- Các tài liệu API, kiến trúc và nguồn mở làm rõ tính năng đã triển khai và giới hạn chưa có (full BPMN executor, plugin chạy mã ngoài, HA).
+
 ### Documentation
 
 - Đồng bộ tài liệu với v0.0.5: kiến trúc một giao diện/Core riêng, mô hình JSON, 11 bảng SQLite và API mở rộng.
 - Bổ sung đầu mục tài liệu, quy trình backup/nâng cấp/phục hồi; sửa đường dẫn DATA_DIR khi backup trong container.
 - Cập nhật danh mục phụ thuộc, hướng dẫn đóng góp, bảo mật và phân biệt ghi chú phát hành lịch sử.
-- Không thay đổi chức năng, schema hoặc số phiên bản trong đợt chỉnh tài liệu này.
+- Đợt chỉnh tài liệu v0.0.5 trước đây không đổi chức năng; **các thay đổi mới ở phần trên thuộc nhánh Unreleased**, chưa là bản phát hành chính thức.
 
 ## [0.0.5] — 2026-11-22 — Extensible Core & Warehouse Operations
 
