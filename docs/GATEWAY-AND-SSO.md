@@ -70,7 +70,7 @@ node selfhost/verify-oidc.mjs
 rm -f /tmp/dxtrace-{owner,reviewer}.cookie
 ~~~
 
-Substitute the actual HTTPS origins. Do not put cookie values into shell history, logs, screenshots or GitHub. The verification asserts: correct OIDC issuer; anonymous API denied; owner and non-owner sessions work; identities are distinct; they share a workspace; non-owner receives HTTP 403 for the read-only AppKit plan endpoint. **Passing unit tests does not mean this live check passed.**
+Substitute the actual HTTPS origins. Do not put cookie values into shell history, logs, screenshots or GitHub. The verification asserts: correct OIDC issuer; anonymous API **and Quality Portal** denied; owner and non-owner sessions work **on both the main application and independent Quality Portal**; identities are distinct; they share a workspace; non-owner receives HTTP 403 for the read-only AppKit plan endpoint. **Passing unit tests does not mean this live check passed.**
 
 ## Reproducible proof for the judges
 
