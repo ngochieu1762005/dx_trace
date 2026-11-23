@@ -82,7 +82,9 @@ test('standalone quality frontend reuses shared Core, identity, audit and workfl
     assert.deepEqual(plan.rejections,[]);
     const install=await request('apps/install',{manifest,baseVersion:0});
     assert.equal(install.status,200);
-    assert.deepEqual((await (await request('apps')).json()).applications.map(x=>x.id),['quality']);
+    const applications=(await (await request('apps')).json()).applications;
+    assert.deepEqual(applications.map(x=>x.id),['quality']);
+    assert.equal(applications[0].entrypoint,'/apps/quality/');
     const otherApps=await (await request('apps',undefined,'outsider')).json();
     assert.deepEqual(otherApps.applications,[],'another organization must not enumerate applications');
 
