@@ -44,8 +44,8 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 | Phạm vi | Tình trạng | Cách kiểm tra |
 | --- | --- | --- |
-| **Release v0.0.6** | Bản phát hành đã công bố: Quality Portal, AppKit, BPMN subset | [Release v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.6) |
-| **Nhánh main** | Đã tích hợp thêm API Gateway độc lập, CI tách mạng, script nghiệm thu OIDC và SPDX SBOM | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
+| **Release v0.0.7** | Gateway, workflow song song/timer và API OIDC tùy chọn; cần nghiệm thu VPS riêng | [Release v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
+| **Nhánh main** | Đã tích hợp API Gateway độc lập, workflow song song/timer và script nghiệm thu OIDC, HTTPS benchmark, SPDX SBOM | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
 | **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
 | **Mở rộng tiếp theo** | BPMN nâng cao, đăng ký API client bên ngoài và kiểm thử phục hồi/benchmark full-stack | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
 
@@ -53,7 +53,7 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 **Dự án được duy trì bởi [Nguyễn Ngọc Hiếu](AUTHORS.md).** Phần giới thiệu dành cho người dùng; các giới hạn kỹ thuật và kết quả thực nghiệm được công bố trong [tài liệu](docs/README.md), [bảng đối chiếu DX-OS](REQUIREMENTS.md) và [ma trận minh chứng](docs/EVIDENCE.md).
 
-### Nâng cấp đang kiểm chứng — PR #21 (chưa phát hành)
+### Nâng cấp v0.0.7 — mã nguồn đã kiểm thử, nghiệm thu VPS đang thực hiện
 
 | Nâng cấp | Trạng thái mã nguồn | Điều kiện để công bố đã nghiệm thu |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 | **External API v1** | Resource server tùy chọn cho JWT Keycloak RS256, danh sách client/model, quota và nhật ký; mặc định tắt, chỉ đọc | [Hướng dẫn OAuth client](docs/EXTERNAL-API.md) · [Tests](tests/external-api.test.mjs) |
 | **Reproducible acceptance** | Thêm công cụ kiểm SSO thật, bài đo HTTPS và thử phục hồi Keycloak+SQLite cô lập | [Bảng nghiệm thu](docs/ACCEPTANCE-2026.md) · Cần chạy trên VPS/staging với dữ liệu thật |
 
-**Lưu ý:** Các phần mới nằm trong [PR #21](https://github.com/ngochieu1762005/dx_trace/pull/21), chưa thuộc tag v0.0.6 và chưa được xác nhận triển khai trên VPS. Không bật API bên ngoài khi chưa thiết lập chính sách và kiểm thử xác thực thật.
+**Lưu ý:** Các phần mới đã merge từ [PR #21](https://github.com/ngochieu1762005/dx_trace/pull/21) và thuộc mã nguồn v0.0.7. CI đã kiểm tra nhưng chưa xác nhận đầy đủ trên VPS. Không bật API bên ngoài khi chưa thiết lập chính sách và kiểm thử xác thực thật.
 
 <a id="contents"></a>
 ## Nội dung
