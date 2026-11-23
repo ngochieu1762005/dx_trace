@@ -51,6 +51,12 @@ Các khóa được setup tạo tự động. Không in `.env` lên issue/log c�
 
 Quyền Keycloak admin khác quyền owner của kho. Realm mặc định không tự đăng ký. Hệ thống hiện không cung cấp bộ chọn nhiều tổ chức cho một danh tính; mời người đã thuộc kho khác có thể trả 409.
 
+## Ứng dụng kiểm định độc lập (nhánh nâng cấp)
+
+Compose có thêm service `quality-portal` (không công bố cổng ra host, không gắn database/volume kho). Sau khi triển khai **đúng commit hỗ trợ**, mở `https://app.example.org/apps/quality/` qua cùng phiên đăng nhập Keycloak. Chủ không gian cài manifest phiên bản 1.0.0 từ giao diện để bật mô hình. Nếu portal không chạy, frontend trả 503 cho route này nhưng kho và Core vẫn hoạt động. Xem [tài liệu và kịch bản kiểm thử](../docs/QUALITY-PORTAL.md).
+
+Trên VPS đang chạy, hãy sao lưu, kiểm tra Compose và dùng quy trình nâng cấp trong [OPERATIONS](OPERATIONS.md) trước khi dựng lại các container. **Không** chạy lại setup hoặc thay đổi mật khẩu Keycloak chỉ để bật ứng dụng.
+
 ## Kiểm tra sau cài đặt
 
 - Đăng nhập mới qua OIDC và quay lại đúng kho; thử phiên hết hạn.

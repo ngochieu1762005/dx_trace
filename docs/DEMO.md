@@ -25,6 +25,12 @@ Kịch bản dành cho người lần đầu xem DX-TRACE, dự kiến 12–15 p
 
 Mẫu AppKit nằm tại [bảo trì](../examples/maintenance/app.json) và [mua sắm](../examples/purchase/app.json). Không cài lại định nghĩa lên mô hình có hồ sơ đang chạy mà bỏ qua cảnh báo kế hoạch. Quy tắc `differentActor` cần người duyệt khác người tạo; một tài khoản owner không thay thế được minh chứng hai người.
 
+## Minh chứng ứng dụng độc lập (main Unreleased, ngoài v0.0.5)
+
+Mở `/apps/quality/` khi đã triển khai service `quality-portal` sau lớp đăng nhập. Chủ không gian cài ứng dụng từ manifest; nhân viên nhập phiếu, gửi thẩm định; tài khoản người tạo bị chặn tự phê duyệt và tài khoản quản lý **khác người** duyệt được. Đối chiếu hồ sơ trong **Nghiệp vụ mở rộng**, sau đó dừng duy nhất frontend thứ hai và xác nhận lõi vẫn trả API thành công. [Từng bước](QUALITY-PORTAL.md).
+
+Nếu chỉ chạy `npm run demo` cục bộ, chưa có service thứ hai và không được tuyên bố đã kiểm SSO. Các lệnh kiểm tự động chạy trên loopback dùng identity giả lập có chủ đích; cần trình diễn Keycloak bằng tài khoản thật khi báo cáo.
+
 ## Đối soát bộ mẫu
 
 Ở trạng thái mẫu ban đầu, SUA-005 có Long Biên nhận 30, trả 17; Tây Hồ nhận 20, chưa trả; Thanh Xuân giữ phiếu 12 chưa giao. Còn cần nhận trả **33 hộp** và xử lý riêng phiếu 12 hộp chưa giao. Luôn đọc số hiện tại trên giao diện trước khi trình bày.

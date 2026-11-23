@@ -36,6 +36,7 @@ WORKDIR /app
 COPY --from=build /app/selfhost/generated selfhost/generated
 COPY --from=build /app/selfhost/*.mjs selfhost/
 COPY --from=build /app/lib lib
+COPY --from=build /app/apps/quality-portal apps/quality-portal
 COPY --from=build /app/app/api app/api
 COPY --from=build /app/package.json .
 COPY --from=build /app/LICENSE .
@@ -44,6 +45,6 @@ COPY --from=build /app/drizzle drizzle
 RUN mkdir -p node_modules data && chown node:node data
 COPY --from=build /app/node_modules/.pnpm/zod@3.25.76/node_modules/zod node_modules/zod
 ENV DATA_DIR=/app/data BIND_ADDRESS=0.0.0.0
-RUN chmod -R a+rX /app/selfhost /app/lib /app/app /app/drizzle /app/node_modules && chmod a+r /app/package.json /app/LICENSE
+RUN chmod -R a+rX /app/selfhost /app/lib /app/app /app/drizzle /app/node_modules /app/apps/quality-portal && chmod a+r /app/package.json /app/LICENSE
 USER node
 CMD ["node","selfhost/server.mjs"]

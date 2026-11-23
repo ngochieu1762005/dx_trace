@@ -16,6 +16,16 @@ python3 -m unittest discover -s tests -p '*_test.py'
 
 Secret gate đọc các tệp được Git theo dõi; chạy trong checkout Git để kiểm đúng phạm vi. Build tạo giao diện; bộ kiểm thử dùng dữ liệu thử. Không trỏ script thử nghiệm vào database hoặc tài khoản vận hành.
 
+## Kiểm chứng ứng dụng độc lập (main Unreleased)
+
+```sh
+node --check apps/quality-portal/server.mjs
+node --check apps/quality-portal/app.js
+node --test tests/quality-portal.test.mjs tests/appkit.test.mjs
+```
+
+Bài kiểm chạy trên loopback, khởi động Core, web và Quality Portal trong ba process; kiểm tra manifest/entrypoint, phân quyền người duyệt, tenant isolation và khả năng Core sống khi portal bị dừng. CI bổ sung một kiểm tra container riêng. Các bài này không thay thử nghiệm OIDC/Keycloak trên VPS.
+
 ## Các lớp kiểm chứng
 
 | Nhóm | Tệp kiểm thử tiêu biểu | Nội dung |

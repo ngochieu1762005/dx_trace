@@ -111,6 +111,19 @@ services:
       BIND_ADDRESS: 0.0.0.0
     volumes: ["warehouse:/app/data"]
     networks: [corenet]
+  # Independent second application. Static-only, no warehouse volume,
+  # credentials, public port or direct access to the Core network.
+  quality-portal:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    restart: unless-stopped
+    command: ["node", "apps/quality-portal/server.mjs"]
+    environment:
+      PORT: "8090"
+      BIND_ADDRESS: 0.0.0.0
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    networks: [appnet]
   # Presentation-only application: no warehouse volume or direct database access.
   app:
     build: {context: "..", dockerfile: selfhost/Dockerfile}
@@ -118,8 +131,9 @@ services:
     environment:
       PUBLIC_ORIGIN: https://${APP_HOST:?}
       DX_CORE_URL: http://core:8081
+      DX_QUALITY_PORTAL_URL: http://quality-portal:8090
       DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
     networks: [appnet, corenet]
-    depends_on: [core]
+    depends_on: [core, quality-portal]
 volumes: {tls: {}, identitydata: {}, warehouse: {}}
 networks: {edge: {}, appnet: {}, corenet: {}, dbnet: {internal: true}}

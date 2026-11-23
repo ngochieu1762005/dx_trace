@@ -13,6 +13,7 @@
 | [app/globals.css](../app/globals.css) | Bố cục và responsive |
 | [selfhost/ui/main.jsx](../selfhost/ui/main.jsx) | Điểm vào React |
 | [selfhost/ui/index.html](../selfhost/ui/index.html) | HTML shell |
+| [apps/quality-portal/](../apps/quality-portal/) | Ứng dụng kiểm định độc lập, manifest, static-only service và frontend |
 | [public/shared/session.mjs](../public/shared/session.mjs) | API client và phục hồi phiên |
 | [landing/index.html](../landing/index.html) | Trang giới thiệu |
 | [landing/assets/site.css](../landing/assets/site.css) | Thiết kế landing |

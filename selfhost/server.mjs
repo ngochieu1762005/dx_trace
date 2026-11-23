@@ -49,6 +49,14 @@ const localBackend = coreUrl ? null : await (async () => {
 if (localDemo && (process.env.BIND_ADDRESS !== '127.0.0.1' || origin !== 'http://127.0.0.1:8080')) {
  throw new Error('Chế độ demo yêu cầu địa chỉ loopback.');
 }
+const qualityOrigin = process.env.DX_QUALITY_PORTAL_URL
+ ? new URL(process.env.DX_QUALITY_PORTAL_URL) : null;
+if (qualityOrigin && (qualityOrigin.protocol !== 'http:' ||
+    !['quality-portal','127.0.0.1'].includes(qualityOrigin.hostname) ||
+    qualityOrigin.username || qualityOrigin.password ||
+    qualityOrigin.search || qualityOrigin.hash)) {
+ throw new Error('DX_QUALITY_PORTAL_URL must point to the private quality-portal service');
+}
 const root=path.resolve('selfhost/generated/web');
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2'};
 createServer(async(req,res)=>{
@@ -68,6 +76,45 @@ createServer(async(req,res)=>{
  }
  if(localDemo && (url.pathname.startsWith('/oauth2/'))){
    res.writeHead(302,{location:'/?area=training#overview'}).end();return;
+ }
+ // Second, independently deployed frontend. OAuth2 Proxy authenticates the
+ // request at the edge; no identity headers, cookies or privileged Core token
+ // ever flow to this static-only application service.
+ if(url.pathname==='/apps/quality' && req.method==='GET'){
+   res.writeHead(308,{location:'/apps/quality/','cache-control':'no-store'}).end();return;
+ }
+ if(url.pathname.startsWith('/apps/quality/')){
+   if(req.method!=='GET'&&req.method!=='HEAD'){res.writeHead(405).end();return}
+   if(!qualityOrigin){res.writeHead(404).end();return}
+   try {
+     const allowed = new Map([
+       ['/apps/quality/','text/html; charset=utf-8'],
+       ['/apps/quality/index.html','text/html; charset=utf-8'],
+       ['/apps/quality/app.js','text/javascript; charset=utf-8'],
+       ['/apps/quality/styles.css','text/css; charset=utf-8'],
+       ['/apps/quality/manifest.json','application/json; charset=utf-8']
+     ]);
+     const contentType = allowed.get(url.pathname);
+     if(!contentType){res.writeHead(404).end();return}
+     const upstream=await fetch(new URL(url.pathname,qualityOrigin),{
+       method:req.method,redirect:'manual',signal:AbortSignal.timeout(5000)
+     });
+     if(upstream.status!==200){res.writeHead(upstream.status===404?404:503).end();return}
+     const bytes=Buffer.from(await upstream.arrayBuffer());
+     if(bytes.length>1024*1024){res.writeHead(502).end();return}
+     res.writeHead(200,{
+       'content-type':contentType,
+       'cache-control':'no-store',
+       'x-content-type-options':'nosniff',
+       'x-frame-options':'DENY',
+       'referrer-policy':'no-referrer',
+       'content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+     }).end(req.method==='HEAD'?undefined:bytes);
+   } catch(error) {
+     console.error('Quality portal unavailable:',error?.message);
+     res.writeHead(503,{'cache-control':'no-store'}).end();
+   }
+   return;
  }
  if(url.pathname.startsWith('/api/')){
  if(!['GET','POST'].includes(req.method)){res.writeHead(405).end();return}

@@ -23,9 +23,15 @@ test('application manifest validates and round-trips without executable scripts'
   const model=manifestToModel(source);
   assert.deepEqual(modelToManifest(model),source);
   assert.equal(listedApplication({id:maintenance.id,version:7,definition:model}).entrypoint,'/#platform');
+  const withUi={...source,metadata:{...source.metadata,uiPath:'/apps/maintenance/'}};
+  const upgraded=manifestToModel(withUi);
+  assert.deepEqual(modelToManifest(upgraded),withUi);
+  assert.equal(listedApplication({id:maintenance.id,version:1,definition:upgraded}).entrypoint,'/apps/maintenance/');
   const hostile = [
     {...source,kind:'CodeApplication'},
     {...source,metadata:{...source.metadata,entrypoint:'https://third-party.invalid/script.js'}},
+    {...source,metadata:{...source.metadata,uiPath:'https://evil.invalid/app'}},
+    {...source,metadata:{...source.metadata,uiPath:'/apps/purchase/'}},
     {...source,spec:{model:maintenance,scripts:['curl attacker']}},
     {...source,spec:{model:{...maintenance,name:'Different name'}}},
     {...source,metadata:{...source.metadata,version:'latest'}},

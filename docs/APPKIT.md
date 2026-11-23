@@ -39,6 +39,8 @@ The inner `model` above is illustrative: copy a complete working schema
 from [maintenance](../examples/maintenance/app.json) or
 [purchase](../examples/purchase/app.json). Each model must pass the
 server-side `validateModel` checks; arbitrary fields/scripts are rejected.
+A manifest may optionally declare `metadata.uiPath` if its UI is separately deployed at **exactly** `/apps/{metadata.id}/`. Remote URLs, query strings, script hooks and arbitrary path overrides are rejected. The path advertises an existing trusted same-origin service; it does not upload or execute a UI bundle. See the [Quality Control Portal](QUALITY-PORTAL.md) example. The model validator also enforces this path rule for direct model updates, rather than trusting the manifest API alone.
+
 Only the owner can plan and install a new application. The model version is
 tracked separately from the application semantic version.
 
@@ -101,9 +103,10 @@ versioned installation plans, role boundaries and persisted model discovery.
 
 ## Current limitations
 
-The kit supports **one declarative model per application manifest** and
-renders its form/workflow using the common operations console. It does not
-currently support external UI bundles, arbitrary plugins, dependency
-resolution, signatures, or a sandbox for third-party executable code.
+The kit supports **one declarative model per application manifest**. It can
+render forms/workflows in the common operations console, or link to a
+**separately deployed, same-origin UI service**, such as Quality Control Portal.
+It does not ingest arbitrary UI bundles from manifests or support executable
+plugins, dependency resolution, signatures, or third-party code sandboxes.
 Do not describe these as implemented until the corresponding code and
 acceptance tests exist.
