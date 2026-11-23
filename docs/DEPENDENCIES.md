@@ -1,4 +1,6 @@
-# Phụ thuộc — DX-TRACE v0.0.5
+# Danh mục phiên bản khóa — DX-TRACE
+
+[Lý do lựa chọn, giấy phép và dịch vụ ngoài](../DEPENDENCIES.md). Bảng dưới đối chiếu lockfile hiện tại; không bổ sung gói chỉ vì tính năng được nhắc trong tài liệu.
 
 Nguồn chuẩn: [package.json](../package.json), [pnpm-lock.yaml](../pnpm-lock.yaml), [Compose](../selfhost/compose.yaml) và [Dockerfile](../selfhost/Dockerfile). Không dùng số version trong tài liệu để thay lockfile khi cài đặt.
 

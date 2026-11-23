@@ -55,6 +55,6 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 ## Bằng chứng trên nhánh nâng cấp (chưa phải release)
 
 - [BPMN](BPMN.md): chuyển đổi XML ↔ quy trình khai báo, kiểm soát vai trò/điều kiện trong runtime; kiểm thử `tests/bpmn.test.mjs` và `tests/platform-api.test.mjs`. Không phải engine BPMN tổng quát.
-- [AppKit](APPKIT.md): cài ứng dụng khai báo theo manifest, mô hình và quyền dùng chung; kiểm thử `tests/appkit.test.mjs` và API discovery. Không chạy mã ngoài.
-- Giao diện kho, trang giới thiệu và theme đăng nhập sử dụng Be Vietnam Pro qua Google Fonts, fallback sang font hệ thống nếu offline.
-- Các minh chứng này chỉ được tính là hoàn thành sau khi PR CI xanh, được review và đưa vào một release thực tế. Không ghép số liệu của nhánh thử nghiệm với số liệu release v0.0.5.
+- [AppKit](APPKIT.md): cài ứng dụng khai báo theo manifest, mô hình và quyền dùng chung; kiểm thử `tests/appkit.test.mjs`, `tests/appkit-api.test.mjs`, gồm cài app qua HTTP, phân quyền, chống trùng và cách ly workspace. Không chạy mã ngoài.
+- App/landing dùng Google Sans WOFF2 có sẵn; theme Keycloak dùng Segoe UI/Arial. Logo xanh #1967D2. Kiểm hồi quy tại `tests/branding.test.mjs`.
+- Các thay đổi này đã có trên main nhưng chưa nằm trong release v0.0.5. Kiểm chứng theo commit và kết quả CI tương ứng; không ghép số liệu main vào báo cáo của tag cũ. Xem [hướng dẫn kiểm thử](TESTING.md).

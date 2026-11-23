@@ -1,6 +1,6 @@
 # Đối chiếu triển khai với DX-OS Open-Core
 
-Phạm vi: **DX-TRACE v0.0.5**. Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
+Phạm vi: **DX-TRACE main**, gồm v0.0.5 và phần Unreleased (AppKit/BPMN). Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
 
 | Hạng mục | Triển khai | Minh chứng / cách kiểm tra | Giới hạn |
 | --- | --- | --- | --- |
