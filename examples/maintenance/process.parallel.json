@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "completeAs": "done",
+  "nodes": [
+    {"id": "start", "type": "start"},
+    {"id": "intake", "type": "userTask", "roles": ["warehouse"]},
+    {"id": "fork", "type": "parallelFork"},
+    {"id": "quality_review", "type": "userTask", "roles": ["manager"], "differentActor": true, "reasonRequired": true},
+    {"id": "waiting_period", "type": "timer", "afterSeconds": 60},
+    {"id": "owner_signoff", "type": "userTask", "roles": ["owner"], "reasonRequired": true},
+    {"id": "join", "type": "parallelJoin"},
+    {"id": "end", "type": "end"}
+  ],
+  "flows": [
+    {"from": "start", "to": "intake"},
+    {"from": "intake", "to": "fork"},
+    {"from": "fork", "to": "quality_review"},
+    {"from": "fork", "to": "waiting_period"},
+    {"from": "quality_review", "to": "join"},
+    {"from": "waiting_period", "to": "owner_signoff"},
+    {"from": "owner_signoff", "to": "join"},
+    {"from": "join", "to": "end"}
+  ]
+}
