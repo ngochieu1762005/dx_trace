@@ -1,6 +1,6 @@
 # Đối chiếu triển khai với DX-OS Open-Core
 
-Phạm vi: **DX-TRACE main**, gồm v0.0.5 và phần Unreleased (AppKit/BPMN). Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
+Phạm vi: **DX-TRACE main**, gồm v0.0.5 và AppKit/BPMN của v0.0.6. Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
 
 | Hạng mục | Triển khai | Minh chứng / cách kiểm tra | Giới hạn |
 | --- | --- | --- | --- |
@@ -19,7 +19,7 @@ Phạm vi: **DX-TRACE main**, gồm v0.0.5 và phần Unreleased (AppKit/BPMN). 
 - [MIT](LICENSE), thông báo giấy phép thành phần và [nguồn biểu trưng](docs/assets/LOGOS.md).
 - [Build từ mã nguồn](README.md#quick-setup), lockfile và Dockerfile.
 - [Đóng góp](CONTRIBUTING.md), [bảo mật](SECURITY.md), [changelog](CHANGELOG.md).
-- [Release v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5) có gói nguồn và checksum.
+- [Release v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.6) có gói nguồn và checksum.
 - [Benchmark](docs/BENCHMARK.md) công bố dữ liệu gốc và phạm vi đo, không dùng số liệu cục bộ làm năng lực VPS.
 
 ## Khi trình diễn

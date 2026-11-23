@@ -64,9 +64,9 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 - Diễn tập lỗi đĩa, phục hồi toàn bộ dịch vụ và sao lưu ngoài máy.
 - Ghi nhận hiệu quả thực tế tại kho với sự đồng ý của đơn vị thử nghiệm.
 
-## Bằng chứng trên nhánh nâng cấp (chưa phải release)
+## Bằng chứng bổ sung từ v0.0.6
 
 - [BPMN](BPMN.md): chuyển đổi XML ↔ quy trình khai báo, kiểm soát vai trò/điều kiện trong runtime; kiểm thử `tests/bpmn.test.mjs` và `tests/platform-api.test.mjs`. Không phải engine BPMN tổng quát.
 - [AppKit](APPKIT.md): cài ứng dụng khai báo theo manifest, mô hình và quyền dùng chung; kiểm thử `tests/appkit.test.mjs`, `tests/appkit-api.test.mjs`, gồm cài app qua HTTP, phân quyền, chống trùng và cách ly workspace. Không chạy mã ngoài.
 - App/landing dùng Google Sans WOFF2 có sẵn; theme Keycloak dùng Segoe UI/Arial. Logo xanh #1967D2. Kiểm hồi quy tại `tests/branding.test.mjs`.
-- Các thay đổi này đã có trên main nhưng chưa nằm trong release v0.0.5. Kiểm chứng theo commit và kết quả CI tương ứng; không ghép số liệu main vào báo cáo của tag cũ. Xem [hướng dẫn kiểm thử](TESTING.md).
+- Các thay đổi này được phát hành trong v0.0.6. Kiểm chứng theo commit và kết quả CI tương ứng; không ghép số liệu main vào báo cáo của tag cũ. Xem [hướng dẫn kiểm thử](TESTING.md).

@@ -17,7 +17,7 @@
 ![PostgreSQL](https://img.shields.io/badge/Identity_DB-PostgreSQL_17-4169e1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Deploy-Docker_Compose-2496ed?logo=docker&logoColor=white)
 
-[Cài đặt nhanh](#quick-setup) · [Kiến trúc](#architecture) · [API](docs/API.md) · [Tài liệu](docs/README.md) · [Minh chứng](docs/EVIDENCE.md) · [Tải v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5)
+[Cài đặt nhanh](#quick-setup) · [Kiến trúc](#architecture) · [API](docs/API.md) · [Tài liệu](docs/README.md) · [Minh chứng](docs/EVIDENCE.md) · [Tải v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.6)
 
 </div>
 
@@ -25,7 +25,7 @@ DX-TRACE kết nối **lô hàng, giao nhận, điều kiện bảo quản và t
 
 Nền tảng theo định hướng **DX-OS Open-Core**: Core API chạy độc lập, giao diện dùng chung danh tính, quyền, dữ liệu và workflow. Ngoài nghiệp vụ kho, người quản trị có thể khai báo mô hình JSON để tạo biểu mẫu và quy trình mới mà không viết lại giao diện cho từng loại hồ sơ.
 
-**Phạm vi tài liệu: nhánh `main`.** Bản phát hành gần nhất là **v0.0.5**. AppKit, xuất/nhập BPMN và cập nhật nhận diện đã có trên `main` nhưng chưa nằm trong ZIP v0.0.5. Chọn tag để tái lập bản phát hành; xem [CHANGELOG](CHANGELOG.md) để phân biệt thay đổi chưa phát hành.
+**Phạm vi tài liệu: v0.0.6.** Bản phát hành gồm Quality Control Portal, AppKit, xuất/nhập BPMN và cập nhật nhận diện. Chọn tag để tái lập đúng mã nguồn; xem [CHANGELOG](CHANGELOG.md) cho lịch sử phiên bản.
 
 **Tác giả và người duy trì:** [Nguyễn Ngọc Hiếu](AUTHORS.md). Dự án phát triển theo định hướng DX-OS Open-Core, với ứng dụng truy xuất và thu hồi thực phẩm.
 
@@ -79,7 +79,7 @@ Trong bộ mẫu SUA-005: Long Biên đã nhận 30 hộp và trả 17; Tây H�
 
 ### Mở rộng sang nghiệp vụ khác
 
-**Trên `main` (chưa phát hành thành tag mới):** có thêm [Quality Control Portal](docs/QUALITY-PORTAL.md) tại `/apps/quality/`, một frontend **chạy ở service/container riêng**, không chứa logic kho hoặc bí mật truy cập Core. Chủ không gian duyệt manifest AppKit; hai ứng dụng dùng chung phiên SSO, quyền, dữ liệu workflow và nhật ký. Kịch bản kiểm chứng hai người và bài kiểm thử tách tiến trình được công bố trong tài liệu. Việc tồn tại mã nguồn và CI không tự chứng minh một lần triển khai SSO thực tế.
+**Từ v0.0.6:** có thêm [Quality Control Portal](docs/QUALITY-PORTAL.md) tại `/apps/quality/`, một frontend **chạy ở service/container riêng**, không chứa logic kho hoặc bí mật truy cập Core. Chủ không gian duyệt manifest AppKit; hai ứng dụng dùng chung phiên SSO, quyền, dữ liệu workflow và nhật ký. Kịch bản kiểm chứng hai người và bài kiểm thử tách tiến trình được công bố trong tài liệu. Việc tồn tại mã nguồn và CI không tự chứng minh một lần triển khai SSO thực tế.
 
 Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch → Áp dụng mô hình** bằng tài khoản chủ không gian. Có mẫu bảo trì thiết bị, mua sắm, kiểm tra chất lượng và yêu cầu khách hàng. Mẫu mua sắm trên 5 triệu đồng yêu cầu chuyển cấp trước khi chủ không gian khác người tạo duyệt. [Cấu hình và giới hạn workflow](docs/PLATFORM.md).
 
@@ -112,7 +112,7 @@ flowchart TD
 | `app` | Phục vụ giao diện và chuyển API sang Core; không gắn volume kho. |
 | `core` | API riêng ở cổng nội bộ 8081, yêu cầu `DX_CORE_TOKEN`, không phục vụ giao diện và không publish cổng host. |
 
-Có **một giao diện kho thống nhất**. Đề xuất, thu hồi và nghiệp vụ mở rộng dùng chung Core; không mô tả chúng thành các ứng dụng frontend độc lập. [Ranh giới bảo mật và mô hình triển khai](docs/HEADLESS-CORE.md).
+Có **một giao diện kho thống nhất** và **Quality Control Portal chạy riêng** từ v0.0.6. Đề xuất, thu hồi và nghiệp vụ mở rộng nằm trong giao diện kho; Portal chất lượng là frontend độc lập dùng cùng Core. [Ranh giới bảo mật và mô hình triển khai](docs/HEADLESS-CORE.md).
 
 ### Dữ liệu và giao dịch
 
@@ -174,7 +174,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 
 ### Chạy ngay trên máy cá nhân
 
-Tải [ZIP v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/download/v0.0.5/DX-TRACE-v0.0.5.zip), giải nén và mở terminal tại thư mục chứa `package.json`:
+Tải [ZIP v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/download/v0.0.6/DX-TRACE-v0.0.6.zip), giải nén và mở terminal tại thư mục chứa `package.json`:
 
 ```bash
 node -v
@@ -188,7 +188,7 @@ Demo chỉ bind loopback và không chứng minh SSO hoặc Core tách tiến tr
 
 ### Dùng mã nguồn mới nhất
 
-Để kiểm tra các tính năng chưa có trong ZIP v0.0.5:
+Để chạy từ nhánh phát triển mới nhất (có thể khác bản phát hành):
 
 ```bash
 git clone https://github.com/ngochieu1762005/dx_trace.git
@@ -227,12 +227,14 @@ npm test
 python3 -m unittest discover -s tests -p '*_test.py'
 ```
 
-Mốc v0.0.5 có **40 kiểm thử Node.js và 3 kiểm thử Python**. CI kiểm thêm app/Core trong container. Các bài kiểm dùng dữ liệu thử, không thay thế kiểm tra camera thật, phiên OIDC hoặc diễn tập phục hồi Keycloak trên VPS.
+CI phát hành v0.0.6 chạy toàn bộ kiểm thử Node.js/Python và kiểm ba container app/Core/Quality Portal. Các bài kiểm dùng dữ liệu thử, không thay thế kiểm tra camera thật, phiên OIDC hoặc diễn tập phục hồi Keycloak trên VPS.
 
 Bài đo cục bộ 10.000 hồ sơ ban đầu, 1/10/25 client đồng thời, 15 giây mỗi mức ghi nhận 0 lỗi trong lần đo được công bố. Không quy đổi thành số người dùng thực: bài đo loại trừ TLS, gateway, Keycloak và mạng Internet. [Phương pháp và dữ liệu gốc](docs/BENCHMARK.md) · [Ma trận minh chứng](docs/EVIDENCE.md).
 
 <a id="changelog"></a>
 ## Nâng cấp và giới hạn
+
+**v0.0.6 thêm service `quality-portal`.** Khi nâng cấp, build và tạo lại `core`, `quality-portal`, `app` bằng cấu hình Compose hiện dùng. Xem [ghi chú v0.0.6](docs/releases/RELEASE_NOTES_v0.0.6.md).
 
 **v0.0.5 có migration dữ liệu hồ sơ mở rộng.** Sao lưu trước khi triển khai; sau migration không chạy image cũ trên DB mới. Quay lui cần khôi phục bản sao lưu tương ứng. [Quy trình vận hành](selfhost/OPERATIONS.md) · [Ghi chú v0.0.5](docs/releases/RELEASE_NOTES_v0.0.5.md).
 

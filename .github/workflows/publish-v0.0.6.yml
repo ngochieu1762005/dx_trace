@@ -1,0 +1,113 @@
+# DX-TRACE | One-time verified publication of v0.0.6
+# SPDX-License-Identifier: MIT
+# Triggered by its addition to main, or explicitly through workflow_dispatch.
+# All release artifacts are created by GitHub Actions, never from a VPS.
+name: Publish DX-TRACE v0.0.6
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-v0.0.6.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dxtrace-publish-v0.0.6
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out clean release candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version and exclude private files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node -p 'JSON.parse(require("fs").readFileSync("package.json","utf8")).version')" = "0.0.6"
+          test -f CHANGELOG.md
+          test -f docs/releases/RELEASE_NOTES_v0.0.6.md
+          test -f SECURITY.md
+          if git ls-files | grep -Ei '(^|/)(\.env(\..*)?|node_modules|data|\.ssh)(/|$)|\.(db|sqlite|sqlite3|pem|key|p12|pfx|dump)$'; then
+            echo "Refusing to release: a private/local file is Git-tracked." >&2
+            exit 1
+          fi
+          if git grep -I -n -E '103\.77\.172\.235|Pharma[V]ision|pharmavision\.hieuds\.com' -- . ':!README.md'; then
+            echo "Refusing to release: personal hosting information remains in tracked source." >&2
+            exit 1
+          fi
+
+      - name: Set up Node 24 and pnpm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --global pnpm@11.25.0
+      - run: pnpm install --frozen-lockfile
+      - run: node tools/check-secrets.mjs
+      - run: node --check apps/quality-portal/server.mjs && node --check apps/quality-portal/app.js
+      - run: node selfhost/build.mjs
+      - run: node --test tests/*.test.mjs
+      - run: python3 -m unittest discover -s tests -p '*_test.py'
+
+      - name: Verify production containers
+        run: |
+          set -euo pipefail
+          docker build -f selfhost/Dockerfile -t dxtrace-release .
+          docker network create dxtrace-release
+          trap 'docker rm -f app quality-portal core >/dev/null 2>&1 || true; docker network rm dxtrace-release >/dev/null 2>&1 || true' EXIT
+          docker run -d --name core --network dxtrace-release -e DX_CORE_TOKEN=ci-only-not-a-production-secret-123456 -e PUBLIC_ORIGIN=http://localhost dxtrace-release node selfhost/core-server.mjs
+          docker run -d --name quality-portal --network dxtrace-release dxtrace-release node apps/quality-portal/server.mjs
+          docker run -d --name app --network dxtrace-release -e DX_CORE_TOKEN=ci-only-not-a-production-secret-123456 -e DX_CORE_URL=http://core:8081 -e DX_QUALITY_PORTAL_URL=http://quality-portal:8090 -e PUBLIC_ORIGIN=http://localhost dxtrace-release
+          docker exec app node selfhost/container-smoke.mjs
+
+      - name: Create source tarball and SHA-256 checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive --format=tar.gz \
+            --prefix=DX-TRACE-v0.0.6/ \
+            -o DX-TRACE-v0.0.6.tar.gz \
+            "$GITHUB_SHA"
+          git archive --format=zip --prefix=DX-TRACE-v0.0.6/ -o DX-TRACE-v0.0.6.zip "$GITHUB_SHA"
+          sha256sum DX-TRACE-v0.0.6.tar.gz DX-TRACE-v0.0.6.zip > SHA256SUMS
+          tar -tzf DX-TRACE-v0.0.6.tar.gz > /dev/null
+
+      - name: Publish tag, GitHub Release, and files
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if gh release view v0.0.6 >/dev/null 2>&1; then
+            echo "v0.0.6 already published; keeping existing release untouched."
+            exit 0
+          fi
+
+          if gh api "repos/$GH_REPO/git/ref/tags/v0.0.6" >/dev/null 2>&1; then
+            actual="$(gh api "repos/$GH_REPO/git/ref/tags/v0.0.6" --jq '.object.sha')"
+            if [ "$actual" != "$GITHUB_SHA" ]; then
+              echo "Tag already exists at a different SHA; refusing to publish unexpected source." >&2
+              exit 1
+            fi
+          else
+            gh api -X POST "repos/$GH_REPO/git/refs" \
+              -f ref='refs/tags/v0.0.6' \
+              -f sha="$GITHUB_SHA" >/dev/null
+          fi
+
+          gh release create v0.0.6 \
+            --verify-tag \
+            --title 'DX-TRACE v0.0.6 — Independent Quality Portal & AppKit' \
+            --notes-file docs/releases/RELEASE_NOTES_v0.0.6.md \
+            DX-TRACE-v0.0.6.tar.gz \
+            DX-TRACE-v0.0.6.zip \
+            SHA256SUMS
+
+          gh release view v0.0.6 --json url -q .url

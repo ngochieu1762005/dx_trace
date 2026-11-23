@@ -1,6 +1,6 @@
 # Kiến trúc Headless Core
 
-Áp dụng cho main trên nền v0.0.5; AppKit/BPMN là phần bổ sung chưa phát hành. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
+Áp dụng cho main trên nền v0.0.5; AppKit/BPMN được phát hành từ v0.0.6. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
 
 ## Phân tách trách nhiệm
 

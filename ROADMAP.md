@@ -10,7 +10,7 @@
 - Nhật ký chuỗi hash, webhook ký HMAC, công cụ sao lưu và xác minh.
 - Kiểm thử API/container và phép đo cục bộ có dữ liệu gốc.
 
-## Đã có trên main — chưa phát hành thành tag mới
+## Đã phát hành — v0.0.6
 
 - AppKit: cài nghiệp vụ khai báo qua manifest và xem kế hoạch trước khi áp dụng.
 - Ứng dụng kiểm tra chất lượng có frontend service/container riêng, entrypoint AppKit giới hạn nội bộ; CI kiểm 3 dịch vụ, phân quyền và cô lập lỗi. Cần xác nhận OIDC E2E trên VPS trước khi phát hành.
@@ -18,7 +18,9 @@
 - Kiểm dấu hiệu bí mật trong nguồn tại CI.
 - Google Sans, nhận diện xanh và cập nhật bộ tài liệu.
 
-Các mục này không có trong ZIP v0.0.5. Để kiểm chứng dùng commit của `main`; để tái lập release dùng tag tương ứng.
+- Quality Control Portal chạy riêng, dùng chung SSO/Core, có bài kiểm tách ba tiến trình.
+
+Các mục này được đóng gói trong v0.0.6; dùng tag tương ứng để tái lập.
 
 ## Ưu tiên tiếp theo
 
