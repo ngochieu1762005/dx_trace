@@ -32,7 +32,7 @@ startWebhook(env.DB);
 if(process.env.DX_PROCESS_TIMER_ENABLED!=='false'){
   startTimerWorker({
     select:async(now,limit)=>(await q(
-      'SELECT workspace,model,id,payload FROM platform_records WHERE due_at IS NOT NULL AND due_at<=? ORDER BY due_at ASC LIMIT ?',
+      "SELECT workspace,model,id,payload FROM platform_records WHERE due_at IS NOT NULL AND due_at<=? AND json_extract(payload, '$.process.status')='running' ORDER BY due_at ASC LIMIT ?",
       now,limit
     ).all()).results,
     apply:(workspace,body,key)=>changePlatform(
