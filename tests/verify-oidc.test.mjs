@@ -10,6 +10,11 @@ function mock({anonymous=302,forbidden=403,second=reviewer}={}){
   return async (url,opts={})=>{
     if(url.includes('.well-known'))return Response.json({issuer:id+'/realms/warehouse',authorization_endpoint:id+'/realms/warehouse/protocol/openid-connect/auth'});
     if(url.endsWith('/api/apps/plan'))return new Response('',{status:forbidden});
+    if(url.endsWith('/apps/quality/')){
+      return opts.headers?.cookie
+        ?new Response('<html>Quality Portal</html>',{status:200,headers:{'content-type':'text/html; charset=utf-8'}})
+        :new Response('',{status:302,headers:{location:'/oauth2/start'}});
+    }
     if(!opts.headers?.cookie)return new Response('',{status:anonymous});
     return Response.json(opts.headers.cookie==='owner=1'?owner:second);
   };
@@ -23,6 +28,7 @@ test('two real session semantics and read-only RBAC check',async()=>{
   const result=await verifyOidc({appOrigin:app,idOrigin:id,ownerCookie:'owner=1',reviewerCookie:'reviewer=1',fetcher:mock()});
   assert.equal(result.sharedWorkspace,true);
   assert.equal(result.ownerOnlyPolicy,'denied');
+  assert.equal(result.secondApplicationSSO,true);
 });
 test('unauthenticated access and mistaken RBAC are failures',async()=>{
   const opts={appOrigin:app,idOrigin:id,ownerCookie:'owner=1',reviewerCookie:'reviewer=1'};
