@@ -31,3 +31,6 @@ selfhost/.env.*
 # Python helper caches
 __pycache__/
 *.pyc
+
+# Third-party OIDC client allowlist (operator controlled; never commit)
+selfhost/external-clients.json
