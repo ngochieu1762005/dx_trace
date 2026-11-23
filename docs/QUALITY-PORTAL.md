@@ -1,6 +1,6 @@
 # Quality Control Portal — independent DX-OS application
 
-> Development-branch feature, **not included in v0.0.5**. Verify the exact commit
+> Unreleased feature on `main`, **not included in v0.0.5**. Verify the exact commit
 > and CI status before describing this as released.
 
 ## Purpose and architecture
