@@ -12,6 +12,12 @@ Nhật ký thay đổi của DX-TRACE.
 - Thêm script kiểm OIDC issuer, API ẩn danh, hai tài khoản thật và từ chối tác vụ chỉ-owner. CI kiểm logic script; kiểm nghiệm SSO live vẫn phải chạy sau triển khai.
 - [Hướng dẫn migrate an toàn](docs/GATEWAY-AND-SSO.md), yêu cầu bổ sung `DX_GATEWAY_APP_TOKEN` vào .env hiện hữu trước khi cập nhật stack.
 
+### Added — reproducible open-source compliance evidence
+
+- GitHub CI phát sinh SPDX 2.3 SBOM từ dependency của checkout và kiểm sơ bộ từng package.
+- Quy trình release chuẩn cho những tag **mới** thêm SPDX/SHA-256 và GitHub provenance + SBOM attestations, có [hướng dẫn đối soát](docs/SUPPLY-CHAIN.md).
+- Chưa thay thế rà soát CVE, pin digest base images, hoặc kiểm giấy phép hoàn chỉnh.
+
 ### Compatibility
 
 - Cấu hình Compose mới **yêu cầu DX_GATEWAY_APP_TOKEN**; không chạy lại setup trên VPS cũ. Thay đổi chưa nằm trong release v0.0.6.
