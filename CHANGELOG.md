@@ -4,13 +4,19 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
-### Added — PR #21: opt-in executable parallel workflows and external OIDC APIs
+Chưa có thay đổi sau v0.0.7.
+
+## [0.0.7] — 2026-11-23 — Parallel Workflow & External OIDC API
+
+Xem [ghi chú phát hành v0.0.7](docs/releases/RELEASE_NOTES_v0.0.7.md).
+
+### Added — opt-in executable parallel workflows and external OIDC APIs
 
 - Bổ sung engine token-based có lưu trạng thái: một cặp fork/join song song, user task theo vai trò, cấm tự duyệt và timer tương đối, với version conflict/idempotency/ledger hiện có. Core có timer worker polling cơ sở dữ liệu để xử lý sau restart.
 - Thêm API `/api/models/{id}/process-complete` và `/api/models/{id}/process-tick`, mô hình mẫu bảo trì song song và kiểm thử hồi quy. Đây **không phải** trình BPMN 2.0 hoàn chỉnh hay importer parallel BPMN XML.
 - Thêm service `external-api` ở Compose profile tùy chọn: Keycloak RS256 JWT, issuer/audience/scope, ACL theo client/model, read-only versioned API, quota và audit không ghi token.
 - Thêm công cụ nghiệm thu: HTTPS benchmark có cookie thật, restore drill SQLite+Keycloak trong container không nối mạng, runbook 2-account SSO và checklist gắn SHA.
-- Thay đổi trên PR, không nằm trong release v0.0.6; cài đặt Keycloak external client và nghiệm thu VPS phải làm riêng.
+- Mã đã merge từ PR #21 và được đóng gói vào v0.0.7; cấu hình Keycloak bên ngoài, khôi phục và nghiệm thu VPS phải làm riêng.
 
 ### Added — isolated policy gateway and acceptance checks
 
@@ -28,8 +34,8 @@ Nhật ký thay đổi của DX-TRACE.
 
 ### Compatibility
 
-- Cấu hình Compose mới **yêu cầu DX_GATEWAY_APP_TOKEN**; không chạy lại setup trên VPS cũ. Thay đổi chưa nằm trong release v0.0.6.
-- Chưa hỗ trợ toàn bộ BPMN 2.0; PR #21 có runtime song song/timer giới hạn và API đối tác đọc-only tùy chọn (mặc định tắt). Không coi unit tests là bằng chứng OIDC thực tế.
+- Cấu hình Compose mới **yêu cầu DX_GATEWAY_APP_TOKEN**; không chạy lại setup trên VPS cũ. Thay đổi nằm trong mã nguồn từ v0.0.7.
+- Chưa hỗ trợ toàn bộ BPMN 2.0; v0.0.7 có runtime song song/timer giới hạn và API đối tác đọc-only tùy chọn (mặc định tắt). Không coi unit tests là bằng chứng OIDC thực tế.
 
 ## [0.0.6] — 2026-11-23 — Independent Quality Portal & AppKit
 
