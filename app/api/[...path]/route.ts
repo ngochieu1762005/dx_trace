@@ -30,6 +30,7 @@
  */
 import {PlatformError,modelOpenApi} from '../../../lib/platform.mjs';
 import {workflowToBpmn,bpmnToWorkflow} from '../../../lib/bpmn.mjs';
+import {processToBpmn} from '../../../lib/process-bpmn.mjs';
 import {manifestToModel,modelToManifest,listedApplication} from '../../../lib/appkit.mjs';
 import {recallImpact} from '../../../lib/impact.mjs';
 import {defaultWorkflow} from '../../../lib/workflow.mjs';
@@ -74,6 +75,15 @@ async function route(req:Request){try{
     const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
     if(!model)throw new DomainError('Không tìm thấy mô hình',404);return json(modelOpenApi(model.definition));
    }
+   if(action==='process-bpmn'){
+    const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
+    if(!model||!model.definition.orchestration)throw new DomainError('Không tìm thấy orchestration',404);
+    return new Response(processToBpmn(model.definition.orchestration,{modelId:model.id,name:model.definition.name}),{headers:{
+     'content-type':'application/xml; charset=utf-8',
+     'content-disposition':'attachment; filename="process-'+model.id+'.bpmn"',
+     'cache-control':'no-store','x-content-type-options':'nosniff'
+    }});
+   }
    if(action==='bpmn'){
     const model=(await storedModels(c)).find((m:any)=>m.id===key&&m.definition.permissions.read.includes(c.role));
     if(!model)throw new DomainError('Không tìm thấy mô hình',404);
@@ -101,7 +111,7 @@ async function route(req:Request){try{
     req.headers.get('idempotency-key')||''));
   }
   if(key==='plan')return json(await modelPlan(c,body.definition));
-  const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':null;
+  const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':action==='process-complete'?'platform.process.complete':action==='process-tick'?'platform.process.tick':null;
   if(!command)throw new DomainError('Không tìm thấy API mô hình',404);
   return json(await changePlatform(c,command,{...body,model:key},req.headers.get('idempotency-key')||''));
  }

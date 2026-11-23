@@ -53,6 +53,16 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 **Dự án được duy trì bởi [Nguyễn Ngọc Hiếu](AUTHORS.md).** Phần giới thiệu dành cho người dùng; các giới hạn kỹ thuật và kết quả thực nghiệm được công bố trong [tài liệu](docs/README.md), [bảng đối chiếu DX-OS](REQUIREMENTS.md) và [ma trận minh chứng](docs/EVIDENCE.md).
 
+### Nâng cấp đang kiểm chứng — PR #21 (chưa phát hành)
+
+| Nâng cấp | Trạng thái mã nguồn | Điều kiện để công bố đã nghiệm thu |
+| --- | --- | --- |
+| **Executable Parallel Process** | Bổ sung fork/join tối đa 5 nhánh, userTask theo vai trò, timer được lưu vào hồ sơ và xử lý bởi Core; vẫn là **tập con thực thi**, chưa hỗ trợ toàn bộ BPMN XML | [Đặc tả và giới hạn](docs/PROCESS-RUNTIME.md) · [Unit tests](tests/process-platform.test.mjs) |
+| **External API v1** | Resource server tùy chọn cho JWT Keycloak RS256, danh sách client/model, quota và nhật ký; mặc định tắt, chỉ đọc | [Hướng dẫn OAuth client](docs/EXTERNAL-API.md) · [Tests](tests/external-api.test.mjs) |
+| **Reproducible acceptance** | Thêm công cụ kiểm SSO thật, bài đo HTTPS và thử phục hồi Keycloak+SQLite cô lập | [Bảng nghiệm thu](docs/ACCEPTANCE-2026.md) · Cần chạy trên VPS/staging với dữ liệu thật |
+
+**Lưu ý:** Các phần mới nằm trong [PR #21](https://github.com/ngochieu1762005/dx_trace/pull/21), chưa thuộc tag v0.0.6 và chưa được xác nhận triển khai trên VPS. Không bật API bên ngoài khi chưa thiết lập chính sách và kiểm thử xác thực thật.
+
 <a id="contents"></a>
 ## Nội dung
 

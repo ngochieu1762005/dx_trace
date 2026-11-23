@@ -29,6 +29,16 @@ Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm
 
 **Các bài kiểm thử mới phải được đánh giá theo kết quả GitHub Actions của commit tương ứng, không được tự nhận đạt trước khi CI xanh.**
 
+## Nâng cấp đang kiểm chứng — PR #21 (ngoài release v0.0.6)
+
+| Hạng mục | Mã | Bằng chứng có thể kiểm | Chưa có bằng chứng |
+| --- | --- | --- | --- |
+| Parallel fork/join & timer persisted | `lib/process-runtime.mjs`, `lib/platform.mjs`, `selfhost/process-timer.mjs` | `tests/process-runtime.test.mjs`, `tests/process-platform.test.mjs`, `tests/process-timer.test.mjs`; CI theo SHA | Không phải full BPMN XML interpreter; chưa thử workflow phức tạp trên VPS |
+| OAuth external API read-only | `selfhost/external-api.mjs`, Compose optional profile | `tests/external-api.test.mjs`; JWT giả lập được ký RS256, kiểm scope/audience và client ACL | Chưa tạo client Keycloak thật và chưa kiểm token production |
+| Authenticated TLS latency | `tools/benchmark-live.mjs` | `tests/benchmark-live.test.mjs` xác minh logic, chống redirect 302 | Chưa chạy trên VPS với cookie Keycloak thật |
+| Isolated restore | `tools/restore-drill.sh` | CI kiểm cú pháp, script dùng network none & temporary containers | Chưa chạy với SQLite/Keycloak backups thật, chưa nghiệm thu staging |
+| Acceptance checklist | [ACCEPTANCE-2026](ACCEPTANCE-2026.md) | Bảng kết quả trống mặc định | Phải điền SHA, ngày, status, bằng chứng thật sau khi chạy |
+
 ## Cách kiểm tra độc lập
 
 ```bash
