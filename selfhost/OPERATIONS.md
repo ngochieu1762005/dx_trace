@@ -1,6 +1,6 @@
 # Vận hành, nâng cấp và phục hồi
 
-Áp dụng cho v0.0.5. Chạy Bash từ thư mục `selfhost/`. Không đặt bản sao lưu trong repository hoặc document root. [Cài mới](README.md) · [Ubuntu Caddy](DEPLOY_SAAS_UBUNTU.md).
+Áp dụng cho mã nguồn sau v0.0.6. Chạy Bash từ thư mục `selfhost/`. Gateway mới yêu cầu bổ sung một khóa mới; đọc [hướng dẫn migration](../docs/GATEWAY-AND-SSO.md) trước khi chạy lệnh trên VPS. Không đặt bản sao lưu trong repository hoặc document root. [Cài mới](README.md) · [Ubuntu Caddy](DEPLOY_SAAS_UBUNTU.md).
 
 ## 1. Chọn đúng cấu hình Compose
 
@@ -56,10 +56,16 @@ if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
   exit 1
 fi
 git pull --ff-only origin main
+umask 077
+if ! grep -q '^DX_GATEWAY_APP_TOKEN=' selfhost/.env; then
+  printf 'DX_GATEWAY_APP_TOKEN=%s\n' "$(openssl rand -hex 32)" >> selfhost/.env
+fi
+chmod 600 selfhost/.env
+node selfhost/doctor.mjs
 cd selfhost
 dc config --quiet
-dc build core quality-portal app
-dc up -d --no-deps --force-recreate core quality-portal app
+dc build core gateway-api quality-portal app
+dc up -d core gateway-api quality-portal app
 )
 ```
 
@@ -75,7 +81,7 @@ Trang giới thiệu là static file, cần đồng bộ riêng từ `landing/` 
 
 ```bash
 dc ps
-dc logs --since=5m --tail=80 core quality-portal app signin
+dc logs --since=5m --tail=80 core gateway-api quality-portal app signin
 dc exec -T app node --input-type=module -e '
 const r = await fetch(process.env.DX_CORE_URL + "/api/health", {
   headers: {"x-dx-core-token": process.env.DX_CORE_TOKEN},
@@ -86,7 +92,7 @@ if (!r.ok) process.exit(1);
 '
 ```
 
-Chờ container khởi động rồi kiểm tra. Không chia sẻ token, cookie hoặc log chưa loại dữ liệu nhạy cảm. HTTP 200/DB binding chỉ xác nhận tuyến nội bộ hoạt động; cần thực hiện:
+Chờ container khởi động rồi kiểm tra. Đảm bảo app chỉ có appnet, Core chỉ có privcore và gateway-api có cả hai mạng. Không chia sẻ token, cookie hoặc log chưa loại dữ liệu nhạy cảm. HTTP 200/DB binding chỉ xác nhận tuyến nội bộ hoạt động; chạy [OIDC live check](../docs/GATEWAY-AND-SSO.md) và thực hiện:
 
 - Đăng nhập thật, kiểm Kho thực hành và Kho vận hành có dữ liệu cũ.
 - Mở lô, phiếu, lịch sử cảm biến và tệp đã quét sạch.
