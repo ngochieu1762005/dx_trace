@@ -4,7 +4,24 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
-Chưa có thay đổi sau v0.0.6.
+### Added — isolated policy gateway and acceptance checks
+
+- Tách mạng appnet/privcore, thêm service `gateway-api` không publish cổng host, dùng khóa ứng dụng khác khóa Core.
+- Chỉ cho phép API GET/POST, hạn chế header, request/response size, redirect và rate-limit theo phiên trong một tiến trình.
+- Thêm kiểm thử Gateway, smoke container App → Gateway → Core và kiểm chứng Core không thể truy cập trực tiếp từ container App.
+- Thêm script kiểm OIDC issuer, API ẩn danh, hai tài khoản thật và từ chối tác vụ chỉ-owner. CI kiểm logic script; kiểm nghiệm SSO live vẫn phải chạy sau triển khai.
+- [Hướng dẫn migrate an toàn](docs/GATEWAY-AND-SSO.md), yêu cầu bổ sung `DX_GATEWAY_APP_TOKEN` vào .env hiện hữu trước khi cập nhật stack.
+
+### Added — reproducible open-source compliance evidence
+
+- GitHub CI phát sinh SPDX 2.3 SBOM từ dependency của checkout và kiểm sơ bộ từng package.
+- Quy trình release chuẩn cho những tag **mới** thêm SPDX/SHA-256 và GitHub provenance + SBOM attestations, có [hướng dẫn đối soát](docs/SUPPLY-CHAIN.md).
+- Chưa thay thế rà soát CVE, pin digest base images, hoặc kiểm giấy phép hoàn chỉnh.
+
+### Compatibility
+
+- Cấu hình Compose mới **yêu cầu DX_GATEWAY_APP_TOKEN**; không chạy lại setup trên VPS cũ. Thay đổi chưa nằm trong release v0.0.6.
+- Chưa bổ sung workflow executor BPMN đầy đủ hoặc API gateway dành cho đối tác bên ngoài. Không coi unit tests là bằng chứng OIDC thực tế.
 
 ## [0.0.6] — 2026-11-23 — Independent Quality Portal & AppKit
 

@@ -110,7 +110,21 @@ services:
       PORT: "8081"
       BIND_ADDRESS: 0.0.0.0
     volumes: ["warehouse:/app/data"]
-    networks: [corenet]
+    networks: [privcore]
+  # Internal policy gateway: separate application credentials from Core credentials.
+  gateway-api:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    restart: unless-stopped
+    command: ["node", "selfhost/api-gateway.mjs"]
+    environment:
+      DX_GATEWAY_APP_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
+      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+      DX_GATEWAY_CORE_URL: http://core:8081
+      DX_GATEWAY_REQUESTS_PER_MINUTE: ${DX_GATEWAY_REQUESTS_PER_MINUTE:-120}
+      PORT: "8082"
+      BIND_ADDRESS: 0.0.0.0
+    networks: [appnet, privcore]
+    depends_on: [core]
   # Independent second application. Static-only, no warehouse volume,
   # credentials, public port or direct access to the Core network.
   quality-portal:
@@ -130,10 +144,10 @@ services:
     restart: unless-stopped
     environment:
       PUBLIC_ORIGIN: https://${APP_HOST:?}
-      DX_CORE_URL: http://core:8081
+      DX_CORE_URL: http://gateway-api:8082
       DX_QUALITY_PORTAL_URL: http://quality-portal:8090
-      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
-    networks: [appnet, corenet]
-    depends_on: [core, quality-portal]
+      DX_CORE_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
+    networks: [appnet]
+    depends_on: [gateway-api, quality-portal]
 volumes: {tls: {}, identitydata: {}, warehouse: {}}
-networks: {edge: {}, appnet: {}, corenet: {}, dbnet: {internal: true}}
+networks: {edge: {}, appnet: {}, privcore: {}, dbnet: {internal: true}}

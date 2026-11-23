@@ -1,6 +1,6 @@
 # Tài liệu DX-TRACE
 
-Áp dụng cho **v0.0.6**, bao gồm AppKit, BPMN và Quality Control Portal. Cấu hình và mã nguồn của tag là căn cứ khi tái lập bản phát hành.
+Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Các tài liệu Gateway/SSO mô tả thay đổi trên nhánh phát triển **sau v0.0.6**, chưa phải một bản phát hành. Dùng tag riêng khi cần tái lập phiên bản cũ.
 
 | Nhu cầu | Tài liệu |
 | --- | --- |
@@ -10,14 +10,14 @@
 | Dùng Caddy có sẵn, ba tên miền | [Ubuntu SaaS](../selfhost/DEPLOY_SAAS_UBUNTU.md) |
 | Cập nhật, sao lưu, khôi phục | [Vận hành](../selfhost/OPERATIONS.md) |
 | Cấu hình giao diện đăng nhập | [Keycloak](../selfhost/BRANDED_LOGIN.md) |
-| Hiểu kiến trúc và ranh giới tin cậy | [Headless Core](HEADLESS-CORE.md) |
+| Hiểu kiến trúc và ranh giới tin cậy | [Headless Core](HEADLESS-CORE.md), [Gateway và kiểm SSO thật](GATEWAY-AND-SSO.md) |
 | Tích hợp API | [Danh mục HTTP API](API.md) |
 | Tạo mô hình, workflow, webhook | [Nghiệp vụ mở rộng](PLATFORM.md) |
 | Nhập/xuất BPMN 2.0 (tập con) | [Giao thức và giới hạn BPMN](BPMN.md) |
 | Đóng gói, cài ứng dụng khai báo | [AppKit](APPKIT.md) |
 | Ứng dụng kiểm định chạy riêng trên cùng lõi | [Quality Control Portal](QUALITY-PORTAL.md) |
 | Tìm tệp cần sửa | [Bản đồ mã nguồn](CODEBASE.md), [giao diện](../app/README.md), [nghiệp vụ](../lib/README.md) |
-| Kiểm tra thư viện và phiên bản | [Phụ thuộc và giấy phép](../DEPENDENCIES.md), [toàn bộ lockfile](DEPENDENCIES.md) |
+| Kiểm tra thư viện và phiên bản | [Phụ thuộc và giấy phép](../DEPENDENCIES.md), [toàn bộ lockfile](DEPENDENCIES.md), [SPDX/SBOM và provenance](SUPPLY-CHAIN.md) |
 | Đối chiếu triển khai, test và giới hạn | [Minh chứng](EVIDENCE.md), [benchmark](BENCHMARK.md), [yêu cầu](../REQUIREMENTS.md) |
 | Đóng góp hoặc báo cáo lỗi | [Đóng góp](../CONTRIBUTING.md), [bảo mật](../SECURITY.md) |
 | Nâng cấp từ phiên bản trước | [Changelog](../CHANGELOG.md), [ghi chú phát hành](releases/README.md) |
