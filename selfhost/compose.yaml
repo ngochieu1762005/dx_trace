@@ -125,6 +125,28 @@ services:
       BIND_ADDRESS: 0.0.0.0
     networks: [appnet, privcore]
     depends_on: [core]
+  # Optional OIDC resource server for third-party integrations.
+  # Requires an operator-maintained policy file and explicit reverse-proxy routing.
+  # Not started during normal deployment; never accepts browser-supplied identity.
+  external-api:
+    profiles: ["external-api"]
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    restart: unless-stopped
+    command: ["node", "selfhost/external-api.mjs"]
+    environment:
+      DX_GATEWAY_APP_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
+      DX_EXTERNAL_ISSUER: https://${ID_HOST:?}/realms/warehouse
+      DX_EXTERNAL_AUDIENCE: ${DX_EXTERNAL_AUDIENCE:-dx-trace-external-api}
+      DX_EXTERNAL_GATEWAY_URL: http://gateway-api:8082
+      DX_EXTERNAL_CLIENTS_FILE: /run/config/external-clients.json
+      PORT: "8093"
+      BIND_ADDRESS: 0.0.0.0
+    volumes: ["./external-clients.json:/run/config/external-clients.json:ro"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    networks: [appnet]
+    depends_on: [gateway-api]
   # Independent second application. Static-only, no warehouse volume,
   # credentials, public port or direct access to the Core network.
   quality-portal:
