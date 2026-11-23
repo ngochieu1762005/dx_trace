@@ -25,7 +25,22 @@ import {createServer} from 'node:http';
 import {timingSafeEqual} from 'node:crypto';
 import {identity,env} from './runtime.mjs';
 import {startWebhook} from './webhook.mjs';
+import {startTimerWorker} from './process-timer.mjs';
+import {q} from '../lib/server.ts';
+import {changePlatform} from '../lib/platform-store.ts';
 startWebhook(env.DB);
+if(process.env.DX_PROCESS_TIMER_ENABLED!=='false'){
+  startTimerWorker({
+    select:async(now,limit)=>(await q(
+      'SELECT workspace,model,id,payload FROM platform_records WHERE due_at IS NOT NULL AND due_at<=? ORDER BY due_at ASC LIMIT ?',
+      now,limit
+    ).all()).results,
+    apply:(workspace,body,key)=>changePlatform(
+      {workspace,role:'owner',name:'dxtrace:timer'},
+      'platform.process.tick',body,key
+    )
+  });
+}
 import {GET,POST} from '../app/api/[...path]/route.ts';
 
 const origin=new URL(process.env.PUBLIC_ORIGIN).origin;
