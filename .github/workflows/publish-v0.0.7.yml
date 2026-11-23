@@ -28,6 +28,7 @@ jobs:
       contents: write
       id-token: write
       attestations: write
+      artifact-metadata: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -73,11 +74,11 @@ jobs:
           sha256sum DX-TRACE.spdx.json >> SHA256SUMS
           sha256sum --check SHA256SUMS
       - name: Attest source archive provenance
-        uses: actions/attest@daf44fb950173508f38bd2406030372c1d1162b1 # v3
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: DX-TRACE-v0.0.7.tar.gz
       - name: Attest source SPDX SBOM
-        uses: actions/attest@daf44fb950173508f38bd2406030372c1d1162b1 # v3
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: DX-TRACE-v0.0.7.tar.gz
           sbom-path: DX-TRACE.spdx.json
