@@ -1,4 +1,6 @@
-# HTTP API — DX-TRACE v0.0.5
+# HTTP API — DX-TRACE
+
+Phạm vi: main. API nền thuộc v0.0.5; các endpoint BPMN/AppKit ghi riêng là Unreleased.
 
 Nguồn đối chiếu: [router](../app/api/%5B...path%5D/route.ts), [domain](../lib/domain.mjs), [platform](../lib/platform.mjs). API công khai dùng tiền tố `/api` trên cùng domain ứng dụng.
 

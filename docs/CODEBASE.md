@@ -1,4 +1,4 @@
-# Bản đồ mã nguồn — v0.0.5
+# Bản đồ mã nguồn — DX-TRACE main
 
 [Tài liệu](README.md) · [Phụ thuộc](DEPENDENCIES.md) · [Giao diện](../app/README.md) · [Nghiệp vụ](../lib/README.md). Các đường dẫn dưới thuộc source; `selfhost/generated/`, `node_modules/` và dữ liệu chạy là đầu ra, không chỉnh trực tiếp để phát hành.
 
@@ -27,6 +27,8 @@
 | [lib/domain.mjs](../lib/domain.mjs) | Quy tắc tồn/giao nhận/thu hồi/cảm biến |
 | [lib/workflow.mjs](../lib/workflow.mjs) | Đề xuất nội bộ |
 | [lib/platform.mjs](../lib/platform.mjs) | Model, điều kiện, kế hoạch thay đổi và OpenAPI |
+| [lib/appkit.mjs](../lib/appkit.mjs) | Kiểm manifest và metadata ứng dụng khai báo |
+| [lib/bpmn.mjs](../lib/bpmn.mjs) | Xuất/nhập tập con BPMN, kiểm topology và thuộc tính |
 | [lib/platform-store.ts](../lib/platform-store.ts) | SQL theo quyền, phân trang và transaction hồ sơ |
 | [lib/workspace-queue.mjs](../lib/workspace-queue.mjs) | Hàng đợi ghi có giới hạn |
 | [lib/impact.mjs](../lib/impact.mjs) | Phép tính đối soát |
@@ -71,6 +73,9 @@
 | [drizzle/0001_sensor_history.sql](../drizzle/0001_sensor_history.sql) | Lịch sử số đo và chỉ mục |
 | [drizzle/0002_audit_ledger.sql](../drizzle/0002_audit_ledger.sql) | Ledger và trạng thái webhook |
 | [drizzle/0003_platform_records.sql](../drizzle/0003_platform_records.sql) | Model, record, command và chỉ mục |
+| [examples/README.md](../examples/README.md) | Cách chọn và sử dụng mô hình/manifest |
+| [examples/maintenance/app.json](../examples/maintenance/app.json) | Manifest ứng dụng bảo trì |
+| [examples/purchase/app.json](../examples/purchase/app.json) | Manifest ứng dụng mua sắm |
 | [examples/maintenance/model.json](../examples/maintenance/model.json) | Mẫu bảo trì |
 | [examples/maintenance/client.mjs](../examples/maintenance/client.mjs) | Client quản trị Core qua môi trường tin cậy; không OAuth SDK |
 | [examples/purchase/model.json](../examples/purchase/model.json) | Mua sắm có ngưỡng chuyển cấp |
@@ -81,6 +86,12 @@
 
 | Đường dẫn | Trách nhiệm |
 | --- | --- |
+| [tests/appkit-api.test.mjs](../tests/appkit-api.test.mjs) | Cài app qua HTTP, quyền, cách ly và audit |
+| [tests/appkit.test.mjs](../tests/appkit.test.mjs) | Manifest và metadata |
+| [tests/bpmn.test.mjs](../tests/bpmn.test.mjs) | Round-trip, điều kiện và XML bị từ chối |
+| [tests/branding.test.mjs](../tests/branding.test.mjs) | Font và logo |
+| [tests/security-gate.test.mjs](../tests/security-gate.test.mjs) | Quy tắc phát hiện bí mật |
+| [tools/check-secrets.mjs](../tools/check-secrets.mjs) | Kiểm tệp Git, báo lỗi không in giá trị nhạy cảm |
 | [tests/domain.test.mjs](../tests/domain.test.mjs) | Kiểm domain |
 | [tests/headless-core.test.mjs](../tests/headless-core.test.mjs) | Kiểm headless core |
 | [tests/impact.test.mjs](../tests/impact.test.mjs) | Kiểm impact |

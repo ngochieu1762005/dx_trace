@@ -1,5 +1,7 @@
 # Đóng góp cho DX-TRACE
 
+Người duy trì: [Nguyễn Ngọc Hiếu](AUTHORS.md). Tuân thủ [quy tắc ứng xử](CODE_OF_CONDUCT.md).
+
 [Kiến trúc](docs/HEADLESS-CORE.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Bảo mật](SECURITY.md).
 
 ## Chuẩn bị và kiểm tra
@@ -35,7 +37,8 @@ Dùng [mẫu issue](.github/ISSUE_TEMPLATE/bug_report.md), ghi version/commit, c
 | Tồn/giao/thu hồi | domain, impact, inventory-view |
 | QR và ảnh | scan, label-image; camera thật sau đó |
 | Phiên/route | session, landing_routing, headless-core |
-| Mô hình/workflow | platform, platform-api, platform-storage |
+| Mô hình/workflow | platform, platform-api, platform-storage, bpmn |
+| Cài ứng dụng khai báo | appkit, appkit-api |
 | Ghi đồng thời | workspace-queue, platform-api, selfhost |
 | Webhook | webhook; xác minh chữ ký, retry và chống trùng phía nhận |
 

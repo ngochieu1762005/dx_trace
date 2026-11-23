@@ -25,7 +25,11 @@ DX-TRACE kết nối **lô hàng, giao nhận, điều kiện bảo quản và t
 
 Nền tảng theo định hướng **DX-OS Open-Core**: Core API chạy độc lập, giao diện dùng chung danh tính, quyền, dữ liệu và workflow. Ngoài nghiệp vụ kho, người quản trị có thể khai báo mô hình JSON để tạo biểu mẫu và quy trình mới mà không viết lại giao diện cho từng loại hồ sơ.
 
-**Tài liệu hiện tại áp dụng cho v0.0.5.** Nhánh `main` có thể có sửa đổi sau phát hành; dùng tag để tái lập đúng mã nguồn. Các bản phát hành cũ giữ nguyên lịch sử tại [CHANGELOG](CHANGELOG.md).
+**Phạm vi tài liệu: nhánh `main`.** Bản phát hành gần nhất là **v0.0.5**. AppKit, xuất/nhập BPMN và cập nhật nhận diện đã có trên `main` nhưng chưa nằm trong ZIP v0.0.5. Chọn tag để tái lập bản phát hành; xem [CHANGELOG](CHANGELOG.md) để phân biệt thay đổi chưa phát hành.
+
+**Tác giả và người duy trì:** [Nguyễn Ngọc Hiếu](AUTHORS.md). Dự án phát triển theo định hướng DX-OS Open-Core, với ứng dụng truy xuất và thu hồi thực phẩm.
+
+[Hướng dẫn trình diễn](docs/DEMO.md) · [Phụ thuộc và giấy phép](DEPENDENCIES.md) · [Lộ trình](ROADMAP.md) · [Kiểm thử](docs/TESTING.md)
 
 | Trải nghiệm | Triển khai và kiểm chứng |
 | --- | --- |
@@ -150,7 +154,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 | Triển khai | Caddy 2, Docker Compose v2 | HTTPS, định tuyến và dịch vụ độc lập |
 | Build / CI | Vite 8.0.13, pnpm 11.25.0, GitHub Actions | Build tái lập theo lockfile và kiểm tra phát hành |
 
-[Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc đầy đủ](docs/DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
+[Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc và giấy phép](DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
 
 <a id="requirements"></a>
 ## 💻 System Requirements
@@ -178,6 +182,20 @@ npm run demo
 Mở **http://127.0.0.1:8080/?area=training#overview**. Phiên demo dùng danh tính chủ kho cục bộ, không cần tài khoản Keycloak. Giữ terminal mở; Ctrl+C để dừng. Lần sau chạy lại `npm run demo`; dữ liệu nằm tại `selfhost/local-demo-data/`.
 
 Demo chỉ bind loopback và không chứng minh SSO hoặc Core tách tiến trình. Nếu cổng 8080 đang dùng, dừng tiến trình chiếm cổng trước. Không công bố chế độ demo ra Internet.
+
+### Dùng mã nguồn mới nhất
+
+Để kiểm tra các tính năng chưa có trong ZIP v0.0.5:
+
+```bash
+git clone https://github.com/ngochieu1762005/dx_trace.git
+cd dx_trace
+git rev-parse HEAD
+npx --yes pnpm@11.25.0 install --frozen-lockfile
+npm run demo
+```
+
+Ghi lại SHA khi trình diễn hoặc báo lỗi. Xem [kịch bản demo](docs/DEMO.md) để thử cả nghiệp vụ kho và AppKit. Không cần Keycloak ở chế độ local demo; kiểm SSO bằng bản Docker riêng.
 
 ### Cài máy chủ mới
 
@@ -236,6 +254,15 @@ Mã nguồn dự án dùng [MIT](LICENSE). Thư viện, biểu trưng và [phôn
 <a id="contact"></a>
 ## Liên hệ
 
-Nguyễn Ngọc Hiếu và DX-TRACE contributors · [Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Báo lỗi](https://github.com/ngochieu1762005/dx_trace/issues/new/choose) · [Lịch sử thay đổi](CHANGELOG.md).
+[Nguyễn Ngọc Hiếu — người duy trì](AUTHORS.md) · [Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Báo lỗi](https://github.com/ngochieu1762005/dx_trace/issues/new/choose) · [Lịch sử thay đổi](CHANGELOG.md).
 
-[↑ Mục lục](#contents)
+## Tài liệu theo nhu cầu
+
+| Mục đích | Tài liệu |
+| --- | --- |
+| Đánh giá và trình diễn | [Demo](docs/DEMO.md), [minh chứng](docs/EVIDENCE.md), [đối chiếu yêu cầu](REQUIREMENTS.md) |
+| Phát triển và tích hợp | [API](docs/API.md), [AppKit](docs/APPKIT.md), [BPMN](docs/BPMN.md), [bản đồ mã](docs/CODEBASE.md) |
+| Cài đặt và vận hành | [Self-host](selfhost/README.md), [Ubuntu](selfhost/DEPLOY_SAAS_UBUNTU.md), [backup/nâng cấp](selfhost/OPERATIONS.md) |
+| Nguồn mở và duy trì | [Phụ thuộc](DEPENDENCIES.md), [thành phần thứ ba](THIRD_PARTY_NOTICES.md), [đóng góp](CONTRIBUTING.md), [ứng xử](CODE_OF_CONDUCT.md), [bảo mật](SECURITY.md), [lộ trình](ROADMAP.md) |
+
+[Toàn bộ tài liệu](docs/README.md) · [↑ Mục lục](#contents)

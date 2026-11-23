@@ -1,6 +1,6 @@
 # Quy tắc nghiệp vụ và lưu trữ
 
-Phạm vi v0.0.5. Các quy tắc được thực thi ở Core, không chỉ ở giao diện. [Router HTTP](../app/api/%5B...path%5D/route.ts) · [Kiến trúc](../docs/HEADLESS-CORE.md).
+Phạm vi main trên nền v0.0.5; AppKit/BPMN thuộc Unreleased. Các quy tắc được thực thi ở Core, không chỉ ở giao diện. [Router HTTP](../app/api/%5B...path%5D/route.ts) · [Kiến trúc](../docs/HEADLESS-CORE.md).
 
 | Module | Trách nhiệm |
 | --- | --- |

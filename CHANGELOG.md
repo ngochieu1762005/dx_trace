@@ -20,6 +20,9 @@ Nhật ký thay đổi của DX-TRACE.
 
 ### Documentation
 
+- Bổ sung danh mục phụ thuộc/giấy phép ở gốc, tác giả, thành phần thứ ba, lộ trình, quy tắc cộng tác và hướng dẫn demo/kiểm thử.
+- Làm rõ tài liệu main so với gói v0.0.5; sửa mô tả font và minh chứng AppKit theo mã hiện tại.
+
 - Đồng bộ tài liệu với v0.0.5: kiến trúc một giao diện/Core riêng, mô hình JSON, 11 bảng SQLite và API mở rộng.
 - Bổ sung đầu mục tài liệu, quy trình backup/nâng cấp/phục hồi; sửa đường dẫn DATA_DIR khi backup trong container.
 - Cập nhật danh mục phụ thuộc, hướng dẫn đóng góp, bảo mật và phân biệt ghi chú phát hành lịch sử.

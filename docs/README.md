@@ -1,10 +1,11 @@
 # Tài liệu DX-TRACE
 
-Áp dụng cho **v0.0.5**. Chọn tài liệu theo việc cần làm; cấu hình và mã nguồn của tag là căn cứ khi tái lập phiên bản.
+Áp dụng cho **nhánh main**, gồm nền v0.0.5 và các thay đổi Unreleased. AppKit/BPMN chưa nằm trong gói v0.0.5. Cấu hình và mã nguồn của tag là căn cứ khi tái lập bản phát hành.
 
 | Nhu cầu | Tài liệu |
 | --- | --- |
-| Hiểu sản phẩm, chạy demo | [README dự án](../README.md) |
+| Hiểu sản phẩm, chạy demo | [README dự án](../README.md), [kịch bản trình diễn](DEMO.md) |
+| Chạy và ghi nhận kiểm thử | [Hướng dẫn kiểm thử](TESTING.md) |
 | Cài Docker trên máy mới | [Triển khai máy chủ](../selfhost/README.md) |
 | Dùng Caddy có sẵn, ba tên miền | [Ubuntu SaaS](../selfhost/DEPLOY_SAAS_UBUNTU.md) |
 | Cập nhật, sao lưu, khôi phục | [Vận hành](../selfhost/OPERATIONS.md) |
@@ -15,10 +16,14 @@
 | Nhập/xuất BPMN 2.0 (tập con) | [Giao thức và giới hạn BPMN](BPMN.md) |
 | Đóng gói, cài ứng dụng khai báo | [AppKit](APPKIT.md) |
 | Tìm tệp cần sửa | [Bản đồ mã nguồn](CODEBASE.md), [giao diện](../app/README.md), [nghiệp vụ](../lib/README.md) |
-| Kiểm tra thư viện và phiên bản | [Phụ thuộc](DEPENDENCIES.md) |
+| Kiểm tra thư viện và phiên bản | [Phụ thuộc và giấy phép](../DEPENDENCIES.md), [toàn bộ lockfile](DEPENDENCIES.md) |
 | Đối chiếu triển khai, test và giới hạn | [Minh chứng](EVIDENCE.md), [benchmark](BENCHMARK.md), [yêu cầu](../REQUIREMENTS.md) |
 | Đóng góp hoặc báo cáo lỗi | [Đóng góp](../CONTRIBUTING.md), [bảo mật](../SECURITY.md) |
 | Nâng cấp từ phiên bản trước | [Changelog](../CHANGELOG.md), [ghi chú phát hành](releases/README.md) |
+
+## Quản lý dự án
+
+[Tác giả](../AUTHORS.md) · [Lộ trình](../ROADMAP.md) · [Quy tắc ứng xử](../CODE_OF_CONDUCT.md) · [Thành phần thứ ba](../THIRD_PARTY_NOTICES.md).
 
 ## Quy ước
 
