@@ -14,6 +14,9 @@ Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Các tài liệu
 | Tích hợp API | [Danh mục HTTP API](API.md) |
 | Tạo mô hình, workflow, webhook | [Nghiệp vụ mở rộng](PLATFORM.md) |
 | Nhập/xuất BPMN 2.0 (tập con) | [Giao thức và giới hạn BPMN](BPMN.md) |
+| Thực thi fork/join song song và timer (PR #21) | [Process Runtime](PROCESS-RUNTIME.md) |
+| API khách hàng/đối tác bằng OAuth2 (tùy chọn, PR #21) | [External OIDC API](EXTERNAL-API.md) |
+| Nghiệm thu SSO, full-stack HTTPS và restore Keycloak | [Acceptance 2026](ACCEPTANCE-2026.md) |
 | Đóng gói, cài ứng dụng khai báo | [AppKit](APPKIT.md) |
 | Ứng dụng kiểm định chạy riêng trên cùng lõi | [Quality Control Portal](QUALITY-PORTAL.md) |
 | Tìm tệp cần sửa | [Bản đồ mã nguồn](CODEBASE.md), [giao diện](../app/README.md), [nghiệp vụ](../lib/README.md) |
