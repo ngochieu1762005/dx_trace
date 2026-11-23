@@ -26,5 +26,5 @@ test('live test fails closed on redirect or anonymous denial and keeps HTTPS-onl
  assert.equal(bad.passed,false);
  assert.equal(bad.levels.length,1);
  assert.equal(bad.levels[0].httpStatuses['302'],12);
- assert.throws(()=>benchmarkLive({appOrigin:'http://localhost:8080',cookie:'x=y'}),/HTTPS/);
+ await assert.rejects(()=>benchmarkLive({appOrigin:'http://localhost:8080',cookie:'x=y'}),/HTTPS/);
 });
