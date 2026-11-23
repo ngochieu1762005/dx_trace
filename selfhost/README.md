@@ -1,6 +1,6 @@
-# Triển khai DX-TRACE v0.0.5
+# Triển khai DX-TRACE từ mã nguồn phát triển sau v0.0.6
 
-Hướng dẫn cài mới bằng Docker Compose. Nếu máy đã có Caddy/Nginx chiếm cổng 80/443, dùng [hướng dẫn Ubuntu có Caddy](DEPLOY_SAAS_UBUNTU.md). Máy đang vận hành dùng [quy trình cập nhật và backup](OPERATIONS.md), không chạy lại setup.
+Hướng dẫn cài mới bằng Docker Compose trên nhánh đã tích hợp Gateway; tag v0.0.6 chưa chứa những thay đổi này. [Nâng cấp VPS và xác minh SSO](../docs/GATEWAY-AND-SSO.md). Nếu máy đã có Caddy/Nginx chiếm cổng 80/443, dùng [hướng dẫn Ubuntu có Caddy](DEPLOY_SAAS_UBUNTU.md). Máy đang vận hành dùng [quy trình cập nhật và backup](OPERATIONS.md), không chạy lại setup.
 
 ## Chuẩn bị
 
@@ -12,7 +12,7 @@ Hướng dẫn cài mới bằng Docker Compose. Nếu máy đã có Caddy/Nginx
 ## Cài từ mã nguồn
 
 ```bash
-git clone --branch v0.0.5 https://github.com/ngochieu1762005/dx_trace.git
+git clone https://github.com/ngochieu1762005/dx_trace.git
 cd dx_trace
 node selfhost/setup.mjs app.example.org id.example.org
 cd selfhost
@@ -21,7 +21,7 @@ docker compose up -d --build
 docker compose ps
 ```
 
-Thay hai tên miền trước khi chạy. Clone theo tag giúp tái lập release; muốn phát triển dùng nhánh `main`. Setup tạo `selfhost/.env` với quyền 0600 và không ghi đè tệp đã tồn tại. Container app không gắn DB; Core riêng giữ volume kho và không publish cổng host.
+Thay hai tên miền trước khi chạy. Ghi lại `git rev-parse HEAD`; khi có release chứa Gateway nên clone theo tag của **release đó**, không phải v0.0.6. Setup tạo `selfhost/.env` với quyền 0600 và không ghi đè tệp đã tồn tại. Container app không gắn DB; Core riêng giữ volume kho và không publish cổng host.
 
 | Biến bắt buộc | Vai trò |
 | --- | --- |
@@ -30,7 +30,8 @@ Thay hai tên miền trước khi chạy. Clone theo tag giúp tái lập releas
 | `DB_PASSWORD` | PostgreSQL của Keycloak |
 | `OIDC_CLIENT_SECRET` | Bí mật client `dx-trace` |
 | `COOKIE_SECRET` | Bảo vệ cookie OAuth2 Proxy |
-| `DX_CORE_TOKEN` | Token nội bộ app/Core, tối thiểu 32 ký tự ngẫu nhiên |
+| `DX_CORE_TOKEN` | Token nội bộ Gateway/Core, tối thiểu 32 ký tự ngẫu nhiên |
+| `DX_GATEWAY_APP_TOKEN` | Token khác biệt dành cho App/Gateway, tự tạo bởi setup mới |
 
 Các khóa được setup tạo tự động. Không in `.env` lên issue/log công khai. Thay biến bootstrap sau khi Keycloak đã khởi tạo không phải cách đổi mật khẩu admin hiện tại.
 
