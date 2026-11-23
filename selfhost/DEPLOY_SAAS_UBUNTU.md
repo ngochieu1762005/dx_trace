@@ -1,6 +1,6 @@
 # Ubuntu: Caddy trên host và ba tên miền
 
-Áp dụng cho v0.0.5, máy đã dùng Caddy hệ thống. Không khởi động gateway Docker cạnh tranh cổng 80/443.
+Áp dụng cho mã nguồn sau v0.0.6, máy đã dùng Caddy hệ thống. Không khởi động service `gateway` (Caddy Docker) cạnh tranh cổng 80/443. Service `gateway-api` mới là lớp policy nội bộ, không công bố cổng. Máy đang hoạt động phải xem [hướng dẫn migration](../docs/GATEWAY-AND-SSO.md) trước khi cập nhật.
 
 | Domain ví dụ | Đích |
 | --- | --- |
@@ -13,13 +13,13 @@ Thay domain bằng tên miền của bạn; giữ nguyên các website khác đa
 ## 1. Lấy mã và tạo cấu hình lần đầu
 
 ```bash
-git clone --branch v0.0.5 https://github.com/ngochieu1762005/dx_trace.git
+git clone https://github.com/ngochieu1762005/dx_trace.git
 cd dx_trace
 node selfhost/setup.mjs app.example.org id.example.org
 cd selfhost
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml config --quiet
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build \
-  identitydb identity core app signin
+  identitydb identity core gateway-api quality-portal app signin
 cd ..
 ```
 
@@ -66,7 +66,7 @@ Chỉ bỏ `--dry-run` khi các site đích đúng. Script có backup/validate/r
 
 ### Đường dẫn hiện tại
 
-| Lối vào | Kết quả theo snippet v0.0.5 |
+| Lối vào | Kết quả theo snippet hiện tại |
 | --- | --- |
 | `/login` | Qua SSO đến kho vận hành `/#overview` |
 | `/try` | Alias cũ, cũng về kho vận hành; không còn bộ diễn tập riêng |
@@ -94,7 +94,7 @@ curl -sS -o /dev/null -w 'App: %{http_code}\n' https://app.example.org/
 curl -sS -o /dev/null -w 'OIDC: %{http_code}\n' https://id.example.org/realms/warehouse/.well-known/openid-configuration
 ```
 
-Landing/OIDC mong đợi 200; app chưa đăng nhập thường 302. Sau đó phải kiểm đăng nhập thật, chuyển kho, quyền, dữ liệu cũ và thao tác ghi. HTTP 302 không chứng minh callback thành công. Nếu 502, xem log app/Core trước khi sửa tài khoản.
+Landing/OIDC mong đợi 200; app chưa đăng nhập thường 302. Sau đó phải kiểm đăng nhập thật, chuyển kho, quyền, dữ liệu cũ và thao tác ghi. HTTP 302 không chứng minh callback thành công. Nếu 502, xem log app/Gateway/Core trước khi sửa tài khoản. Nghiệm thu SSO bằng hai tài khoản và script `selfhost/verify-oidc.mjs`; 302/HTTP health không đủ.
 
 ## 6. Nâng cấp và phục hồi
 
