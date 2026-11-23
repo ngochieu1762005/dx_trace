@@ -1,6 +1,6 @@
 # Ma trận minh chứng kỹ thuật
 
-Phạm vi **v0.0.5**: 40 kiểm thử Node.js, 3 kiểm thử Python và job kiểm container đã đạt ở phát hành. Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
+Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm thử Python. Từ v0.0.6 và nhánh nâng cấp, phải xem số lượng thực tế trong GitHub Actions; không dùng các số lịch sử làm kết quả hiện tại. Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
 
 | Năng lực | Mã / tài liệu | Minh chứng | Giới hạn |
 | --- | --- | --- | --- |
@@ -25,7 +25,7 @@ Phạm vi **v0.0.5**: 40 kiểm thử Node.js, 3 kiểm thử Python và job ki�
 | Dùng lại Core sau cài AppKit | `manifest.json`, `lib/appkit.mjs`, `lib/platform.mjs` | Plan/install, ID/entrypoint, quyền khác tổ chức, dữ liệu và ledger dùng chung | Không có plugin chạy mã ngoài hoặc app store |
 | Phân tách người lập và duyệt | `examples/quality/model.json` | Người lập bị 403, tài khoản quản lý khác duyệt thành công | Chưa kiểm TOTP/Keycloak E2E tự động |
 | Cô lập sự cố frontend | `selfhost/compose.yaml`, `selfhost/server.mjs` | Tắt quality-portal, API kho và hồ sơ chất lượng vẫn hoạt động | Không phải HA ở tầng Core/DB |
-| CI container 3 dịch vụ | `.github/workflows/ci.yml`, `selfhost/container-smoke.mjs` | Build image và thử Core+App+Quality | Chưa thay thế kiểm thử khôi phục stack production |
+| CI container nhiều dịch vụ | `.github/workflows/ci.yml`, `selfhost/container-smoke.mjs` | Build image, thử App+Gateway+Core+Quality, cấm App gọi trực tiếp Core | Chỉ thành minh chứng khi workflow PR đã đạt; chưa kiểm Keycloak end-to-end hoặc khôi phục production |
 
 **Các bài kiểm thử mới phải được đánh giá theo kết quả GitHub Actions của commit tương ứng, không được tự nhận đạt trước khi CI xanh.**
 
@@ -70,3 +70,15 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 - [AppKit](APPKIT.md): cài ứng dụng khai báo theo manifest, mô hình và quyền dùng chung; kiểm thử `tests/appkit.test.mjs`, `tests/appkit-api.test.mjs`, gồm cài app qua HTTP, phân quyền, chống trùng và cách ly workspace. Không chạy mã ngoài.
 - App/landing dùng Google Sans WOFF2 có sẵn; theme Keycloak dùng Segoe UI/Arial. Logo xanh #1967D2. Kiểm hồi quy tại `tests/branding.test.mjs`.
 - Các thay đổi này được phát hành trong v0.0.6. Kiểm chứng theo commit và kết quả CI tương ứng; không ghép số liệu main vào báo cáo của tag cũ. Xem [hướng dẫn kiểm thử](TESTING.md).
+
+
+## Gateway tách khóa và kiểm chứng OIDC (chưa phát hành)
+
+| Hạng mục | Bằng chứng trong repository | Bằng chứng cần thu thập sau deploy |
+| --- | --- | --- |
+| Khóa riêng của App/Gateway và Gateway/Core | `selfhost/api-gateway.mjs`, `selfhost/compose.yaml`, `tests/api-gateway.test.mjs` | Xác nhận hai khóa khác nhau, không tiết lộ giá trị |
+| Chống bypass Core | CI ở `.github/workflows/ci.yml`, `selfhost/container-smoke.mjs` | Screenshot hoặc output đã ẩn IP nội bộ từ job thành công |
+| OIDC và RBAC thật | `selfhost/verify-oidc.mjs`, `tests/verify-oidc.test.mjs` | Chạy script bằng hai phiên Keycloak, ghi PASS/FAIL và commit SHA, tuyệt đối không ghi cookie |
+| Hướng dẫn rollback | [Gateway and SSO](GATEWAY-AND-SSO.md), [Vận hành](../selfhost/OPERATIONS.md) | Diễn tập trên máy test và ghi thời gian phục hồi |
+
+**Lưu ý:** Source code và test giả lập chỉ chứng minh logic. Không báo cáo Keycloak hoặc VPS đã kiểm thành công khi chưa thực sự chạy.
