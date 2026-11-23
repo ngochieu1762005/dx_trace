@@ -1,6 +1,6 @@
 # Tài liệu DX-TRACE
 
-Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Các tài liệu Gateway/SSO mô tả thay đổi trên nhánh phát triển **sau v0.0.6**, chưa phải một bản phát hành. Dùng tag riêng khi cần tái lập phiên bản cũ.
+Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Từ **v0.0.7**, repository bổ sung Gateway tách mạng, process runtime song song/timer, External OIDC API tùy chọn và công cụ nghiệm thu. Mã đã qua CI; các bước Keycloak/khôi phục/tải thật trên VPS vẫn cần nghiệm thu riêng. Dùng tag riêng khi cần tái lập phiên bản cũ.
 
 | Nhu cầu | Tài liệu |
 | --- | --- |
@@ -14,7 +14,7 @@ Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Các tài liệu
 | Tích hợp API | [Danh mục HTTP API](API.md) |
 | Tạo mô hình, workflow, webhook | [Nghiệp vụ mở rộng](PLATFORM.md) |
 | Nhập/xuất BPMN 2.0 (tập con) | [Giao thức và giới hạn BPMN](BPMN.md) |
-| Thực thi fork/join song song và timer (PR #21) | [Process Runtime](PROCESS-RUNTIME.md) |
+| Thực thi fork/join song song và timer (v0.0.7) | [Process Runtime](PROCESS-RUNTIME.md) |
 | API khách hàng/đối tác bằng OAuth2 (tùy chọn, PR #21) | [External OIDC API](EXTERNAL-API.md) |
 | Nghiệm thu SSO, full-stack HTTPS và restore Keycloak | [Acceptance 2026](ACCEPTANCE-2026.md) |
 | Đóng gói, cài ứng dụng khai báo | [AppKit](APPKIT.md) |
