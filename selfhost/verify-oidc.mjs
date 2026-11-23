@@ -34,6 +34,16 @@ export async function verifyOidc({appOrigin,idOrigin,ownerCookie,reviewerCookie,
     return data;
   }
   const owner=await state(ownerCookie),reviewer=await state(reviewerCookie);
+  // The independent static Quality Portal shares the same verified SSO session.
+  const anonymousPortal=await fetcher(app+'/apps/quality/',{redirect:'manual',signal:AbortSignal.timeout(8000)});
+  if(anonymousPortal.status===200)throw Error('SECURITY: independent portal is publicly accessible');
+  if(![302,303,401,403].includes(anonymousPortal.status))throw Error('Unexpected portal anonymous response: '+anonymousPortal.status);
+  for(const cookie of [ownerCookie,reviewerCookie]){
+    const portal=await fetcher(app+'/apps/quality/',{headers:{cookie},redirect:'manual',signal:AbortSignal.timeout(8000)});
+    if(portal.status!==200||!(portal.headers.get('content-type')||'').includes('text/html')){
+      throw Error('Quality Portal must be available through the same authenticated session');
+    }
+  }
   if(owner.me.role!=='owner')throw Error('First session must be workspace owner');
   if(!['manager','warehouse','viewer'].includes(reviewer.me.role))throw Error('Second session must have a non-owner role');
   if(owner.me.email.toLowerCase()===reviewer.me.email.toLowerCase())throw Error('Sessions must belong to two different people');
@@ -43,7 +53,7 @@ export async function verifyOidc({appOrigin,idOrigin,ownerCookie,reviewerCookie,
     body:'{}',redirect:'manual',signal:AbortSignal.timeout(8000)
   });
   if(forbidden.status!==403)throw Error('SECURITY: non-owner has unexpected AppKit plan access: '+forbidden.status);
-  return {anonymous:anonymous.status,ownerRole:owner.me.role,reviewerRole:reviewer.me.role,sharedWorkspace:true,ownerOnlyPolicy:'denied'};
+  return {anonymous:anonymous.status,anonymousPortal:anonymousPortal.status,ownerRole:owner.me.role,reviewerRole:reviewer.me.role,sharedWorkspace:true,secondApplicationSSO:true,ownerOnlyPolicy:'denied'};
 }
 const invoked=process.argv[1]&&pathToFileURL(resolve(process.argv[1])).href===import.meta.url;
 if(invoked){
@@ -52,7 +62,7 @@ if(invoked){
     const outcome=await verifyOidc({appOrigin:DX_VERIFY_APP_ORIGIN,idOrigin:DX_VERIFY_ID_ORIGIN,
       ownerCookie:await readCookie(DX_VERIFY_OWNER_COOKIE_FILE),
       reviewerCookie:await readCookie(DX_VERIFY_REVIEWER_COOKIE_FILE)});
-    console.log('PASS OIDC issuer, anonymous deny, two independent sessions, shared workspace, owner-only API deny');
+    console.log('PASS OIDC issuer, anonymous deny, two sessions, shared workspace, two-app SSO, owner-only API deny');
     console.log(JSON.stringify(outcome));
   }catch(error){console.error('FAIL live SSO verification:',error?.message);process.exitCode=1;}
 }
