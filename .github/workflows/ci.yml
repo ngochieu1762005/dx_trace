@@ -48,6 +48,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Check tracked source for leaked credentials
         run: node tools/check-secrets.mjs
+      - name: Validate standalone portal JavaScript syntax
+        run: node --check apps/quality-portal/server.mjs && node --check apps/quality-portal/app.js
       - run: node selfhost/build.mjs
       - run: node --test tests/*.test.mjs
       - run: python3 -m unittest discover -s tests -p '*_test.py'
