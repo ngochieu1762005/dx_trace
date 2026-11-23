@@ -27,3 +27,8 @@ services:
   app:
     ports: ["127.0.0.1:8182:8080"]
     mem_limit: 384m
+
+  # Explicit opt-in only: not publicly reachable until host Caddy route is added.
+  external-api:
+    ports: ["127.0.0.1:8183:8093"]
+    mem_limit: 192m
