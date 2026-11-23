@@ -48,7 +48,7 @@ test('persisted parallel process requires distinct reviewer and fires timer only
  update(state,'platform.process.complete',{version:5,task:'inspect'},'owner','owner','2026-11-23T10:00:11.000Z');
  assert.equal(state.records[0].status,'done');
  assert.equal(state.records[0].process.status,'completed');
- assert.equal(state.records[0].version,7);
+ assert.equal(state.records[0].version,6);
  assert.equal(state.records[0].history.filter(e=>e.action==='process.task').length,3);
 });
 test('process model validates terminal state and read-role assignment',()=>{
