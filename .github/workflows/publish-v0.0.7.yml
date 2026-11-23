@@ -88,16 +88,29 @@ jobs:
         run: |
           set -euo pipefail
           if git ls-remote --exit-code --tags origin refs/tags/v0.0.7 >/dev/null 2>&1; then
-            echo 'ERROR: v0.0.7 tag already exists; refusing to move or overwrite it.'
-            exit 1
+            git fetch origin tag v0.0.7
+            TARGET="$(git rev-parse 'refs/tags/v0.0.7^{commit}')"
+            if [ "$TARGET" != "$GITHUB_SHA" ]; then
+              echo "ERROR: existing immutable tag points to $TARGET, expected $GITHUB_SHA"
+              exit 1
+            fi
+            echo "Tag already points to this exact commit; continuing."
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git tag -a v0.0.7 "$GITHUB_SHA" -m 'DX-TRACE v0.0.7 — Parallel Workflow & External OIDC API'
+            git push origin refs/tags/v0.0.7
           fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git tag -a v0.0.7 "$GITHUB_SHA" -m 'DX-TRACE v0.0.7 — Parallel Workflow & External OIDC API'
-          git push origin refs/tags/v0.0.7
-          gh release create v0.0.7 \
-            --verify-tag \
-            --title 'DX-TRACE v0.0.7 — Parallel Workflow & External OIDC API' \
-            --notes-file docs/releases/RELEASE_NOTES_v0.0.7.md \
-            DX-TRACE-v0.0.7.tar.gz DX-TRACE-v0.0.7.zip DX-TRACE.spdx.json SHA256SUMS
+          if gh release view v0.0.7 >/dev/null 2>&1; then
+            echo "Release exists at the verified tag; refreshing matching assets."
+            gh release upload v0.0.7 \
+              DX-TRACE-v0.0.7.tar.gz DX-TRACE-v0.0.7.zip DX-TRACE.spdx.json SHA256SUMS \
+              --clobber
+          else
+            gh release create v0.0.7 \
+              --verify-tag \
+              --title 'DX-TRACE v0.0.7 — Parallel Workflow & External OIDC API' \
+              --notes-file docs/releases/RELEASE_NOTES_v0.0.7.md \
+              DX-TRACE-v0.0.7.tar.gz DX-TRACE-v0.0.7.zip DX-TRACE.spdx.json SHA256SUMS
+          fi
           gh release view v0.0.7 --json tagName,name,isDraft,isPrerelease,assets,url
