@@ -25,7 +25,7 @@ Kịch bản dành cho người lần đầu xem DX-TRACE, dự kiến 12–15 p
 
 Mẫu AppKit nằm tại [bảo trì](../examples/maintenance/app.json) và [mua sắm](../examples/purchase/app.json). Không cài lại định nghĩa lên mô hình có hồ sơ đang chạy mà bỏ qua cảnh báo kế hoạch. Quy tắc `differentActor` cần người duyệt khác người tạo; một tài khoản owner không thay thế được minh chứng hai người.
 
-## Minh chứng ứng dụng độc lập (nhánh nâng cấp, ngoài v0.0.5)
+## Minh chứng ứng dụng độc lập (main Unreleased, ngoài v0.0.5)
 
 Mở `/apps/quality/` khi đã triển khai service `quality-portal` sau lớp đăng nhập. Chủ không gian cài ứng dụng từ manifest; nhân viên nhập phiếu, gửi thẩm định; tài khoản người tạo bị chặn tự phê duyệt và tài khoản quản lý **khác người** duyệt được. Đối chiếu hồ sơ trong **Nghiệp vụ mở rộng**, sau đó dừng duy nhất frontend thứ hai và xác nhận lõi vẫn trả API thành công. [Từng bước](QUALITY-PORTAL.md).
 
