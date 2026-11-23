@@ -52,7 +52,7 @@ For a new Docker Compose installation:
 ```sh
 cd selfhost
 docker compose config --quiet
-docker compose up -d --build core quality-portal app
+docker compose up -d --build
 docker compose ps
 ```
 
