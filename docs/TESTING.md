@@ -16,7 +16,7 @@ python3 -m unittest discover -s tests -p '*_test.py'
 
 Secret gate đọc các tệp được Git theo dõi; chạy trong checkout Git để kiểm đúng phạm vi. Build tạo giao diện; bộ kiểm thử dùng dữ liệu thử. Không trỏ script thử nghiệm vào database hoặc tài khoản vận hành.
 
-## Kiểm chứng ứng dụng độc lập (nhánh nâng cấp)
+## Kiểm chứng ứng dụng độc lập (main Unreleased)
 
 ```sh
 node --check apps/quality-portal/server.mjs
