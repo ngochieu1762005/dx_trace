@@ -1,7 +1,6 @@
 # Quality Control Portal — independent DX-OS application
 
-> Unreleased feature on `main`, **not included in v0.0.5**. Verify the exact commit
-> and CI status before describing this as released.
+> Available from **v0.0.6**. Use the release tag to reproduce the published source.
 
 ## Purpose and architecture
 
@@ -34,7 +33,7 @@ and optional BPMN subset interchange.
 
 ## Run from source
 
-Requirements: Node.js 24, a clean checkout of the development branch.
+Requirements: Node.js 24, a clean checkout of tag v0.0.6 or a documented later commit.
 To serve the static frontend by itself:
 
 ```sh

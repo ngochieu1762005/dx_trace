@@ -6,7 +6,7 @@ Kịch bản dành cho người lần đầu xem DX-TRACE, dự kiến 12–15 p
 
 ## Chuẩn bị
 
-1. Chọn bản cần trình diễn: tag v0.0.5 cho bản phát hành, hoặc commit `main` để có AppKit/BPMN. Ghi lại `git rev-parse HEAD`.
+1. Chọn bản cần trình diễn: tag v0.0.6 cho bản phát hành, hoặc commit `main` để kiểm nhánh phát triển. Ghi lại `git rev-parse HEAD`.
 2. Chạy theo [README](../README.md#quick-setup). Demo cục bộ có danh tính owner, không cần Keycloak và không chứng minh SSO.
 3. Nếu trình diễn SSO/quyền, dùng bản Docker đã cấu hình và tài khoản thực của ít nhất hai vai trò. Không đưa mật khẩu vào slide hoặc repository.
 4. Kiểm tra camera/HTTPS trước buổi trình diễn. Chuẩn bị ảnh QR do chính hệ thống tạo để có phương án thay thế.

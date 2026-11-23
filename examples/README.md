@@ -18,7 +18,7 @@ Các mẫu dùng chung Core, danh tính và giao diện hồ sơ của DX-TRACE.
 3. Xem kế hoạch, kiểm phiên bản và các lý do từ chối trước khi áp dụng/cài.
 4. Tạo hồ sơ thử, thực hiện từng bước bằng vai trò phù hợp; kiểm nhật ký và kết quả.
 
-AppKit/BPMN có trên main, chưa nằm trong ZIP v0.0.5. Không dán `app.json` vào ô định nghĩa mô hình: manifest bọc mô hình trong `spec.model`, còn `model.json` là định nghĩa trực tiếp. Không đổi workflow của mô hình đang có hồ sơ chưa kết thúc mà bỏ qua kiểm tra của máy chủ.
+AppKit/BPMN được đóng gói từ v0.0.6. Không dán `app.json` vào ô định nghĩa mô hình: manifest bọc mô hình trong `spec.model`, còn `model.json` là định nghĩa trực tiếp. Không đổi workflow của mô hình đang có hồ sơ chưa kết thúc mà bỏ qua kiểm tra của máy chủ.
 
 ## Ví dụ client quản trị
 

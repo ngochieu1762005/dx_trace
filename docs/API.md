@@ -1,6 +1,6 @@
 # HTTP API — DX-TRACE
 
-Phạm vi: main. API nền thuộc v0.0.5; các endpoint BPMN/AppKit ghi riêng là Unreleased.
+Phạm vi: v0.0.6, gồm API nền, BPMN và AppKit.
 
 Nguồn đối chiếu: [router](../app/api/%5B...path%5D/route.ts), [domain](../lib/domain.mjs), [platform](../lib/platform.mjs). API công khai dùng tiền tố `/api` trên cùng domain ứng dụng.
 
@@ -111,4 +111,4 @@ Lỗi nghiệp vụ trả JSON `{error: "..."}`. Lỗi proxy có thể trả HTM
 
 ## API mở rộng trên nhánh nâng cấp
 
-Các endpoint BPMN và AppKit được bổ sung trên nhánh nâng cấp, **chưa nằm trong release v0.0.5**. [Tập con BPMN và ví dụ](BPMN.md) · [AppKit khai báo](APPKIT.md). Import BPMN từ chối phần tử không hỗ trợ, không dùng XML DTD/XXE. Cả hai cơ chế đều đi qua model plan/apply và audit-ledger; không cho phép thực thi JavaScript hoặc truy cập Core bằng token từ trình duyệt.
+Các endpoint BPMN và AppKit được phát hành từ **v0.0.6**. [Tập con BPMN và ví dụ](BPMN.md) · [AppKit khai báo](APPKIT.md). Import BPMN từ chối phần tử không hỗ trợ, không dùng XML DTD/XXE. Cả hai cơ chế đều đi qua model plan/apply và audit-ledger; không cho phép thực thi JavaScript hoặc truy cập Core bằng token từ trình duyệt.

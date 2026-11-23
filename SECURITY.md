@@ -1,6 +1,6 @@
 # Bảo mật và báo cáo lỗ hổng
 
-Phạm vi tài liệu: DX-TRACE main và nền v0.0.5; phần AppKit/BPMN thuộc Unreleased. Dự án chưa công bố chính sách LTS/SLA; hãy đối chiếu bản phát hành và changelog trước khi triển khai.
+Phạm vi tài liệu: DX-TRACE main và nền v0.0.5; phần AppKit/BPMN có từ v0.0.6. Dự án chưa công bố chính sách LTS/SLA; hãy đối chiếu bản phát hành và changelog trước khi triển khai.
 
 ## Báo cáo riêng
 

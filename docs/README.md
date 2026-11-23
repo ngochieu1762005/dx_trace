@@ -1,6 +1,6 @@
 # Tài liệu DX-TRACE
 
-Áp dụng cho **nhánh main**, gồm nền v0.0.5 và các thay đổi Unreleased. AppKit/BPMN chưa nằm trong gói v0.0.5. Cấu hình và mã nguồn của tag là căn cứ khi tái lập bản phát hành.
+Áp dụng cho **v0.0.6**, bao gồm AppKit, BPMN và Quality Control Portal. Cấu hình và mã nguồn của tag là căn cứ khi tái lập bản phát hành.
 
 | Nhu cầu | Tài liệu |
 | --- | --- |

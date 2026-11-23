@@ -13,3 +13,7 @@
 Chi tiết thay đổi liên phiên bản: [CHANGELOG.md](../../CHANGELOG.md).
 
 Để phát hành các phiên bản tiếp theo, thêm `RELEASE_NOTES_vX.Y.Z.md` vào thư mục này; workflow `.github/workflows/release.yml` sẽ sử dụng file tương ứng nếu có.
+
+## v0.0.6
+
+[Ghi chú v0.0.6](RELEASE_NOTES_v0.0.6.md) — Quality Control Portal, AppKit, BPMN và tài liệu.

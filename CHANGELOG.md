@@ -4,12 +4,18 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+Chưa có thay đổi sau v0.0.6.
+
+## [0.0.6] — 2026-11-23 — Independent Quality Portal & AppKit
+
+Xem [ghi chú phát hành và nâng cấp](docs/releases/RELEASE_NOTES_v0.0.6.md).
+
 ### Added — independently deployed quality application
 
 - Thêm Quality Control Portal với frontend và container độc lập, dùng chung Core API, định danh, phân quyền, mô hình, workflow và ledger. Route được bảo vệ bởi cùng OAuth2 Proxy; không cung cấp khóa Core cho frontend.
 - AppKit có `metadata.uiPath` giới hạn đúng `/apps/{id}/`, kiểm cả manifest và model trực tiếp, khám phá được entrypoint; quản trị viên cài bằng plan/install.
 - CI xác minh build 3 container Core/App/Quality Portal, bộ test 3 tiến trình kiểm chống tự duyệt, cách ly workspace, CSP và Core không bị ảnh hưởng khi portal bị dừng.
-- [Tài liệu nghiệm thu](docs/QUALITY-PORTAL.md) ghi rõ phạm vi, giới hạn và cách thử hai vai trò bằng Keycloak thật. Chưa nằm trong Release v0.0.5.
+- [Tài liệu nghiệm thu](docs/QUALITY-PORTAL.md) ghi rõ phạm vi, giới hạn và cách thử hai vai trò bằng Keycloak thật. Phát hành từ v0.0.6.
 
 ### Added — workflow interchange and reusable applications
 
@@ -33,7 +39,7 @@ Nhật ký thay đổi của DX-TRACE.
 - Đồng bộ tài liệu với v0.0.5: kiến trúc một giao diện/Core riêng, mô hình JSON, 11 bảng SQLite và API mở rộng.
 - Bổ sung đầu mục tài liệu, quy trình backup/nâng cấp/phục hồi; sửa đường dẫn DATA_DIR khi backup trong container.
 - Cập nhật danh mục phụ thuộc, hướng dẫn đóng góp, bảo mật và phân biệt ghi chú phát hành lịch sử.
-- Đợt chỉnh tài liệu v0.0.5 trước đây không đổi chức năng; **các thay đổi mới ở phần trên thuộc nhánh Unreleased**, chưa là bản phát hành chính thức.
+- Phát hành chung các thay đổi sau v0.0.5 trong v0.0.6; giữ nguyên tag và tài sản của các phiên bản trước.
 
 ## [0.0.5] — 2026-11-22 — Extensible Core & Warehouse Operations
 

@@ -44,7 +44,7 @@ const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new Domai
 import {models as storedModels,plan as modelPlan,queryRecords,changePlatform} from '../../../lib/platform-store.ts';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
- if(kind==='health')return json({status:'ok',version:'0.0.5',database:!!env.DB});
+ if(kind==='health')return json({status:'ok',version:'0.0.6',database:!!env.DB});
  if(kind==='ingest'&&req.method==='POST'){
   const token=req.headers.get('authorization')?.replace(/^Bearer /,'');if(!token)throw new DomainError('Thiếu khóa thiết bị',401);
   const d:any=await q('SELECT * FROM device_keys WHERE hash=? AND active=1',await hash(token)).first();if(!d)throw new DomainError('Khóa thiết bị không hợp lệ',401);
@@ -130,7 +130,7 @@ async function route(req:Request){try{
  }
  if(kind==='platform'&&req.method==='GET'){
   const installed=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role)).map(listedApplication);
-  return json({version:'0.0.5',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,installedApplications:installed,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export','apps']}});
+  return json({version:'0.0.6',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,installedApplications:installed,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export','apps']}});
  }
  if(kind==='sensor-history'&&req.method==='GET'){
   const params=new URL(req.url).searchParams;
