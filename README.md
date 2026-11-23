@@ -49,7 +49,7 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 | **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
 | **Mở rộng tiếp theo** | BPMN nâng cao, đăng ký API client bên ngoài và kiểm thử phục hồi/benchmark full-stack | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
 
-> **Lưu ý khi tái lập:** Release \`v0.0.6\` và mã \`main\` hiện không hoàn toàn giống nhau. Tài liệu và bài kiểm về Gateway mới áp dụng cho \`main\`; tag \`v0.0.6\` không chứa những thay đổi đó. Trên VPS đang hoạt động, không chạy lại \`setup.mjs\` hoặc nâng cấp Compose khi chưa sao lưu và bổ sung khóa \`DX_GATEWAY_APP_TOKEN\`. Xem [quy trình chuyển đổi an toàn](docs/GATEWAY-AND-SSO.md).
+> **Lưu ý khi tái lập:** Release `v0.0.6` và mã `main` hiện không hoàn toàn giống nhau. Tài liệu và bài kiểm về Gateway mới áp dụng cho `main`; tag `v0.0.6` không chứa những thay đổi đó. Trên VPS đang hoạt động, không chạy lại `setup.mjs` hoặc nâng cấp Compose khi chưa sao lưu và bổ sung khóa `DX_GATEWAY_APP_TOKEN`. Xem [quy trình chuyển đổi an toàn](docs/GATEWAY-AND-SSO.md).
 
 **Dự án được duy trì bởi [Nguyễn Ngọc Hiếu](AUTHORS.md).** Phần giới thiệu dành cho người dùng; các giới hạn kỹ thuật và kết quả thực nghiệm được công bố trong [tài liệu](docs/README.md), [bảng đối chiếu DX-OS](REQUIREMENTS.md) và [ma trận minh chứng](docs/EVIDENCE.md).
 
