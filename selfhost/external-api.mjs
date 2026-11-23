@@ -114,7 +114,7 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
    if(url.origin!=='http://external.internal'){status=400;return json(res,status,'Invalid target',requestId);}
    const match=/^\/v1\/models\/([a-z][a-z0-9_]{0,39})\/records$/.exec(url.pathname);
    if(!match&&url.pathname!=='/v1/health'){status=404;return json(res,status,'Unknown version or route',requestId);}
-   if(url.searchParams.keys().some(k=>!['limit','offset','q','status'].includes(k))||
+   if([...url.searchParams.keys()].some(k=>!['limit','offset','q','status'].includes(k))||
       [...url.searchParams.keys()].some(k=>url.searchParams.getAll(k).length!==1)){
       status=400;return json(res,status,'Invalid query parameter',requestId);
    }
