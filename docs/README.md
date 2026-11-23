@@ -17,7 +17,7 @@ Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Các tài liệu
 | Đóng gói, cài ứng dụng khai báo | [AppKit](APPKIT.md) |
 | Ứng dụng kiểm định chạy riêng trên cùng lõi | [Quality Control Portal](QUALITY-PORTAL.md) |
 | Tìm tệp cần sửa | [Bản đồ mã nguồn](CODEBASE.md), [giao diện](../app/README.md), [nghiệp vụ](../lib/README.md) |
-| Kiểm tra thư viện và phiên bản | [Phụ thuộc và giấy phép](../DEPENDENCIES.md), [toàn bộ lockfile](DEPENDENCIES.md) |
+| Kiểm tra thư viện và phiên bản | [Phụ thuộc và giấy phép](../DEPENDENCIES.md), [toàn bộ lockfile](DEPENDENCIES.md), [SPDX/SBOM và provenance](SUPPLY-CHAIN.md) |
 | Đối chiếu triển khai, test và giới hạn | [Minh chứng](EVIDENCE.md), [benchmark](BENCHMARK.md), [yêu cầu](../REQUIREMENTS.md) |
 | Đóng góp hoặc báo cáo lỗi | [Đóng góp](../CONTRIBUTING.md), [bảo mật](../SECURITY.md) |
 | Nâng cấp từ phiên bản trước | [Changelog](../CHANGELOG.md), [ghi chú phát hành](releases/README.md) |
