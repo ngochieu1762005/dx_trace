@@ -70,6 +70,8 @@ jobs:
         run: node tools/check-secrets.mjs
       - name: Validate standalone portal JavaScript syntax
         run: node --check apps/quality-portal/server.mjs && node --check apps/quality-portal/app.js
+      - name: Validate external API, process timer and offline restore runner syntax
+        run: node --check selfhost/external-api.mjs && node --check selfhost/process-timer.mjs && bash -n tools/restore-drill.sh
       - run: node selfhost/build.mjs
       - run: node --test tests/*.test.mjs
       - run: python3 -m unittest discover -s tests -p '*_test.py'
@@ -79,6 +81,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build production image
         run: docker build -f selfhost/Dockerfile -t dxtrace-ci .
+      - name: Validate host-Caddy Compose with external OIDC API profile
+        run: |
+          APP_HOST=app.ci.invalid ID_HOST=id.ci.invalid \
+          DB_PASSWORD=ci-only-postgres \
+          ADMIN_PASSWORD=ci-only-keycloak \
+          OIDC_CLIENT_SECRET=ci-only-oidc \
+          COOKIE_SECRET=ci-only-cookie \
+          DX_CORE_TOKEN=ci-only-core-token-secret-123456789012345678 \
+          DX_GATEWAY_APP_TOKEN=ci-only-gateway-token-secret-123456789012345 \
+          docker compose -f selfhost/compose.yaml -f selfhost/compose.ubuntu-edge.yaml --profile external-api config --quiet
       - name: Verify isolated app and core
         run: |
           docker network create dxtrace-edge
