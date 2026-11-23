@@ -17,7 +17,7 @@ Phạm vi **v0.0.5**: 40 kiểm thử Node.js, 3 kiểm thử Python và job ki�
 | Chức năng kho | domain, impact, scanner, inventory-view | Các test nghiệp vụ, thu hồi, đối chiếu mã và CSV trong `tests/` | Camera thật cần kiểm trên từng thiết bị |
 | Hiệu năng | `tools/benchmark-platform.mjs` | [Kết quả và phạm vi đo](BENCHMARK.md) | Không đo SSO/TLS/gateway, không so trực tiếp với hệ thống khác |
 
-## Ứng dụng độc lập và ranh giới chịu lỗi (chỉ nhánh nâng cấp)
+## Ứng dụng độc lập và ranh giới chịu lỗi (main Unreleased, ngoài v0.0.5)
 
 | Hạng mục | Mã / tài liệu | Kiểm chứng tự động | Chưa được chứng minh |
 | --- | --- | --- | --- |
