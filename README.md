@@ -79,6 +79,8 @@ Trong bộ mẫu SUA-005: Long Biên đã nhận 30 hộp và trả 17; Tây H�
 
 ### Mở rộng sang nghiệp vụ khác
 
+**Trên nhánh nâng cấp (chưa phát hành):** có thêm [Quality Control Portal](docs/QUALITY-PORTAL.md) tại `/apps/quality/`, một frontend **chạy ở service/container riêng**, không chứa logic kho hoặc bí mật truy cập Core. Chủ không gian duyệt manifest AppKit; hai ứng dụng dùng chung phiên SSO, quyền, dữ liệu workflow và nhật ký. Kịch bản kiểm chứng hai người và bài kiểm thử tách tiến trình được công bố trong tài liệu. Việc tồn tại mã nguồn và CI không tự chứng minh một lần triển khai SSO thực tế.
+
 Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch → Áp dụng mô hình** bằng tài khoản chủ không gian. Có mẫu bảo trì thiết bị, mua sắm, kiểm tra chất lượng và yêu cầu khách hàng. Mẫu mua sắm trên 5 triệu đồng yêu cầu chuyển cấp trước khi chủ không gian khác người tạo duyệt. [Cấu hình và giới hạn workflow](docs/PLATFORM.md).
 
 <a id="architecture"></a>
@@ -95,6 +97,7 @@ flowchart TD
     Identity --> IdentityDB["PostgreSQL · danh tính"]
     Signin --> App["Web app · React và API proxy"]
     Edge -->|"POST /api/ingest"| App
+    App -->|"Chỉ GET tệp tĩnh, không gửi danh tính"| QA["Quality Portal · service riêng"]
     App -->|"Token nội bộ và danh tính"| Core["Headless Core · Node.js"]
     Core --> SQL["SQLite · nghiệp vụ"]
     Core --> Objects["Tệp theo SHA-256"]
