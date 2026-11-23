@@ -49,6 +49,7 @@ test('Keycloak RS256 signature, audience, scope and model ACL guard external rea
  try{
   assert.equal((await fetch(base+'/v1/health')).status,401);
   assert.equal((await fetch(base+'/v1/health',{headers:{authorization:'Basic xxx'}})).status,401);
+  assert.equal((await fetch(base+'/v1/health',{headers:{authorization:'Bearer a.b.c'}})).status,401);
   assert.equal((await fetch(base+'/v1/models/maintenance/records',{headers:auth,method:'POST'})).status,405);
   assert.equal((await fetch(base+'/v2/models/maintenance/records',{headers:auth})).status,404);
   assert.equal((await fetch(base+'/v1/models/quality/records',{headers:auth})).status,403);
