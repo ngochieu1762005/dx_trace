@@ -61,15 +61,17 @@ jobs:
         run: |
           docker network create dxtrace-ci
           docker run -d --name core --network dxtrace-ci -e DX_CORE_TOKEN=ci-only-not-a-production-secret-123456 -e PUBLIC_ORIGIN=http://localhost dxtrace-ci node selfhost/core-server.mjs
-          docker run -d --name app --network dxtrace-ci -e DX_CORE_TOKEN=ci-only-not-a-production-secret-123456 -e DX_CORE_URL=http://core:8081 -e PUBLIC_ORIGIN=http://localhost dxtrace-ci
+          docker run -d --name quality-portal --network dxtrace-ci dxtrace-ci node apps/quality-portal/server.mjs
+          docker run -d --name app --network dxtrace-ci -e DX_CORE_TOKEN=ci-only-not-a-production-secret-123456 -e DX_CORE_URL=http://core:8081 -e DX_QUALITY_PORTAL_URL=http://quality-portal:8090 -e PUBLIC_ORIGIN=http://localhost dxtrace-ci
           docker exec app node selfhost/container-smoke.mjs
       - name: Container logs
         if: failure()
         run: |
           docker logs core
           docker logs app
+          docker logs quality-portal
       - name: Cleanup
         if: always()
         run: |
-          docker rm -f app core || true
+          docker rm -f app quality-portal core || true
           docker network rm dxtrace-ci || true
