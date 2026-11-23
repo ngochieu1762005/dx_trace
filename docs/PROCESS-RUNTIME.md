@@ -49,6 +49,7 @@ The record includes its initial `process` tokens in its JSON payload.
 | POST | `/api/models/{model}/process-complete` | `{id,version,task,reason?}` | Active user task, role, optional different-actor/reason, model workspace, record version and idempotency |
 | POST | `/api/models/{model}/process-tick` | `{id,version}` | Owner/manager only, trusted server clock; normally executed by the Core timer worker |
 | GET | `/api/models/{model}/records` | Optional pagination | Existing workspace/record authorization; includes `process.tokens` and `process.history` |
+| GET | `/api/models/{model}/process-bpmn` | No request body | Download validated process as BPMN 2.0 XML with parallel gateways and ISO timer duration |
 
 Each POST requires a unique `Idempotency-Key` and the same-origin
 authenticated session checks already enforced for DX-TRACE write APIs.
@@ -77,6 +78,7 @@ unverified identity is accepted from the browser.
   event-based gateways, compensation and subprocesses are intentionally rejected.
 - A relative timer is triggered **when a token enters its node**. Timers are
   polled; execution may occur after their exact due instant under load.
+- BPMN 2.0 XML **export** is implemented for the executable graph, but import of arbitrary parallel BPMN XML is intentionally unsupported. Custom role/approval attributes in XML require review when imported into another engine.
 - No service task executes arbitrary code; no expression eval, scripts,
   dynamic remote plugins, or external BPMN XML import.
 - Existing UI remains focused on state-machine workflows; the new
@@ -89,7 +91,7 @@ unverified identity is accepted from the browser.
 ## Reproducible tests
 
 ~~~bash
-node --test tests/process-runtime.test.mjs tests/process-platform.test.mjs tests/process-timer.test.mjs
+node --test tests/process-runtime.test.mjs tests/process-platform.test.mjs tests/process-timer.test.mjs tests/process-bpmn.test.mjs
 ~~~
 
 Tests prove parallel join ordering, timed release, real role/different-actor
