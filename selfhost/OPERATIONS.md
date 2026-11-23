@@ -58,10 +58,12 @@ fi
 git pull --ff-only origin main
 cd selfhost
 dc config --quiet
-dc build core app
-dc up -d --no-deps --force-recreate core app
+dc build core quality-portal app
+dc up -d --no-deps --force-recreate core quality-portal app
 )
 ```
+
+Từ bản có Quality Control Portal, `quality-portal` là tiến trình frontend tách biệt. Kiểm tra `https://<tên-miền-ứng-dụng>/apps/quality/` sau khi nâng cấp và mở Nghiệp vụ mở rộng để cài manifest theo quyền owner; service không cần thêm cổng công khai hay volume kho. Nếu dừng riêng `quality-portal`, ứng dụng này trả 503 trong khi API Core vẫn có thể phục vụ.
 
 Đọc changelog trước khi chọn `main`. Nếu cần tái lập release, dùng checkout riêng tại tag đã chọn, cùng cấu hình/volume đã kiểm tra; không đổi tên project Compose tùy tiện vì có thể tạo volume trống khác. Chỉ tái tạo `signin` hoặc `identity` nếu có thay đổi cấu hình liên quan. Không chạy lại setup trên hệ thống đã có `.env`; không dùng `down -v`.
 
@@ -73,7 +75,7 @@ Trang giới thiệu là static file, cần đồng bộ riêng từ `landing/` 
 
 ```bash
 dc ps
-dc logs --since=5m --tail=80 core app signin
+dc logs --since=5m --tail=80 core quality-portal app signin
 dc exec -T app node --input-type=module -e '
 const r = await fetch(process.env.DX_CORE_URL + "/api/health", {
   headers: {"x-dx-core-token": process.env.DX_CORE_TOKEN},
