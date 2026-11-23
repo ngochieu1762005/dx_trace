@@ -86,6 +86,7 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
   if(parts.length!==3||parts.some(p=>!p))throw Error('Invalid JWT');
   const h=decode(parts[0]),p=decode(parts[1]);
   if(h.alg!=='RS256'||!CLIENT.test(h.kid||'')||h.crit||h.jku||h.jwk||h.x5u||h.x5c)throw Error('Unexpected JWT header');
+  if(!cachedKeys.has(h.kid)&&clock()-updated<10000)throw Error('Unknown JWT key');
   if(!cachedKeys.has(h.kid)||clock()-updated>300000)await refresh();
   const key=cachedKeys.get(h.kid);
   if(!key||!verifySignature('RSA-SHA256',Buffer.from(parts[0]+'.'+parts[1]),key,Buffer.from(parts[2],'base64url')))throw Error('Invalid JWT signature');
@@ -118,7 +119,9 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
       [...url.searchParams.keys()].some(k=>url.searchParams.getAll(k).length!==1)){
       status=400;return json(res,status,'Invalid query parameter',requestId);
    }
-   const identity=await authenticate(req.headers.authorization);
+   const identity=await authenticate(req.headers.authorization).catch(()=>null);
+   if(!identity){status=401;return json(res,status,'Unauthorized',requestId,
+    {'www-authenticate':'Bearer realm="dxtrace", error="invalid_token"'});}
    clientId=identity.clientId;
    if(match&&!identity.policy.models.has(match[1])){status=403;return json(res,status,'Model not authorized for client',requestId);}
    if(url.pathname!=='/v1/health'){
