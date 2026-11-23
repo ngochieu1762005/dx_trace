@@ -17,6 +17,18 @@ Phạm vi **v0.0.5**: 40 kiểm thử Node.js, 3 kiểm thử Python và job ki�
 | Chức năng kho | domain, impact, scanner, inventory-view | Các test nghiệp vụ, thu hồi, đối chiếu mã và CSV trong `tests/` | Camera thật cần kiểm trên từng thiết bị |
 | Hiệu năng | `tools/benchmark-platform.mjs` | [Kết quả và phạm vi đo](BENCHMARK.md) | Không đo SSO/TLS/gateway, không so trực tiếp với hệ thống khác |
 
+## Ứng dụng độc lập và ranh giới chịu lỗi (chỉ nhánh nâng cấp)
+
+| Hạng mục | Mã / tài liệu | Kiểm chứng tự động | Chưa được chứng minh |
+| --- | --- | --- | --- |
+| Frontend ứng dụng thứ hai chạy riêng | [Quality Portal](QUALITY-PORTAL.md), `apps/quality-portal/server.mjs` | `tests/quality-portal.test.mjs` spawn 3 process, route CSP, deny path traversal | Browser test trên VPS thật |
+| Dùng lại Core sau cài AppKit | `manifest.json`, `lib/appkit.mjs`, `lib/platform.mjs` | Plan/install, ID/entrypoint, quyền khác tổ chức, dữ liệu và ledger dùng chung | Không có plugin chạy mã ngoài hoặc app store |
+| Phân tách người lập và duyệt | `examples/quality/model.json` | Người lập bị 403, tài khoản quản lý khác duyệt thành công | Chưa kiểm TOTP/Keycloak E2E tự động |
+| Cô lập sự cố frontend | `selfhost/compose.yaml`, `selfhost/server.mjs` | Tắt quality-portal, API kho và hồ sơ chất lượng vẫn hoạt động | Không phải HA ở tầng Core/DB |
+| CI container 3 dịch vụ | `.github/workflows/ci.yml`, `selfhost/container-smoke.mjs` | Build image và thử Core+App+Quality | Chưa thay thế kiểm thử khôi phục stack production |
+
+**Các bài kiểm thử mới phải được đánh giá theo kết quả GitHub Actions của commit tương ứng, không được tự nhận đạt trước khi CI xanh.**
+
 ## Cách kiểm tra độc lập
 
 ```bash
