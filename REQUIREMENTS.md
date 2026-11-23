@@ -1,14 +1,14 @@
 # Đối chiếu triển khai với DX-OS Open-Core
 
-Phạm vi: **DX-TRACE main**, gồm v0.0.5 và AppKit/BPMN của v0.0.6. Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
+Phạm vi: **DX-TRACE v0.0.7**, kế thừa v0.0.5/v0.0.6, thêm Gateway và workflow song song/timer. Bảng này liên kết năng lực với mã và cách kiểm chứng; không thay thế nguyên văn thể lệ hoặc xác nhận của ban tổ chức.
 
 | Hạng mục | Triển khai | Minh chứng / cách kiểm tra | Giới hạn |
 | --- | --- | --- | --- |
 | Identity / SSO | Keycloak + OAuth2 Proxy; quyền thành viên tại Core | `selfhost/realm.json`, `lib/server.ts`, [script kiểm OIDC sống](selfhost/verify-oidc.mjs) cho hai tài khoản cùng kho | Unit tests vẫn mô phỏng; phải chạy live check bằng session thật sau triển khai |
-| Biên API | Caddy → signin → app → Gateway → Core; thêm optional external OIDC JWT resource server (PR #21) | [Gateway + OIDC](docs/GATEWAY-AND-SSO.md), [API bên ngoài](docs/EXTERNAL-API.md), tests và CI container | API bên ngoài chỉ đọc, không bật mặc định; chưa có self-service client portal hay quota phân tán |
+| Biên API | Caddy → signin → app → Gateway → Core; thêm optional external OIDC JWT resource server (v0.0.7) | [Gateway + OIDC](docs/GATEWAY-AND-SSO.md), [API bên ngoài](docs/EXTERNAL-API.md), tests và CI container | API bên ngoài chỉ đọc, không bật mặc định; chưa có self-service client portal hay quota phân tán |
 | Dữ liệu có cấu trúc | SQLite: workspace, cảm biến, mô hình/hồ sơ | [Migration](drizzle/), test cách ly và phân trang | Kho truyền thống còn JSON, chưa PostgreSQL nghiệp vụ |
 | Dữ liệu phi cấu trúc | Tệp PNG/JPEG/PDF, hash, metadata và trạng thái quét | Upload/download/restore tests; [API](docs/API.md) | Kho tệp cục bộ; scanner ngoài là tùy chọn |
-| Workflow | State-machine JSON và BPMN XML tập con; PR #21 thêm executor fork/join, guarded tasks và timer persisted | [BPMN interchange](docs/BPMN.md), [Process Runtime](docs/PROCESS-RUNTIME.md), kiểm thử lưu trạng thái/timer | Không hỗ trợ toàn bộ BPMN 2.0 hoặc BPMN parallel XML importer, chưa có UI editor kéo thả |
+| Workflow | State-machine JSON và BPMN XML tập con; v0.0.7 thêm executor fork/join, guarded tasks và timer persisted | [BPMN interchange](docs/BPMN.md), [Process Runtime](docs/PROCESS-RUNTIME.md), kiểm thử lưu trạng thái/timer | Không hỗ trợ toàn bộ BPMN 2.0 hoặc BPMN parallel XML importer, chưa có UI editor kéo thả |
 | Core headless | Tiến trình/container API riêng, không UI; App không kết nối privcore | Unit test token sai + smoke Docker từ chối đường trực tiếp tới Core | Demo PC là ngoại lệ chạy cùng tiến trình; chưa có HA |
 | Tái sử dụng | Bốn mô hình dùng chung biểu mẫu; Quality Control Portal có frontend/container độc lập dùng chung Core | [Quality Portal](docs/QUALITY-PORTAL.md), `tests/quality-portal.test.mjs`, CI 3 container | Chưa có runtime thực thi plugin ngoài; kiểm SSO trên VPS vẫn cần thực hiện |
 | H–P–D–I trong bài toán kho | Người/vai trò; quy trình; dữ liệu lô/số đo; tra cứu hỗ trợ | Quy trình nhập → giao → sự cố → thu hồi và đối soát | AI tùy chọn không quyết định thay người quản lý |
