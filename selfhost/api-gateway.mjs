@@ -49,7 +49,10 @@ export function createGateway(config,{upstreamFetch=fetch,clock=Date.now}={}){
       // Per-process fixed window, not a distributed quota or WAF.
       if(url.pathname!=='/api/health'){
         const now=clock();
-        if(clients.size>4096){for(const [key,item] of clients)if(now-item.start>=60000)clients.delete(key);}
+        if(clients.size>4096){
+          for(const [key,item] of clients)if(now-item.start>=60000)clients.delete(key);
+          while(clients.size>4096)clients.delete(clients.keys().next().value);
+        }
         const key=typeof req.headers['x-forwarded-user']==='string'&&req.headers['x-forwarded-user'].length<=256
           ? req.headers['x-forwarded-user'] : 'anonymous';
         let item=clients.get(key);
@@ -75,8 +78,18 @@ export function createGateway(config,{upstreamFetch=fetch,clock=Date.now}={}){
       });
       if(response.status>=300&&response.status<400)return reply(res,502,'Unexpected upstream redirect');
       if(Number(response.headers.get('content-length'))>MAX_RESPONSE)return reply(res,502,'Upstream response too large');
-      const buffer=Buffer.from(await response.arrayBuffer());
-      if(buffer.length>MAX_RESPONSE)return reply(res,502,'Upstream response too large');
+      const chunksOut=[];let sizeOut=0;
+      if(response.body){
+        const reader=response.body.getReader();
+        for(;;){
+          const {done,value}=await reader.read();
+          if(done)break;
+          sizeOut+=value.byteLength;
+          if(sizeOut>MAX_RESPONSE){await reader.cancel();return reply(res,502,'Upstream response too large');}
+          chunksOut.push(Buffer.from(value));
+        }
+      }
+      const buffer=Buffer.concat(chunksOut,sizeOut);
       const outbound={'cache-control':'no-store','x-content-type-options':'nosniff'};
       for(const name of REPLY){const value=response.headers.get(name);if(value)outbound[name]=value;}
       res.writeHead(response.status,outbound).end(buffer);
