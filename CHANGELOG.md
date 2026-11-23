@@ -4,6 +4,13 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+### Added — independently deployed quality application
+
+- Thêm Quality Control Portal với frontend và container độc lập, dùng chung Core API, định danh, phân quyền, mô hình, workflow và ledger. Route được bảo vệ bởi cùng OAuth2 Proxy; không cung cấp khóa Core cho frontend.
+- AppKit có `metadata.uiPath` giới hạn đúng `/apps/{id}/`, kiểm cả manifest và model trực tiếp, khám phá được entrypoint; quản trị viên cài bằng plan/install.
+- CI xác minh build 3 container Core/App/Quality Portal, bộ test 3 tiến trình kiểm chống tự duyệt, cách ly workspace, CSP và Core không bị ảnh hưởng khi portal bị dừng.
+- [Tài liệu nghiệm thu](docs/QUALITY-PORTAL.md) ghi rõ phạm vi, giới hạn và cách thử hai vai trò bằng Keycloak thật. Chưa nằm trong Release v0.0.5.
+
 ### Added — workflow interchange and reusable applications
 
 - Hỗ trợ xuất/nhập **tập con BPMN 2.0** (start, user task, cổng XOR, end, sequence flow) bằng XML; bảo toàn phân quyền, điều kiện dữ liệu, lý do phê duyệt và SLA trong thuộc tính riêng.
