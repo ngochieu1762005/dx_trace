@@ -1,47 +1,62 @@
 <div align="center">
 
-<img src="docs/assets/project-banner.svg" alt="DX-TRACE — Truy xuất và điều phối thu hồi thực phẩm" width="100%">
+<img src="docs/assets/project-banner.svg" alt="DX-TRACE — Nền tảng truy xuất và điều phối thu hồi thực phẩm" width="100%">
+
+# DX-TRACE
+### Open-Core Digital Transformation Platform
 
 **Truy xuất đến cùng. Thu hồi có kiểm soát.**
 
+Nền tảng DX-OS nguồn mở cho quản lý chuỗi cung ứng thực phẩm, điều phối thu hồi và xây dựng ứng dụng nghiệp vụ trên cùng một lõi.
+
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases/latest)
-[![MIT](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/ngochieu1762005/dx_trace)](https://github.com/ngochieu1762005/dx_trace/issues)
+[![Latest Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases)
+[![MIT License](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
+[![SPDX](https://img.shields.io/badge/SBOM-SPDX--2.3-0f766e)](docs/SUPPLY-CHAIN.md)
 
 ![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)
 ![Node](https://img.shields.io/badge/Node.js-24-417e38?logo=nodedotjs&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
-![Keycloak](https://img.shields.io/badge/SSO-Keycloak-326ce5?logo=keycloak&logoColor=white)
-![SQLite](https://img.shields.io/badge/Data-SQLite-003b57?logo=sqlite&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/Identity_DB-PostgreSQL_17-4169e1?logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Deploy-Docker_Compose-2496ed?logo=docker&logoColor=white)
+![Keycloak](https://img.shields.io/badge/Identity-Keycloak-326ce5?logo=keycloak&logoColor=white)
+![Docker](https://img.shields.io/badge/Deployment-Docker_Compose-2496ed?logo=docker&logoColor=white)
+![SQLite](https://img.shields.io/badge/Core_Data-SQLite-003b57?logo=sqlite&logoColor=white)
 
-[Cài đặt nhanh](#quick-setup) · [Kiến trúc](#architecture) · [API](docs/API.md) · [Tài liệu](docs/README.md) · [Minh chứng](docs/EVIDENCE.md) · [Tải v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.6)
+[**Live Website**](https://dxtrace.hieuds.com/) · [**Ứng dụng**](https://app.dxtrace.hieuds.com/) · [**Quick Start**](#quick-setup) · [**System Architecture**](#architecture) · [**Demo Guide**](docs/DEMO.md) · [**Technical Evidence**](docs/EVIDENCE.md)
 
 </div>
 
-DX-TRACE kết nối **lô hàng, giao nhận, điều kiện bảo quản và thu hồi** trong một quy trình thống nhất. Khi một lô gặp sự cố, người quản lý xác định được hàng đã đến đâu, còn nằm trong kho bao nhiêu, đã nhận trả bao nhiêu và ai đang xử lý.
+DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản → sự cố → thu hồi → đối soát** trong một quy trình thống nhất. Khi có lô hàng không đạt yêu cầu, hệ thống hỗ trợ xác định vị trí và lượng hàng liên quan, kiểm soát các quyết định phê duyệt, ghi nhận lịch sử thao tác và hỗ trợ truy xuất nguồn gốc bằng QR/mã vạch.
 
-Nền tảng theo định hướng **DX-OS Open-Core**: Core API chạy độc lập, giao diện dùng chung danh tính, quyền, dữ liệu và workflow. Ngoài nghiệp vụ kho, người quản trị có thể khai báo mô hình JSON để tạo biểu mẫu và quy trình mới mà không viết lại giao diện cho từng loại hồ sơ.
+Đây không chỉ là giao diện quản lý kho: **DX-TRACE có lõi API headless**, mô hình nghiệp vụ có thể khai báo, ứng dụng thứ hai triển khai độc lập và hạ tầng danh tính dùng chung. Các khẳng định kỹ thuật đều được liên kết tới mã nguồn, kiểm thử hoặc tài liệu nghiệm thu; những hạng mục chưa xác minh được ghi rõ.
 
-**Phạm vi tài liệu: v0.0.6.** Bản phát hành gồm Quality Control Portal, AppKit, xuất/nhập BPMN và cập nhật nhận diện. Chọn tag để tái lập đúng mã nguồn; xem [CHANGELOG](CHANGELOG.md) cho lịch sử phiên bản.
+## Điểm nổi bật
 
-**Tác giả và người duy trì:** [Nguyễn Ngọc Hiếu](AUTHORS.md). Dự án phát triển theo định hướng DX-OS Open-Core, với ứng dụng truy xuất và thu hồi thực phẩm.
+| Năng lực | DX-TRACE triển khai như thế nào | Minh chứng |
+| :--- | :--- | :--- |
+| **Reusable Headless Core** | Core API riêng, không phụ thuộc vào giao diện web hoặc Quality Portal | [Kiến trúc](docs/HEADLESS-CORE.md) · [Kiểm thử](tests/headless-core.test.mjs) |
+| **Identity / SSO** | Keycloak + OAuth2 Proxy; danh tính dùng chung và phân quyền tại Core | [Cấu hình](selfhost/compose.yaml) · [Kiểm chứng 2 người dùng](docs/GATEWAY-AND-SSO.md) |
+| **Isolated API Gateway** | Gateway chính sách nội bộ, hai khóa dịch vụ khác nhau, mạng Docker phân tách, kiểm soát request | [Gateway](selfhost/api-gateway.mjs) · [Bài kiểm](tests/api-gateway.test.mjs) |
+| **Declarative AppKit** | Cài mô hình ứng dụng từ manifest, kế thừa biểu mẫu, quyền và workflow | [AppKit](docs/APPKIT.md) · [Ví dụ](examples/maintenance/app.json) |
+| **Workflow / BPMN interchange** | Quy trình máy trạng thái có kiểm tra quyền, chống tự duyệt; nhập/xuất tập con BPMN 2.0 | [Đặc tả BPMN](docs/BPMN.md) · [Bài kiểm](tests/bpmn.test.mjs) |
+| **Independent Quality Portal** | Frontend thứ hai chạy container riêng, dùng API lõi và phiên SSO cùng nguồn | [Quality Portal](docs/QUALITY-PORTAL.md) · [Mã nguồn](apps/quality-portal/) |
+| **Open-source evidence** | GitHub CI, Docker smoke test, kiểm tra bí mật, SPDX SBOM và quy trình phát hành có attestations | [CI](.github/workflows/ci.yml) · [Supply chain](docs/SUPPLY-CHAIN.md) |
 
-[Hướng dẫn trình diễn](docs/DEMO.md) · [Phụ thuộc và giấy phép](DEPENDENCIES.md) · [Lộ trình](ROADMAP.md) · [Kiểm thử](docs/TESTING.md)
+### Phiên bản và mức độ xác minh
 
-| Trải nghiệm | Triển khai và kiểm chứng |
-| --- | --- |
-| [Website giới thiệu](https://dxtrace.hieuds.com/) | [Chạy trên PC](#quick-setup) |
-| [Ứng dụng kho](https://app.dxtrace.hieuds.com/) | [Máy chủ Docker](selfhost/README.md) |
-| [Dịch vụ danh tính demo](https://dxauth.hieuds.com/) | [Ubuntu có Caddy sẵn](selfhost/DEPLOY_SAAS_UBUNTU.md) |
+| Phạm vi | Tình trạng | Cách kiểm tra |
+| --- | --- | --- |
+| **Release v0.0.6** | Bản phát hành đã công bố: Quality Portal, AppKit, BPMN subset | [Release v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.6) |
+| **Nhánh main** | Đã tích hợp thêm API Gateway độc lập, CI tách mạng, script nghiệm thu OIDC và SPDX SBOM | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
+| **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
+| **Mở rộng tiếp theo** | BPMN nâng cao, đăng ký API client bên ngoài và kiểm thử phục hồi/benchmark full-stack | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
 
-Tài khoản demo do quản trị viên cấp; repository không chứa mật khẩu dùng chung. Khi tự triển khai, dùng tên miền và tài khoản của đơn vị bạn.
+> **Lưu ý khi tái lập:** Release \`v0.0.6\` và mã \`main\` hiện không hoàn toàn giống nhau. Tài liệu và bài kiểm về Gateway mới áp dụng cho \`main\`; tag \`v0.0.6\` không chứa những thay đổi đó. Trên VPS đang hoạt động, không chạy lại \`setup.mjs\` hoặc nâng cấp Compose khi chưa sao lưu và bổ sung khóa \`DX_GATEWAY_APP_TOKEN\`. Xem [quy trình chuyển đổi an toàn](docs/GATEWAY-AND-SSO.md).
+
+**Dự án được duy trì bởi [Nguyễn Ngọc Hiếu](AUTHORS.md).** Phần giới thiệu dành cho người dùng; các giới hạn kỹ thuật và kết quả thực nghiệm được công bố trong [tài liệu](docs/README.md), [bảng đối chiếu DX-OS](REQUIREMENTS.md) và [ma trận minh chứng](docs/EVIDENCE.md).
 
 <a id="contents"></a>
 ## Nội dung
 
+- [Điểm nổi bật và phạm vi phiên bản](#điểm-nổi-bật)
 - [Bài toán và tính năng](#features)
 - [System Architecture](#architecture)
 - [Technologies Used](#technologies)
@@ -114,7 +129,7 @@ flowchart TD
 | `gateway-api` | Gateway chính sách nội bộ ở 8082; kiểm khóa app, giới hạn lưu lượng, lọc header, thay khóa Core; không publish cổng host. |
 | `core` | API riêng ở cổng nội bộ 8081, yêu cầu `DX_CORE_TOKEN`, không phục vụ giao diện và không publish cổng host. |
 
-Trên nhánh phát triển sau v0.0.6, App → Gateway → Core dùng hai khóa và hai mạng Docker khác nhau; xem [sơ đồ, kiểm thử OIDC thực và cách nâng cấp VPS](docs/GATEWAY-AND-SSO.md). **Đây chưa phải nội dung của tag v0.0.6.**
+Trên nhánh `main` sau v0.0.6, App → Gateway → Core dùng hai khóa và hai mạng Docker khác nhau; xem [sơ đồ, kiểm thử OIDC thực và cách nâng cấp VPS](docs/GATEWAY-AND-SSO.md). **Đây chưa phải nội dung của tag v0.0.6.**
 
 Có **một giao diện kho thống nhất** và **Quality Control Portal chạy riêng** từ v0.0.6. Đề xuất, thu hồi và nghiệp vụ mở rộng nằm trong giao diện kho; Portal chất lượng là frontend độc lập dùng cùng Core. [Ranh giới bảo mật và mô hình triển khai](docs/HEADLESS-CORE.md).
 
@@ -159,6 +174,8 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 | Lưu trữ | `node:sqlite`, filesystem, `node:crypto` | SQLite WAL, đối tượng tệp, hash và HMAC |
 | Danh tính | Keycloak 26.4.7, PostgreSQL 17, OAuth2 Proxy 7.12.0 | Đăng nhập và phiên OIDC |
 | Triển khai | Caddy 2, Docker Compose v2 | HTTPS, định tuyến và dịch vụ độc lập |
+| API Gateway nội bộ | Node.js 24, `selfhost/api-gateway.mjs` | Tách khóa Core, giới hạn tuyến/headers/body và quota từng tiến trình |
+| Supply chain | Syft / SPDX 2.3, GitHub Attestations | Kiểm kê phụ thuộc qua CI; xác minh provenance cho các release mới khi phát hành thành công |
 | Build / CI | Vite 8.0.13, pnpm 11.25.0, GitHub Actions | Build tái lập theo lockfile và kiểm tra phát hành |
 
 [Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc và giấy phép](DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
@@ -231,14 +248,16 @@ npm test
 python3 -m unittest discover -s tests -p '*_test.py'
 ```
 
-CI phát hành v0.0.6 chạy toàn bộ kiểm thử Node.js/Python và kiểm ba container app/Core/Quality Portal. Các bài kiểm dùng dữ liệu thử, không thay thế kiểm tra camera thật, phiên OIDC hoặc diễn tập phục hồi Keycloak trên VPS.
+CI của bản v0.0.6 kiểm thử Node.js/Python và các container app/Core/Quality Portal. CI trên `main` đã mở rộng sang **app → gateway-api → core** ở các mạng riêng, kiểm tra Quality Portal và tạo **SPDX 2.3 SBOM**. Kiểm thử tự động không thay thế kiểm tra camera thật, OIDC với người dùng thật, diễn tập phục hồi Keycloak hoặc benchmark toàn stack trên VPS. [Xem workflow](.github/workflows/ci.yml) · [SBOM và provenance](docs/SUPPLY-CHAIN.md).
 
 Bài đo cục bộ 10.000 hồ sơ ban đầu, 1/10/25 client đồng thời, 15 giây mỗi mức ghi nhận 0 lỗi trong lần đo được công bố. Không quy đổi thành số người dùng thực: bài đo loại trừ TLS, gateway, Keycloak và mạng Internet. [Phương pháp và dữ liệu gốc](docs/BENCHMARK.md) · [Ma trận minh chứng](docs/EVIDENCE.md).
 
 <a id="changelog"></a>
 ## Nâng cấp và giới hạn
 
-**v0.0.6 thêm service `quality-portal`.** Khi nâng cấp, build và tạo lại `core`, `quality-portal`, `app` bằng cấu hình Compose hiện dùng. Xem [ghi chú v0.0.6](docs/releases/RELEASE_NOTES_v0.0.6.md).
+**v0.0.6:** đã phát hành Quality Control Portal và AppKit; xem [ghi chú v0.0.6](docs/releases/RELEASE_NOTES_v0.0.6.md).
+
+**Sau v0.0.6, trên `main`:** thêm `gateway-api` làm lớp chính sách giữa ứng dụng và Core, bảo vệ bằng khóa riêng và mạng Docker tách biệt; mở rộng CI và SBOM. **Nâng cấp VPS đang chạy cần tạo khóa `DX_GATEWAY_APP_TOKEN` mới và sao lưu trước khi dựng lại container**. Xem [hướng dẫn nâng cấp an toàn](docs/GATEWAY-AND-SSO.md) và [vận hành](selfhost/OPERATIONS.md).
 
 **v0.0.5 có migration dữ liệu hồ sơ mở rộng.** Sao lưu trước khi triển khai; sau migration không chạy image cũ trên DB mới. Quay lui cần khôi phục bản sao lưu tương ứng. [Quy trình vận hành](selfhost/OPERATIONS.md) · [Ghi chú v0.0.5](docs/releases/RELEASE_NOTES_v0.0.5.md).
 
@@ -248,7 +267,7 @@ Bài đo cục bộ 10.000 hồ sơ ban đầu, 1/10/25 client đồng thời, 1
 - Quét mã độc và AI là tích hợp tùy chọn; AI không tự quyết định thu hồi.
 - Ledger chưa có neo hash bên ngoài, không chống được quản trị viên viết lại toàn bộ DB.
 
-Ưu tiên tiếp theo: SSO end-to-end tự động, đo toàn stack trên VPS cố định và thử nghiệm quy trình với người vận hành. Không coi các mục này là tính năng đã có.
+Ưu tiên tiếp theo: kiểm tra SSO hai ứng dụng với tài khoản Keycloak thật, khôi phục backup lên môi trường tách biệt, đo toàn stack có TLS/gateway, mở rộng BPMN timer/parallel và mô hình API client bên ngoài. [BPMN #18](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API #19](https://github.com/ngochieu1762005/dx_trace/issues/19) · [VPS #20](https://github.com/ngochieu1762005/dx_trace/issues/20). Đây là **công việc đang mở**, không phải các tính năng đã nghiệm thu.
 
 <a id="contribution"></a>
 ## Đóng góp
@@ -272,6 +291,6 @@ Mã nguồn dự án dùng [MIT](LICENSE). Thư viện, biểu trưng và [phôn
 | Đánh giá và trình diễn | [Demo](docs/DEMO.md), [minh chứng](docs/EVIDENCE.md), [đối chiếu yêu cầu](REQUIREMENTS.md) |
 | Phát triển và tích hợp | [API](docs/API.md), [AppKit](docs/APPKIT.md), [BPMN](docs/BPMN.md), [bản đồ mã](docs/CODEBASE.md) |
 | Cài đặt và vận hành | [Self-host](selfhost/README.md), [Ubuntu](selfhost/DEPLOY_SAAS_UBUNTU.md), [backup/nâng cấp](selfhost/OPERATIONS.md) |
-| Nguồn mở và duy trì | [Phụ thuộc](DEPENDENCIES.md), [thành phần thứ ba](THIRD_PARTY_NOTICES.md), [đóng góp](CONTRIBUTING.md), [ứng xử](CODE_OF_CONDUCT.md), [bảo mật](SECURITY.md), [lộ trình](ROADMAP.md) |
+| Nguồn mở và duy trì | [Phụ thuộc](DEPENDENCIES.md), [SBOM và attestations](docs/SUPPLY-CHAIN.md), [thành phần thứ ba](THIRD_PARTY_NOTICES.md), [đóng góp](CONTRIBUTING.md), [ứng xử](CODE_OF_CONDUCT.md), [bảo mật](SECURITY.md), [lộ trình](ROADMAP.md) |
 
 [Toàn bộ tài liệu](docs/README.md) · [↑ Mục lục](#contents)
