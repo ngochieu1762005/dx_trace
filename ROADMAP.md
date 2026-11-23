@@ -13,6 +13,7 @@
 ## Đã có trên main — chưa phát hành thành tag mới
 
 - AppKit: cài nghiệp vụ khai báo qua manifest và xem kế hoạch trước khi áp dụng.
+- Ứng dụng kiểm tra chất lượng có frontend service/container riêng, entrypoint AppKit giới hạn nội bộ; CI kiểm 3 dịch vụ, phân quyền và cô lập lỗi. Cần xác nhận OIDC E2E trên VPS trước khi phát hành.
 - Xuất/nhập tập con BPMN 2.0, bảo toàn vai trò và điều kiện.
 - Kiểm dấu hiệu bí mật trong nguồn tại CI.
 - Google Sans, nhận diện xanh và cập nhật bộ tài liệu.
