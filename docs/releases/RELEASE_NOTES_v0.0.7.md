@@ -64,6 +64,8 @@ CI **does not** establish that an external Keycloak client is configured correct
 - [Changes from v0.0.6](https://github.com/ngochieu1762005/dx_trace/compare/v0.0.6...v0.0.7)
 - [Release source and checksums](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7)
 
+The published source SHA, SPDX inventory and checksum manifest must be validated by the tagged release workflow before this release is considered complete.
+
 This is a **code release**, not certification of production HA, comprehensive BPMN coverage, clinical/security compliance, independently audited security or actual deployed VPS availability. Live Keycloak SSO, staging restore and TLS load measurements remain separate acceptance tasks.
 
 © 2026 DX-TRACE contributors. Licensed under MIT.
