@@ -1,0 +1,99 @@
+{
+  "apiVersion": "dxtrace.io/v1",
+  "kind": "DeclarativeApplication",
+  "metadata": {
+    "id": "quality",
+    "name": "Kiểm tra chất lượng",
+    "version": "1.0.0",
+    "description": "Độc lập về frontend và tiến trình phục vụ; sử dụng chung DX-TRACE Headless Core để kiểm định lô."
+  },
+  "spec": {
+    "model": {
+      "id": "quality",
+      "name": "Kiểm tra chất lượng",
+      "fields": [
+        {
+          "key": "lot",
+          "label": "Mã lô tham chiếu",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "finding",
+          "label": "Kết quả kiểm tra",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "permissions": {
+        "read": [
+          "owner",
+          "manager",
+          "warehouse"
+        ],
+        "create": [
+          "owner",
+          "manager",
+          "warehouse"
+        ],
+        "scope": "own"
+      },
+      "workflow": {
+        "states": [
+          "draft",
+          "submitted",
+          "approved",
+          "rejected",
+          "done"
+        ],
+        "initial": "draft",
+        "terminal": [
+          "rejected",
+          "done"
+        ],
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "submitted",
+            "roles": [
+              "owner",
+              "manager",
+              "warehouse"
+            ],
+            "dueHours": 24
+          },
+          {
+            "from": "submitted",
+            "to": "approved",
+            "roles": [
+              "owner",
+              "manager"
+            ],
+            "differentActor": true,
+            "dueHours": 48
+          },
+          {
+            "from": "submitted",
+            "to": "rejected",
+            "roles": [
+              "owner",
+              "manager"
+            ],
+            "differentActor": true,
+            "reasonRequired": true
+          },
+          {
+            "from": "approved",
+            "to": "done",
+            "roles": [
+              "owner",
+              "manager",
+              "warehouse"
+            ],
+            "reasonRequired": true
+          }
+        ]
+      }
+    }
+  }
+}
