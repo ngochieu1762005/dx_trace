@@ -1,6 +1,6 @@
 # Ma trận minh chứng kỹ thuật
 
-Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm thử Python. Từ v0.0.6 và nhánh nâng cấp, phải xem số lượng thực tế trong GitHub Actions; không dùng các số lịch sử làm kết quả hiện tại. Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
+Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm thử Python. Từ v0.0.6 đến v0.0.7, phải xem số lượng thực tế trong GitHub Actions; không dùng các số lịch sử làm kết quả hiện tại. Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
 
 | Năng lực | Mã / tài liệu | Minh chứng | Giới hạn |
 | --- | --- | --- | --- |
@@ -29,7 +29,7 @@ Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm
 
 **Các bài kiểm thử mới phải được đánh giá theo kết quả GitHub Actions của commit tương ứng, không được tự nhận đạt trước khi CI xanh.**
 
-## Nâng cấp đang kiểm chứng — PR #21 (ngoài release v0.0.6)
+## Năng lực mới trong v0.0.7 — nghiệm thu VPS còn mở
 
 | Hạng mục | Mã | Bằng chứng có thể kiểm | Chưa có bằng chứng |
 | --- | --- | --- | --- |
