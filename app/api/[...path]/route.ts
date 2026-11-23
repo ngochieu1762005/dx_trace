@@ -101,7 +101,7 @@ async function route(req:Request){try{
     req.headers.get('idempotency-key')||''));
   }
   if(key==='plan')return json(await modelPlan(c,body.definition));
-  const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':null;
+  const command=key==='apply'?'platform.apply':action==='records'?'platform.create':action==='transition'?'platform.transition':action==='update'?'platform.update':action==='process-complete'?'platform.process.complete':action==='process-tick'?'platform.process.tick':null;
   if(!command)throw new DomainError('Không tìm thấy API mô hình',404);
   return json(await changePlatform(c,command,{...body,model:key},req.headers.get('idempotency-key')||''));
  }
