@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "clients": [
+    {
+      "clientId": "my-integrator",
+      "models": ["maintenance", "quality"],
+      "requestsPerMinute": 30
+    }
+  ]
+}
