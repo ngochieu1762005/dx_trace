@@ -36,7 +36,7 @@ test('ClamAV INSTREAM framing and verdict parsing',async(t)=>{
     let all=Buffer.alloc(0);
     socket.on('data',chunk=>{
       all=Buffer.concat([all,chunk]);
-      if(all.length<8+4+3+4)return;
+      if(all.length<Buffer.byteLength('zINSTREAM\0')+4+3+4)return;
       received.push(all);
       socket.end('stream: Test-Signature FOUND\0');
     });
