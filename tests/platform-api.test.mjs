@@ -69,7 +69,7 @@ test('HTTP models are isolated, idempotent, audited and survive verified restore
  const backup=dir+'/backup';execFileSync(process.execPath,['selfhost/backup.mjs',backup],{env:{...process.env,DATA_DIR:dir+'/data'}});
  const verify=JSON.parse(execFileSync(process.execPath,['selfhost/verify-backup.mjs',backup],{encoding:'utf8'}));assert.equal(verify.valid,true);
  await stop();await start(backup);
- assert.equal((await (await call('models')).json()).records[0].status,'approved');assert.deepEqual(await (await call('audit-ledger/verify')).json(),ledger);
+ assert.equal((await (await call('models/maintenance')).json()).records[0].status,'approved');assert.deepEqual(await (await call('audit-ledger/verify')).json(),ledger);
  const db=new DatabaseSync(backup+'/warehouse.sqlite');db.prepare('UPDATE audit_ledger SET payload=? WHERE seq=(SELECT MIN(seq) FROM audit_ledger)').run('{}');db.close();
  assert.equal((await (await call('audit-ledger/verify')).json()).valid,false);
  }finally{await stop();await rm(dir,{recursive:true,force:true})}
