@@ -4,6 +4,10 @@ An application bundle groups up to 12 existing v1 manifests into one transaction
 
 Example: [operations bundle](../examples/bundles/operations.json) installs maintenance and purchase approval together.
 
+## Operations console
+
+Open the expanded business operations screen as workspace owner and expand **Gói nghiệp vụ · AppKit v2**. The example loads automatically. Preview each model and apply the bundle only when the server reports it applicable. Editing the manifest clears the preview. This is a JSON editor, not a visual relationship designer.
+
 ## Developer CLI
 
 ```sh
