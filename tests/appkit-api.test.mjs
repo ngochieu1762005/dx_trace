@@ -42,6 +42,13 @@ test('installing a second app reuses audited Core without leaking records betwee
    stdio:'inherit'
   });
   await ready();
+  const bundle={apiVersion:'dxtrace.io/v2',kind:'ApplicationBundle',metadata:{id:'operations',name:'Operations',version:'1.0.0'},spec:{applications:[maintenance,purchase]}};
+  const bundlePlan=await request('apps/bundle-plan',{bundle});
+  assert.equal(bundlePlan.status,200);
+  assert.deepEqual((await bundlePlan.json()).baseVersions,{maintenance:0,purchase:0});
+  const bad=await request('apps/bundle-install',{bundle,baseVersions:{maintenance:0,purchase:1}});
+  assert.equal(bad.status,409);
+  assert.equal((await (await request('apps')).json()).applications.length,0);
   const firstPlan=await request('apps/plan',{manifest:maintenance});
   assert.equal(firstPlan.status,200);
   const p1=await firstPlan.json();
@@ -49,6 +56,9 @@ test('installing a second app reuses audited Core without leaking records betwee
   const first=await request('apps/install',{manifest:maintenance,baseVersion:0});
   assert.equal(first.status,200);
   assert.equal((await first.json()).version,1);
+  // Existing model must survive stale bundle and no partial install.
+  assert.equal((await request('apps/bundle-install',{bundle,baseVersions:{maintenance:0,purchase:0}})).status,409);
+  assert.deepEqual((await (await request('apps')).json()).applications.map(a=>a.id),['maintenance']);
   const secondPlan=await request('apps/plan',{manifest:purchase});
   assert.equal(secondPlan.status,200);
   assert.equal((await secondPlan.json()).baseVersion,0);
@@ -78,6 +88,17 @@ test('installing a second app reuses audited Core without leaking records betwee
   const wrong=structuredClone(maintenance);
   wrong.metadata.entrypoint='https://untrusted.example/plugin.js';
   assert.equal((await request('apps/plan',{manifest:wrong})).status,422);
+  assert.equal((await request('apps/bundle-install',{bundle,baseVersions:{maintenance:1,purchase:1}},'staff')).status,403);
+  const updated=structuredClone(bundle);
+  for(const app of updated.spec.applications)app.metadata.version='1.1.0';
+  const installBody={bundle:updated,baseVersions:{maintenance:1,purchase:1}},bundleKey=randomUUID();
+  const installedBundle=await request('apps/bundle-install',installBody,'owner',bundleKey);
+  assert.equal(installedBundle.status,200);
+  const result=await installedBundle.json();
+  assert.deepEqual(result.applications.map(a=>a.version),[2,2]);
+  assert.deepEqual(await (await request('apps/bundle-install',installBody,'owner',bundleKey)).json(),result);
+  assert.equal((await request('apps/bundle-install',installBody)).status,409);
+  assert.deepEqual((await (await request('apps')).json()).applications.map(a=>a.appVersion),['1.1.0','1.1.0']);
   assert.equal((await (await request('audit-ledger/verify')).json()).valid,true);
  }finally{
   if(child && child.exitCode===null){const finished=once(child,'exit');child.kill();await finished}

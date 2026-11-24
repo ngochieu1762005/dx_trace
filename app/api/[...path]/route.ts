@@ -28,6 +28,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {previewBundle,installBundle} from '../../../lib/bundle-store.ts';
 import {verifyUpload} from '../../../lib/upload-policy.mjs';
 import {buildCatalog} from '../../../lib/data-catalog.mjs';
 import {PlatformError,modelOpenApi} from '../../../lib/platform.mjs';
@@ -71,6 +72,11 @@ async function route(req:Request){try{
   }
   if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
   if(c.role!=='owner')throw new DomainError('Chỉ chủ không gian được cài ứng dụng',403);
+  if(['bundle-plan','bundle-install'].includes(key)){
+   const body:any=await req.json();
+   if(key==='bundle-plan')return json(await previewBundle(c,body?.bundle));
+   return json(await installBundle(c,body?.bundle,body?.baseVersions,req.headers.get('idempotency-key')||''));
+  }
   if(!['plan','install'].includes(key))throw new DomainError('Không tìm thấy API ứng dụng',404);
   const body:any=await req.json(),definition=manifestToModel(body?.manifest);
   if(key==='plan')return json(await modelPlan(c,definition));
