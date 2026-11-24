@@ -135,3 +135,21 @@ jobs:
       - name: Cleanup
         if: always()
         run: docker rm -f dx-pg-ci || true
+  isolated-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --global pnpm@11.25.0
+      - run: pnpm install --frozen-lockfile
+      - name: Verify low-concurrency isolated request path
+        run: node tools/benchmark-platform.mjs --topology isolated --records 10000 --seconds 2 --levels 1,10 --assert-no-errors --out /tmp/dxtrace-smoke.json
+      - name: Characterize isolated stack up to 200 concurrent clients
+        run: node tools/benchmark-platform.mjs --topology isolated --records 10000 --seconds 3 --levels 25,50,100,200 --out /tmp/dxtrace-isolated.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: isolated-stack-benchmark
+          path: /tmp/dxtrace-*.json
