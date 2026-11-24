@@ -28,6 +28,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {verifyUpload} from '../../../lib/upload-policy.mjs';
+import {buildCatalog} from '../../../lib/data-catalog.mjs';
 import {PlatformError,modelOpenApi} from '../../../lib/platform.mjs';
 import {workflowToBpmn,bpmnToWorkflow} from '../../../lib/bpmn.mjs';
 import {processToBpmn} from '../../../lib/process-bpmn.mjs';
@@ -57,6 +59,7 @@ async function route(req:Request){try{
  if(kind==='quality'&&action==='escalate'&&req.method==='POST'){
   return json(await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||''));
  }
+ if(kind==='catalog'&&req.method==='GET'&&!key)return json({models:buildCatalog(await storedModels(c),c.role)});
  if(kind==='apps'){
   if(req.method==='GET'){
    const visible=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role));
@@ -189,7 +192,7 @@ async function route(req:Request){try{
   if(Number(req.headers.get('content-length')||0)>6*1024*1024)throw new DomainError('Tệp tối đa 5 MB',413);
   const form=await req.formData(),file=form.get('file');if(!(file instanceof File)||!file.size||file.size>5*1024*1024)throw new DomainError('Chọn PNG, JPEG hoặc PDF tối đa 5 MB',422);
   const bytes=await file.arrayBuffer(),a=new Uint8Array(bytes);const mime=a[0]===137&&a[1]===80&&a[2]===78&&a[3]===71?'image/png':a[0]===255&&a[1]===216&&a[2]===255?'image/jpeg':new TextDecoder().decode(a.slice(0,5))==='%PDF-'?'application/pdf':'';if(!mime)throw new DomainError('Định dạng tệp không hợp lệ',422);
-  let scan='pending';if((env as any).FILE_SCAN_URL){const r=await fetch((env as any).FILE_SCAN_URL,{method:'POST',headers:{'Content-Type':'application/octet-stream',Authorization:'Bearer '+((env as any).FILE_SCAN_TOKEN||'')},body:bytes,signal:AbortSignal.timeout(15000)});if(r.ok){const result:any=await r.json();scan=result.clean===true?'clean':'blocked'}}
+  const scan=await verifyUpload(bytes,env);
   const digest=await hash(bytes);await env.BUCKET.put(c.workspace+'/'+digest,bytes,{httpMetadata:{contentType:'application/octet-stream'}});const result=await change(c,'file.create',{entity:String(form.get('entity')||''),name:file.name,mime,size:file.size,hash:digest,scan},crypto.randomUUID());return json(result);
  }
  const b:any=await req.json(),requestId=req.headers.get('idempotency-key')||'';

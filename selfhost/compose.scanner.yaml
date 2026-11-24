@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 DX-TRACE contributors
+# Opt-in malware scan stack. No host ports; only the core can reach scan-api.
+services:
+  core:
+    environment:
+      FILE_SCAN_URL: http://scan-api:8094/scan
+      FILE_SCAN_TOKEN: ${FILE_SCAN_TOKEN:?Configure a random scanner credential}
+    networks: [privcore, scanclient]
+  scan-api:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    command: ["node", "selfhost/scan-api.mjs"]
+    restart: unless-stopped
+    environment:
+      FILE_SCAN_TOKEN: ${FILE_SCAN_TOKEN:?Configure a random scanner credential}
+    networks: [scanclient, scanbackend]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    depends_on: [clamav]
+  clamav:
+    image: clamav/clamav:1.4
+    restart: unless-stopped
+    networks: [scanbackend, scanupdates]
+    volumes: ["clam-signatures:/var/lib/clamav"]
+networks:
+  scanclient: {internal: true}
+  scanbackend: {internal: true}
+  scanupdates: {}
+volumes:
+  clam-signatures: {}
