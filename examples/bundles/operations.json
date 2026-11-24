@@ -1,0 +1,267 @@
+{
+  "apiVersion": "dxtrace.io/v2",
+  "kind": "ApplicationBundle",
+  "metadata": {
+    "id": "operations",
+    "name": "Bộ nghiệp vụ vận hành",
+    "version": "1.0.0"
+  },
+  "spec": {
+    "applications": [
+      {
+        "apiVersion": "dxtrace.io/v1",
+        "kind": "DeclarativeApplication",
+        "metadata": {
+          "id": "maintenance",
+          "name": "Yêu cầu bảo trì thiết bị",
+          "version": "1.0.0",
+          "description": "Yêu cầu bảo trì thiết bị và phê duyệt có phân quyền"
+        },
+        "spec": {
+          "model": {
+            "id": "maintenance",
+            "name": "Yêu cầu bảo trì thiết bị",
+            "fields": [
+              {
+                "key": "equipment",
+                "label": "Thiết bị",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "description",
+                "label": "Mô tả",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "priority",
+                "label": "Ưu tiên",
+                "type": "choice",
+                "options": [
+                  "Thường",
+                  "Khẩn cấp"
+                ],
+                "required": true
+              },
+              {
+                "key": "cost",
+                "label": "Chi phí dự kiến",
+                "type": "number"
+              }
+            ],
+            "permissions": {
+              "read": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "create": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "scope": "own"
+            },
+            "workflow": {
+              "states": [
+                "draft",
+                "submitted",
+                "approved",
+                "rejected",
+                "done"
+              ],
+              "initial": "draft",
+              "terminal": [
+                "rejected",
+                "done"
+              ],
+              "transitions": [
+                {
+                  "from": "draft",
+                  "to": "submitted",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "dueHours": 24
+                },
+                {
+                  "from": "submitted",
+                  "to": "approved",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "dueHours": 48
+                },
+                {
+                  "from": "submitted",
+                  "to": "rejected",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "reasonRequired": true
+                },
+                {
+                  "from": "approved",
+                  "to": "done",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "reasonRequired": true
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "apiVersion": "dxtrace.io/v1",
+        "kind": "DeclarativeApplication",
+        "metadata": {
+          "id": "purchase",
+          "name": "Đề nghị mua sắm",
+          "version": "1.0.0",
+          "description": "Yêu cầu mua sắm với luồng phê duyệt theo hạn mức"
+        },
+        "spec": {
+          "model": {
+            "id": "purchase",
+            "name": "Đề nghị mua sắm",
+            "fields": [
+              {
+                "key": "title",
+                "label": "Nội dung mua sắm",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "amount",
+                "label": "Số tiền (VND)",
+                "type": "number",
+                "required": true,
+                "min": 1
+              }
+            ],
+            "permissions": {
+              "read": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "create": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "scope": "own"
+            },
+            "workflow": {
+              "states": [
+                "draft",
+                "submitted",
+                "approved",
+                "rejected",
+                "done",
+                "escalated"
+              ],
+              "initial": "draft",
+              "terminal": [
+                "rejected",
+                "done"
+              ],
+              "transitions": [
+                {
+                  "from": "draft",
+                  "to": "submitted",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "dueHours": 24
+                },
+                {
+                  "from": "submitted",
+                  "to": "approved",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "dueHours": 48,
+                  "when": {
+                    "field": "amount",
+                    "op": "lte",
+                    "value": 5000000
+                  }
+                },
+                {
+                  "from": "submitted",
+                  "to": "rejected",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "reasonRequired": true
+                },
+                {
+                  "from": "approved",
+                  "to": "done",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "reasonRequired": true
+                },
+                {
+                  "from": "submitted",
+                  "to": "escalated",
+                  "roles": [
+                    "manager",
+                    "owner"
+                  ],
+                  "differentActor": true,
+                  "when": {
+                    "field": "amount",
+                    "op": "gt",
+                    "value": 5000000
+                  },
+                  "dueHours": 24
+                },
+                {
+                  "from": "escalated",
+                  "to": "approved",
+                  "roles": [
+                    "owner"
+                  ],
+                  "differentActor": true,
+                  "reasonRequired": true,
+                  "dueHours": 48
+                },
+                {
+                  "from": "escalated",
+                  "to": "rejected",
+                  "roles": [
+                    "owner"
+                  ],
+                  "differentActor": true,
+                  "reasonRequired": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}
