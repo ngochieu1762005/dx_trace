@@ -1,0 +1,197 @@
+[
+  [
+    "Bắt đầu",
+    [
+      [
+        "intro",
+        "website/content/intro.md",
+        "Giới thiệu"
+      ],
+      [
+        "quickstart",
+        "website/content/quickstart.md",
+        "Bắt đầu nhanh"
+      ],
+      [
+        "demo",
+        "docs/DEMO.md",
+        "Kịch bản trình diễn"
+      ]
+    ]
+  ],
+  [
+    "Kiến trúc",
+    [
+      [
+        "architecture",
+        "docs/HEADLESS-CORE.md",
+        "Headless Core"
+      ],
+      [
+        "gateway-sso",
+        "docs/GATEWAY-AND-SSO.md",
+        "Gateway & SSO"
+      ],
+      [
+        "external-api",
+        "docs/EXTERNAL-API.md",
+        "External OIDC API"
+      ],
+      [
+        "quality-portal",
+        "docs/QUALITY-PORTAL.md",
+        "Quality Portal"
+      ]
+    ]
+  ],
+  [
+    "Phát triển ứng dụng",
+    [
+      [
+        "platform",
+        "docs/PLATFORM.md",
+        "Mô hình nghiệp vụ"
+      ],
+      [
+        "appkit",
+        "docs/APPKIT.md",
+        "AppKit v1"
+      ],
+      [
+        "application-bundles",
+        "docs/APPLICATION-BUNDLES.md",
+        "AppKit v2 · Bundles"
+      ],
+      [
+        "model-governance",
+        "docs/MODEL-GOVERNANCE.md",
+        "Quản trị dữ liệu"
+      ],
+      [
+        "model-access",
+        "docs/MODEL-ACCESS.md",
+        "Phân quyền mô hình"
+      ],
+      [
+        "bpmn",
+        "docs/BPMN.md",
+        "BPMN 2.0"
+      ],
+      [
+        "process-runtime",
+        "docs/PROCESS-RUNTIME.md",
+        "Process Runtime"
+      ],
+      [
+        "api",
+        "docs/API.md",
+        "HTTP API"
+      ],
+      [
+        "codebase",
+        "docs/CODEBASE.md",
+        "Bản đồ mã nguồn"
+      ]
+    ]
+  ],
+  [
+    "Triển khai & vận hành",
+    [
+      [
+        "selfhost",
+        "selfhost/README.md",
+        "Docker Compose"
+      ],
+      [
+        "ubuntu",
+        "selfhost/DEPLOY_SAAS_UBUNTU.md",
+        "Ubuntu & Caddy"
+      ],
+      [
+        "operations",
+        "selfhost/OPERATIONS.md",
+        "Vận hành & khôi phục"
+      ],
+      [
+        "scanner",
+        "docs/PLATFORM-ASSURANCE.md",
+        "ClamAV & Catalog"
+      ],
+      [
+        "postgres",
+        "docs/POSTGRES-MIGRATION.md",
+        "Chuyển đổi PostgreSQL"
+      ],
+      [
+        "operating-workflows",
+        "docs/OPERATING-WORKFLOWS.md",
+        "Quy trình vận hành"
+      ]
+    ]
+  ],
+  [
+    "Kiểm chứng & nguồn mở",
+    [
+      [
+        "evidence",
+        "docs/EVIDENCE.md",
+        "Ma trận minh chứng"
+      ],
+      [
+        "acceptance",
+        "docs/ACCEPTANCE-2026.md",
+        "Nghiệm thu"
+      ],
+      [
+        "testing",
+        "docs/TESTING.md",
+        "Kiểm thử"
+      ],
+      [
+        "benchmark",
+        "docs/BENCHMARK.md",
+        "Hiệu năng"
+      ],
+      [
+        "audit",
+        "docs/AUDIT-EVIDENCE.md",
+        "Kiểm chứng audit"
+      ],
+      [
+        "supply-chain",
+        "docs/SUPPLY-CHAIN.md",
+        "SBOM & Supply Chain"
+      ],
+      [
+        "dependencies",
+        "docs/DEPENDENCIES.md",
+        "Phụ thuộc"
+      ],
+      [
+        "contributing",
+        "CONTRIBUTING.md",
+        "Đóng góp"
+      ],
+      [
+        "security",
+        "SECURITY.md",
+        "Bảo mật"
+      ],
+      [
+        "roadmap",
+        "ROADMAP.md",
+        "Lộ trình"
+      ],
+      [
+        "changelog",
+        "CHANGELOG.md",
+        "Changelog"
+      ],
+      [
+        "releases",
+        "docs/releases/README.md",
+        "Phát hành"
+      ]
+    ]
+  ]
+]
