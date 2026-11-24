@@ -28,6 +28,21 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 Đây không chỉ là giao diện quản lý kho: **DX-TRACE có lõi API headless**, mô hình nghiệp vụ có thể khai báo, ứng dụng thứ hai triển khai độc lập và hạ tầng danh tính dùng chung. Các khẳng định kỹ thuật đều được liên kết tới mã nguồn, kiểm thử hoặc tài liệu nghiệm thu; những hạng mục chưa xác minh được ghi rõ.
 
+## Quy trình liên thông trên nhánh main
+
+**Việc cần làm → kiểm định → cách ly → thu hồi → đối soát → minh chứng.** Giao diện giữ đúng vùng kho khi chuyển giữa ứng dụng; người xử lý thấy các bước theo quyền và trạng thái thực tế.
+
+| Thao tác | Kết quả |
+| --- | --- |
+| Mở **Việc cần làm** | Gom sự cố, phiếu chờ giao và hồ sơ có bước cần xử lý; ưu tiên việc quá hạn |
+| Kiểm định **Không đạt** | Quản lý xác nhận cách ly, liên kết hoặc mở sự cố; chặn giao hàng tại Core |
+| Xử lý **quy trình song song** | Hoàn tất từng nhánh theo vai trò, theo dõi timer và điều kiện hội tụ |
+| Xuất **minh chứng nhật ký** | Kiểm tra chuỗi SHA-256 tại trình duyệt và đối chiếu bằng CLI với mốc đã giữ riêng |
+
+[**Hướng dẫn quy trình**](docs/OPERATING-WORKFLOWS.md) · [**Kiểm chứng nhật ký**](docs/AUDIT-EVIDENCE.md) · [**Changelog**](CHANGELOG.md)
+
+Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của tag v0.0.7. Triển khai VPS và nghiệm thu SSO thực tế là bước riêng.
+
 ## Điểm nổi bật
 
 | Năng lực | DX-TRACE triển khai như thế nào | Minh chứng |
@@ -45,9 +60,9 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 | Phạm vi | Tình trạng | Cách kiểm tra |
 | --- | --- | --- |
 | **Release v0.0.7** | Gateway, workflow song song/timer và API OIDC tùy chọn; cần nghiệm thu VPS riêng | [Release v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
-| **Nhánh main** | Đã tích hợp API Gateway độc lập, workflow song song/timer và script nghiệm thu OIDC, HTTPS benchmark, SPDX SBOM | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
+| **Nhánh main** | Thêm quy trình kiểm định–cách ly, bảng việc cần làm, giao diện tác vụ song song và minh chứng nhật ký độc lập | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
 | **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
-| **Mở rộng tiếp theo** | BPMN nâng cao, đăng ký API client bên ngoài và kiểm thử phục hồi/benchmark full-stack | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
+| **Nghiệm thu tiếp theo** | SSO trên VPS, phục hồi toàn stack, camera thật và đo tải qua HTTPS; API OIDC đọc-only đã có ở v0.0.7 | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
 
 > **Lưu ý khi tái lập:** Release `v0.0.6` và mã `main` hiện không hoàn toàn giống nhau. Tài liệu và bài kiểm về Gateway mới áp dụng cho `main`; tag `v0.0.6` không chứa những thay đổi đó. Trên VPS đang hoạt động, không chạy lại `setup.mjs` hoặc nâng cấp Compose khi chưa sao lưu và bổ sung khóa `DX_GATEWAY_APP_TOKEN`. Xem [quy trình chuyển đổi an toàn](docs/GATEWAY-AND-SSO.md).
 
@@ -84,6 +99,7 @@ Một lô sữa đã được phân phối đến nhiều cửa hàng. Đầu d�
 
 | Phân hệ | Khả năng hiện có |
 | --- | --- |
+| Việc cần làm | Hàng đợi theo vai trò, việc gần hạn/quá hạn và liên kết đúng vùng kho |
 | Tổng quan | Cảnh báo, chỉ số kho và thao tác nhanh quét mã, nhập lô, lập phiếu xuất |
 | Lô hàng | Quản lý hạn dùng, vị trí, tồn; lọc và xuất CSV; gợi ý thứ tự FEFO khi chọn lô xuất |
 | Giao nhận | Giữ hàng, giao, hủy và nhận trả theo số lượng; kiểm tra tồn tại máy chủ |
@@ -110,6 +126,10 @@ Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch �
 
 <a id="architecture"></a>
 ## 🏗️ System Architecture
+
+[![Kiến trúc toàn hệ thống: danh tính, gateway, hai ứng dụng, Core, dữ liệu và tích hợp](docs/assets/architecture-current.svg)](docs/assets/architecture-current.svg)
+
+Sơ đồ thể hiện các dịch vụ và đường đi chính. Đầu dò dùng Bearer token qua tuyến `/api/ingest`; không sử dụng phiên người dùng. API đối tác đọc-only là profile tùy chọn, cần cấu hình Keycloak và tuyến reverse proxy riêng. Các bước nghiệp vụ mới: [quy trình liên thông](docs/OPERATING-WORKFLOWS.md).
 
 ### Biên truy cập và dịch vụ
 

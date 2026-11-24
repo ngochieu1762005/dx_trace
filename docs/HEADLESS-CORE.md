@@ -1,6 +1,6 @@
 # Kiến trúc Headless Core
 
-Áp dụng cho nhánh nâng cấp sau v0.0.6 (chưa phát hành); AppKit/BPMN đã được phát hành từ v0.0.6. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
+Áp dụng cho kiến trúc từ v0.0.7 và nhánh main. Các nâng cấp liên thông nghiệp vụ sau v0.0.7 được ghi riêng trong Changelog; AppKit/BPMN có từ v0.0.6. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
 
 ## Phân tách trách nhiệm
 

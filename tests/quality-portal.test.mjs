@@ -111,6 +111,56 @@ test('standalone quality frontend reuses shared Core, identity, audit and workfl
     assert.equal(after.records[0].createdBy,'owner@example.test');
     assert.equal((await (await request('audit-ledger/verify')).json()).valid,true);
 
+    // A failed inspection and the warehouse must commit as a single decision.
+    const supplier=await (await request('partners',{name:'Quality supplier',kind:'supplier'})).json();
+    const destination=await (await request('partners',{name:'Store',kind:'destination'})).json();
+    const lot=await (await request('lots',{code:'QC-LOT',product:'Milk',supplier:supplier.id,quantity:100,unit:'box',expiry:'2099-12-31',location:'A1',min_temp:2,max_temp:8})).json();
+    const otherLot=await (await request('lots',{code:'OTHER-QC',product:'Milk',supplier:supplier.id,quantity:10,unit:'box',expiry:'2099-12-31',location:'B1',min_temp:2,max_temp:8})).json();
+    const reserved=await (await request('shipments',{lot:lot.id,destination:destination.id,quantity:10})).json();
+    async function rejectedRecord(){
+      const result=await (await request('models/quality/records',{data:{lot:'QC-LOT',finding:'Temperature outside allowed range'}})).json();
+      assert.equal((await request('models/quality/transition',{id:result.id,version:1,target:'submitted'})).status,200);
+      assert.equal((await request('models/quality/transition',{id:result.id,version:2,target:'rejected',reason:'Failed independent inspection'},'manager')).status,200);
+      return result.id;
+    }
+    const failed=await rejectedRecord();
+    const escalation={version:3,lot:lot.id,severity:'high',reason:'Quarantine after inspection'};
+    assert.equal((await request('members',{email:'staff@example.test',role:'warehouse'})).status,200);
+    await request('state',undefined,'staff');
+    assert.equal((await request('quality/'+failed+'/escalate',escalation,'staff')).status,403);
+    assert.equal((await request('quality/'+failed+'/escalate',escalation,'outsider')).status,404);
+    assert.equal((await request('quality/'+failed+'/escalate?area=training',escalation)).status,404);
+    assert.equal((await request('quality/'+record.id+'/escalate',{...escalation,version:3})).status,409,'approved inspection cannot quarantine');
+    assert.equal((await request('quality/'+failed+'/escalate',{...escalation,lot:'unknown'})).status,404);
+    assert.equal((await request('quality/'+failed+'/escalate',{...escalation,version:1})).status,409);
+    assert.equal((await request('quality/'+failed+'/escalate',{...escalation,lot:otherLot.id})).status,422,'existing different lot cannot be substituted');
+    assert.equal((await request('quality/'+failed+'/escalate',{...escalation,reason:''})).status,422);
+    const key=randomUUID();
+    const outcomes=await Promise.all(Array.from({length:3},()=>request('quality/'+failed+'/escalate',escalation,'manager',key)));
+    for(const response of outcomes)assert.equal(response.status,200);
+    const linked=await outcomes[0].json();
+    assert.equal(linked.reused,false);
+    assert.equal((await request('quality/'+failed+'/escalate',{...escalation,reason:'Changed'},'manager',key)).status,409);
+    assert.equal((await request('quality/'+failed+'/escalate',escalation,'owner',key)).status,409,'replay is bound to actor');
+    const warehouse=await (await request('state')).json();
+    assert.equal(warehouse.lots.find(item=>item.id===lot.id).status,'quarantine');
+    assert.equal(warehouse.incidents.filter(item=>item.lot===lot.id).length,1);
+    assert.equal((await request('shipments',{lot:lot.id,destination:destination.id,quantity:1})).status,409,'new shipment blocked');
+    assert.equal((await request('shipments/'+reserved.id+'/deliver',{})).status,409,'existing reservation cannot bypass quarantine');
+    const records=await (await request('models/quality/records')).json();
+    assert.equal(records.records.find(item=>item.id===failed).warehouseIncident.id,linked.incident);
+    const second=await rejectedRecord();
+    const reused=await (await request('quality/'+second+'/escalate',escalation,'manager')).json();
+    assert.equal(reused.reused,true);assert.equal(reused.incident,linked.incident);
+    assert.equal((await (await request('audit-ledger/verify')).json()).valid,true);
+    const queue=await (await request('models?open=1&order=due&limit=25')).json();
+    assert.deepEqual(queue.records.map(item=>item.id),[record.id],'open queue excludes terminal rejected records');
+    const proof=await request('audit-ledger/export');assert.equal(proof.status,200);
+    const bundle=await proof.json();
+    assert.equal(bundle.schema,'dxtrace.audit.v1');
+    assert.equal(bundle.events.filter(event=>JSON.parse(event.payload).action==='quality.escalate').length,2);
+    assert.equal((await request('audit-ledger/export',undefined,'staff')).status,403);
+
     // The second frontend can crash without taking the warehouse or Core down.
     await stop(qualityProcess);
     qualityProcess=null;

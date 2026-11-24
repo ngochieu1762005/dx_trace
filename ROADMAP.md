@@ -22,6 +22,13 @@
 
 Các mục này được đóng gói trong v0.0.6; dùng tag tương ứng để tái lập.
 
+## Đã bổ sung trên main sau v0.0.7
+
+- Liên thông kiểm định không đạt với cách ly lô, sự cố và ledger trong một transaction.
+- Việc cần làm theo vai trò và giao diện user task/timer cho quy trình song song.
+- Kiểm chứng nhật ký offline với mốc đối chiếu giữ độc lập, không tuyên bố chữ ký số hoặc witness công khai.
+- Giữ vùng kho khi chuyển ứng dụng; Quality Portal có tìm kiếm, phân trang và lịch sử.
+
 ## Ưu tiên tiếp theo
 
 | Ưu tiên | Hạng mục | Điều kiện nghiệm thu |
