@@ -43,6 +43,13 @@ test('HTTP models are isolated, idempotent, audited and survive verified restore
  assert.equal((await call('models/apply',{definition,baseVersion:1},'staff')).status,403);
  assert.equal((await call('models/maintenance/transition',{id:a.id,version:1,target:'submitted'},'staff')).status,200);
  const results=await Promise.all([1,2].map(()=>call('models/maintenance/transition',{id:a.id,version:2,target:'approved'},'manager')));assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
+ const ownerProfile=await (await call('catalog/maintenance/profile')).json();
+ assert.equal(ownerProfile.total,1);
+ assert.equal(ownerProfile.fields.find(f=>f.key==='equipment').present,1);
+ assert.equal(ownerProfile.fields.find(f=>f.key==='cost').missing,1);
+ assert.equal((await call('catalog/maintenance/profile',undefined,'outsider')).status,404);
+ const staffProfile=await (await call('catalog/maintenance/profile',undefined,'staff')).json();
+ assert.equal(staffProfile.total,1);
  const state=await (await call('state')).json();assert.equal(state.records,undefined);assert.equal(state.models,undefined,'legacy state must not bypass record permissions');
  const ledger=await (await call('audit-ledger/verify')).json();assert.equal(ledger.valid,true);assert.equal(ledger.entries,4,'duplicate and failed commands not logged');
  assert.equal((await call('audit-ledger',undefined,'staff')).status,403);

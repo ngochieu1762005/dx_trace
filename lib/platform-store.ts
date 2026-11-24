@@ -61,3 +61,24 @@ async function changePlatformUnlocked(c:any,cmd:string,b:any,key:string){
  }
  fail('Dữ liệu đang thay đổi, hãy tải lại',409);
 }
+
+/** Profile only records already visible to the same caller's model listing.
+ * No example values or identities are returned. SQLite reads in this method
+ * are one aggregate statement, not an unbounded JS scan. */
+export async function profileModel(c:any,id:string){
+ const m=(await models(c)).find((x:any)=>x.id===id&&x.definition.permissions.read.includes(c.role));
+ if(!m)fail('Không tìm thấy mô hình',404);
+ const fields=m.definition.fields,select=['COUNT(*) AS total','MAX(updated) AS latest'],bind:any[]=[];
+ for(let i=0;i<fields.length;i++){
+  const f=fields[i],path='$.data.'+f.key;
+  select.push("COALESCE(SUM(CASE WHEN json_extract(payload,?) IS NOT NULL AND json_extract(payload,?) <> '' THEN 1 ELSE 0 END),0) AS filled_"+i);
+  bind.push(path,path);
+ }
+ const own=m.definition.permissions.scope==='own'&&!['owner','manager'].includes(c.role);
+ const row=await q('SELECT '+select.join(',')+' FROM platform_records WHERE workspace=? AND model=?'+(own?' AND actor=?':''),
+   ...bind,c.workspace,id,...(own?[c.email||c.name]:[])).first();
+ const total=Number(row.total);
+ return {model:id,version:m.version,total,latest:row.latest??null,
+   fields:fields.map((f:any,i:number)=>({key:f.key,label:f.label,required:!!f.required,
+     conditional:!!f.requiredWhen,present:Number(row['filled_'+i]),missing:total-Number(row['filled_'+i])}))};
+}

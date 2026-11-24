@@ -45,7 +45,7 @@ import {DomainError,insights} from '../../../lib/domain.mjs';
 
 const json=(data:any,status=200)=>Response.json(data,{status,headers:{'cache-control':'no-store','X-Content-Type-Options':'nosniff'}});
 const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new DomainError('Cần quyền quản lý',403)};
-import {models as storedModels,plan as modelPlan,queryRecords,changePlatform} from '../../../lib/platform-store.ts';
+import {models as storedModels,plan as modelPlan,queryRecords,changePlatform,profileModel} from '../../../lib/platform-store.ts';
 import {escalateQuality} from '../../../lib/quality-bridge.ts';
 import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
 async function route(req:Request){try{
@@ -60,7 +60,11 @@ async function route(req:Request){try{
  if(kind==='quality'&&action==='escalate'&&req.method==='POST'){
   return json(await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||''));
  }
- if(kind==='catalog'&&req.method==='GET'&&!key)return json({models:buildCatalog(await storedModels(c),c.role)});
+ if(kind==='catalog'&&req.method==='GET'){
+  if(!key)return json({models:buildCatalog(await storedModels(c),c.role)});
+  if(action==='profile')return json(await profileModel(c,key));
+  throw new DomainError('Không tìm thấy tài nguyên danh mục',404);
+ }
  if(kind==='apps'){
   if(req.method==='GET'){
    const visible=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role));
