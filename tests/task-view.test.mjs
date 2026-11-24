@@ -4,7 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {executableTasks} from '../lib/task-view.mjs';
-const definition={workflow:{transitions:[{from:'submitted',to:'approved',roles:['manager'],differentActor:true,when:{field:'amount',op:'gte',value:5}}]},orchestration:{nodes:[{id:'review',type:'userTask',roles:['manager'],differentActor:true},{id:'inspect',type:'userTask',roles:['warehouse']},{id:'wait',type:'timer'}]}};
+const definition={permissions:{read:['manager','warehouse'],scope:'all'},workflow:{transitions:[{from:'submitted',to:'approved',roles:['manager'],differentActor:true,when:{field:'amount',op:'gte',value:5}}]},orchestration:{nodes:[{id:'review',type:'userTask',roles:['manager'],differentActor:true},{id:'inspect',type:'userTask',roles:['warehouse']},{id:'wait',type:'timer'}]}};
 test('parallel tasks expose only active authorized human work',()=>{
  const record={createdBy:'creator',process:{status:'running',tokens:[{node:'review'},{node:'wait'}]}};
  assert.deepEqual(executableTasks(definition,record,'manager','creator'),[]);
@@ -20,4 +20,10 @@ test('state-machine task projection excludes self approval and unmet conditions'
  assert.equal(executableTasks(definition,record,'manager','other').length,1);
  record.data.amount=1;
  assert.deepEqual(executableTasks(definition,record,'manager','other'),[]);
+});
+
+test('task projection hides tasks outside the explicit model scope',()=>{
+ const d=structuredClone(definition);d.permissions.scopeByRole={manager:'own'};
+ const record={createdBy:'creator',status:'submitted',data:{amount:10}};
+ assert.deepEqual(executableTasks(d,record,'manager','other'),[]);
 });

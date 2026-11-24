@@ -50,15 +50,26 @@ test('HTTP models are isolated, idempotent, audited and survive verified restore
  assert.equal((await call('catalog/maintenance/profile',undefined,'outsider')).status,404);
  const staffProfile=await (await call('catalog/maintenance/profile',undefined,'staff')).json();
  assert.equal(staffProfile.total,1);
+ // Use an independent model to verify SQL filtering BEFORE aggregate counts/pagination.
+ const scoped=structuredClone(definition);scoped.id='scoped_maintenance';
+ scoped.permissions.scopeByRole={manager:'own',warehouse:'all'};
+ assert.equal((await call('models/apply',{definition:scoped,baseVersion:0})).status,200);
+ const secret=await (await call('models/scoped_maintenance/records',body,'staff')).json();
+ const managerView=await (await call('models/scoped_maintenance',undefined,'manager')).json();
+ assert.equal(managerView.page.total,0);
+ assert.equal(managerView.summary.total,0);
+ assert.equal((await (await call('catalog/scoped_maintenance/profile',undefined,'manager')).json()).total,0);
+ assert.equal((await (await call('models/scoped_maintenance',undefined,'staff')).json()).page.total,1);
+ assert.equal((await call('models/scoped_maintenance/transition',{id:secret.id,version:1,target:'submitted'},'manager')).status,403);
  const state=await (await call('state')).json();assert.equal(state.records,undefined);assert.equal(state.models,undefined,'legacy state must not bypass record permissions');
- const ledger=await (await call('audit-ledger/verify')).json();assert.equal(ledger.valid,true);assert.equal(ledger.entries,4,'duplicate and failed commands not logged');
+ const ledger=await (await call('audit-ledger/verify')).json();assert.equal(ledger.valid,true);assert.equal(ledger.entries,6,'duplicate and failed commands not logged');
  assert.equal((await call('audit-ledger',undefined,'staff')).status,403);
  assert.equal((await call('metrics',undefined,'staff')).status,403);
- assert.match(await (await call('metrics')).text(),/dxtrace_records 1/);
+ assert.match(await (await call('metrics')).text(),/dxtrace_records 2/);
  const backup=dir+'/backup';execFileSync(process.execPath,['selfhost/backup.mjs',backup],{env:{...process.env,DATA_DIR:dir+'/data'}});
  const verify=JSON.parse(execFileSync(process.execPath,['selfhost/verify-backup.mjs',backup],{encoding:'utf8'}));assert.equal(verify.valid,true);
  await stop();await start(backup);
- assert.equal((await (await call('models')).json()).records[0].status,'approved');assert.deepEqual(await (await call('audit-ledger/verify')).json(),ledger);
+ assert.equal((await (await call('models/maintenance')).json()).records[0].status,'approved');assert.deepEqual(await (await call('audit-ledger/verify')).json(),ledger);
  const db=new DatabaseSync(backup+'/warehouse.sqlite');db.prepare('UPDATE audit_ledger SET payload=? WHERE seq=(SELECT MIN(seq) FROM audit_ledger)').run('{}');db.close();
  assert.equal((await (await call('audit-ledger/verify')).json()).valid,false);
  }finally{await stop();await rm(dir,{recursive:true,force:true})}
