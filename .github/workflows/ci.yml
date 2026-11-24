@@ -113,3 +113,25 @@ jobs:
         run: |
           docker rm -f app quality-portal gateway-api core || true
           docker network rm dxtrace-edge dxtrace-private || true
+  postgres-migration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Start disposable PostgreSQL
+        run: |
+          docker run -d --name dx-pg-ci -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17-alpine
+          for i in $(seq 1 60); do
+            if docker exec dx-pg-ci pg_isready -U postgres >/dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Verify migration and rollback against PostgreSQL
+        env:
+          DX_TEST_POSTGRES_CONTAINER: dx-pg-ci
+        run: node --test tests/postgres-export.test.mjs
+      - name: Cleanup
+        if: always()
+        run: docker rm -f dx-pg-ci || true
