@@ -28,10 +28,12 @@ export async function queryRecords(c:any,params:URLSearchParams){
  const total=await count('SELECT COUNT(*) n FROM platform_records WHERE '+where,args);
  const late=await count('SELECT COUNT(*) n FROM platform_records WHERE '+where+' AND '+overdue,[...args,...overdueArgs]);
  const byStatus=Object.fromEntries((await q('SELECT status,COUNT(*) n FROM platform_records WHERE '+where+' GROUP BY status',...args).all()).results.map((r:any)=>[r.status,r.n]));
+ if(params.get('open')==='1'&&terminals.length){where+=' AND NOT ('+terminals.map(()=>'(model=? AND status=?)').join(' OR ')+')';args.push(...terminals.flat())}
  const status=params.get('status');if(status==='overdue'){where+=' AND '+overdue;args.push(...overdueArgs)}else if(status&&status!=='all'){where+=' AND status=?';args.push(status)}
  const search=params.get('q')?.trim();if(search){if(search.length>200)fail('Từ khóa quá dài');where+=" AND (id LIKE ? ESCAPE '\\' OR json_extract(payload,'$.data') LIKE ? ESCAPE '\\')";const term='%'+search.replace(/[\\%_]/g,'\\$&')+'%';args.push(term,term)}
  const filtered=await count('SELECT COUNT(*) n FROM platform_records WHERE '+where,args);
- const records=(await q('SELECT payload FROM platform_records WHERE '+where+' ORDER BY updated DESC,id LIMIT ? OFFSET ?',...args,limit,offset).all()).results.map((r:any)=>JSON.parse(r.payload));
+ const ordering=params.get('order')==='due'?'CASE WHEN due_at IS NULL THEN 1 ELSE 0 END,due_at,updated DESC,id':'updated DESC,id';
+ const records=(await q('SELECT payload FROM platform_records WHERE '+where+' ORDER BY '+ordering+' LIMIT ? OFFSET ?',...args,limit,offset).all()).results.map((r:any)=>JSON.parse(r.payload));
  return {models:visible,records:platformView({models:all,records},actor(c)).records,summary:{total,overdue:late,byStatus},page:{limit,offset,total:filtered,hasMore:offset+limit<filtered}};
 }
 export async function changePlatform(c:any,cmd:string,b:any,key:string){

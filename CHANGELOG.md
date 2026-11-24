@@ -4,7 +4,27 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
-Chưa có thay đổi sau v0.0.7.
+### Added
+
+- Quy trình kiểm định–kho: quản lý liên kết phiếu không đạt với sự cố và cách ly lô trong cùng transaction; giữ lịch sử, kiểm phiên bản và chống gửi trùng theo người thực hiện.
+- Mục Việc cần làm: gom sự cố, giao nhận, đề xuất và bước nghiệp vụ được phép xử lý; ưu tiên quá hạn, giữ vùng kho và dẫn tới đúng hồ sơ.
+- Giao diện workflow song song: bước đang hoạt động, timer, lịch sử và hoàn tất tác vụ theo quyền; mẫu bảo trì song song có mã riêng.
+- Xuất gói nhật ký và mốc đối chiếu, kiểm SHA-256 tại trình duyệt, CLI kiểm offline với mốc giữ ngoài máy chủ.
+
+### Fixed
+
+- Giữ `area=training` khi mở Quality Portal, gọi API và trở lại kho; không đưa người dùng từ thực hành sang vận hành ngoài ý muốn.
+- Quality Portal có chọn lô thực tế, tìm kiếm, lọc, phân trang, lịch sử và khóa idempotency được giữ khi thử lại.
+- Ẩn thao tác workflow không đủ điều kiện hoặc vi phạm cấm tự duyệt; bổ sung đường dẫn sâu tới hồ sơ.
+
+### Documentation
+
+- Trang giới thiệu bổ sung quy trình kiểm định, điều phối công việc và minh chứng vận hành.
+- Đồng bộ README, API, Quality Portal, runtime, roadmap và hướng dẫn kiểm chứng; không thay đổi tag hoặc phiên bản release v0.0.7.
+
+### Compatibility
+
+Không đổi schema cơ sở dữ liệu, không đặt lại dữ liệu kho. Cấu hình Gateway của v0.0.7 vẫn bắt buộc; đọc [hướng dẫn chuyển đổi](docs/GATEWAY-AND-SSO.md) nếu nâng từ bản cũ.
 
 ## [0.0.7] — 2026-11-23 — Parallel Workflow & External OIDC API
 

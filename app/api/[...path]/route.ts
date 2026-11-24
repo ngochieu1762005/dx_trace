@@ -43,6 +43,8 @@ import {DomainError,insights} from '../../../lib/domain.mjs';
 const json=(data:any,status=200)=>Response.json(data,{status,headers:{'cache-control':'no-store','X-Content-Type-Options':'nosniff'}});
 const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new DomainError('Cần quyền quản lý',403)};
 import {models as storedModels,plan as modelPlan,queryRecords,changePlatform} from '../../../lib/platform-store.ts';
+import {escalateQuality} from '../../../lib/quality-bridge.ts';
+import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
  if(kind==='health')return json({status:'ok',version:'0.0.7',database:!!env.DB});
@@ -52,6 +54,9 @@ async function route(req:Request){try{
   const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='quality'&&action==='escalate'&&req.method==='POST'){
+  return json(await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||''));
+ }
  if(kind==='apps'){
   if(req.method==='GET'){
    const visible=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role));
@@ -118,6 +123,14 @@ async function route(req:Request){try{
  if(kind==='audit-ledger'&&req.method==='GET'){
   manager(c);
   const rows=(await q('SELECT seq,previous,hash,payload FROM audit_ledger WHERE workspace=? ORDER BY seq',c.workspace).all()).results;
+  if(key==='export'){
+   const bundle=auditBundle(c.workspace,rows);
+   const verified=await verifyAuditBundle(bundle);
+   if(!verified.valid)throw new DomainError('Nhật ký không toàn vẹn: '+verified.reason,409);
+   const content=JSON.stringify(bundle);
+   if(Buffer.byteLength(content)>10*1024*1024)throw new DomainError('Gói nhật ký vượt 10 MiB; xuất từ bản sao lưu tại máy chủ',422);
+   return new Response(content,{headers:{'content-type':'application/json','content-disposition':'attachment; filename="DX-TRACE-audit.json"','cache-control':'no-store','x-content-type-options':'nosniff'}});
+  }
   if(key==='verify'){
    let previous='0'.repeat(64);
    for(const row of rows){if(row.previous!==previous||row.hash!==await hash(previous+'\n'+row.seq+'\n'+row.payload))return json({valid:false,failedAt:row.seq});previous=row.hash}

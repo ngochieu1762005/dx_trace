@@ -13,3 +13,5 @@ Git, GitHub Actions và pnpm sử dụng SVG của Devicon. Biểu trưng Open F
 ## Phạm vi sử dụng
 
 Biểu trưng chỉ nhận diện công nghệ, không ngụ ý chứng nhận hoặc tài trợ. Các SVG kiến trúc cũ trong thư mục là tài sản lịch sử; kiến trúc hiện hành xem [README](../../README.md#architecture) và [Headless Core](../HEADLESS-CORE.md). Không dùng hình cũ để suy ra số dịch vụ hay ứng dụng hiện có.
+
+`architecture-current.svg` tái sử dụng các logo nhúng đã được ghi nguồn trong tài liệu này (React, Caddy, Keycloak, OAuth2 Proxy, PostgreSQL, Node.js, SQLite). Các khối và đường nối do dự án trình bày; logo không thể hiện bảo trợ hoặc chứng nhận.

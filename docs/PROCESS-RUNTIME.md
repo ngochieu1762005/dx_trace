@@ -98,3 +98,7 @@ Tests prove parallel join ordering, timed release, real role/different-actor
 checks in `applyPlatform`, record version conflicts, persistence via
 serialization, and bounded timer retries. They do not replace a real Keycloak
 two-account acceptance test or an isolated restore drill.
+
+## Operations UI — main after v0.0.7
+
+The operations console now offers **Bảo trì · kiểm tra song song** as a separate model template (`maintenance_parallel`). Record details show active user tasks, timers, partial joins and process history. Buttons respect role and creator separation; Core rechecks all conditions on completion. The work queue links directly to a model and record while retaining the selected workspace. Existing state-machine templates are unchanged.

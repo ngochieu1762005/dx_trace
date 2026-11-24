@@ -92,3 +92,13 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 | Hướng dẫn rollback | [Gateway and SSO](GATEWAY-AND-SSO.md), [Vận hành](../selfhost/OPERATIONS.md) | Diễn tập trên máy test và ghi thời gian phục hồi |
 
 **Lưu ý:** Source code và test giả lập chỉ chứng minh logic. Không báo cáo Keycloak hoặc VPS đã kiểm thành công khi chưa thực sự chạy.
+## Liên thông nghiệp vụ — main sau v0.0.7
+
+| Năng lực | Minh chứng có thể chạy lại | Phạm vi |
+| --- | --- | --- |
+| Phiếu kiểm định → cách ly → chặn giao | `tests/quality-portal.test.mjs` | HTTP qua app và Core tách tiến trình; sai vai trò/tổ chức/vùng kho, concurrent replay và sự cố đã mở |
+| Task theo quyền và trạng thái | `tests/task-view.test.mjs` + tests process runtime hiện có | Chiếu task lên UI không thay thế kiểm quyền Core |
+| Minh chứng hash chain | `tests/audit-proof.test.mjs` | Sửa payload, viết lại toàn chuỗi, cắt ngắn trước mốc và checkpoint khác kho |
+| Giữ vùng kho | `tests/audit-proof.test.mjs` + quality HTTP test | Giữ query/hash trong liên kết, phân tách API thực hành/vận hành |
+
+Các bài kiểm trên không tự xác nhận giao diện camera, trình duyệt SSO hay VPS của người triển khai. [Hướng dẫn tái hiện quy trình](OPERATING-WORKFLOWS.md).

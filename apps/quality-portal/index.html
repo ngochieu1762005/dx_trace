@@ -14,16 +14,16 @@
     <div class="brand"><img class="brand-icon" src="/brand-mark.svg" alt="" width="42" height="42">
       <span>DX-TRACE <small>Quality Portal</small></span></div>
     <nav aria-label="Điều hướng">
-      <a href="/#overview">Kho vận hành</a>
-      <a href="/#platform">Core AppKit</a>
-      <span class="pill">Ứng dụng độc lập</span>
+      <a id="warehouse-link" href="/#overview">Về kho</a>
+      <a id="platform-link" href="/#platform">Nghiệp vụ mở rộng</a>
+      <span id="area-label" class="pill">Đang xác minh kho</span>
     </nav>
   </header>
   <main id="main" class="layout">
     <section class="hero" aria-labelledby="title">
-      <div><p class="eyebrow">DX-OS OPEN-CORE / APPLICATION 02</p>
-      <h1 id="title">Kiểm soát chất lượng <span>trên cùng một lõi.</span></h1>
-      <p>Ghi nhận kết quả kiểm tra lô, chuyển người duyệt, theo dõi hạn xử lý và truy vết thao tác. Ứng dụng này chạy bằng tiến trình giao diện riêng, tái sử dụng định danh, API, dữ liệu, workflow của DX-TRACE.</p>
+      <div><p class="eyebrow">KIỂM ĐỊNH & AN TOÀN HÀNG HÓA</p>
+      <h1 id="title">Từ kết quả kiểm tra <span>đến quyết định xử lý.</span></h1>
+      <p>Chọn lô trong kho, lập phiếu và chuyển người thẩm định. Khi kết quả không đạt, quản lý có thể cách ly lô và mở hồ sơ sự cố ngay tại đây.</p>
       </div>
       <div class="hero-aside"><span class="live-dot"></span> <span id="identity">Đang xác minh phiên</span><small>Không lưu mật khẩu, token hoặc dữ liệu tại frontend này.</small></div>
     </section>
@@ -45,7 +45,7 @@
         <section class="panel" aria-labelledby="new-title">
           <p class="eyebrow">BƯỚC 01 · LẬP HỒ SƠ</p><h2 id="new-title">Phiếu kiểm tra mới</h2>
           <form id="record-form">
-            <label for="lot">Mã lô tham chiếu</label><input id="lot" name="lot" maxlength="200" placeholder="LOT-2026-001" required autocomplete="off">
+            <label for="lot">Lô hàng trong kho hiện tại</label><select id="lot" name="lot" required><option value="">Chọn lô hàng</option></select>
             <label for="finding">Kết quả kiểm tra</label><textarea id="finding" name="finding" maxlength="4000" rows="5" placeholder="Ghi kết quả, phép đo và nội dung cần xác minh..." required></textarea>
             <button class="primary" type="submit">Lưu phiếu nháp</button>
           </form>
@@ -53,8 +53,13 @@
         </section>
         <section class="panel wide" aria-labelledby="records-title">
           <div class="panel-header"><div><p class="eyebrow">BƯỚC 02 · THẨM ĐỊNH</p><h2 id="records-title">Hồ sơ kiểm định</h2></div><button id="refresh" class="secondary" type="button">Tải lại</button></div>
+          <form id="filters" class="filters" role="search">
+            <label for="query">Tìm hồ sơ<input id="query" type="search" maxlength="200" placeholder="Mã lô hoặc nội dung"></label>
+            <label for="status-filter">Trạng thái<select id="status-filter"><option value="all">Tất cả</option><option value="submitted">Chờ thẩm định</option><option value="overdue">Quá hạn</option><option value="rejected">Không đạt</option><option value="approved">Đã duyệt</option><option value="done">Hoàn tất</option><option value="draft">Bản nháp</option></select></label>
+            <button type="submit" class="secondary">Lọc</button>
+          </form>
           <div id="records" class="records" aria-live="polite"><p class="empty">Chưa có hồ sơ.</p></div>
-          <p class="footnote">Hiển thị tối đa 50 hồ sơ gần nhất mà tài khoản được phép xem. Hạn xử lý, phiên bản và trạng thái được tính tại Core.</p>
+          <nav class="pagination" aria-label="Phân trang hồ sơ"><button id="previous" type="button" class="secondary">Trước</button><span id="page-info"></span><button id="next" type="button" class="secondary">Sau</button></nav>
         </section>
       </div>
     </section>
@@ -65,9 +70,11 @@
       <p id="decision-description"></p>
       <label for="decision-reason">Lý do / kết quả xử lý</label>
       <textarea id="decision-reason" rows="3" maxlength="2000"></textarea>
+      <div id="severity-field" hidden><label for="severity">Mức ưu tiên sự cố</label><select id="severity"><option value="medium">Trung bình</option><option value="high">Cao</option><option value="critical">Khẩn cấp</option></select></div>
+      <p id="decision-error" role="alert"></p>
       <div class="dialog-actions"><button id="cancel-decision" type="button" class="secondary">Hủy</button><button type="submit" class="primary">Xác nhận</button></div>
     </form>
   </dialog>
-  <footer class="footer">DX-TRACE · AppKit manifest · Headless Core · Tách frontend nghiệp vụ khỏi lõi và kho vận hành</footer>
+  <footer class="footer">DX-TRACE · Kiểm định có người thẩm định độc lập · Mọi quyết định được ghi nhật ký</footer>
 </body>
 </html>

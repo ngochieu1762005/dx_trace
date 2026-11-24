@@ -1,6 +1,6 @@
 # HTTP API — DX-TRACE
 
-Phạm vi: v0.0.6, gồm API nền, BPMN và AppKit.
+Phạm vi: nhánh main sau v0.0.7. Các API mới bên dưới chưa nằm trong archive v0.0.7; dùng tag tương ứng khi tái lập bản phát hành.
 
 Nguồn đối chiếu: [router](../app/api/%5B...path%5D/route.ts), [domain](../lib/domain.mjs), [platform](../lib/platform.mjs). API công khai dùng tiền tố `/api` trên cùng domain ứng dụng.
 
@@ -112,3 +112,15 @@ Lỗi nghiệp vụ trả JSON `{error: "..."}`. Lỗi proxy có thể trả HTM
 ## API mở rộng trên nhánh nâng cấp
 
 Các endpoint BPMN và AppKit được phát hành từ **v0.0.6**. [Tập con BPMN và ví dụ](BPMN.md) · [AppKit khai báo](APPKIT.md). Import BPMN từ chối phần tử không hỗ trợ, không dùng XML DTD/XXE. Cả hai cơ chế đều đi qua model plan/apply và audit-ledger; không cho phép thực thi JavaScript hoặc truy cập Core bằng token từ trình duyệt.
+
+## Kiểm định và minh chứng — main sau v0.0.7
+
+| Method | Path | Nội dung / quyền |
+| --- | --- | --- |
+| POST | `/api/quality/{recordId}/escalate` | `{version,lot,severity,reason}` + Idempotency-Key; manager/owner, phiếu không đạt, mã lô khớp kho hiện tại |
+| GET | `/api/audit-ledger/export` | Manager/owner tải gói raw ledger và checkpoint, tối đa 10 MiB |
+| GET | `/api/models?open=1&order=due` | Loại trạng thái kết thúc; sắp hồ sơ có hạn trước, hạn gần nhất trước; giới hạn/phân trang và quyền như API danh sách |
+
+Escalation thành công trả `{id,version,incident,lot,reused}`. Nếu có sự cố mở, `reused: true` và mức ưu tiên của sự cố cũ được giữ. Trạng thái không đạt tự nó không cách ly: cần hành động xác nhận này. Không đổi mã lô của phiếu hoặc phê duyệt thu hồi tự động. Khóa gửi lại được ràng buộc người thực hiện, nội dung và vùng kho.
+
+Các API vẫn nhận `area=training`. Xem [luồng vận hành](OPERATING-WORKFLOWS.md) và [định dạng minh chứng](AUDIT-EVIDENCE.md).

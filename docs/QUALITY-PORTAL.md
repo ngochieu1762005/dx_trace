@@ -1,6 +1,6 @@
 # Quality Control Portal — independent DX-OS application
 
-> Available from **v0.0.6**. Use the release tag to reproduce the published source.
+> Frontend độc lập có từ **v0.0.6**. Phần liên thông kiểm định–cách ly dưới đây thuộc **main sau v0.0.7**, chưa có trong archive v0.0.7.
 
 ## Purpose and architecture
 
@@ -11,12 +11,13 @@ The application package consists of a static UI service and an AppKit manifest.
 All record and workflow decisions remain in Core.
 
 ```mermaid
-flowchart LR
+flowchart TD
     Browser[Authenticated browser] --> Caddy[Caddy HTTPS]
     Caddy --> Oauth[OAuth2 Proxy / Keycloak]
     Oauth --> App[DX-TRACE edge web proxy]
     App -->|Static GET only, no identity headers| QA[Quality Portal :8090]
-    App -->|Authenticated API + internal token| Core[Headless Core :8081]
+    App -->|Application token| Gateway[Policy Gateway :8082]
+    Gateway -->|Separate Core token| Core[Headless Core :8081]
     Core --> DB[(SQLite: platform records)]
     Core --> Audit[(Append-only audit ledger)]
 ```
@@ -58,7 +59,7 @@ docker compose ps
 Use the full stack with Keycloak, OAuth2 Proxy, gateway and HTTPS according
 to [self-hosting](../selfhost/README.md) for an actual SSO demo.
 `quality-portal` has no published host port and joins `appnet` only.
-The Core remains on `corenet`, its volume is not mounted into the portal,
+The Core remains on `privcore`, its volume is not mounted into the portal,
 and the main frontend still does not mount the warehouse volume.
 
 On a host using the Ubuntu/Windows Caddy overlay, the same application route
@@ -132,3 +133,9 @@ performance, production hardening, persistent SSO or browser compatibility.
 | Reverse proxy boundary | `selfhost/server.mjs` |
 | Deployment | `selfhost/compose.yaml`, `selfhost/Dockerfile` |
 | Tests | `tests/quality-portal.test.mjs`, `selfhost/container-smoke.mjs` |
+
+## Kiểm định gắn với kho hiện tại
+
+Cổng giữ `?area=training` xuyên suốt các API và liên kết khi người dùng chọn kho thực hành. Phiếu mới chọn mã lô từ dữ liệu kho, có tìm kiếm, lọc trạng thái và phân trang 25 mục. Hồ sơ không đạt cung cấp **Cách ly & mở sự cố** cho manager/owner; cần xác nhận lý do. Ghi phiếu, trạng thái lô, liên kết sự cố, kết quả idempotency và ledger trong một transaction. Sự cố đã mở được tái sử dụng; không tự phê duyệt thu hồi.
+
+Đọc [quy trình liên thông](OPERATING-WORKFLOWS.md) để thực hiện kiểm thử hai người. Lịch sử phiếu và liên kết ngược đến sự cố/lô nằm ngay trong cổng. Các dữ liệu và phiên bản mô hình cũ được giữ nguyên.
