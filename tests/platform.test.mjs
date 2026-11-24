@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {validateModel,planModel,applyPlatform,platformView,modelOpenApi} from '../lib/platform.mjs';
+import {validateModel,planModel,applyPlatform,platformView,modelOpenApi,recordScope,canRead} from '../lib/platform.mjs';
 const definition=JSON.parse(readFileSync(new URL('../examples/maintenance/model.json',import.meta.url)));
 const context=(role='owner',actor='owner')=>({role,actor,now:'2026-11-22T10:00:00Z',entity:'record-1'});
 function setup(){const state={};applyPlatform(state,'platform.apply',{definition,baseVersion:0},context());return state}
@@ -41,3 +41,19 @@ test('record scope, self-approval, reasons, versions and overdue',()=>{
  assert.throws(()=>validateModel({...m,fields:[null]}),e=>e.status===422);
  assert.throws(()=>validateModel({...m,workflow:{...m.workflow,transitions:[null]}}),e=>e.status===422);
  });
+
+test('explicit model scopes override legacy manager access and enforce transitions',()=>{
+ const d=structuredClone(definition);d.permissions.scopeByRole={manager:'own',warehouse:'all'};
+ const s={};applyPlatform(s,'platform.apply',{definition:d,baseVersion:0},context());
+ const data={equipment:'Freezer',description:'Repair',priority:'Thường'};
+ applyPlatform(s,'platform.create',{model:d.id,data},context('warehouse','staff'));
+ assert.equal(recordScope(d,'manager'),'own');
+ assert.equal(recordScope(d,'owner'),'all');
+ assert.equal(recordScope(d,'viewer'),'none');
+ assert.equal(canRead(d,s.records[0],context('manager','boss')),false);
+ assert.equal(platformView(s,context('warehouse','other')).records.length,1);
+ applyPlatform(s,'platform.transition',{model:d.id,id:'record-1',version:1,target:'submitted'},context('warehouse','staff'));
+ assert.throws(()=>applyPlatform(s,'platform.transition',{model:d.id,id:'record-1',version:2,target:'approved'},context('manager','boss')),{status:403});
+ assert.throws(()=>validateModel({...d,permissions:{...d.permissions,scopeByRole:{owner:'own'}}}),{status:422});
+ assert.throws(()=>validateModel({...d,permissions:{...d.permissions,scopeByRole:{viewer:'all'}}}),{status:422});
+});

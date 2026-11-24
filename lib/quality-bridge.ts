@@ -3,6 +3,7 @@
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */
 import {withWorkspace} from './workspace-queue.mjs';
 import {q,db,hash,read} from './server.ts';
+import {canRead} from './platform.mjs';
 import {apply,DomainError} from './domain.mjs';
 
 const fail=(message:string,status=409):never=>{throw new DomainError(message,status)};
@@ -27,6 +28,7 @@ export async function escalateQuality(c:any,id:string,body:any,key:string){
    const stored=await q('SELECT payload FROM platform_records WHERE workspace=? AND model=? AND id=?',c.workspace,'quality',id).first();
    if(!stored)fail('Không tìm thấy hồ sơ kiểm định',404);
    const record=JSON.parse(stored.payload);
+   if(!canRead(JSON.parse(model.payload).definition,record,{role:c.role,actor:who}))fail('Không có quyền đọc hồ sơ kiểm định',403);
    if(record.version!==body.version)fail('Hồ sơ đã thay đổi, hãy tải lại');
    if(record.status!=='rejected')fail('Chỉ chuyển hồ sơ đã thẩm định không đạt');
    if(record.warehouseIncident)fail('Hồ sơ đã được liên kết với sự cố');

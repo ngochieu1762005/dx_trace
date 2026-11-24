@@ -2,7 +2,7 @@
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */
 import {withWorkspace} from './workspace-queue.mjs';
 import {q,db,hash} from './server.ts';
-import {applyPlatform,planModel,platformView,PlatformError} from './platform.mjs';
+import {applyPlatform,planModel,platformView,PlatformError,recordScope} from './platform.mjs';
 const fail=(m:string,s=422)=>{throw new PlatformError(m,s)};
 const actor=(c:any)=>({role:c.role,actor:c.email||c.name,now:new Date().toISOString()});
 export async function models(c:any){return (await q('SELECT payload FROM platform_models WHERE workspace=? ORDER BY id',c.workspace).all()).results.map((r:any)=>JSON.parse(r.payload))}
@@ -17,7 +17,7 @@ export async function queryRecords(c:any,params:URLSearchParams){
  const limit=Number(params.get('limit')||50),offset=Number(params.get('offset')||0);
  if(!Number.isInteger(limit)||limit<1||limit>200||!Number.isInteger(offset)||offset<0)fail('Phân trang không hợp lệ');
  const selected=visible.filter((m:any)=>!model||m.id===model),clauses:string[]=[],args:any[]=[c.workspace];
- for(const m of selected){const own=m.definition.permissions.scope==='own'&&!['owner','manager'].includes(c.role);clauses.push('(model=?'+(own?' AND actor=?':'')+')');args.push(m.id);if(own)args.push(c.email||c.name)}
+ for(const m of selected){const own=recordScope(m.definition,c.role)==='own';clauses.push('(model=?'+(own?' AND actor=?':'')+')');args.push(m.id);if(own)args.push(c.email||c.name)}
  if(!clauses.length)return {models:visible,records:[],summary:{total:0,overdue:0,byStatus:{}},page:{limit,offset,total:0,hasMore:false}};
  let where='workspace=? AND ('+clauses.join(' OR ')+')';
  const now=new Date().toISOString();
@@ -74,7 +74,7 @@ export async function profileModel(c:any,id:string){
   select.push("COALESCE(SUM(CASE WHEN json_extract(payload,?) IS NOT NULL AND json_extract(payload,?) <> '' THEN 1 ELSE 0 END),0) AS filled_"+i);
   bind.push(path,path);
  }
- const own=m.definition.permissions.scope==='own'&&!['owner','manager'].includes(c.role);
+ const own=recordScope(m.definition,c.role)==='own';
  const row=await q('SELECT '+select.join(',')+' FROM platform_records WHERE workspace=? AND model=?'+(own?' AND actor=?':''),
    ...bind,c.workspace,id,...(own?[c.email||c.name]:[])).first();
  const total=Number(row.total);
