@@ -22,6 +22,8 @@ Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi
 
 </div>
 
+**Chuyển đổi lõi hạ tầng (đang kiểm thử):** Apache APISIX thay gateway tự phát triển; Flowable OSS là engine BPMN mục tiêu. Bản mặc định vẫn dùng gateway và workflow hiện tại cho đến khi nghiệm thu, di chuyển trạng thái và phát hành hoàn tất. Xem [kiến trúc và kế hoạch chuyển đổi](docs/THIRD-PARTY-CORE-MIGRATION.md).
+
 ## Bắt đầu theo nhu cầu
 
 | Bạn muốn | Mở tài liệu |

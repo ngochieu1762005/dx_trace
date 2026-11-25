@@ -1,5 +1,7 @@
 # Kiến trúc hệ thống DX-TRACE
 
+**Trạng thái chuyển đổi:** Apache APISIX và Flowable OSS đang được đánh giá trên stack cô lập. Kiến trúc và API hiện hành chưa thay đổi mặc định cho đến khi nghiệm thu và chuyển trạng thái quy trình hoàn tất. [Hướng dẫn chuyển đổi](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+
 ![Sơ đồ triển khai DX-TRACE với các tuyến người dùng, đầu dò và tích hợp](../../docs/assets/architecture-current.svg)
 
 Sơ đồ mô tả mã nguồn trên nhánh `main`. Cấu hình Docker chuẩn chạy Caddy trong Compose. Với VPS dùng Caddy trên máy chủ, tệp ghi đè Compose chuyển các điểm vào cần thiết sang cổng loopback. [Compose chuẩn](../../selfhost/compose.yaml) · [Cấu hình Ubuntu](../../selfhost/compose.ubuntu-edge.yaml) · [Ví dụ Caddy](../../selfhost/Caddyfile.ubuntu.saas.snippet)

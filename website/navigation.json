@@ -73,6 +73,11 @@
         "Cổng API và đăng nhập một lần"
       ],
       [
+        "third-party-core-migration",
+        "docs/THIRD-PARTY-CORE-MIGRATION.md",
+        "Chuyển đổi APISIX và Flowable"
+      ],
+      [
         "external-api",
         "docs/EXTERNAL-API.md",
         "API tích hợp qua OIDC"

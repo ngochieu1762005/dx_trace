@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+apisix:
+  node_listen: 8082
+  enable_admin: false
+  enable_control: false
+deployment:
+  role: data_plane
+  role_data_plane:
+    config_provider: yaml
+plugins:
+  - key-auth
+  - proxy-rewrite
+  - limit-count
+  - request-id
+  - response-rewrite
+  - client-control

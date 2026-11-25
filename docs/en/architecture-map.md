@@ -1,5 +1,7 @@
 # DX-TRACE system architecture
 
+**Migration status:** APISIX and Flowable OSS are being evaluated in an isolated stack. The architecture and API described here remain the current default until acceptance and business workflow migration are complete. [Migration guide](third-party-core-migration.md).
+
 ![Deployment architecture with browser, sensor and integration routes](../../docs/assets/architecture-current-en.svg)
 
 The diagram describes the Compose deployment on `main`. Base Compose runs Caddy as a container. The Ubuntu override uses the host Caddy and loopback bindings for the application and identity entry points. The product and documentation sites are static files served by the host. [Base Compose](../../selfhost/compose.yaml) · [Ubuntu override](../../selfhost/compose.ubuntu-edge.yaml)

@@ -73,6 +73,11 @@
         "Gateway and SSO"
       ],
       [
+        "third-party-core-migration",
+        "docs/en/third-party-core-migration.md",
+        "APISIX and Flowable migration"
+      ],
+      [
         "external-api",
         "docs/en/external-api.md",
         "External OIDC API"
