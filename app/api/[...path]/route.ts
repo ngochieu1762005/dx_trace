@@ -48,6 +48,7 @@ const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new Domai
 import {models as storedModels,plan as modelPlan,queryRecords,changePlatform,profileModel} from '../../../lib/platform-store.ts';
 import {escalateQuality} from '../../../lib/quality-bridge.ts';
 import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
+import {nativeReview} from '../../../lib/native-review.ts';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
  if(kind==='health')return json({status:'ok',version:'0.0.7',database:!!env.DB});
@@ -57,6 +58,7 @@ async function route(req:Request){try{
   const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='flowable-review')return json(await nativeReview(c,req,key,action));
  if(kind==='quality'&&action==='escalate'&&req.method==='POST'){
   return json(await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||''));
  }
@@ -167,6 +169,16 @@ async function route(req:Request){try{
  if(kind==='platform'&&req.method==='GET'){
   const installed=(await storedModels(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role)).map(listedApplication);
   return json({version:'0.0.7',identity:{provider:'Keycloak OIDC',role:c.role},applications:[{id:'trace',name:'Truy xuất & thu hồi',resources:['lots','shipments','incidents']},{id:'requests',name:'Đề xuất nội bộ',resources:['workflowRuns']}],workflow:defaultWorkflow,installedApplications:installed,api:{base:'/api',authentication:'Authenticated same-origin session',writes:'POST + Idempotency-Key',resources:['state','partners','lots','shipments','incidents','documents','workflow','files','devices','export','apps']}});
+ }
+ if(kind==='sensor-lineage'&&req.method==='GET'){
+  manager(c);
+  const id=new URL(req.url).searchParams.get('reading')||'';
+  if(!key||id.length<1||id.length>100)throw new DomainError('Device and reading ID required',422);
+  const row:any=await q('SELECT recorded,fingerprint,payload FROM sensor_history WHERE workspace=? AND device=? AND key=?',c.workspace,key,JSON.stringify([c.workspace,key,id])).first();
+  if(!row)throw new DomainError('Reading not found',404);
+  const reading=JSON.parse(row.payload);
+  const ledger=await q("SELECT seq,hash,created FROM audit_ledger WHERE workspace=? AND json_extract(payload,'$.action')='sensor.ingest' AND json_extract(payload,'$.entity')=? ORDER BY seq LIMIT 20",c.workspace,reading.id).all();
+  return json({kind:'observed-sensor-lineage',source:{device:key,readingId:id,received:reading.received,recorded:row.recorded},storage:{table:'sensor_history',fingerprint:row.fingerprint},lot:reading.lot,reading,audit:ledger.results,notes:'Routine readings may not have audit-ledger entries. Lot association is from persisted telemetry; no incident causality is inferred.'});
  }
  if(kind==='sensor-history'&&req.method==='GET'){
   const params=new URL(req.url).searchParams;

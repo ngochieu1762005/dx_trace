@@ -3,7 +3,16 @@ name: Third-party core acceptance
 on:
   pull_request:
     paths:
+      - 'selfhost/compose.yaml'
       - 'selfhost/compose.third-party.yaml'
+      - 'lib/native-review.ts'
+      - 'selfhost/runtime.mjs'
+      - 'app/api/**'
+      - 'examples/**'
+      - 'tools/archive-sensors.mjs'
+      - 'tools/verify-stack.mjs'
+      - 'tools/sensor-client.mjs'
+      - 'tests/cold-archive.test.mjs'
       - 'selfhost/apisix/**'
       - 'selfhost/flowable/**'
       - 'selfhost/scripts/third-party-smoke.mjs'
@@ -30,6 +39,15 @@ jobs:
             echo "::add-mask::$value"
             printf '%s=%s\n' "$key" "$value" >> .env
           done
+      - name: Set up Node for governance checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify Git-declared topology and cold archive
+        run: |
+          node ../tools/verify-stack.mjs -f compose.yaml -f compose.third-party.yaml
+          node --test ../tests/cold-archive.test.mjs
+          node --check ../tools/sensor-client.mjs
       - name: Validate and start isolated services
         run: |
           docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test config --quiet
