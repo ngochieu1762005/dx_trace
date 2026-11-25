@@ -4,7 +4,7 @@
 
 | Phiên bản | Ghi chú | GitHub Release |
 | --- | --- | --- |
-| Unreleased | [Thay đổi đang phát triển](RELEASE_NOTES_UNRELEASED.md) | Chưa có tag |
+| Unreleased | [Thay đổi đang phát triển](UNRELEASED.md) | Chưa có tag |
 | **v0.0.7** | [Parallel Workflow & External OIDC API](RELEASE_NOTES_v0.0.7.md) | [Tải v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
 | v0.0.6 | [Independent Quality Portal & AppKit](RELEASE_NOTES_v0.0.6.md) | [Tải v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.6) |
 | v0.0.5 | [Extensible Core & Warehouse Operations](RELEASE_NOTES_v0.0.5.md) | [Tải v0.0.5](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.5) |
