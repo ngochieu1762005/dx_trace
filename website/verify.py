@@ -9,8 +9,12 @@ class Links(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links=[]
+        self.ids=set()
     def handle_starttag(self,tag,attrs):
         for key,value in attrs:
+            if key=="id" and value:
+                assert value not in self.ids, value
+                self.ids.add(value)
             if key in ("href","src") and value:
                 self.links.append(value)
 
@@ -35,3 +39,13 @@ assert (root/"docs/index.html").is_file()
 assert (root/"docs/assets/brand.svg").is_file()
 assert (root/"docs/assets/site.js").is_file()
 print("Verified",len(entries),"pages, search index and local asset links")
+
+sections=json.loads((root/"docs/assets/sections.json").read_text(encoding="utf-8"))
+assert len(sections)>len(entries), "Missing section search index"
+for entry in sections:
+    parsed=urlsplit(entry["path"])
+    path=root/"docs"/parsed.path
+    parser=Links()
+    parser.feed(path.read_text(encoding="utf-8"))
+    assert parsed.fragment in parser.ids, entry["path"]
+print("Verified",len(sections),"section anchors")

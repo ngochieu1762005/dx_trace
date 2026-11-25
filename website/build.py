@@ -25,6 +25,8 @@ def slug(text):
 def render(source, current, routes, revision):
     tokens = MD.parse((ROOT / source).read_text(encoding="utf-8"))
     headings, used, words = [], {}, []
+    sections = []
+    section = None
     def rewrite(value, image):
         url = urlsplit(value)
         if url.scheme or url.netloc or not url.path:
@@ -47,6 +49,8 @@ def render(source, current, routes, revision):
     def visit(token):
         if token.type in ("text","code_inline","fence","code_block"):
             words.append(token.content)
+            if section is not None:
+                section["text"].append(token.content)
         for attr, image in (("href",False),("src",True)):
             value = token.attrGet(attr)
             if value is not None:
@@ -63,8 +67,10 @@ def render(source, current, routes, revision):
             token.attrSet("id",anchor)
             if token.tag in ("h2","h3"):
                 headings.append((token.tag,title,anchor))
+                section = {"heading":title,"anchor":anchor,"text":[]}
+                sections.append(section)
         visit(token)
-    return MD.renderer.render(tokens,MD.options,{}),headings," ".join(words)
+    return MD.renderer.render(tokens,MD.options,{}),headings," ".join(words),sections
 
 def build(out):
     groups = json.loads((SITE/"navigation.json").read_text(encoding="utf-8"))
@@ -88,10 +94,11 @@ def build(out):
     shutil.copytree(ROOT/"docs/assets",assets/"docs")
     shutil.copytree(ROOT/"public/fonts/google-sans",assets/"fonts")
     search = []
+    section_index = []
     def link(key):
         return "../"+key+"/index.html"
     for i,(key,source,title) in enumerate(entries):
-        body,headings,plain = render(source,key,routes,revision)
+        body,headings,plain,sections = render(source,key,routes,revision)
         section = next(group for group,items in groups if any(x[0]==key for x in items))
         sidebar = "".join('<details class="nav-group"'+(' open' if group==section else '')+'><summary>'+E(group)+"</summary>"+
             "".join('<a href="'+E(link(k))+'"'+(' aria-current="page"' if k==key else '')+">"+E(t)+"</a>" for k,_,t in items)+"</details>" for group,items in groups)
@@ -104,6 +111,7 @@ def build(out):
         cards = ""
         if key=="intro":
             cards='<div class="start"><div class="eyebrow">OPEN-CORE · DEVELOPER PORTAL</div><p class="lead">Xây dựng ứng dụng nghiệp vụ.<br>Truy xuất đến cùng.</p><p>Một nền tảng. Nhiều ứng dụng. Chung dữ liệu và danh tính.</p><div class="actions"><a class="primary" href="../quickstart/index.html">Bắt đầu ngay →</a><a href="../architecture/index.html">Khám phá kiến trúc</a></div></div><div class="cards">'+''.join('<a href="'+link(k)+'"><span class="card-icon">'+icon+'</span><strong>'+label+'</strong><span>'+desc+'</span></a>' for k,icon,label,desc in [('quickstart','↗','Bắt đầu nhanh','Chạy demo và cài ứng dụng'),('warehouse-guide','▤','Hướng dẫn người dùng','Kho, truy xuất và thu hồi'),('app-tutorial','◇','Xây dựng ứng dụng','Tutorial và AppKit'),('api-reference','⌘','API Reference','Hợp đồng HTTP và ví dụ'),('deployment-checklist','↗','Triển khai','Docker, bảo mật và vận hành'),('evaluation','✓','Kiểm chứng','Ma trận và kịch bản nghiệm thu')])+'</div>'
+        api_filter = '<div class="api-tools"><label for="api-filter">Tìm endpoint</label><input id="api-filter" type="search" placeholder="Ví dụ: bundle, /models, GET…"><span id="api-count" aria-live="polite"></span></div>' if key=="api-reference" else ""
         page = f"""<!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="{E(title)} · Tài liệu kỹ thuật DX-TRACE">
@@ -115,7 +123,7 @@ def build(out):
 <nav class="toplinks"><a href="../intro/index.html">Tài liệu</a><a href="../api-reference/index.html">API</a><a href="https://dxtrace.hieuds.com/">Sản phẩm</a></nav>
 <div class="top-actions"><button id="search-open" class="search-trigger" type="button">⌕ <span>Tìm tài liệu</span> <kbd>Ctrl K</kbd></button><button id="theme" type="button" aria-label="Đổi giao diện sáng tối">◐</button><a class="github" href="{REPO}">GitHub ↗</a></div></header>
 <div class="layout"><aside id="sidebar" class="sidebar" aria-label="Mục lục tài liệu"><div class="version"><span class="dot"></span> MAIN <code>{revision[:7]}</code></div><label class="sidebar-label" for="nav-filter">Danh mục tài liệu</label><input id="nav-filter" type="search" placeholder="Lọc danh mục…" autocomplete="off">{sidebar}</aside>
-<main id="content" class="main"><div class="breadcrumb">Tài liệu <span>›</span> {E(section)} <span>›</span> {E(title)}</div>{cards}<article>{body}</article><div class="page-feedback"><strong>Tài liệu này có hữu ích?</strong><a href="{REPO}/issues/new">Gửi góp ý hoặc báo lỗi ↗</a></div>
+<main id="content" class="main"><div class="breadcrumb">Tài liệu <span>›</span> {E(section)} <span>›</span> {E(title)}</div>{cards}{api_filter}<article>{body}</article><div class="page-feedback"><strong>Tài liệu này có hữu ích?</strong><a href="{REPO}/issues/new">Gửi góp ý hoặc báo lỗi ↗</a></div>
 <div class="source"><a href="{REPO}/blob/{revision}/{quote(source,safe='/')}">Xem nguồn tài liệu ↗</a><span>MIT · {revision[:7]}</span></div><nav class="pagination" aria-label="Trang liền kề">{paging}</nav></main>
 <aside class="toc" aria-label="Mục lục trang"><strong>Trong trang này</strong>{toc or '<span>Giới thiệu</span>'}<div class="toc-bottom"><button type="button" id="print-page">In / lưu PDF</button><a href="{REPO}/issues">Góp ý tài liệu ↗</a></div></aside></div>
 <footer><span>DX-TRACE · Open-Core Digital Transformation Platform</span><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="https://app.dxtrace.hieuds.com/">Ứng dụng ↗</a></footer>
@@ -124,6 +132,9 @@ def build(out):
         dest.mkdir(parents=True)
         (dest/"index.html").write_text(page,encoding="utf-8")
         search.append({"title":title,"path":key+"/index.html","group":section,"text":plain})
+        for item in sections:
+            section_index.append({"title":title,"heading":item["heading"],"path":key+"/index.html#"+item["anchor"],"group":section,"text":" ".join(item["text"])})
+    (assets/"sections.json").write_text(json.dumps(section_index,ensure_ascii=False),encoding="utf-8")
     (assets/"search.json").write_text(json.dumps(search,ensure_ascii=False),encoding="utf-8")
     (out/"index.html").write_text('<!doctype html><html lang="vi"><meta charset="utf-8"><title>DX-TRACE Docs</title><meta http-equiv="refresh" content="0;url=docs/intro/"><a href="docs/intro/">Mở tài liệu DX-TRACE</a></html>',encoding="utf-8")
     (docs/"index.html").write_text('<!doctype html><html lang="vi"><meta charset="utf-8"><title>DX-TRACE Docs</title><meta http-equiv="refresh" content="0;url=intro/"><a href="intro/">Mở tài liệu DX-TRACE</a></html>',encoding="utf-8")

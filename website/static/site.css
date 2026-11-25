@@ -21,3 +21,11 @@ article{overflow-wrap:anywhere}article h1{font-size:clamp(30px,4vw,43px);line-he
 .toc-bottom button{display:block;width:100%;font-size:12px;text-align:left;margin-bottom:12px}
 article pre:has(code.language-mermaid){white-space:pre}
 @media print{.topbar,.sidebar,.toc,footer,.pagination,.page-feedback,dialog,.cards,.start,pre button{display:none!important}.layout{display:block}.main{padding:0;max-width:none}.source{margin-top:20px}body{background:white;color:black}article pre{white-space:pre-wrap;overflow:visible}article table{display:table;break-inside:auto}article tr{break-inside:avoid}article h2{break-after:avoid}}
+
+.api-tools{padding:14px 16px;margin:0 0 24px;background:var(--surface);border:1px solid var(--line);border-radius:10px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:13px}
+.api-tools label{font-weight:650}.api-tools input{flex:1;min-width:130px;padding:9px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:7px}.api-tools span{color:var(--muted)}
+.http-method{display:inline-block;font:700 11px ui-monospace,monospace;padding:3px 7px;border-radius:5px;background:var(--soft);color:var(--blue)}
+.http-method.get{color:#18754c;background:#e8f5ed}.http-method.post{color:#1967d2;background:#eaf2ff}
+:root[data-theme=dark] .http-method.get{color:#9ae6b4;background:#244237}:root[data-theme=dark] .http-method.post{color:#8ab4ff;background:#253b58}
+article tr[hidden]{display:none!important}#results strong,#results .search-snippet{display:block}.search-snippet{font-size:12px;line-height:1.45;color:var(--muted);margin-top:4px}
+@media print{.api-tools{display:none}}

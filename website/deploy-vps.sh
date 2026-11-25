@@ -13,7 +13,9 @@ TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 "$VENV/bin/python" website/build.py --out "$TMP/site"
 "$VENV/bin/python" website/verify.py "$TMP/site"
-install -d -m 755 "$BACKUPS"
+install -d -m 700 "$BACKUPS"
+chmod 700 "$BACKUPS"
+cp -a "$ROOT/index.html" "$BACKUPS/landing-index-$(date -u +%Y%m%dT%H%M%S)-$.html"
 STAGE=$(mktemp -d /srv/dx-trace/.docs-stage.XXXXXX)
 trap 'rm -rf "$TMP" "$STAGE"' EXIT
 cp -a "$TMP/site/docs/." "$STAGE/"
