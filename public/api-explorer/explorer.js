@@ -42,7 +42,7 @@ function request(){
  const q=JSON.parse(query.value||'{}');
  if(!q||Array.isArray(q)||typeof q!=='object'||Object.values(q).some(v=>typeof v==='object'))throw Error(t('Query phải là object JSON phẳng.','Query must be a flat JSON object.'));
  const url=new URL('/api'+path,origin);
- for(const [k,v] of Object.entries(q))if(k!=='area')url.searchParams.set(k,String(v));
+ for(const [k,v] of Object.entries(q))if(k!=='area'){if(livePage&&!['limit','offset','status','q','open','order','model','after'].includes(k))throw Error(t('Query không được hỗ trợ trong console thật.','Query parameter not allowed in live console.'));url.searchParams.set(k,String(v));}
  if(current.auth!=='device')url.searchParams.set('area','training');
  const headers={};
  if(current.auth==='device')headers.Authorization='Bearer DEVICE_TOKEN';
