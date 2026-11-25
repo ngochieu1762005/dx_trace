@@ -165,6 +165,27 @@ Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch �
 
 Sơ đồ mô tả cấu hình Compose trên nhánh `main` và cách đặt Caddy trên VPS Ubuntu. Xem [bản đồ kiến trúc đầy đủ](website/content/architecture-map.md) để đối chiếu từng tuyến với cấu hình, dữ liệu và mã nguồn.
 
+### Đường đi của yêu cầu
+
+```mermaid
+flowchart TD
+    U["Người dùng kho hoặc kiểm định"] --> H["Caddy HTTPS"]
+    D["Đầu dò IoT"] --> H
+    H -->|"Tên miền kho"| S["OAuth2 Proxy"]
+    S <-->|"Đăng nhập OIDC"| I["Keycloak"]
+    I --> P["PostgreSQL danh tính"]
+    S -->|"Phiên đã xác thực"| A["App"]
+    H -->|"POST /api/ingest · Bearer thiết bị"| A
+    A -->|"GET tệp giao diện kiểm định"| Q["Quality Portal"]
+    A -->|"/api · khóa ứng dụng"| G["Cổng API nội bộ"]
+    E["API tích hợp tùy chọn"] -->|"Đọc qua JWT và chính sách client"| G
+    G -->|"Khóa Core riêng"| C["Lõi nghiệp vụ"]
+    C --> B["SQLite nghiệp vụ"]
+    C --> F["Kho tệp minh chứng"]
+```
+
+Khi mở **Cổng kiểm định**, App lấy tệp giao diện từ Quality Portal. Sau khi trang tải xong, trình duyệt gọi `/api` về App bằng phiên kho hiện tại. Các yêu cầu nghiệp vụ đi tiếp qua cổng API đến Core.
+
 | Tuyến | Đường đi | Điểm phân quyền |
 | --- | --- | --- |
 | Web kho | Caddy → OAuth2 Proxy → App → cổng API → Core | Keycloak xác thực tài khoản. Core kiểm quyền theo kho và thao tác. |
