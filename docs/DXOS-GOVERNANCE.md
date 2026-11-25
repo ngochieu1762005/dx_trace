@@ -1,28 +1,27 @@
-# DX-OS governance and evidence / Quản trị và minh chứng
+# Bốn nguyên lý DX-OS
 
-## Hot / cold
-The hot workspace retains recent sensor samples; indexed sensor_history retains the complete history. Export a completed month from a consistent verified SQLite backup to a new gzip JSON Lines directory:
+## Dữ liệu nóng/lạnh
+
+Core giữ các số đo gần nhất và lịch sử có chỉ mục. Xuất tháng đã kết thúc từ bản sao SQLite nhất quán, theo workspace, sang JSONL gzip kèm manifest SHA-256:
+
 ```sh
 node tools/archive-sensors.mjs export /secure/backup/warehouse.sqlite /secure/cold/oct ws-example 2026-10
 node tools/archive-sensors.mjs verify /secure/cold/oct
 node tools/archive-sensors.mjs query /secure/cold/oct device-id
 ```
-Archives are workspace-specific, checksummed, and non-destructive. Keep in separately permissioned/encrypted operator storage. No live purge, automated tiering, WORM guarantee or Parquet engine is claimed. Retention and deletion require a separate reviewed policy.
 
-## IT/OT and lineage
-The existing device key and POST /api/ingest validate identity, temperature, timestamp and replay. GET /api/sensor-lineage/{device}?reading={sampleId} is restricted to managers and returns the persisted reading, source device, linked lot, storage fingerprint and any associated audit entries. No inferred incident causality is asserted. History is real when the reading comes from an actual device; synthetic data must be marked as a fixture. 
+Không xóa dữ liệu nguồn, chưa tự động phân tầng, chưa cam kết WORM. Lưu bản xuất tại kho riêng có quyền truy cập và mã hóa phù hợp.
 
-## Zero Trust / GitOps
-APISIX private network and separate gateway/Core credentials, Core RBAC/workspace isolation, Flowable private database and API networks, no exposed engine or database port. `node tools/verify-stack.mjs -f selfhost/compose.yaml -f selfhost/compose.third-party.yaml` validates the rendered Compose topology without printing secrets (run with a properly configured env file). PR CI is a desired-state gate, not continuous deployment reconciliation. Use reviewed commits and preserve production volumes. No automatic deployment or production claims.
+## IT/OT
 
-## Controlled device demonstration
-Create a dedicated device in a disposable training workspace, then set the token without writing it to source. From a host where the training endpoint is deliberately exposed with TLS:
+Thiết bị gửi POST /api/ingest bằng Bearer riêng, chống trùng, kiểm nhiệt độ và thời gian. Ba số đo vượt ngưỡng có thể tạo sự cố cách ly. Công cụ sensor-client.mjs chỉ dùng fixture ở kho thực hành; không chứng nhận phần cứng. Thu hồi khóa sau thử.
 
-```sh
-read -rsp 'Training device token: ' DX_DEVICE_TOKEN; echo
-export DX_DEVICE_TOKEN
-node tools/sensor-client.mjs https://app.example.org/api/ingest 12 3 --training-fixture
-unset DX_DEVICE_TOKEN
-```
+## Data Governance và Lineage
 
-The script sends real HTTP requests with synthetic measurements and preserves the same sample ID/body during retries. Never use a production lot or a real device token for this fixture. The operator must configure ingress for device-token authentication; do not bypass SSO for other routes. Verify in the UI and lineage API, then revoke the training device. A hardware sensor has not been certified by this test.
+GET /api/sensor-lineage/{device}?reading={sampleId} dành cho owner/manager, trả nguồn, lô, thời gian, fingerprint và audit nếu có. Không suy diễn quan hệ nhân quả sự cố. Catalog AppKit vẫn là lineage khai báo.
+
+## Zero Trust và GitOps
+
+APISIX mặc định, khóa gateway/Core riêng; RBAC và cách ly workspace tại Core. Flowable có mạng coreworkflow/workflowdb riêng. Kiểm cấu hình mong muốn qua tools/verify-stack.mjs và CI; chưa có bộ đồng bộ GitOps liên tục. Không công bố cổng nội bộ.
+
+[CI tích hợp](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792) · [English](en/dxos-governance.md).

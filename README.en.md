@@ -14,7 +14,7 @@ Food traceability, warehouse operations and recall coordination.
 
 </div>
 
-**Core infrastructure migration (under evaluation):** Apache APISIX is the candidate replacement for the custom gateway; Flowable OSS is the target BPMN engine. The default deployment retains the existing gateway and business workflow runtime until acceptance, state migration and release are complete. See the [architecture and migration plan](docs/en/third-party-core-migration.md).
+**Main-branch status (unreleased):** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows retain their legacy runtime. PR #35 integration CI passed; production acceptance remains separate. [Architecture](docs/en/third-party-core-migration.md) · [DX-OS governance](docs/DXOS-GOVERNANCE.md).
 
 ## Start here
 

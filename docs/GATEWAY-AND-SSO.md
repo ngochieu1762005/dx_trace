@@ -1,6 +1,6 @@
 # DX-TRACE: isolated API Gateway and live OIDC acceptance
 
-Status: **unreleased change, proposed after v0.0.6**. This document describes code on the feature branch, not a deployed release. Never claim production SSO passed until running the live verification.
+Status: **APISIX default on main, unreleased**. Integration CI passed for PR #35; production SSO still requires live verification.
 
 ## Architecture and trust boundary
 
@@ -10,15 +10,15 @@ flowchart LR
   Caddy --> OAuth2["OAuth2 Proxy"]
   OAuth2 <--> Keycloak
   OAuth2 --> App["DX-TRACE App / Quality Portal"]
-  App -->|"App-scoped secret"| Gateway["api-gateway :8082"]
+  App -->|"App-scoped secret"| Gateway["Apache APISIX :8082"]
   Gateway -->|"Core-only secret"| Core["Core :8081"]
   Core --> DB[("SQLite + objects")]
 ~~~
 
 - App and Gateway share the Docker appnet. Gateway and Core share privcore. **App is not connected to privcore.**
 - The Gateway has **no published host port** and is not a substitute for OAuth2 Proxy. Authentication is still performed by Keycloak and OAuth2 Proxy at the HTTPS edge. Caddy must strip all client-supplied identity headers.
-- App never receives the Core token. The Gateway validates the app-scoped token using timing-safe comparison; forwards a limited set of headers; overwrites the Core token; permits only GET/POST under /api/; rejects redirects, oversized requests/responses and malformed paths.
-- Fixed-window rate limiting defaults to 120 requests per minute per verified forwarded subject (anonymous sensor traffic shares a bucket). It is **per process**, not a distributed WAF or globally enforced API quota. Increase DX_GATEWAY_REQUESTS_PER_MINUTE for legitimate device volume after measurement.
+- App never receives the Core token. APISIX key-auth validates the application credential; proxy-rewrite sets the separate Core credential; GET/POST routes and client-control enforce the configured method and body policy. Core and the App retain their own checks. The former Node gateway is retained for legacy tests; its exact response caps and redirect behavior are not an APISIX equivalence claim.
+- Fixed-window rate limiting defaults to 120 requests per minute per verified forwarded subject (anonymous sensor traffic shares a bucket). It is **per process**, not a distributed WAF or globally enforced API quota. The APISIX limit is declared in selfhost/apisix/apisix.yaml; the legacy Node environment variable does not change it.
 - Core remains the authority for workspace membership, RBAC, workflow guards, idempotency and persistence. Gateway is not an external API client management portal; independent third-party OAuth client onboarding, distributed quotas and traffic analytics remain open work.
 
 ## Safe migration for an existing VPS
@@ -33,7 +33,7 @@ if ! grep -q '^DX_GATEWAY_APP_TOKEN=' selfhost/.env; then
   printf 'DX_GATEWAY_APP_TOKEN=%s\n' "$(openssl rand -hex 32)" >> selfhost/.env
 fi
 chmod 600 selfhost/.env
-node selfhost/doctor.mjs
+# Host Node is optional; use docker compose config --quiet below.
 ~~~
 
 3. For a host already running Caddy on 80/443, use the two Compose files consistently, never the default configuration alone:
@@ -82,4 +82,4 @@ Substitute the actual HTTPS origins. Do not put cookie values into shell history
 
 ## Remaining limitations
 
-The project still runs a deliberately constrained BPMN 2.0 interchange and finite-state workflow engine, not a full execution engine with parallel gateway/timer jobs. Production HA, external API client registration, policy analytics, distributed rate limits, failover and third-party penetration tests are not included in this change. Record these honestly when presenting.
+Existing warehouse/AppKit workflow remains constrained; an independent native Flowable process is available via the optional overlay. Full workflow migration is not claimed. Production HA, external API client registration, policy analytics, distributed rate limits, failover and third-party penetration tests are not included in this change. Record these honestly when presenting.

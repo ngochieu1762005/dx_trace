@@ -1,6 +1,6 @@
 # Chuyển đổi Apache APISIX và Flowable OSS
 
-**Trạng thái:** cấu hình tích hợp đang được đánh giá, chưa phát hành hoặc triển khai VPS. [English](en/third-party-core-migration.md).
+**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [English](en/third-party-core-migration.md).
 
 ## Kiến trúc mục tiêu
 
@@ -12,18 +12,18 @@ flowchart TD
   A --> G[Apache APISIX]
   G --> K[DX-TRACE Headless Core]
   K --> D[(Dữ liệu nghiệp vụ)]
-  K -. Tích hợp chưa hoàn tất .-> F[Flowable OSS]
+  K -->|Overlay: thẩm định độc lập| F[Flowable OSS]
   F --> P[(PostgreSQL riêng)]
 ```
 
 | Thành phần | Bản mặc định hiện tại | Phương án chuyển đổi |
 | --- | --- | --- |
-| API Gateway | Node.js, chính sách nội bộ | APISIX standalone, khóa dịch vụ, giới hạn request |
-| Workflow | Engine JavaScript, tập con BPMN | Flowable REST, BPMN thực thi, timer và tác vụ song song |
+| API Gateway | APISIX standalone mặc định | Node gateway giữ cho kiểm thử cũ |
+| Workflow | Engine cũ cho kho/AppKit | Overlay Flowable REST cho thẩm định độc lập |
 | SSO | Keycloak + OAuth2 Proxy | Giữ nguyên |
 | Dữ liệu nghiệp vụ | SQLite và kho tệp | Giữ nguyên; PostgreSQL mới chỉ phục vụ Flowable |
 
-Flowable chưa điều phối các hồ sơ kho thực tế. Quyền theo kho, chống tự duyệt, audit và tính toàn vẹn giao dịch vẫn thuộc Core. Các API công khai và sơ đồ kiến trúc hiện hành chưa thay đổi.
+Flowable điều phối hồ sơ thẩm định độc lập qua API; chưa điều phối toàn bộ hồ sơ kho. Quyền theo kho, chống tự duyệt, audit và tính toàn vẹn giao dịch vẫn thuộc Core. Các API công khai và sơ đồ kiến trúc hiện hành chưa thay đổi.
 
 ## Kiểm thử trên môi trường cô lập
 
@@ -38,7 +38,7 @@ docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml 
 docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml down
 ```
 
-Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không xóa volume production. Kịch bản tạo quy trình BPMN thử, hoàn tất hai tác vụ song song, kiểm timer và lịch sử; chưa kiểm toàn bộ nghiệp vụ kho.
+Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không xóa volume production. Kịch bản kiểm engine thật, API thẩm định, app độc lập, IT/OT và lineage. Không chạy trên production. [CI PR #35](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792).
 
 ## Điều kiện chuyển sang vận hành
 
@@ -51,6 +51,6 @@ Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không
 
 ## Nguồn và giấy phép
 
-[Apache APISIX](https://github.com/apache/apisix) 3.21.0 và [Flowable OSS](https://github.com/flowable/flowable-engine) 7.2.0 dùng Apache-2.0. PostgreSQL 17 dùng PostgreSQL License. Tag image là cấu hình ứng viên, chưa xác minh digest và kết quả chạy.
+[Apache APISIX](https://github.com/apache/apisix) 3.21.0 và [Flowable OSS](https://github.com/flowable/flowable-engine) 7.2.0 dùng Apache-2.0. PostgreSQL 17 dùng PostgreSQL License. Tag image đã chạy trong CI tích hợp PR #35; chưa khóa digest và chưa xác nhận production.
 
 [Cấu hình triển khai](../selfhost/compose.third-party.yaml) · [CI tích hợp](../.github/workflows/third-party-core.yml) · [Kiến trúc hiện tại](HEADLESS-CORE.md).

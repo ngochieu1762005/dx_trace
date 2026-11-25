@@ -78,6 +78,16 @@
         "Chuyển đổi APISIX và Flowable"
       ],
       [
+        "native-review",
+        "docs/NATIVE-REVIEW.md",
+        "Flowable OSS · Thẩm định"
+      ],
+      [
+        "dxos-governance",
+        "docs/DXOS-GOVERNANCE.md",
+        "Bốn nguyên lý DX-OS"
+      ],
+      [
         "external-api",
         "docs/EXTERNAL-API.md",
         "API tích hợp qua OIDC"

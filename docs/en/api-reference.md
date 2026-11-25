@@ -93,3 +93,16 @@ Generated per-model OpenAPI is distinct from this manually curated whole-platfor
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/api-reference.md).
+
+## Native Flowable and telemetry lineage (unreleased main)
+
+| Method / path | Access | Input / output |
+| --- | --- | --- |
+| `POST /api/flowable-review/start` | owner/manager/warehouse | reference; required Idempotency-Key; instance id and tasks |
+| `GET /api/flowable-review/{id}` | same-workspace owner/manager/warehouse | status, outcome and role-filtered tasks |
+| `POST /api/flowable-review/{id}/complete` | task role, not creator | taskId, approved (boolean), reason |
+| `GET /api/sensor-lineage/{device}?reading={sampleId}` | owner/manager | reading, linked lot, fingerprint and available audit entries |
+
+Flowable requires the overlay. 503 when unavailable; 403 for denied role; 404 outside the workspace; 409 for conflicts or uncertain outcomes. Refresh state before retrying completion. Review does not release stock.
+
+[Native review](native-review.md).

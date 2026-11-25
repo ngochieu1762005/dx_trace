@@ -1,6 +1,6 @@
 # Tài liệu DX-TRACE
 
-**Trạng thái chuyển đổi:** Apache APISIX và Flowable OSS đang được đánh giá trên stack cô lập. Kiến trúc và API hiện hành chưa thay đổi mặc định cho đến khi nghiệm thu và chuyển trạng thái quy trình hoàn tất. [Hướng dẫn chuyển đổi](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 Nền tảng chuyển đổi số nguồn mở cho chuỗi cung ứng, truy xuất thực phẩm và điều phối thu hồi. Một lõi dùng chung cho danh tính, dữ liệu, phân quyền và quy trình nghiệp vụ.
 
@@ -19,11 +19,11 @@ Nền tảng chuyển đổi số nguồn mở cho chuỗi cung ứng, truy xu�
 | Thành phần | Chức năng |
 | --- | --- |
 | Identity | Keycloak và OAuth2 Proxy |
-| API Gateway | Chính sách truy cập và cách ly Core |
+| API Gateway | Apache APISIX, chính sách truy cập và cách ly Core |
 | Headless Core | Nghiệp vụ, dữ liệu, quyền và audit |
 | AppKit | Biểu mẫu khai báo, workflow và gói nghiệp vụ |
-| Process Runtime | Tập con BPMN, fork/join và timer |
-| Data Governance | Catalog, kiểm tra và thống kê độ đầy đủ dữ liệu |
+| Process Runtime | Runtime cũ + Flowable OSS tùy chọn |
+| Data Governance | Catalog, truy vết cảm biến, kho lạnh kiểm SHA-256 |
 | Quality Portal | Ứng dụng kiểm định độc lập |
 
 ## Phiên bản và minh chứng

@@ -78,6 +78,16 @@
         "APISIX and Flowable migration"
       ],
       [
+        "native-review",
+        "docs/en/native-review.md",
+        "Flowable OSS review"
+      ],
+      [
+        "dxos-governance",
+        "docs/en/dxos-governance.md",
+        "DX-OS governance"
+      ],
+      [
         "external-api",
         "docs/en/external-api.md",
         "External OIDC API"

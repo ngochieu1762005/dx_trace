@@ -9,8 +9,11 @@ Bảng mô tả mã nguồn main, không tự khẳng định mọi tính năng 
 | AppKit | [AppKit](../../docs/APPKIT.md) | Manifest không chạy code tùy ý |
 | Bundles | [Application bundles](../../docs/APPLICATION-BUNDLES.md) | Không có khóa ngoại liên model |
 | Quyền theo model | [Model access](../../docs/MODEL-ACCESS.md) | Vai trò cố định, chưa group provisioning |
+| APISIX | [Gateway](../../docs/GATEWAY-AND-SSO.md) | Mặc định Compose; SSO live cần nghiệm thu |
+| Flowable OSS | [Thẩm định](../../docs/NATIVE-REVIEW.md) | Overlay, không chuyển toàn bộ workflow |
+| Bốn nguyên lý DX-OS | [Quản trị](../../docs/DXOS-GOVERNANCE.md) | Cold export, lineage cảm biến, IT/OT fixture, kiểm cấu hình CI; không phải lakehouse/GitOps controller |
 | BPMN | [Runtime](../../docs/PROCESS-RUNTIME.md) | Tập con, không phải engine BPMN đầy đủ |
-| Data Catalog | [Assurance](../../docs/PLATFORM-ASSURANCE.md) | Lineage khai báo |
+| Data Catalog | [Assurance](../../docs/PLATFORM-ASSURANCE.md) | Lineage khai báo cho model; truy vết quan sát cho cảm biến |
 | Data quality | [Governance](../../docs/MODEL-GOVERNANCE.md) | Thống kê hiện diện không phải chứng nhận dữ liệu |
 | File scanning | [Assurance](../../docs/PLATFORM-ASSURANCE.md) | Optional ClamAV, cần nghiệm thu thực |
 | PostgreSQL | [Migration](../../docs/POSTGRES-MIGRATION.md) | Import offline, Core vẫn SQLite |

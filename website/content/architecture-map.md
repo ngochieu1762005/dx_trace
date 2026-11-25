@@ -1,6 +1,6 @@
 # Kiến trúc hệ thống DX-TRACE
 
-**Trạng thái chuyển đổi:** Apache APISIX và Flowable OSS đang được đánh giá trên stack cô lập. Kiến trúc và API hiện hành chưa thay đổi mặc định cho đến khi nghiệm thu và chuyển trạng thái quy trình hoàn tất. [Hướng dẫn chuyển đổi](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 ![Sơ đồ triển khai DX-TRACE với các tuyến người dùng, đầu dò và tích hợp](../../docs/assets/architecture-current.svg)
 
@@ -21,7 +21,7 @@ Sơ đồ mô tả mã nguồn trên nhánh `main`. Cấu hình Docker chuẩn c
 
 1. Người dùng vào kho qua Caddy. OAuth2 Proxy thực hiện đăng nhập OIDC với Keycloak, quản lý cookie phiên và truyền danh tính đến App.
 2. App phục vụ giao diện React. Khi trình duyệt gọi `/api`, App đính kèm khóa dịch vụ ứng dụng và chuyển yêu cầu đến `gateway-api:8082`. Đối với trang kiểm định, container riêng chỉ phục vụ tệp giao diện.
-3. Gateway áp dụng giới hạn lưu lượng, phương thức, kích thước và chính sách header rồi chuyển tiếp với khóa Core riêng. App và Gateway nối `appnet`. Gateway và Core nối `privcore`.
+3. Apache APISIX áp dụng giới hạn lưu lượng, phương thức, kích thước và chính sách header rồi chuyển tiếp với khóa Core riêng. App và Gateway nối `appnet`. Gateway và Core nối `privcore`.
 4. Core kiểm quyền theo kho, vai trò và thao tác. Các thao tác phù hợp được kiểm tra phiên bản và khóa chống gửi trùng trước khi ghi giao dịch. Phân quyền nghiệp vụ nằm tại Core.
 
 | Cổng loopback trên VPS Ubuntu | Đích trong Compose | Tuyến |
@@ -31,7 +31,7 @@ Sơ đồ mô tả mã nguồn trên nhánh `main`. Cấu hình Docker chuẩn c
 | `127.0.0.1:8182` | `app:8080` | Tuyến nhận số đo qua Caddy |
 | `127.0.0.1:8183` | `external-api:8093` | Chỉ khi bật API tích hợp tùy chọn |
 
-Core và cổng API nội bộ dùng cổng container 8081 và 8082. Chúng không có cổng công bố lên host trong cấu hình chuẩn. [Mã App](../../selfhost/server.mjs) · [Mã Gateway](../../selfhost/api-gateway.mjs) · [Mã Core](../../selfhost/core-server.mjs)
+Core và cổng API nội bộ dùng cổng container 8081 và 8082. Chúng không có cổng công bố lên host trong cấu hình chuẩn. [Mã App](../../selfhost/server.mjs) · [Cấu hình APISIX](../../selfhost/apisix/apisix.yaml) · [Mã Core](../../selfhost/core-server.mjs)
 
 ## Dữ liệu được lưu ở đâu
 
@@ -44,6 +44,8 @@ Core và cổng API nội bộ dùng cổng container 8081 và 8082. Chúng khô
 Nghiệp vụ kho gốc dùng trạng thái JSON trong `workspaces`. AppKit lưu mô hình, hồ sơ và kết quả lệnh trong các bảng riêng. Kho vận hành và kho thực hành là các phạm vi dữ liệu được Core phân giải khi nhận yêu cầu. Khi sao lưu, giữ cả dữ liệu Core và định danh Keycloak. [Khởi tạo dữ liệu](../../selfhost/runtime.mjs) · [Sao lưu và phục hồi](backup-restore.md)
 
 ## Quy trình và dịch vụ nền
+
+Overlay tùy chọn kết nối Core với Flowable qua `coreworkflow`; PostgreSQL riêng (`workflowdata`) qua `workflowdb`. Không mở cổng engine. Kho lạnh là bản xuất gzip JSON Lines theo workspace/tháng, kiểm SHA-256, không xóa nguồn. [Flowable](../../docs/NATIVE-REVIEW.md) · [Quản trị DX-OS](../../docs/DXOS-GOVERNANCE.md).
 
 - Nghiệp vụ kho kiểm tra lô, hạn dùng, giữ hàng, giao nhận và thu hồi. Khi quản lý cách ly từ phiếu kiểm định không đạt, Core liên kết phiếu với sự cố và áp dụng chặn giao theo quy tắc của lô.
 - AppKit dùng manifest để khai báo biểu mẫu, phạm vi đọc, chuyển trạng thái và quyền. Bộ thực thi có tác vụ song song và định thời lưu trong hồ sơ. Worker định thời chạy cùng tiến trình Core. Nhập/xuất BPMN áp dụng trên tập con đã mô tả.

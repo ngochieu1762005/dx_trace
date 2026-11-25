@@ -1,6 +1,6 @@
 # Phụ thuộc và thành phần tích hợp
 
-**Thành phần tích hợp ứng viên (chưa phát hành):** [Apache APISIX 3.21.0](https://github.com/apache/apisix) và [Flowable OSS 7.2.0](https://github.com/flowable/flowable-engine) — Apache-2.0; PostgreSQL 17 — PostgreSQL License. Dịch vụ được lấy từ image upstream, không nhúng mã vào Core; giữ LICENSE/NOTICE và kiểm kê phụ thuộc thực tế khi phân phối. Tag chưa xác minh digest; chưa đưa vào SBOM bản phát hành. [Kế hoạch chuyển đổi](docs/THIRD-PARTY-CORE-MIGRATION.md).
+**Thành phần trên main (chưa phát hành):** APISIX mặc định, Flowable tùy chọn. [Apache APISIX 3.21.0](https://github.com/apache/apisix) và [Flowable OSS 7.2.0](https://github.com/flowable/flowable-engine) — Apache-2.0; PostgreSQL 17 — PostgreSQL License. Dịch vụ được lấy từ image upstream, không nhúng mã vào Core; giữ LICENSE/NOTICE và kiểm kê phụ thuộc thực tế khi phân phối. Tag chưa khóa digest; không thuộc SBOM của tag v0.0.7. [Kế hoạch chuyển đổi](docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 [README](README.md) · [Danh mục khóa đầy đủ](docs/DEPENDENCIES.md) · [Thông tin thành phần thứ ba](THIRD_PARTY_NOTICES.md)
 

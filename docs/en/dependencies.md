@@ -2,7 +2,7 @@
 
 ## Main components
 
-Node.js 24, pnpm, React, Vite, Zod, QR/barcode libraries, SQLite, Docker Compose, Keycloak, OAuth2 Proxy and Caddy. PostgreSQL serves identity; optional scanner uses ClamAV. Docs use Python markdown-it-py and custom HTML/CSS/JS.
+Node.js 24, pnpm, React, Vite, Zod, QR/barcode libraries, SQLite, Docker Compose, Keycloak, OAuth2 Proxy and Caddy. Apache APISIX 3.21.0 is the default gateway; optional Flowable OSS 7.2.0 uses a separate PostgreSQL database. Both upstream projects use Apache-2.0. PostgreSQL also serves identity; optional scanner uses ClamAV. Docs use Python markdown-it-py and custom HTML/CSS/JS.
 
 Use package.json, the lockfile, dependency notices and release SBOM for exact versions and licenses.
 

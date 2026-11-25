@@ -1,6 +1,6 @@
 # DX-TRACE system architecture
 
-**Migration status:** APISIX and Flowable OSS are being evaluated in an isolated stack. The architecture and API described here remain the current default until acceptance and business workflow migration are complete. [Migration guide](third-party-core-migration.md).
+**Main-branch status (unreleased):** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows keep their legacy runtime. PR #35 integration CI passed; production acceptance remains separate. [Integration](third-party-core-migration.md).
 
 ![Deployment architecture with browser, sensor and integration routes](../../docs/assets/architecture-current-en.svg)
 
@@ -19,6 +19,8 @@ The diagram describes the Compose deployment on `main`. Base Compose runs Caddy 
 The App shares `appnet` with the API gateway, and the gateway shares `privcore` with Core. The gateway replaces the application credential with its separate Core credential before forwarding. The Ubuntu configuration publishes OAuth2 Proxy on loopback 8180, Keycloak on 8181 and the App device ingress on 8182. The optional external API binds loopback 8183. Gateway and Core have no published host ports in the standard configuration.
 
 ## Data and background work
+
+Optional Flowable uses private `coreworkflow` and `workflowdb` networks and a separate PostgreSQL volume `workflowdata`. No engine port is published. Cold telemetry export is workspace/month scoped, gzip JSON Lines and SHA-256 verified; it does not purge source data. [Native review](native-review.md) · [DX-OS governance](dxos-governance.md).
 
 | Storage | Owner | Contents |
 | --- | --- | --- |

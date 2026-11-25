@@ -22,7 +22,7 @@ Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi
 
 </div>
 
-**Nhánh nâng cấp hạ tầng (chưa phát hành):** cấu hình Compose trên nhánh này mặc định dùng Apache APISIX. Flowable OSS chạy một quy trình thẩm định độc lập qua overlay; hồ sơ hiện hữu vẫn dùng engine cũ. Xem [minh chứng và giới hạn](docs/NATIVE-REVIEW.md).
+**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định của Compose. Flowable OSS 7.2.0 tùy chọn thực thi quy trình thẩm định độc lập; hồ sơ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; production cần nghiệm thu riêng. [Kiến trúc](docs/THIRD-PARTY-CORE-MIGRATION.md) · [Quản trị DX-OS](docs/DXOS-GOVERNANCE.md).
 
 ## Bắt đầu theo nhu cầu
 
@@ -292,7 +292,7 @@ Ghi lại SHA khi trình diễn hoặc báo lỗi. Xem [kịch bản demo](docs/
 Nếu máy chưa có reverse proxy chiếm 80/443, trỏ hai tên miền đến máy chủ rồi chạy từ gốc repository:
 
 ```bash
-node selfhost/setup.mjs app.example.org id.example.org
+docker run --rm -v "$PWD/selfhost:/work" -w /work node:24-alpine node setup.mjs app.example.org id.example.org
 cd selfhost
 docker compose config --quiet
 docker compose up -d --build

@@ -71,7 +71,7 @@ jobs:
       - name: Validate standalone portal JavaScript syntax
         run: node --check apps/quality-portal/server.mjs && node --check apps/quality-portal/app.js
       - name: Validate external API, process timer and offline restore runner syntax
-        run: node --check selfhost/external-api.mjs && node --check selfhost/process-timer.mjs && bash -n tools/restore-drill.sh
+        run: node --check selfhost/external-api.mjs && node --check selfhost/process-timer.mjs && bash -n tools/restore-drill.sh && bash -n selfhost/scripts/update-ubuntu.sh && node --check selfhost/doctor.mjs
       - run: node selfhost/build.mjs
       - run: node --test tests/*.test.mjs
       - run: python3 -m unittest discover -s tests -p '*_test.py'
