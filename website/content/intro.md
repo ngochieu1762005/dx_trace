@@ -1,5 +1,7 @@
 # Tài liệu DX-TRACE
 
+**Trạng thái chuyển đổi:** Apache APISIX và Flowable OSS đang được đánh giá trên stack cô lập. Kiến trúc và API hiện hành chưa thay đổi mặc định cho đến khi nghiệm thu và chuyển trạng thái quy trình hoàn tất. [Hướng dẫn chuyển đổi](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+
 Nền tảng chuyển đổi số nguồn mở cho chuỗi cung ứng, truy xuất thực phẩm và điều phối thu hồi. Một lõi dùng chung cho danh tính, dữ liệu, phân quyền và quy trình nghiệp vụ.
 
 ![Kiến trúc DX-TRACE](../../docs/assets/architecture-current.svg)

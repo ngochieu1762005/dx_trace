@@ -1,5 +1,7 @@
 # Lộ trình phát triển
 
+**Ưu tiên chuyển đổi hạ tầng:** thay gateway bằng Apache APISIX, chuyển thực thi BPMN sang Flowable OSS, nghiệm thu bảo mật và tương thích, di chuyển workflow đang chạy, sau đó cập nhật cấu hình mặc định và phát hành. Chưa hoàn tất. [Kế hoạch chi tiết](docs/THIRD-PARTY-CORE-MIGRATION.md).
+
 [Changelog](CHANGELOG.md) ghi thay đổi đã thực hiện; tài liệu này ghi trạng thái và tiêu chí cho bước tiếp theo. Người duy trì: [Nguyễn Ngọc Hiếu](AUTHORS.md). Không cam kết ngày hoàn thành khi chưa có kế hoạch phát hành.
 
 ## Đã phát hành — v0.0.5

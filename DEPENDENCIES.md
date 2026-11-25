@@ -1,5 +1,7 @@
 # Phụ thuộc và thành phần tích hợp
 
+**Thành phần tích hợp ứng viên (chưa phát hành):** [Apache APISIX 3.21.0](https://github.com/apache/apisix) và [Flowable OSS 7.2.0](https://github.com/flowable/flowable-engine) — Apache-2.0; PostgreSQL 17 — PostgreSQL License. Dịch vụ được lấy từ image upstream, không nhúng mã vào Core; giữ LICENSE/NOTICE và kiểm kê phụ thuộc thực tế khi phân phối. Tag chưa xác minh digest; chưa đưa vào SBOM bản phát hành. [Kế hoạch chuyển đổi](docs/THIRD-PARTY-CORE-MIGRATION.md).
+
 [README](README.md) · [Danh mục khóa đầy đủ](docs/DEPENDENCIES.md) · [Thông tin thành phần thứ ba](THIRD_PARTY_NOTICES.md)
 
 Tài liệu mô tả các thành phần thực sự được DX-TRACE sử dụng: giao diện, Core, công cụ dựng, hạ tầng triển khai và dịch vụ ngoài. Phiên bản cài đặt lấy từ `pnpm-lock.yaml`, Dockerfile và Compose của commit đang dùng; không lấy từ badge hay phiên bản mới nhất của upstream.
