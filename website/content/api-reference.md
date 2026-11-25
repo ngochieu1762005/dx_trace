@@ -91,3 +91,16 @@ Apply và lệnh record cần khóa lệnh. OpenAPI hiện sinh theo từng mode
 | GET /metrics | Manager | Prometheus gauges của workspace |
 
 [Ví dụ gọi API](api-examples.md) · [Xác thực và lỗi](api-auth.md) · [Router nguồn](../../app/api/%5B...path%5D/route.ts).
+
+## Flowable OSS và truy vết cảm biến (main, chưa phát hành)
+
+| Method / path | Quyền | Body / kết quả |
+| --- | --- | --- |
+| POST /flowable-review/start | Owner/manager/warehouse | reference; Idempotency-Key bắt buộc; trả id và tasks |
+| GET /flowable-review/{id} | Owner/manager/warehouse cùng workspace | Trạng thái, outcome và tasks theo vai trò |
+| POST /flowable-review/{id}/complete | Vai trò nhiệm vụ; không phải người tạo | taskId, approved (boolean), reason |
+| GET /sensor-lineage/{device}?reading={sampleId} | Owner/manager | Số đo, lô, fingerprint, audit nếu tồn tại |
+
+Flowable yêu cầu overlay; 503 khi chưa cấu hình, 403 khi không đủ quyền, 404 ngoài workspace, 409 khi xung đột hoặc kết quả chưa chắc chắn. Đọc trạng thái trước khi thử lại thao tác complete. Quy trình thẩm định không tự giải phóng lô.
+
+[Hướng dẫn Flowable](../../docs/NATIVE-REVIEW.md).

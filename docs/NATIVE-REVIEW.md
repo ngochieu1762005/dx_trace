@@ -1,32 +1,20 @@
-# Native Flowable review — staging candidate
+# Quy trình thẩm định Flowable OSS
 
-APISIX is the private gateway in base Compose on this branch. Existing workflows keep their current state engine. The Flowable overlay adds an executable BPMN process for an independent release review; it does not release a warehouse lot or migrate existing records.
+APISIX mặc định trên main; Flowable OSS là overlay tùy chọn. CI tích hợp PR #35 đã đạt; chưa xác nhận production.
 
-All requests use the authenticated session through APISIX. POST requires same-origin; start requires Idempotency-Key.
-- POST /api/flowable-review/start: {"reference":"review-001"}.
-- GET /api/flowable-review/{id}: workspace-scoped state and active tasks.
-- POST /api/flowable-review/{id}/complete: {"taskId":"...","approved":true,"reason":"Evidence checked"}.
+## Flowable OSS và truy vết cảm biến (main, chưa phát hành)
 
-Both parallel tasks must approve before the demonstration timer and final manager approval. A negative decision ends the process; no inventory change is implied. Flowable owns its task state and history, SQLite retains workspace mapping and durable start intent. Ambiguous starts are not automatically repeated. Back up both databases together with writes suspended. Existing workflows and timers remain enabled; no automatic migration is attempted. Staging CI, actual SSO, failure recovery and restore are acceptance gates.
+| Method / path | Quyền | Body / kết quả |
+| --- | --- | --- |
+| POST /flowable-review/start | Owner/manager/warehouse | reference; Idempotency-Key bắt buộc; trả id và tasks |
+| GET /flowable-review/{id} | Owner/manager/warehouse cùng workspace | Trạng thái, outcome và tasks theo vai trò |
+| POST /flowable-review/{id}/complete | Vai trò nhiệm vụ; không phải người tạo | taskId, approved (boolean), reason |
+| GET /sensor-lineage/{device}?reading={sampleId} | Owner/manager | Số đo, lô, fingerprint, audit nếu tồn tại |
 
-The supplier_review manifest is a separate AppKit application (existing declarative runtime). Install through the existing plan/install API; no application-specific Core code is required.
+Flowable yêu cầu overlay; 503 khi chưa cấu hình, 403 khi không đủ quyền, 404 ngoài workspace, 409 khi xung đột hoặc kết quả chưa chắc chắn. Đọc trạng thái trước khi thử lại thao tác complete. Quy trình thẩm định không tự giải phóng lô.
 
-## Staging operator runbook (Ubuntu)
+Hai tác vụ kiểm kê và chất lượng chạy song song; cả hai đạt mới qua timer thử nghiệm hai giây và phê duyệt cuối. Người tạo không được duyệt. Core giữ mapping workspace và ý định khởi tạo bền vững; Flowable giữ trạng thái task. Khi không rõ kết quả tạo, đối soát lịch sử trước khi gửi lại. Sao lưu cả hai DB khi ngừng ghi. Không tự chuyển hồ sơ cũ hoặc thay đổi tồn kho.
 
-Use a separate checkout and separate Compose project with disposable volumes; never point acceptance scripts at production. The following creates only private Core/gateway/Flowable services (no public Caddy or Keycloak ports):
+## Nghiệm thu
 
-```sh
-cd /opt
- git clone --branch feat/dxos-platform-hardening https://github.com/ngochieu1762005/dx_trace.git dxtrace-acceptance
-cd dxtrace-acceptance/selfhost
-umask 077
-node setup.mjs app.example.invalid id.example.invalid
-node ../tools/verify-stack.mjs -f compose.yaml -f compose.third-party.yaml
-docker compose -p dxtrace-acceptance -f compose.yaml -f compose.third-party.yaml up -d --build core gateway-api flowable
-docker compose -p dxtrace-acceptance -f compose.yaml -f compose.third-party.yaml --profile migration-test run --rm migration-smoke
-docker compose -p dxtrace-acceptance -f compose.yaml -f compose.third-party.yaml ps
-# Only the disposable project; never run -v on production.
-docker compose -p dxtrace-acceptance -f compose.yaml -f compose.third-party.yaml down -v
-```
-
-The direct identity headers in the smoke runner are synthetic test identities on a trusted disposable network, not proof of Keycloak SSO or a public login method. The stock and native Flowable review are separate state machines. The final decision has no stock side effect; do not describe it as automatic release.
+[CI PR #35](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792) đã đạt. Chạy smoke trên môi trường riêng, không dùng dữ liệu thật. [Hướng dẫn staging](THIRD-PARTY-CORE-MIGRATION.md) · [English](en/native-review.md).

@@ -1,6 +1,6 @@
 # Apache APISIX and Flowable OSS migration
 
-Status: candidate integration; not a production rollout or replacement of all existing workflows.
+Status: APISIX is default on main; optional Flowable executes an independent review. PR #35 integration CI passed; this is not a production rollout or migration of all existing workflows.
 
 ## Architecture
 
@@ -53,3 +53,5 @@ timer and checks historical completion. It does not exercise warehouse workflows
 Upstream: Apache APISIX 3.21.0 and Flowable OSS 7.2.0 (Apache-2.0). PostgreSQL
 17 (PostgreSQL License). Image tags are pinned, not digest-verified; review
 upstream security advisories and pin digests before production.
+
+See [native review](native-review.md) and [governance](dxos-governance.md). [Integration CI](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792).
