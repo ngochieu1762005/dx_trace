@@ -19,7 +19,7 @@ git pull --ff-only origin main
 sudo bash website/deploy-vps.sh
 ```
 
-The public docs are static and independently deployable. The live API console is included in the App image and requires rebuilding that image. GitHub Pages remains optional.
+The public docs are static and independently deployable. GitHub Pages remains optional.
 
 ## Full source and translation status
 

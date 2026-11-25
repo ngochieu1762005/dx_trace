@@ -115,8 +115,6 @@ def build(out, lang='vi'):
             cards='<div class="start"><div class="eyebrow">OPEN-CORE · DEVELOPER PORTAL</div><p class="lead">Xây dựng ứng dụng nghiệp vụ.<br>Truy xuất đến cùng.</p><p>Một nền tảng. Nhiều ứng dụng. Chung dữ liệu và danh tính.</p><div class="actions"><a class="primary" href="../quickstart/index.html">Bắt đầu ngay →</a><a href="../architecture/index.html">Khám phá kiến trúc</a></div></div><div class="cards">'+''.join('<a href="'+link(k)+'"><span class="card-icon">'+icon+'</span><strong>'+label+'</strong><span>'+desc+'</span></a>' for k,icon,label,desc in [('quickstart','↗','Bắt đầu nhanh','Chạy demo và cài ứng dụng'),('warehouse-guide','▤','Hướng dẫn người dùng','Kho, truy xuất và thu hồi'),('app-tutorial','◇','Xây dựng ứng dụng','Tutorial và AppKit'),('api-reference','⌘','API Reference','Hợp đồng HTTP và ví dụ'),('deployment-checklist','↗','Triển khai','Docker, bảo mật và vận hành'),('evaluation','✓','Kiểm chứng','Ma trận và kịch bản nghiệm thu')])+'</div>'
         if en and key=="intro":
             cards = '<div class="start"><div class="eyebrow">OPEN-CORE · DEVELOPER PORTAL</div><p class="lead">Build business applications.<br>Trace every step.</p><p>One platform. Shared data and identity.</p><div class="actions"><a class="primary" href="../quickstart/index.html">Get started →</a><a href="../architecture/index.html">Explore architecture</a></div></div>'
-        explorer_link = ('../../api-explorer/en.html' if en else '../api-explorer/index.html')
-        explorer = ('<div class="start"><p class="lead">API Explorer</p><p>'+('Browse endpoints, build requests and open the authenticated GET console.' if en else 'Khám phá endpoint, tạo lệnh tích hợp và mở console GET có xác thực.')+'</p><a class="primary" href="'+explorer_link+'">API Explorer →</a></div>') if key in ("api-reference","api") else ""
         api_filter = '<div class="api-tools"><label for="api-filter">Tìm endpoint</label><input id="api-filter" type="search" placeholder="Ví dụ: bundle, /models, GET…"><span id="api-count" aria-live="polite"></span></div>' if key=="api-reference" and not en else ""
         page = f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -129,7 +127,7 @@ def build(out, lang='vi'):
 <nav class="toplinks"><a href="../intro/index.html">Tài liệu</a><a href="../api-reference/index.html">API</a><a href="https://dxtrace.hieuds.com/">Sản phẩm</a></nav>
 <div class="top-actions"><a class="locale" href="{("../../"+key+"/index.html") if en else ("../en/"+key+"/index.html")}" hreflang="{"vi" if en else "en"}">{"Tiếng Việt" if en else "English"}</a><button id="search-open" class="search-trigger" type="button">⌕ <span>Tìm tài liệu</span> <kbd>Ctrl K</kbd></button><button id="theme" type="button" aria-label="Đổi giao diện sáng tối">◐</button><a class="github" href="{REPO}">GitHub ↗</a></div></header>
 <div class="layout"><aside id="sidebar" class="sidebar" aria-label="Mục lục tài liệu"><div class="version"><span class="dot"></span> MAIN <code>{revision[:7]}</code></div><label class="sidebar-label" for="nav-filter">Danh mục tài liệu</label><input id="nav-filter" type="search" placeholder="Lọc danh mục…" autocomplete="off">{sidebar}</aside>
-<main id="content" class="main"><div class="breadcrumb">Tài liệu <span>›</span> {E(section)} <span>›</span> {E(title)}</div>{cards}{explorer}{api_filter}<article>{body}</article><div class="page-feedback"><strong>Tài liệu này có hữu ích?</strong><a href="{REPO}/issues/new">Gửi góp ý hoặc báo lỗi ↗</a></div>
+<main id="content" class="main"><div class="breadcrumb">Tài liệu <span>›</span> {E(section)} <span>›</span> {E(title)}</div>{cards}{api_filter}<article>{body}</article><div class="page-feedback"><strong>Tài liệu này có hữu ích?</strong><a href="{REPO}/issues/new">Gửi góp ý hoặc báo lỗi ↗</a></div>
 <div class="source"><a href="{REPO}/blob/{revision}/{quote(source,safe='/')}">Xem nguồn tài liệu ↗</a><span>MIT · {revision[:7]}</span></div><nav class="pagination" aria-label="Trang liền kề">{paging}</nav></main>
 <aside class="toc" aria-label="Mục lục trang"><strong>Trong trang này</strong>{toc or '<span>Giới thiệu</span>'}<div class="toc-bottom"><button type="button" id="print-page">In / lưu PDF</button><a href="{REPO}/issues">Góp ý tài liệu ↗</a></div></aside></div>
 <footer><span>DX-TRACE · Open-Core Digital Transformation Platform</span><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="https://app.dxtrace.hieuds.com/">Ứng dụng ↗</a></footer>
@@ -162,10 +160,6 @@ if __name__=="__main__":
     build(temp,"en")
     shutil.move(str(temp/"docs"),str(out/"docs/en"))
     shutil.rmtree(temp)
-    explorer=out/"docs/api-explorer"
-    shutil.copytree(ROOT/"public/api-explorer",explorer)
-    shutil.copy2(SITE/"static/explorer-vi.html",explorer/"index.html")
-    shutil.copy2(SITE/"static/explorer-en.html",explorer/"en.html")
     # Explicit language entry points, without duplicating the Vietnamese document tree.
     vi=out/"docs/vi"
     vi.mkdir()
