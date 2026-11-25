@@ -16,3 +16,10 @@ function search(){const query=normalize(input.value.trim());if(!query){message('
 async function openSearch(){if(!dialog.open)dialog.showModal();input.focus();if(!index){loading??=fetch(root+'assets/search.json').then(r=>{if(!r.ok)throw Error('index unavailable');return r.json()});try{index=await loading}catch{loading=null;message('Không thể tải chỉ mục.');return}}search()}
 $('search-open').addEventListener('click',openSearch);input.addEventListener('input',search);document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch()}});
 const toc=[...document.querySelectorAll('.toc a[href^="#"]')];if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){for(const a of toc){if(a.hash==='#'+encodeURIComponent(entry.target.id)||decodeURIComponent(a.hash)==='#'+entry.target.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')}}},{rootMargin:'-80px 0px -65% 0px'});for(const h of document.querySelectorAll('article h2,article h3'))observer.observe(h)}
+
+const navFilter=$('nav-filter');
+const groups=[...document.querySelectorAll('.nav-group')];
+const original=groups.map(group=>group.open);
+navFilter.addEventListener('input',()=>{const query=normalize(navFilter.value.trim());groups.forEach((group,i)=>{let visible=0;for(const a of group.querySelectorAll('a')){const match=!query||normalize(a.textContent).includes(query)||normalize(group.querySelector('summary').textContent).includes(query);a.hidden=!match;visible+=Number(match)}group.hidden=!visible;group.open=query?visible>0:original[i]})});
+$('print-page')?.addEventListener('click',()=>window.print());
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!dialog.open&&$('sidebar').classList.contains('open')){$('sidebar').classList.remove('open');$('menu').setAttribute('aria-expanded','false');$('menu').focus()}});

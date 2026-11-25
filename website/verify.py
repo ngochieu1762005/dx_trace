@@ -15,11 +15,11 @@ class Links(HTMLParser):
                 self.links.append(value)
 
 root=Path(sys.argv[1]).resolve()
-entries=json.loads((root/"assets/search.json").read_text(encoding="utf-8"))
-assert len(entries)>=30
+entries=json.loads((root/"docs/assets/search.json").read_text(encoding="utf-8"))
+assert len(entries)>=50
 assert len({x["path"] for x in entries})==len(entries)
 for entry in entries:
-    path=root/entry["path"]
+    path=root/"docs"/entry["path"]
     assert path.is_file(), path
     parser=Links()
     parser.feed(path.read_text(encoding="utf-8"))
@@ -31,5 +31,7 @@ for entry in entries:
         assert target.is_relative_to(root), value
         assert target.exists(), (path,value)
 assert (root/".nojekyll").exists()
-assert (root/"assets/site.js").is_file()
+assert (root/"docs/index.html").is_file()
+assert (root/"docs/assets/brand.svg").is_file()
+assert (root/"docs/assets/site.js").is_file()
 print("Verified",len(entries),"pages, search index and local asset links")

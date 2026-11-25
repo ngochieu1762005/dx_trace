@@ -1,0 +1,29 @@
+# Tài khoản, SSO và phân quyền
+
+Keycloak xác thực danh tính; OAuth2 Proxy tạo phiên; Core kiểm tra thành viên và quyền. Quản trị Keycloak khác owner của kho.
+
+| Vai trò | Phạm vi điển hình |
+| --- | --- |
+| owner | Thành viên, cấu hình, mô hình, nghiệp vụ |
+| manager | Duyệt sự cố, thiết bị, nghiệp vụ theo model |
+| warehouse | Nhập, giao, nhận trả và tác vụ được cấp |
+| viewer | Tra cứu; model phải cho phép đọc |
+
+## Tạo tài khoản chung kho
+
+1. Quản trị viên tạo người dùng trong realm warehouse, email hợp lệ.
+2. Owner mời đúng email trước lần đăng nhập đầu tiên.
+3. Người dùng đăng nhập qua ứng dụng.
+4. Kiểm kho, vai trò và quyền bằng thao tác thực.
+
+Một danh tính không có lời mời có thể được cấp workspace riêng. Không tạo lại người dùng chỉ vì nhìn thấy kho trống; kiểm vùng dữ liệu và email trước.
+
+## Phân quyền mô hình
+
+permissions.read và permissions.create quy định vai trò. scope là all hoặc own. scopeByRole cho phép điều chỉnh phạm vi từng vai trò được đọc. Owner không bị override. Model có thể giới hạn manager chỉ thấy hồ sơ của họ, nhưng điều đó cũng có thể chặn việc duyệt hồ sơ người khác.
+
+## Nghiệm thu
+
+Dùng ít nhất hai tài khoản thực; thử viewer ghi dữ liệu, người tạo tự duyệt khi differentActor bật, user ngoài workspace đọc model, thu hồi quyền. Không giả header danh tính trên Internet.
+
+[Gateway và SSO](../../docs/GATEWAY-AND-SSO.md) · [Model access](../../docs/MODEL-ACCESS.md).

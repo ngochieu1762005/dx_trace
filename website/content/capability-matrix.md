@@ -1,0 +1,20 @@
+# Ma trận năng lực và giới hạn
+
+Bảng mô tả mã nguồn main, không tự khẳng định mọi tính năng đã triển khai trên VPS hoặc đạt chứng nhận.
+
+| Năng lực | Minh chứng nguồn | Giới hạn |
+| --- | --- | --- |
+| Headless Core | [Kiến trúc](../../docs/HEADLESS-CORE.md) | Cần kiểm môi trường chạy |
+| SSO | [Gateway/SSO](../../docs/GATEWAY-AND-SSO.md) | Nghiệm thu với hai user thật |
+| AppKit | [AppKit](../../docs/APPKIT.md) | Manifest không chạy code tùy ý |
+| Bundles | [Application bundles](../../docs/APPLICATION-BUNDLES.md) | Không có khóa ngoại liên model |
+| Quyền theo model | [Model access](../../docs/MODEL-ACCESS.md) | Vai trò cố định, chưa group provisioning |
+| BPMN | [Runtime](../../docs/PROCESS-RUNTIME.md) | Tập con, không phải engine BPMN đầy đủ |
+| Data Catalog | [Assurance](../../docs/PLATFORM-ASSURANCE.md) | Lineage khai báo |
+| Data quality | [Governance](../../docs/MODEL-GOVERNANCE.md) | Thống kê hiện diện không phải chứng nhận dữ liệu |
+| File scanning | [Assurance](../../docs/PLATFORM-ASSURANCE.md) | Optional ClamAV, cần nghiệm thu thực |
+| PostgreSQL | [Migration](../../docs/POSTGRES-MIGRATION.md) | Import offline, Core vẫn SQLite |
+| Audit | [Audit evidence](../../docs/AUDIT-EVIDENCE.md) | Checkpoint ngoài DB để đối chiếu |
+| Supply chain | [SBOM](../../docs/SUPPLY-CHAIN.md) | CI không thay thế audit bảo mật độc lập |
+
+Đối chiếu commit, release, cấu hình triển khai và [CI](https://github.com/ngochieu1762005/dx_trace/actions) khi đánh giá.
