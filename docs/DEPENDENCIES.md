@@ -22,7 +22,7 @@ Tổng **7 dependencies + 1 devDependency**, tức 8 gói trực tiếp khi tín
 
 - Node.js 24: HTTP, fetch, crypto, filesystem, AsyncLocalStorage và SQLite tích hợp; không cài ORM Drizzle dù thư mục SQL tên `drizzle/`.
 - pnpm 11.25.0 quản lý gói; Python 3 dùng thư viện chuẩn cho script triển khai và kiểm thử routing.
-- Container: Node 24 bookworm-slim, Keycloak 26.4.7, PostgreSQL 17-alpine, OAuth2 Proxy v7.12.0, Caddy 2-alpine. Một số tag image là tag biến động, chưa khóa digest.
+- Container: Node 24 bookworm-slim, Keycloak 26.4.7, PostgreSQL 17-alpine, OAuth2 Proxy v7.12.0, Caddy 2-alpine, Apache APISIX 3.21.0 (mặc định), Flowable REST 7.2.0 và PostgreSQL 17 (overlay tùy chọn). Một số tag image là tag biến động, chưa khóa digest.
 - Open Food Facts, Groq, scanner ngoài và webhook là kết nối HTTP, không phải npm packages. Groq/scanner/webhook tùy chọn theo cấu hình.
 - Phông gốc được khôi phục: giao diện nghiệp vụ và landing sử dụng **Google Sans** từ các tệp WOFF2 đã có trong repository (xem [giấy phép](../public/fonts/google-sans/LICENSE.txt)); Keycloak dùng stack **Segoe UI/Arial**. Trình duyệt dùng font dự phòng khi cần. Không tải font từ Google Fonts trong các stylesheet giao diện.
 

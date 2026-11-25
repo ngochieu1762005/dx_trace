@@ -2,7 +2,7 @@
 
 ## Upgrade
 
-Record current commit, preserve .env and Compose files, back up warehouse SQLite/files and Keycloak separately, then pull fast-forward only. Build Core, Gateway, Quality Portal and App with the same Compose project and overrides.
+Record current commit, preserve .env and Compose files, back up warehouse SQLite/files and Keycloak separately, then pull fast-forward only. Pull Apache APISIX and build Core, Quality Portal and App with the same Compose project and overrides. On a standard Ubuntu host, use `bash selfhost/scripts/update-ubuntu.sh --with-flowable` after a fast-forward pull; omit the option for APISIX-only unless Flowable is already active. No host Node is required. Preserve additional overrides and back up the workflow database if already enabled. Install python3-venv for docs.
 
 ## Verify
 

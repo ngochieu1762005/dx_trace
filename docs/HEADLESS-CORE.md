@@ -9,7 +9,7 @@
 | Biên truy cập | Caddy, OAuth2 Proxy | HTTPS, định tuyến, phiên OIDC và header danh tính đã xác minh |
 | Danh tính | Keycloak, PostgreSQL | Realm `warehouse`, client `dx-trace`, tài khoản và xác thực |
 | Trình bày | `selfhost/server.mjs`, React | Giao diện thống nhất; chỉ nối appnet, không gắn volume kho |
-| Gateway chính sách | `selfhost/api-gateway.mjs` | Tách khóa app/Core, hạn chế tuyến, header, dung lượng và tần suất |
+| Gateway chính sách | `selfhost/apisix/apisix.yaml` | Apache APISIX mặc định; khóa app/Core riêng, giới hạn tuyến và tần suất |
 | Lõi | `selfhost/core-server.mjs`, router API, `lib/` | Kiểm quyền theo kho, quy tắc, workflow, giao dịch, tệp và tích hợp |
 | Dữ liệu | SQLite, filesystem | Một volume `warehouse` chỉ gắn ở Core |
 
@@ -46,7 +46,9 @@ Kho truyền thống lưu JSON trong `workspaces`, lịch sử cảm biến lưu
 
 Tệp lưu theo SHA-256; metadata nằm trong kho. Tệp chưa có kết quả quét sạch bị chặn tải xuống. Ledger ghi lệnh thành công và webhook đọc ledger; thay đổi thành viên/cấu hình không nằm toàn bộ trong sổ lệnh này.
 
-## Hai loại workflow
+## Các loại workflow
+
+- **Flowable OSS (overlay tùy chọn):** quy trình thẩm định độc lập, PostgreSQL riêng, fork/join, timer và phê duyệt; không tự chuyển trạng thái nghiệp vụ kho. [API](NATIVE-REVIEW.md).
 
 - **Nghiệp vụ kho / đề xuất nội bộ:** quy tắc trong `domain.mjs` và `workflow.mjs`.
 - **Nghiệp vụ mở rộng:** định nghĩa JSON, plan/apply, kiểu trường, vai trò, phạm vi đọc, điều kiện và version. [PLATFORM](PLATFORM.md) mô tả chi tiết.
@@ -68,7 +70,7 @@ python3 -m unittest discover -s tests -p '*_test.py'
 
 `npm run demo` dùng backend cùng tiến trình, danh tính thử và loopback để chạy được trên PC không Docker. Không dùng chế độ này làm bằng chứng SSO hay phân tách dịch vụ.
 
-Caddy là biên HTTPS; Gateway nội bộ có policy hạn chế nhưng chưa có cổng tự đăng ký API client bên ngoài, quota phân tán hoặc quản trị policy nâng cao. Chưa có lakehouse, data lineage, GitOps tự phục hồi, quét mã độc mặc định, object storage phân tán hoặc PostgreSQL cho nghiệp vụ. AI là tích hợp tùy chọn, không phải thành phần bắt buộc của Core.
+Caddy là biên HTTPS; Gateway nội bộ có policy hạn chế nhưng chưa có cổng tự đăng ký API client bên ngoài, quota phân tán hoặc quản trị policy nâng cao. Có truy vết cảm biến và xuất dữ liệu lạnh kiểm checksum; chưa có lakehouse, lineage toàn hệ thống, GitOps tự phục hồi, quét mã độc mặc định, object storage phân tán hoặc PostgreSQL cho nghiệp vụ. AI là tích hợp tùy chọn, không phải thành phần bắt buộc của Core.
 
 ## Đóng gói ứng dụng khai báo
 
