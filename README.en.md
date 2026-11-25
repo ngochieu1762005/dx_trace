@@ -24,6 +24,33 @@ Food traceability, warehouse operations and recall coordination.
 
 DX-TRACE is an open-source platform for warehouse traceability, food quality and recall coordination. It connects lots, shipments, storage conditions, incidents and reconciliation. The reusable headless Core supports declarative business applications and an independently deployed Quality Portal.
 
+## Follow a lot through a recall
+
+A store has already received part of a lot when an inspection fails. The warehouse needs to identify stock it can still hold, destinations that have received goods and the person authorised to approve a recall. To follow the case on `main`, use the same practice workspace and lot throughout.
+
+| Stage | Action | What to verify |
+| --- | --- | --- |
+| Receive | Select **Kho thực hành** (practice warehouse). Open **Lô hàng** and record the lot identifier, quantity and expiry. | Use the lot identifier to distinguish deliveries of the same product. |
+| Dispatch | Reserve stock for a destination and confirm delivery. | Check the destination, delivered quantity and shipment status. |
+| Inspect | Submit an inspection in Quality Portal. A different reviewer records a failed result. | The inspection retains the reason. Quarantine requires a separate management decision. |
+| Quarantine | Link the failed inspection to an incident. | The Core blocks new dispatches and delivery confirmation for reserved stock from the lot. |
+| Reconcile | Approve the recall with an authorised account and record returns by destination. | Compare returned quantities with deliveries. Export the audit evidence and retain its checkpoint separately. |
+
+[Operating workflow](docs/en/operating-workflows.md) · [Quality Portal](docs/en/quality-portal.md) · [Audit verification](docs/en/audit.md)
+
+### Reproduce the checks
+
+After installing dependencies, run these from the repository root.
+
+| Behaviour | Command |
+| --- | --- |
+| Scan input recognition | `node --test tests/scan.test.mjs` |
+| Inspection review and quarantine boundaries | `node --test tests/quality-portal.test.mjs` |
+| Parallel tasks and persisted timers | `node --test tests/process-platform.test.mjs tests/process-timer.test.mjs` |
+| Verification of exported audit evidence | `node --test tests/audit-proof.test.mjs` |
+
+Use a printed label and an HTTPS camera session to test scanning on a phone. Use two distinct Keycloak accounts to verify SSO and review permissions on a deployment. [Acceptance guide](docs/en/acceptance.md)
+
 ## Architecture
 
 ![Architecture](docs/assets/architecture-current.svg)
@@ -52,9 +79,8 @@ DX-TRACE is an open-source platform for warehouse traceability, food quality and
 ```bash
 git clone https://github.com/ngochieu1762005/dx_trace.git
 cd dx_trace
-npm install --global pnpm@11.25.0
-pnpm install --frozen-lockfile
-pnpm demo
+npx --yes pnpm@11.25.0 install --frozen-lockfile
+npm run demo
 ```
 
 Open the loopback address shown in the terminal. This local demo uses synthetic identity; it is not production SSO.
