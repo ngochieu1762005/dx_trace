@@ -26,7 +26,8 @@ function search(){
      if(!title.includes(term)&&!heading.includes(term)&&!content.includes(term))return null;
      score+=title.includes(term)?9:0;score+=heading.includes(term)?13:0;score+=content.includes(term)?2:0;
    }
-   if(heading.includes(query))score+=8;
+   if(title.includes(query))score+=20;
+   if(heading.includes(query))score+=12;
    return {item,score};
  }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,15);
  if(!hits.length){message(tr("Không tìm thấy tài liệu phù hợp.","No matching documents."));return}
@@ -78,7 +79,7 @@ if(apiFilter){
      const visible=terms.every(term=>normalize(row.textContent).includes(term));
      row.hidden=!visible;if(visible)count++;
    }
-   $('api-count').textContent=count+' / '+rows.length+' endpoint';
+   $('api-count').textContent=count+' / '+rows.length+' '+tr('đường dẫn','routes');
  };
  apiFilter.addEventListener('input',update);update();
 }

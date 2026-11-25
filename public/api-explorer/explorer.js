@@ -18,7 +18,14 @@ function choices(){
 }
 function choose(){
  current=catalog.find(e=>e.id===select.value)||null;params.replaceChildren();response.textContent='';el('run').disabled=true;
- if(!current){el('open-live').hidden=true;el('note').textContent=t('Không có endpoint phù hợp.','No matching endpoint.');output.textContent='';return}
+ el('new-key').hidden=!current?.idempotency;
+ el('copy').disabled=!current;
+ if(!current){
+   el('open-live').hidden=true;el('body-label').hidden=true;el('multipart-note').hidden=true;
+   el('note').textContent=t('Không có đường dẫn phù hợp.','No matching route.');
+   for(const field of ['auth','status','sample','output'])el(field).textContent='';
+   query.value='';body.value='';return;
+ }
  requestId=crypto.randomUUID();
  el('note').textContent=txt(current.note);
  el('auth').textContent=current.auth+(current.idempotency?' · Idempotency-Key':'');

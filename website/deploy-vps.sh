@@ -30,10 +30,12 @@ if ! mv -- "$STAGE" "$ROOT/docs"; then
     if [ -n "$OLD" ]; then mv -- "$OLD" "$ROOT/docs"; fi
     exit 1
 fi
-# Only update the tracked landing page, preserving all other Caddy sites.
+# Publish shared assets before either language points to the new edition.
+install -d -m 755 "$ROOT/assets" "$ROOT/assets/fonts" "$ROOT/en"
+install -m 644 landing/assets/{brand-lockup.svg,mark.svg,food-distribution.webp,site.css,site.js} "$ROOT/assets/"
+install -m 644 landing/assets/fonts/* "$ROOT/assets/fonts/"
+install -m 644 landing/404.html "$ROOT/404.html"
 install -m 644 landing/index.html "$ROOT/index.html"
-install -d -m 755 "$ROOT/en"
 install -m 644 landing/en/index.html "$ROOT/en/index.html"
-install -m 644 landing/assets/site.js "$ROOT/assets/site.js"
 echo "DX-TRACE Docs: https://dxtrace.hieuds.com/docs/"
 if [ -n "$OLD" ]; then echo "Previous docs: $OLD"; fi

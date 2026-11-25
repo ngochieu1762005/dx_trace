@@ -12,29 +12,28 @@
   <a class="skip" href="#main">Đến nội dung chính</a>
   <header class="topbar">
     <div class="brand"><img class="brand-icon" src="/brand-mark.svg" alt="" width="42" height="42">
-      <span>DX-TRACE <small>Quality Portal</small></span></div>
+      <span>DX-TRACE <small>Kiểm định chất lượng</small></span></div>
     <nav aria-label="Điều hướng">
       <a id="warehouse-link" href="/#overview">Về kho</a>
       <a id="platform-link" href="/#platform">Nghiệp vụ mở rộng</a>
-      <span id="area-label" class="pill">Đang xác minh kho</span>
+
     </nav>
   </header>
   <main id="main" class="layout">
     <section class="hero" aria-labelledby="title">
-      <div><p class="eyebrow">KIỂM ĐỊNH & AN TOÀN HÀNG HÓA</p>
-      <h1 id="title">Từ kết quả kiểm tra <span>đến quyết định xử lý.</span></h1>
-      <p>Chọn lô trong kho, lập phiếu và chuyển người thẩm định. Khi kết quả không đạt, quản lý có thể cách ly lô và mở hồ sơ sự cố ngay tại đây.</p>
+      <div><span id="area-label" class="pill">Đang xác minh kho</span>
+        <h1 id="title">Sổ kiểm định chất lượng</h1>
+        <p>Lập phiếu theo lô, chuyển thẩm định và theo dõi các hồ sơ quá hạn.</p>
       </div>
-      <div class="hero-aside"><span class="live-dot"></span> <span id="identity">Đang xác minh phiên</span><small>Không lưu mật khẩu, token hoặc dữ liệu tại frontend này.</small></div>
+      <span id="identity" class="identity">Đang xác minh phiên</span>
     </section>
     <div id="notice" role="status" aria-live="polite" class="notice">Đang kết nối Core API…</div>
     <section id="setup" class="setup" hidden aria-labelledby="setup-title">
-      <p class="eyebrow">CHUẨN BỊ ỨNG DỤNG</p>
       <h2 id="setup-title">Chưa cài mô hình kiểm định</h2>
       <p id="setup-description">Ứng dụng cần một manifest được chủ không gian duyệt và cài qua DX-TRACE Core.</p>
       <button id="install" type="button" class="primary">Kiểm tra kế hoạch và cài ứng dụng</button>
     </section>
-    <section id="workspace" hidden aria-label="Workspace kiểm định">
+    <section id="workspace" hidden aria-label="Không gian kiểm định">
       <div class="stats" aria-label="Thống kê">
         <div><small>Tổng hồ sơ</small><strong id="total">0</strong></div>
         <div><small>Quá hạn</small><strong id="overdue">0</strong></div>
@@ -42,17 +41,8 @@
         <div><small>Đã hoàn tất</small><strong id="completed">0</strong></div>
       </div>
       <div class="columns">
-        <section class="panel" aria-labelledby="new-title">
-          <p class="eyebrow">BƯỚC 01 · LẬP HỒ SƠ</p><h2 id="new-title">Phiếu kiểm tra mới</h2>
-          <form id="record-form">
-            <label for="lot">Lô hàng trong kho hiện tại</label><select id="lot" name="lot" required><option value="">Chọn lô hàng</option></select>
-            <label for="finding">Kết quả kiểm tra</label><textarea id="finding" name="finding" maxlength="4000" rows="5" placeholder="Ghi kết quả, phép đo và nội dung cần xác minh..." required></textarea>
-            <button class="primary" type="submit">Lưu phiếu nháp</button>
-          </form>
-          <p class="footnote">Người lập không thể tự phê duyệt hồ sơ của mình. Quy tắc được kiểm tra tại Core, không chỉ ẩn nút.</p>
-        </section>
         <section class="panel wide" aria-labelledby="records-title">
-          <div class="panel-header"><div><p class="eyebrow">BƯỚC 02 · THẨM ĐỊNH</p><h2 id="records-title">Hồ sơ kiểm định</h2></div><button id="refresh" class="secondary" type="button">Tải lại</button></div>
+          <div class="panel-header"><div><h2 id="records-title">Hồ sơ kiểm định</h2></div><button id="refresh" class="secondary" type="button">Tải lại</button></div>
           <form id="filters" class="filters" role="search">
             <label for="query">Tìm hồ sơ<input id="query" type="search" maxlength="200" placeholder="Mã lô hoặc nội dung"></label>
             <label for="status-filter">Trạng thái<select id="status-filter"><option value="all">Tất cả</option><option value="submitted">Chờ thẩm định</option><option value="overdue">Quá hạn</option><option value="rejected">Không đạt</option><option value="approved">Đã duyệt</option><option value="done">Hoàn tất</option><option value="draft">Bản nháp</option></select></label>
@@ -60,6 +50,15 @@
           </form>
           <div id="records" class="records" aria-live="polite"><p class="empty">Chưa có hồ sơ.</p></div>
           <nav class="pagination" aria-label="Phân trang hồ sơ"><button id="previous" type="button" class="secondary">Trước</button><span id="page-info"></span><button id="next" type="button" class="secondary">Sau</button></nav>
+        </section>
+        <section id="creation-panel" class="panel compose-panel" aria-labelledby="new-title">
+          <h2 id="new-title">Phiếu kiểm tra mới</h2>
+          <form id="record-form">
+            <label for="lot">Lô hàng trong kho hiện tại</label><select id="lot" name="lot" required><option value="">Chọn lô hàng</option></select>
+            <label for="finding">Kết quả kiểm tra</label><textarea id="finding" name="finding" maxlength="4000" rows="5" placeholder="Ghi kết quả, phép đo và nội dung cần xác minh..." required></textarea>
+            <button class="primary" type="submit">Lưu phiếu nháp</button>
+          </form>
+          <p class="footnote">Sau khi gửi, một người thẩm định khác sẽ duyệt phiếu.</p>
         </section>
       </div>
     </section>
@@ -75,6 +74,6 @@
       <div class="dialog-actions"><button id="cancel-decision" type="button" class="secondary">Hủy</button><button type="submit" class="primary">Xác nhận</button></div>
     </form>
   </dialog>
-  <footer class="footer">DX-TRACE · Kiểm định có người thẩm định độc lập · Mọi quyết định được ghi nhật ký</footer>
+  <footer class="footer">DX-TRACE · Kiểm định chất lượng</footer>
 </body>
 </html>

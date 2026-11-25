@@ -1,1 +1,35 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DX-TRACE API Explorer</title><link rel="stylesheet" href="./explorer.css"><script defer src="./explorer.js"></script></head><body data-live="1"><header><strong>DX-TRACE / API Explorer</strong><nav><a href="https://dxtrace.hieuds.com/docs/">Tài liệu</a><a href="./en.html">English</a></nav></header><main><h1>Khám phá API</h1><p>55 endpoint · hợp đồng, ví dụ và lệnh tích hợp</p><p class="notice">Phiên đăng nhập ứng dụng · chỉ gọi GET được cho phép trong Kho thực hành. Không có thao tác ghi.</p><div class="layout"><section class="panel"><h2>Yêu cầu</h2><label>Tìm endpoint<input id="filter" placeholder="/models, AppKit, GET"></label><label>Method<select id="method"><option value="all">Tất cả</option><option>GET</option><option>POST</option></select></label><label>Endpoint<select id="endpoint"></select></label><p id="note"></p><p id="auth"></p><div id="params"></div><label>Query JSON<textarea id="query" rows="3"></textarea></label><label id="body-label">Request body<textarea id="body" rows="9"></textarea></label><p id="multipart-note" hidden>multipart/form-data · file + entity</p><div class="buttons"><button id="new-key" type="button">Mã yêu cầu mới</button><a id="open-live" class="button" hidden>Mở console gọi GET</a><button id="run" class="primary" type="button" disabled>Gọi GET thật</button></div><p id="status" role="status"></p></section><section class="panel"><h2>Mã tích hợp</h2><label>Ngôn ngữ<select id="language"><option value="curl">cURL</option><option value="javascript">JavaScript Fetch</option><option value="python">Python Requests</option></select></label><button id="copy" type="button">Sao chép</button><pre id="output"></pre><h2>Ví dụ phản hồi (minh họa, không phải kết quả thật)</h2><pre id="sample"></pre><h2>Phản hồi thật</h2><pre id="response" aria-live="polite"></pre></section></div></main></body></html>
+<!doctype html>
+<!-- DX-TRACE | Authenticated API console. SPDX-License-Identifier: MIT. -->
+<html lang="vi"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tra cứu API | DX-TRACE</title><link rel="icon" href="/brand-mark.svg">
+  <link rel="stylesheet" href="./explorer.css"><script defer src="./explorer.js"></script>
+</head><body data-live="1">
+  <header><a class="brand" href="/?area=training#platform"><img src="/brand-mark.svg" width="30" height="30" alt="">DX-TRACE</a>
+    <nav><a href="https://dxtrace.hieuds.com/docs/">Tài liệu</a><a href="./en.html" hreflang="en">English</a></nav>
+  </header>
+  <main>
+    <div class="intro"><a href="/?area=training#platform">Kho thực hành</a>
+      <h1>Tra cứu API</h1>
+      <p>Chọn đường dẫn để xem mã tích hợp và gửi yêu cầu GET bằng phiên đăng nhập hiện tại.</p>
+    </div>
+    <div class="layout">
+      <section class="panel"><h2>Yêu cầu</h2>
+        <label>Tìm đường dẫn<input id="filter" type="search" placeholder="/models, AppKit, GET"></label>
+        <label hidden>Phương thức<select id="method"><option value="all">GET</option></select></label>
+        <label>Đường dẫn API<select id="endpoint"></select></label>
+        <p id="note"></p><p id="auth"></p><div id="params"></div>
+        <label>Tham số truy vấn (JSON)<textarea id="query" rows="3"></textarea></label>
+        <label id="body-label" hidden>Nội dung yêu cầu<textarea id="body" rows="7"></textarea></label>
+        <p id="multipart-note" hidden>multipart/form-data · file + entity</p>
+        <div class="buttons"><button id="new-key" type="button" hidden>Tạo mã yêu cầu</button><a id="open-live" class="button" hidden>Mở bảng gọi API</a><button id="run" class="primary" type="button" disabled>Gửi yêu cầu GET</button></div>
+        <p id="status" role="status"></p>
+      </section>
+      <section class="panel"><h2>Mã tích hợp</h2>
+        <div class="code-controls"><label>Ngôn ngữ<select id="language"><option value="curl">cURL</option><option value="javascript">JavaScript Fetch</option><option value="python">Python Requests</option></select></label><button id="copy" type="button">Sao chép</button></div>
+        <pre id="output"></pre><details><summary>Xem phản hồi minh họa</summary><pre id="sample"></pre></details>
+        <h2>Kết quả từ máy chủ</h2><pre id="response" aria-live="polite"></pre>
+      </section>
+    </div>
+  </main>
+</body></html>

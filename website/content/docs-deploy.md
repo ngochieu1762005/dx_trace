@@ -23,7 +23,7 @@ git pull --ff-only origin main
 sudo bash website/deploy-vps.sh
 ```
 
-Script build, verify, sao lưu thư mục docs trước đó ngoài root web, sau đó đưa bản mới vào /srv/dx-trace/landing/docs. Không build Docker, không sửa Caddy hoặc database. Cần python3-venv trên host.
+Script dựng và kiểm tra tài liệu hai ngôn ngữ, sao lưu thư mục tài liệu cũ rồi xuất bản vào `/srv/dx-trace/landing/docs`. Tiếp theo, script chép ảnh kho, phông chữ, CSS và JavaScript trước khi cập nhật trang giới thiệu tiếng Việt, tiếng Anh và trang 404. Máy chủ cần gói `python3-venv`. Ứng dụng kho và cổng kiểm định được cập nhật qua Docker Compose.
 
 ## GitHub Pages
 

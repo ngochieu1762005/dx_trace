@@ -135,7 +135,7 @@ function render(view) {
   root.replaceChildren();
   if(!state.records.length) root.append(line('p','Chưa có hồ sơ nào trong phạm vi được phép xem.','empty'));
   else for(const record of state.records) root.append(drawRecord(record));
-  el('record-form').hidden = !state.definition.permissions.create.includes(state.me.role);
+  el('creation-panel').hidden = !state.definition.permissions.create.includes(state.me.role);
   el('workspace').hidden = false;
   el('setup').hidden = true;
   el('previous').disabled=state.offset===0;el('next').disabled=!view.page.hasMore;
@@ -160,9 +160,13 @@ async function init() {
     el('area-label').textContent=session.demo?'Kho thực hành':'Kho vận hành';
     el('warehouse-link').href=areaPath('/#overview');
     el('platform-link').href=areaPath('/#platform');
-    el('identity').textContent = session.me.name + ' · ' + session.me.role;
+    el('identity').textContent = session.me.name + ' · ' + ({owner:'Chủ không gian',manager:'Quản lý',warehouse:'Nhân viên kho',viewer:'Chỉ xem'}[session.me.role] || session.me.role);
     const installed = await api('/api/apps');
-    if(installed.applications.some((item)=>item.id === 'quality')) return await refresh();
+    if(installed.applications.some((item)=>item.id === 'quality')) {
+      await refresh();
+      notice('');
+      return;
+    }
     el('workspace').hidden = true;
     el('setup').hidden = false;
     const isOwner = state.me.role === 'owner';

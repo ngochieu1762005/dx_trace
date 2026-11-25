@@ -19,6 +19,8 @@ git pull --ff-only origin main
 sudo bash website/deploy-vps.sh
 ```
 
+The script publishes both documentation languages and backs up the previous documentation outside the public web root. It installs the photograph, local fonts, CSS and JavaScript before replacing the two product pages and the 404 page. The warehouse and Quality Portal are deployed through Docker Compose.
+
 The public docs are static and independently deployable. GitHub Pages remains optional.
 
 ## Full source and translation status

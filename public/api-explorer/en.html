@@ -1,1 +1,35 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DX-TRACE API Explorer</title><link rel="stylesheet" href="./explorer.css"><script defer src="./explorer.js"></script></head><body data-live="1"><header><strong>DX-TRACE / API Explorer</strong><nav><a href="https://dxtrace.hieuds.com/docs/en/">Documentation</a><a href="./index.html">Tiếng Việt</a></nav></header><main><h1>Explore the API</h1><p>55 endpoints · contracts, examples and integration snippets</p><p class="notice">Authenticated application session · allowlisted GET requests in the training workspace only. No writes.</p><div class="layout"><section class="panel"><h2>Request</h2><label>Find endpoint<input id="filter" placeholder="/models, AppKit, GET"></label><label>Method<select id="method"><option value="all">All</option><option>GET</option><option>POST</option></select></label><label>Endpoint<select id="endpoint"></select></label><p id="note"></p><p id="auth"></p><div id="params"></div><label>Query JSON<textarea id="query" rows="3"></textarea></label><label id="body-label">Request body<textarea id="body" rows="9"></textarea></label><p id="multipart-note" hidden>multipart/form-data · file + entity</p><div class="buttons"><button id="new-key" type="button">New request key</button><a id="open-live" class="button" hidden>Open live GET console</a><button id="run" class="primary" type="button" disabled>Send live GET</button></div><p id="status" role="status"></p></section><section class="panel"><h2>Integration code</h2><label>Language<select id="language"><option value="curl">cURL</option><option value="javascript">JavaScript Fetch</option><option value="python">Python Requests</option></select></label><button id="copy" type="button">Copy</button><pre id="output"></pre><h2>Example response (illustrative, not a live result)</h2><pre id="sample"></pre><h2>Live response</h2><pre id="response" aria-live="polite"></pre></section></div></main></body></html>
+<!doctype html>
+<!-- DX-TRACE | Authenticated API console. SPDX-License-Identifier: MIT. -->
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>API console | DX-TRACE</title><link rel="icon" href="/brand-mark.svg">
+  <link rel="stylesheet" href="./explorer.css"><script defer src="./explorer.js"></script>
+</head><body data-live="1">
+  <header><a class="brand" href="/?area=training#platform"><img src="/brand-mark.svg" width="30" height="30" alt="">DX-TRACE</a>
+    <nav><a href="https://dxtrace.hieuds.com/docs/en/">Documentation</a><a href="./index.html" hreflang="vi">Tiếng Việt</a></nav>
+  </header>
+  <main>
+    <div class="intro"><a href="/?area=training#platform">Training workspace</a>
+      <h1>API console</h1>
+      <p>Choose a route to see integration code and send a GET request using your current session.</p>
+    </div>
+    <div class="layout">
+      <section class="panel"><h2>Request</h2>
+        <label>Filter routes<input id="filter" type="search" placeholder="/models, AppKit, GET"></label>
+        <label hidden>Method<select id="method"><option value="all">GET</option></select></label>
+        <label>API route<select id="endpoint"></select></label>
+        <p id="note"></p><p id="auth"></p><div id="params"></div>
+        <label>Query parameters (JSON)<textarea id="query" rows="3"></textarea></label>
+        <label id="body-label" hidden>Request body<textarea id="body" rows="7"></textarea></label>
+        <p id="multipart-note" hidden>multipart/form-data · file + entity</p>
+        <div class="buttons"><button id="new-key" type="button" hidden>New request key</button><a id="open-live" class="button" hidden>Open live console</a><button id="run" class="primary" type="button" disabled>Send GET request</button></div>
+        <p id="status" role="status"></p>
+      </section>
+      <section class="panel"><h2>Integration code</h2>
+        <div class="code-controls"><label>Language<select id="language"><option value="curl">cURL</option><option value="javascript">JavaScript Fetch</option><option value="python">Python Requests</option></select></label><button id="copy" type="button">Copy</button></div>
+        <pre id="output"></pre><details><summary>Show sample response</summary><pre id="sample"></pre></details>
+        <h2>Server response</h2><pre id="response" aria-live="polite"></pre>
+      </section>
+    </div>
+  </main>
+</body></html>
