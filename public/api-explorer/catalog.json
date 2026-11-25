@@ -1,0 +1,2545 @@
+[
+  {
+    "id": "get-health",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "GET",
+    "path": "/health",
+    "title": {
+      "en": "Health",
+      "vi": "Kiểm tra Core"
+    },
+    "auth": "public",
+    "body": null,
+    "query": {},
+    "response": {
+      "status": "ok",
+      "version": "0.0.7",
+      "database": true
+    },
+    "note": {
+      "en": "Health only; not SSO readiness.",
+      "vi": "Chỉ kiểm tra Core, không chứng minh SSO."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-state",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "GET",
+    "path": "/state",
+    "title": {
+      "en": "Workspace snapshot",
+      "vi": "Ảnh chụp kho"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": {
+      "revision": 12,
+      "lots": [],
+      "shipments": [],
+      "me": {
+        "role": "viewer"
+      },
+      "alerts": []
+    },
+    "note": {
+      "en": "Workspace snapshot; abbreviated example.",
+      "vi": "Ví dụ rút gọn, theo kho hiện tại."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-export",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "GET",
+    "path": "/export",
+    "title": {
+      "en": "Export snapshot",
+      "vi": "Xuất snapshot"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "JSON attachment; not a full backup.",
+      "vi": "Tệp JSON, không thay thế backup."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-platform",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "GET",
+    "path": "/platform",
+    "title": {
+      "en": "Platform discovery",
+      "vi": "Khám phá nền tảng"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": {
+      "version": "0.0.7",
+      "installedApplications": []
+    },
+    "note": {
+      "en": "Includes identity, built-in applications and workflow.",
+      "vi": "Có identity, ứng dụng và workflow."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-impact-lotid",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "GET",
+    "path": "/impact/{lotId}",
+    "title": {
+      "en": "Recall impact",
+      "vi": "Phạm vi thu hồi"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Use an internal lot ID, not the printed lot code.",
+      "vi": "Dùng ID nội bộ, không phải mã lô in."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-barcode-code",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "GET",
+    "path": "/barcode/{code}",
+    "title": {
+      "en": "Barcode lookup",
+      "vi": "Tra mã vạch"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": {
+      "barcode": "12345678",
+      "name": "Example",
+      "brand": "",
+      "quantity": "",
+      "source": "Open Food Facts"
+    },
+    "note": {
+      "en": "8–14 digits; external lookup may fail.",
+      "vi": "8–14 chữ số; dịch vụ ngoài có thể lỗi."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-partners",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/partners",
+    "title": {
+      "en": "Create partner",
+      "vi": "Tạo đối tác"
+    },
+    "auth": "writer",
+    "body": {
+      "name": "Demo supplier",
+      "kind": "supplier",
+      "contact": "",
+      "address": ""
+    },
+    "query": {},
+    "response": {
+      "id": "PAR-EXAMPLE"
+    },
+    "note": {
+      "en": "kind: supplier or destination; contact/address optional.",
+      "vi": "kind: supplier hoặc destination; liên hệ/địa chỉ tùy chọn."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-lots",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/lots",
+    "title": {
+      "en": "Create lot",
+      "vi": "Nhập lô"
+    },
+    "auth": "writer",
+    "body": {
+      "code": "DEMO-LOT-01",
+      "product": "Yogurt",
+      "supplier": "PAR-EXAMPLE",
+      "quantity": 50,
+      "unit": "box",
+      "expiry": "2027-12-31",
+      "location": "Cold room",
+      "min_temp": 2,
+      "max_temp": 8,
+      "barcode": "",
+      "notes": ""
+    },
+    "query": {},
+    "response": {
+      "id": "LOT-EXAMPLE"
+    },
+    "note": {
+      "en": "Unique code; valid date; positive quantity; min_temp < max_temp.",
+      "vi": "Mã duy nhất, ngày hợp lệ, lượng dương, min_temp < max_temp."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-shipments",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/shipments",
+    "title": {
+      "en": "Reserve shipment",
+      "vi": "Giữ phiếu giao"
+    },
+    "auth": "writer",
+    "body": {
+      "lot": "LOT-EXAMPLE",
+      "destination": "PAR-EXAMPLE",
+      "quantity": 10
+    },
+    "query": {},
+    "response": {
+      "id": "SHI-EXAMPLE"
+    },
+    "note": {
+      "en": "Active lot, valid destination and sufficient available stock.",
+      "vi": "Lô hoạt động, điểm nhận hợp lệ, đủ tồn."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-shipments-id-deliver",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/shipments/{id}/deliver",
+    "title": {
+      "en": "Deliver shipment",
+      "vi": "Xác nhận giao"
+    },
+    "auth": "writer",
+    "body": {},
+    "query": {},
+    "response": {
+      "id": "SHI-EXAMPLE"
+    },
+    "note": {
+      "en": "Reserved shipment and active unexpired lot.",
+      "vi": "Phiếu reserved, lô hoạt động và còn hạn."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-shipments-id-cancel",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/shipments/{id}/cancel",
+    "title": {
+      "en": "Cancel reservation",
+      "vi": "Hủy giữ hàng"
+    },
+    "auth": "writer",
+    "body": {},
+    "query": {},
+    "response": {
+      "id": "SHI-EXAMPLE"
+    },
+    "note": {
+      "en": "Reserved shipments only.",
+      "vi": "Chỉ phiếu reserved."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-shipments-id-return",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/shipments/{id}/return",
+    "title": {
+      "en": "Receive recalled goods",
+      "vi": "Nhận trả"
+    },
+    "auth": "writer",
+    "body": {
+      "quantity": 3
+    },
+    "query": {},
+    "response": {
+      "id": "SHI-EXAMPLE"
+    },
+    "note": {
+      "en": "Approved recall; quantity optional, cannot exceed outstanding amount.",
+      "vi": "Thu hồi đã duyệt; lượng tùy chọn, không vượt số còn phải thu."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-incidents",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/incidents",
+    "title": {
+      "en": "Quarantine lot",
+      "vi": "Cách ly lô"
+    },
+    "auth": "writer",
+    "body": {
+      "lot": "LOT-EXAMPLE",
+      "reason": "Temperature deviation",
+      "severity": "high"
+    },
+    "query": {},
+    "response": {
+      "id": "INC-EXAMPLE"
+    },
+    "note": {
+      "en": "severity: medium/high/critical; no existing open incident.",
+      "vi": "severity medium/high/critical; chưa có sự cố mở."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-incidents-id-approve",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/incidents/{id}/approve",
+    "title": {
+      "en": "Approve recall",
+      "vi": "Duyệt thu hồi"
+    },
+    "auth": "manager",
+    "body": {},
+    "query": {},
+    "response": {
+      "id": "INC-EXAMPLE"
+    },
+    "note": {
+      "en": "Pending incident only.",
+      "vi": "Chỉ sự cố pending."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-incidents-id-close",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/incidents/{id}/close",
+    "title": {
+      "en": "Close incident",
+      "vi": "Đóng sự cố"
+    },
+    "auth": "manager",
+    "body": {},
+    "query": {},
+    "response": {
+      "id": "INC-EXAMPLE"
+    },
+    "note": {
+      "en": "Approved and all reserved/delivered shipments resolved; lot stays blocked.",
+      "vi": "Đã duyệt, xử lý hết phiếu; lô vẫn bị chặn."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-quality-id-escalate",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/quality/{id}/escalate",
+    "title": {
+      "en": "Escalate failed inspection",
+      "vi": "Chuyển kiểm định thành sự cố"
+    },
+    "auth": "manager",
+    "body": {
+      "version": 3,
+      "lot": "LOT-EXAMPLE",
+      "reason": "Rejected inspection",
+      "severity": "high"
+    },
+    "query": {},
+    "response": {
+      "id": "REC-EXAMPLE",
+      "version": 4,
+      "incident": "INC-EXAMPLE",
+      "lot": "LOT-EXAMPLE",
+      "reused": false
+    },
+    "note": {
+      "en": "Rejected quality record, matching lot code, not already linked.",
+      "vi": "Hồ sơ rejected, mã lô khớp, chưa liên kết."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-workspace",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/workspace",
+    "title": {
+      "en": "Rename workspace",
+      "vi": "Đổi tên kho"
+    },
+    "auth": "owner",
+    "body": {
+      "name": "Demo workspace"
+    },
+    "query": {},
+    "response": {
+      "id": "WOR-EXAMPLE"
+    },
+    "note": {
+      "en": "Name up to 100 characters.",
+      "vi": "Tên tối đa 100 ký tự."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-workflow",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/workflow",
+    "title": {
+      "en": "Create proposal",
+      "vi": "Tạo đề xuất"
+    },
+    "auth": "writer",
+    "body": {
+      "title": "Maintenance request",
+      "content": "Inspect the cold room"
+    },
+    "query": {},
+    "response": {
+      "id": "WOR-EXAMPLE"
+    },
+    "note": {
+      "en": "Content up to 4000 characters.",
+      "vi": "Nội dung tối đa 4000 ký tự."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-workflow-id-transition",
+    "group": {
+      "en": "Warehouse",
+      "vi": "Kho và truy xuất"
+    },
+    "method": "POST",
+    "path": "/workflow/{id}/transition",
+    "title": {
+      "en": "Transition proposal",
+      "vi": "Chuyển đề xuất"
+    },
+    "auth": "workflow",
+    "body": {
+      "target": "submitted"
+    },
+    "query": {},
+    "response": {
+      "id": "WOR-EXAMPLE"
+    },
+    "note": {
+      "en": "Allowed target and role depend on workflow.",
+      "vi": "Trạng thái và vai trò theo workflow."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-members",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/members",
+    "title": {
+      "en": "Invite member",
+      "vi": "Mời thành viên"
+    },
+    "auth": "owner",
+    "body": {
+      "email": "user@example.org",
+      "role": "warehouse"
+    },
+    "query": {},
+    "response": {
+      "ok": true
+    },
+    "note": {
+      "en": "Invite before first login; manager/warehouse/viewer.",
+      "vi": "Mời trước đăng nhập; manager/warehouse/viewer."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-members-id-role",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/members/{id}/role",
+    "title": {
+      "en": "Change member role",
+      "vi": "Đổi quyền thành viên"
+    },
+    "auth": "owner",
+    "body": {
+      "role": "viewer"
+    },
+    "query": {},
+    "response": {
+      "ok": true
+    },
+    "note": {
+      "en": "Cannot change owner; role may be disabled.",
+      "vi": "Không đổi owner; có thể disabled."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-devices",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/devices",
+    "title": {
+      "en": "Issue device credential",
+      "vi": "Cấp khóa thiết bị"
+    },
+    "auth": "manager",
+    "body": {
+      "name": "Cold room probe",
+      "lot": "LOT-EXAMPLE"
+    },
+    "query": {},
+    "response": {
+      "id": "DEV-EXAMPLE",
+      "token": "<shown once>"
+    },
+    "note": {
+      "en": "Credential returned once; store securely.",
+      "vi": "Khóa chỉ trả một lần, lưu an toàn."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-devices-id-revoke",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/devices/{id}/revoke",
+    "title": {
+      "en": "Revoke device",
+      "vi": "Thu hồi khóa thiết bị"
+    },
+    "auth": "manager",
+    "body": {},
+    "query": {},
+    "response": {
+      "id": "DEV-EXAMPLE"
+    },
+    "note": {
+      "en": "Disables device credential.",
+      "vi": "Vô hiệu hóa khóa."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-ingest",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/ingest",
+    "title": {
+      "en": "Submit temperature reading",
+      "vi": "Gửi số đo"
+    },
+    "auth": "device",
+    "body": {
+      "id": "sample-001",
+      "temperature": 4.5,
+      "recorded": "<current UTC ISO timestamp>"
+    },
+    "query": {},
+    "response": {
+      "id": "DEV-EXAMPLE:sample-001"
+    },
+    "note": {
+      "en": "Bearer device credential; time within 10 minutes; same ID and body for retries.",
+      "vi": "Bearer thiết bị; thời gian trong 10 phút; retry cùng ID và body."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-sensor-history-deviceid",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "GET",
+    "path": "/sensor-history/{deviceId}",
+    "title": {
+      "en": "Read sensor history",
+      "vi": "Lịch sử cảm biến"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {
+      "offset": 0
+    },
+    "response": {
+      "readings": [],
+      "nextOffset": null
+    },
+    "note": {
+      "en": "Up to 100 readings per page.",
+      "vi": "Tối đa 100 số đo/trang."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "post-documents",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/documents",
+    "title": {
+      "en": "Create SOP",
+      "vi": "Tạo tài liệu SOP"
+    },
+    "auth": "writer",
+    "body": {
+      "title": "Cold storage SOP",
+      "content": "Keep records of temperature checks."
+    },
+    "query": {},
+    "response": {
+      "id": "DOC-EXAMPLE"
+    },
+    "note": {
+      "en": "Content up to 20000 characters.",
+      "vi": "Nội dung tối đa 20000 ký tự."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-assistant",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/assistant",
+    "title": {
+      "en": "Ask SOP assistant",
+      "vi": "Hỏi trợ lý SOP"
+    },
+    "auth": "session",
+    "body": {
+      "question": "Where is the cold storage SOP?"
+    },
+    "query": {},
+    "response": {
+      "mode": "retrieval",
+      "answer": "Example response",
+      "sources": []
+    },
+    "note": {
+      "en": "Question 2–2000 chars; optional external LLM; no business writes.",
+      "vi": "Câu hỏi 2–2000 ký tự; LLM tùy chọn; không ghi nghiệp vụ."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-files",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "POST",
+    "path": "/files",
+    "title": {
+      "en": "Upload attachment",
+      "vi": "Tải tệp đính kèm"
+    },
+    "auth": "writer",
+    "body": null,
+    "query": {},
+    "response": {
+      "id": "FIL-EXAMPLE"
+    },
+    "note": {
+      "en": "Multipart file + entity; PNG/JPEG/PDF up to 5 MiB; quarantine until clean.",
+      "vi": "Multipart file + entity; PNG/JPEG/PDF tối đa 5 MiB; cách ly đến khi sạch."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": true
+  },
+  {
+    "id": "get-files-id",
+    "group": {
+      "en": "Identity & devices",
+      "vi": "Tài khoản, thiết bị, tệp"
+    },
+    "method": "GET",
+    "path": "/files/{id}",
+    "title": {
+      "en": "Download attachment",
+      "vi": "Tải xuống tệp"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Binary attachment; 423 when scan is not clean.",
+      "vi": "Tệp nhị phân; 423 nếu chưa sạch."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-apps",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "GET",
+    "path": "/apps",
+    "title": {
+      "en": "List installed apps",
+      "vi": "Danh sách ứng dụng"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": {
+      "applications": []
+    },
+    "note": {
+      "en": "Only readable models.",
+      "vi": "Chỉ model được phép đọc."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-apps-id-manifest",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "GET",
+    "path": "/apps/{id}/manifest",
+    "title": {
+      "en": "Export manifest",
+      "vi": "Xuất manifest"
+    },
+    "auth": "model",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Returns AppKit v1 manifest.",
+      "vi": "Trả manifest v1."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-apps-plan",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "POST",
+    "path": "/apps/plan",
+    "title": {
+      "en": "Preview app install",
+      "vi": "Xem kế hoạch cài app"
+    },
+    "auth": "owner",
+    "body": {
+      "manifest": {
+        "apiVersion": "dxtrace.io/v1",
+        "kind": "DeclarativeApplication",
+        "metadata": {
+          "id": "maintenance",
+          "name": "Yêu cầu bảo trì thiết bị",
+          "version": "1.0.0",
+          "description": "Yêu cầu bảo trì thiết bị và phê duyệt có phân quyền"
+        },
+        "spec": {
+          "model": {
+            "id": "maintenance",
+            "name": "Yêu cầu bảo trì thiết bị",
+            "fields": [
+              {
+                "key": "equipment",
+                "label": "Thiết bị",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "description",
+                "label": "Mô tả",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "priority",
+                "label": "Ưu tiên",
+                "type": "choice",
+                "options": [
+                  "Thường",
+                  "Khẩn cấp"
+                ],
+                "required": true
+              },
+              {
+                "key": "cost",
+                "label": "Chi phí dự kiến",
+                "type": "number"
+              }
+            ],
+            "permissions": {
+              "read": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "create": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "scope": "own"
+            },
+            "workflow": {
+              "states": [
+                "draft",
+                "submitted",
+                "approved",
+                "rejected",
+                "done"
+              ],
+              "initial": "draft",
+              "terminal": [
+                "rejected",
+                "done"
+              ],
+              "transitions": [
+                {
+                  "from": "draft",
+                  "to": "submitted",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "dueHours": 24
+                },
+                {
+                  "from": "submitted",
+                  "to": "approved",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "dueHours": 48
+                },
+                {
+                  "from": "submitted",
+                  "to": "rejected",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "reasonRequired": true
+                },
+                {
+                  "from": "approved",
+                  "to": "done",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "reasonRequired": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Use the complete manifest object, not the filename; read-only plan.",
+      "vi": "Dùng object manifest đầy đủ, không dùng tên file; plan không ghi."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-apps-install",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "POST",
+    "path": "/apps/install",
+    "title": {
+      "en": "Install app",
+      "vi": "Cài app"
+    },
+    "auth": "owner",
+    "body": {
+      "manifest": {
+        "apiVersion": "dxtrace.io/v1",
+        "kind": "DeclarativeApplication",
+        "metadata": {
+          "id": "maintenance",
+          "name": "Yêu cầu bảo trì thiết bị",
+          "version": "1.0.0",
+          "description": "Yêu cầu bảo trì thiết bị và phê duyệt có phân quyền"
+        },
+        "spec": {
+          "model": {
+            "id": "maintenance",
+            "name": "Yêu cầu bảo trì thiết bị",
+            "fields": [
+              {
+                "key": "equipment",
+                "label": "Thiết bị",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "description",
+                "label": "Mô tả",
+                "type": "text",
+                "required": true
+              },
+              {
+                "key": "priority",
+                "label": "Ưu tiên",
+                "type": "choice",
+                "options": [
+                  "Thường",
+                  "Khẩn cấp"
+                ],
+                "required": true
+              },
+              {
+                "key": "cost",
+                "label": "Chi phí dự kiến",
+                "type": "number"
+              }
+            ],
+            "permissions": {
+              "read": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "create": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "scope": "own"
+            },
+            "workflow": {
+              "states": [
+                "draft",
+                "submitted",
+                "approved",
+                "rejected",
+                "done"
+              ],
+              "initial": "draft",
+              "terminal": [
+                "rejected",
+                "done"
+              ],
+              "transitions": [
+                {
+                  "from": "draft",
+                  "to": "submitted",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "dueHours": 24
+                },
+                {
+                  "from": "submitted",
+                  "to": "approved",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "dueHours": 48
+                },
+                {
+                  "from": "submitted",
+                  "to": "rejected",
+                  "roles": [
+                    "owner",
+                    "manager"
+                  ],
+                  "differentActor": true,
+                  "reasonRequired": true
+                },
+                {
+                  "from": "approved",
+                  "to": "done",
+                  "roles": [
+                    "owner",
+                    "manager",
+                    "warehouse"
+                  ],
+                  "reasonRequired": true
+                }
+              ]
+            }
+          }
+        }
+      },
+      "baseVersion": 0
+    },
+    "query": {},
+    "response": {
+      "id": "maintenance",
+      "version": 1
+    },
+    "note": {
+      "en": "Use baseVersion returned by plan.",
+      "vi": "Dùng baseVersion từ plan."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-apps-bundle-plan",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "POST",
+    "path": "/apps/bundle-plan",
+    "title": {
+      "en": "Preview bundle",
+      "vi": "Xem kế hoạch bundle"
+    },
+    "auth": "owner",
+    "body": {
+      "bundle": {
+        "apiVersion": "dxtrace.io/v2",
+        "kind": "ApplicationBundle",
+        "metadata": {
+          "id": "operations",
+          "name": "Bộ nghiệp vụ vận hành",
+          "version": "1.0.0"
+        },
+        "spec": {
+          "applications": [
+            {
+              "apiVersion": "dxtrace.io/v1",
+              "kind": "DeclarativeApplication",
+              "metadata": {
+                "id": "maintenance",
+                "name": "Yêu cầu bảo trì thiết bị",
+                "version": "1.0.0",
+                "description": "Yêu cầu bảo trì thiết bị và phê duyệt có phân quyền"
+              },
+              "spec": {
+                "model": {
+                  "id": "maintenance",
+                  "name": "Yêu cầu bảo trì thiết bị",
+                  "fields": [
+                    {
+                      "key": "equipment",
+                      "label": "Thiết bị",
+                      "type": "text",
+                      "required": true
+                    },
+                    {
+                      "key": "description",
+                      "label": "Mô tả",
+                      "type": "text",
+                      "required": true
+                    },
+                    {
+                      "key": "priority",
+                      "label": "Ưu tiên",
+                      "type": "choice",
+                      "options": [
+                        "Thường",
+                        "Khẩn cấp"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "key": "cost",
+                      "label": "Chi phí dự kiến",
+                      "type": "number"
+                    }
+                  ],
+                  "permissions": {
+                    "read": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "create": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "scope": "own"
+                  },
+                  "workflow": {
+                    "states": [
+                      "draft",
+                      "submitted",
+                      "approved",
+                      "rejected",
+                      "done"
+                    ],
+                    "initial": "draft",
+                    "terminal": [
+                      "rejected",
+                      "done"
+                    ],
+                    "transitions": [
+                      {
+                        "from": "draft",
+                        "to": "submitted",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "dueHours": 24
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "approved",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "dueHours": 48
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "rejected",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true
+                      },
+                      {
+                        "from": "approved",
+                        "to": "done",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "reasonRequired": true
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "apiVersion": "dxtrace.io/v1",
+              "kind": "DeclarativeApplication",
+              "metadata": {
+                "id": "purchase",
+                "name": "Đề nghị mua sắm",
+                "version": "1.0.0",
+                "description": "Yêu cầu mua sắm với luồng phê duyệt theo hạn mức"
+              },
+              "spec": {
+                "model": {
+                  "id": "purchase",
+                  "name": "Đề nghị mua sắm",
+                  "fields": [
+                    {
+                      "key": "title",
+                      "label": "Nội dung mua sắm",
+                      "type": "text",
+                      "required": true
+                    },
+                    {
+                      "key": "amount",
+                      "label": "Số tiền (VND)",
+                      "type": "number",
+                      "required": true,
+                      "min": 1
+                    }
+                  ],
+                  "permissions": {
+                    "read": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "create": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "scope": "own"
+                  },
+                  "workflow": {
+                    "states": [
+                      "draft",
+                      "submitted",
+                      "approved",
+                      "rejected",
+                      "done",
+                      "escalated"
+                    ],
+                    "initial": "draft",
+                    "terminal": [
+                      "rejected",
+                      "done"
+                    ],
+                    "transitions": [
+                      {
+                        "from": "draft",
+                        "to": "submitted",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "dueHours": 24
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "approved",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "dueHours": 48,
+                        "when": {
+                          "field": "amount",
+                          "op": "lte",
+                          "value": 5000000
+                        }
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "rejected",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true
+                      },
+                      {
+                        "from": "approved",
+                        "to": "done",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "reasonRequired": true
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "escalated",
+                        "roles": [
+                          "manager",
+                          "owner"
+                        ],
+                        "differentActor": true,
+                        "when": {
+                          "field": "amount",
+                          "op": "gt",
+                          "value": 5000000
+                        },
+                        "dueHours": 24
+                      },
+                      {
+                        "from": "escalated",
+                        "to": "approved",
+                        "roles": [
+                          "owner"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true,
+                        "dueHours": 48
+                      },
+                      {
+                        "from": "escalated",
+                        "to": "rejected",
+                        "roles": [
+                          "owner"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "query": {},
+    "response": {
+      "id": "operations",
+      "version": "1.0.0",
+      "baseVersions": {
+        "maintenance": 0,
+        "purchase": 0
+      },
+      "models": [],
+      "applicable": true
+    },
+    "note": {
+      "en": "Use complete bundle object; plan is read-only.",
+      "vi": "Dùng object bundle đầy đủ; plan không ghi."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-apps-bundle-install",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "POST",
+    "path": "/apps/bundle-install",
+    "title": {
+      "en": "Install bundle atomically",
+      "vi": "Cài gói nguyên tử"
+    },
+    "auth": "owner",
+    "body": {
+      "bundle": {
+        "apiVersion": "dxtrace.io/v2",
+        "kind": "ApplicationBundle",
+        "metadata": {
+          "id": "operations",
+          "name": "Bộ nghiệp vụ vận hành",
+          "version": "1.0.0"
+        },
+        "spec": {
+          "applications": [
+            {
+              "apiVersion": "dxtrace.io/v1",
+              "kind": "DeclarativeApplication",
+              "metadata": {
+                "id": "maintenance",
+                "name": "Yêu cầu bảo trì thiết bị",
+                "version": "1.0.0",
+                "description": "Yêu cầu bảo trì thiết bị và phê duyệt có phân quyền"
+              },
+              "spec": {
+                "model": {
+                  "id": "maintenance",
+                  "name": "Yêu cầu bảo trì thiết bị",
+                  "fields": [
+                    {
+                      "key": "equipment",
+                      "label": "Thiết bị",
+                      "type": "text",
+                      "required": true
+                    },
+                    {
+                      "key": "description",
+                      "label": "Mô tả",
+                      "type": "text",
+                      "required": true
+                    },
+                    {
+                      "key": "priority",
+                      "label": "Ưu tiên",
+                      "type": "choice",
+                      "options": [
+                        "Thường",
+                        "Khẩn cấp"
+                      ],
+                      "required": true
+                    },
+                    {
+                      "key": "cost",
+                      "label": "Chi phí dự kiến",
+                      "type": "number"
+                    }
+                  ],
+                  "permissions": {
+                    "read": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "create": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "scope": "own"
+                  },
+                  "workflow": {
+                    "states": [
+                      "draft",
+                      "submitted",
+                      "approved",
+                      "rejected",
+                      "done"
+                    ],
+                    "initial": "draft",
+                    "terminal": [
+                      "rejected",
+                      "done"
+                    ],
+                    "transitions": [
+                      {
+                        "from": "draft",
+                        "to": "submitted",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "dueHours": 24
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "approved",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "dueHours": 48
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "rejected",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true
+                      },
+                      {
+                        "from": "approved",
+                        "to": "done",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "reasonRequired": true
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "apiVersion": "dxtrace.io/v1",
+              "kind": "DeclarativeApplication",
+              "metadata": {
+                "id": "purchase",
+                "name": "Đề nghị mua sắm",
+                "version": "1.0.0",
+                "description": "Yêu cầu mua sắm với luồng phê duyệt theo hạn mức"
+              },
+              "spec": {
+                "model": {
+                  "id": "purchase",
+                  "name": "Đề nghị mua sắm",
+                  "fields": [
+                    {
+                      "key": "title",
+                      "label": "Nội dung mua sắm",
+                      "type": "text",
+                      "required": true
+                    },
+                    {
+                      "key": "amount",
+                      "label": "Số tiền (VND)",
+                      "type": "number",
+                      "required": true,
+                      "min": 1
+                    }
+                  ],
+                  "permissions": {
+                    "read": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "create": [
+                      "owner",
+                      "manager",
+                      "warehouse"
+                    ],
+                    "scope": "own"
+                  },
+                  "workflow": {
+                    "states": [
+                      "draft",
+                      "submitted",
+                      "approved",
+                      "rejected",
+                      "done",
+                      "escalated"
+                    ],
+                    "initial": "draft",
+                    "terminal": [
+                      "rejected",
+                      "done"
+                    ],
+                    "transitions": [
+                      {
+                        "from": "draft",
+                        "to": "submitted",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "dueHours": 24
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "approved",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "dueHours": 48,
+                        "when": {
+                          "field": "amount",
+                          "op": "lte",
+                          "value": 5000000
+                        }
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "rejected",
+                        "roles": [
+                          "owner",
+                          "manager"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true
+                      },
+                      {
+                        "from": "approved",
+                        "to": "done",
+                        "roles": [
+                          "owner",
+                          "manager",
+                          "warehouse"
+                        ],
+                        "reasonRequired": true
+                      },
+                      {
+                        "from": "submitted",
+                        "to": "escalated",
+                        "roles": [
+                          "manager",
+                          "owner"
+                        ],
+                        "differentActor": true,
+                        "when": {
+                          "field": "amount",
+                          "op": "gt",
+                          "value": 5000000
+                        },
+                        "dueHours": 24
+                      },
+                      {
+                        "from": "escalated",
+                        "to": "approved",
+                        "roles": [
+                          "owner"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true,
+                        "dueHours": 48
+                      },
+                      {
+                        "from": "escalated",
+                        "to": "rejected",
+                        "roles": [
+                          "owner"
+                        ],
+                        "differentActor": true,
+                        "reasonRequired": true
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "baseVersions": {
+        "maintenance": 0,
+        "purchase": 0
+      }
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Use exact baseVersions from plan; no partial writes.",
+      "vi": "Dùng baseVersions từ plan; không ghi một phần."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-catalog",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "GET",
+    "path": "/catalog",
+    "title": {
+      "en": "Model catalog",
+      "vi": "Danh mục model"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {},
+    "response": {
+      "models": []
+    },
+    "note": {
+      "en": "Metadata, declared lineage and access.",
+      "vi": "Metadata, lineage khai báo và quyền."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-catalog-id-profile",
+    "group": {
+      "en": "AppKit & catalog",
+      "vi": "AppKit và danh mục"
+    },
+    "method": "GET",
+    "path": "/catalog/{id}/profile",
+    "title": {
+      "en": "Model data quality",
+      "vi": "Thống kê chất lượng dữ liệu"
+    },
+    "auth": "model",
+    "body": null,
+    "query": {},
+    "response": {
+      "total": 0,
+      "latest": null,
+      "fields": []
+    },
+    "note": {
+      "en": "Counts scoped to authorized records; no raw values.",
+      "vi": "Thống kê theo phạm vi quyền; không trả giá trị thô."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-models",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "GET",
+    "path": "/models",
+    "title": {
+      "en": "List records",
+      "vi": "Danh sách hồ sơ"
+    },
+    "auth": "session",
+    "body": null,
+    "query": {
+      "limit": 50,
+      "offset": 0,
+      "status": "all"
+    },
+    "response": {
+      "models": [],
+      "records": [],
+      "summary": {
+        "total": 0,
+        "overdue": 0,
+        "byStatus": {}
+      },
+      "page": {
+        "limit": 50,
+        "offset": 0,
+        "total": 0,
+        "hasMore": false
+      }
+    },
+    "note": {
+      "en": "Optional model, q (max 200), open=1, order=due, limit 1–200.",
+      "vi": "Tùy chọn model, q tối đa 200, open=1, order=due, limit 1–200."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-models-id-records",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "GET",
+    "path": "/models/{id}/records",
+    "title": {
+      "en": "List model records",
+      "vi": "Hồ sơ theo model"
+    },
+    "auth": "model",
+    "body": null,
+    "query": {
+      "limit": 50,
+      "offset": 0,
+      "status": "all"
+    },
+    "response": {
+      "models": [],
+      "records": [],
+      "summary": {
+        "total": 0,
+        "overdue": 0,
+        "byStatus": {}
+      },
+      "page": {
+        "limit": 50,
+        "offset": 0,
+        "total": 0,
+        "hasMore": false
+      }
+    },
+    "note": {
+      "en": "Pagination after scope checks.",
+      "vi": "Phân trang sau kiểm phạm vi quyền."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-models-id-openapi",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "GET",
+    "path": "/models/{id}/openapi",
+    "title": {
+      "en": "Generated OpenAPI",
+      "vi": "OpenAPI của model"
+    },
+    "auth": "model",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Generated per-model schema.",
+      "vi": "Đặc tả sinh riêng theo model."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-models-id-bpmn",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "GET",
+    "path": "/models/{id}/bpmn",
+    "title": {
+      "en": "Export workflow BPMN",
+      "vi": "Xuất BPMN workflow"
+    },
+    "auth": "model",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "XML finite-state workflow subset.",
+      "vi": "XML tập con workflow FSM."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-models-id-process-bpmn",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "GET",
+    "path": "/models/{id}/process-bpmn",
+    "title": {
+      "en": "Export process BPMN",
+      "vi": "Xuất BPMN process"
+    },
+    "auth": "model",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Requires orchestration.",
+      "vi": "Cần orchestration."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-plan",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/plan",
+    "title": {
+      "en": "Preview model change",
+      "vi": "Xem tác động model"
+    },
+    "auth": "owner",
+    "body": {
+      "definition": {
+        "id": "maintenance",
+        "name": "Yêu cầu bảo trì thiết bị",
+        "fields": [
+          {
+            "key": "equipment",
+            "label": "Thiết bị",
+            "type": "text",
+            "required": true
+          },
+          {
+            "key": "description",
+            "label": "Mô tả",
+            "type": "text",
+            "required": true
+          },
+          {
+            "key": "priority",
+            "label": "Ưu tiên",
+            "type": "choice",
+            "options": [
+              "Thường",
+              "Khẩn cấp"
+            ],
+            "required": true
+          },
+          {
+            "key": "cost",
+            "label": "Chi phí dự kiến",
+            "type": "number"
+          }
+        ],
+        "permissions": {
+          "read": [
+            "owner",
+            "manager",
+            "warehouse"
+          ],
+          "create": [
+            "owner",
+            "manager",
+            "warehouse"
+          ],
+          "scope": "own"
+        },
+        "workflow": {
+          "states": [
+            "draft",
+            "submitted",
+            "approved",
+            "rejected",
+            "done"
+          ],
+          "initial": "draft",
+          "terminal": [
+            "rejected",
+            "done"
+          ],
+          "transitions": [
+            {
+              "from": "draft",
+              "to": "submitted",
+              "roles": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "dueHours": 24
+            },
+            {
+              "from": "submitted",
+              "to": "approved",
+              "roles": [
+                "owner",
+                "manager"
+              ],
+              "differentActor": true,
+              "dueHours": 48
+            },
+            {
+              "from": "submitted",
+              "to": "rejected",
+              "roles": [
+                "owner",
+                "manager"
+              ],
+              "differentActor": true,
+              "reasonRequired": true
+            },
+            {
+              "from": "approved",
+              "to": "done",
+              "roles": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "reasonRequired": true
+            }
+          ]
+        }
+      }
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Complete definition; read-only plan.",
+      "vi": "Định nghĩa đầy đủ; plan không ghi."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-apply",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/apply",
+    "title": {
+      "en": "Apply model definition",
+      "vi": "Áp dụng model"
+    },
+    "auth": "owner",
+    "body": {
+      "definition": {
+        "id": "maintenance",
+        "name": "Yêu cầu bảo trì thiết bị",
+        "fields": [
+          {
+            "key": "equipment",
+            "label": "Thiết bị",
+            "type": "text",
+            "required": true
+          },
+          {
+            "key": "description",
+            "label": "Mô tả",
+            "type": "text",
+            "required": true
+          },
+          {
+            "key": "priority",
+            "label": "Ưu tiên",
+            "type": "choice",
+            "options": [
+              "Thường",
+              "Khẩn cấp"
+            ],
+            "required": true
+          },
+          {
+            "key": "cost",
+            "label": "Chi phí dự kiến",
+            "type": "number"
+          }
+        ],
+        "permissions": {
+          "read": [
+            "owner",
+            "manager",
+            "warehouse"
+          ],
+          "create": [
+            "owner",
+            "manager",
+            "warehouse"
+          ],
+          "scope": "own"
+        },
+        "workflow": {
+          "states": [
+            "draft",
+            "submitted",
+            "approved",
+            "rejected",
+            "done"
+          ],
+          "initial": "draft",
+          "terminal": [
+            "rejected",
+            "done"
+          ],
+          "transitions": [
+            {
+              "from": "draft",
+              "to": "submitted",
+              "roles": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "dueHours": 24
+            },
+            {
+              "from": "submitted",
+              "to": "approved",
+              "roles": [
+                "owner",
+                "manager"
+              ],
+              "differentActor": true,
+              "dueHours": 48
+            },
+            {
+              "from": "submitted",
+              "to": "rejected",
+              "roles": [
+                "owner",
+                "manager"
+              ],
+              "differentActor": true,
+              "reasonRequired": true
+            },
+            {
+              "from": "approved",
+              "to": "done",
+              "roles": [
+                "owner",
+                "manager",
+                "warehouse"
+              ],
+              "reasonRequired": true
+            }
+          ]
+        }
+      },
+      "baseVersion": 0
+    },
+    "query": {},
+    "response": {
+      "id": "maintenance",
+      "version": 1
+    },
+    "note": {
+      "en": "Use exact baseVersion; rejects incompatible updates.",
+      "vi": "Dùng baseVersion chính xác; từ chối thay đổi không tương thích."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-bpmn-plan",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/bpmn/plan",
+    "title": {
+      "en": "Preview BPMN import",
+      "vi": "Xem kế hoạch BPMN"
+    },
+    "auth": "owner",
+    "body": {
+      "xml": "<replace with supported BPMN XML>"
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Model ID must match existing or supplied definition.",
+      "vi": "ID model phải khớp định nghĩa hiện tại hoặc được cung cấp."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-bpmn-apply",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/bpmn/apply",
+    "title": {
+      "en": "Apply BPMN import",
+      "vi": "Áp dụng BPMN"
+    },
+    "auth": "owner",
+    "body": {
+      "xml": "<replace with supported BPMN XML>",
+      "baseVersion": 1
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Use plan result and supported subset only.",
+      "vi": "Dùng kết quả plan và tập con hỗ trợ."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-id-records",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/{id}/records",
+    "title": {
+      "en": "Create record",
+      "vi": "Tạo hồ sơ"
+    },
+    "auth": "model",
+    "body": {
+      "data": {
+        "equipment": "Freezer A",
+        "description": "Inspect gasket",
+        "priority": "Thường"
+      }
+    },
+    "query": {},
+    "response": {
+      "id": "REC-EXAMPLE",
+      "version": 1
+    },
+    "note": {
+      "en": "Sample data for maintenance model; field validation is model-specific.",
+      "vi": "Dữ liệu mẫu bảo trì; kiểm tra theo model."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-id-update",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/{id}/update",
+    "title": {
+      "en": "Update record",
+      "vi": "Sửa hồ sơ"
+    },
+    "auth": "model",
+    "body": {
+      "id": "REC-EXAMPLE",
+      "version": 1,
+      "data": {
+        "equipment": "Freezer A",
+        "description": "Updated note",
+        "priority": "Thường"
+      }
+    },
+    "query": {},
+    "response": {
+      "id": "REC-EXAMPLE",
+      "version": 2
+    },
+    "note": {
+      "en": "Creator, initial state and matching version.",
+      "vi": "Người tạo, trạng thái đầu và đúng version."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-id-transition",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/{id}/transition",
+    "title": {
+      "en": "Transition record",
+      "vi": "Chuyển trạng thái"
+    },
+    "auth": "workflow",
+    "body": {
+      "id": "REC-EXAMPLE",
+      "version": 1,
+      "target": "submitted"
+    },
+    "query": {},
+    "response": {
+      "id": "REC-EXAMPLE",
+      "version": 2
+    },
+    "note": {
+      "en": "Role, guard, reason and differentActor rules apply.",
+      "vi": "Theo role, guard, lý do và differentActor."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-id-process-complete",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/{id}/process-complete",
+    "title": {
+      "en": "Complete user task",
+      "vi": "Hoàn tất tác vụ"
+    },
+    "auth": "workflow",
+    "body": {
+      "id": "REC-EXAMPLE",
+      "version": 1,
+      "task": "review",
+      "reason": "Reviewed"
+    },
+    "query": {},
+    "response": {
+      "id": "REC-EXAMPLE",
+      "version": 2
+    },
+    "note": {
+      "en": "Active task and matching version required.",
+      "vi": "Tác vụ đang hoạt động, đúng version."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "post-models-id-process-tick",
+    "group": {
+      "en": "Models & workflow",
+      "vi": "Model và quy trình"
+    },
+    "method": "POST",
+    "path": "/models/{id}/process-tick",
+    "title": {
+      "en": "Advance due timer",
+      "vi": "Xử lý timer đến hạn"
+    },
+    "auth": "manager",
+    "body": {
+      "id": "REC-EXAMPLE",
+      "version": 1
+    },
+    "query": {},
+    "response": {
+      "id": "REC-EXAMPLE",
+      "version": 2
+    },
+    "note": {
+      "en": "Timer must be due; normal deployments use worker.",
+      "vi": "Timer đến hạn; bình thường worker tự xử lý."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-audit-ledger",
+    "group": {
+      "en": "Audit & metrics",
+      "vi": "Audit và chỉ số"
+    },
+    "method": "GET",
+    "path": "/audit-ledger",
+    "title": {
+      "en": "List audit events",
+      "vi": "Danh sách audit"
+    },
+    "auth": "manager",
+    "body": null,
+    "query": {
+      "after": 0
+    },
+    "response": {
+      "events": [],
+      "cursor": 0
+    },
+    "note": {
+      "en": "At most 100 events after sequence cursor.",
+      "vi": "Tối đa 100 sự kiện sau cursor."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-audit-ledger-verify",
+    "group": {
+      "en": "Audit & metrics",
+      "vi": "Audit và chỉ số"
+    },
+    "method": "GET",
+    "path": "/audit-ledger/verify",
+    "title": {
+      "en": "Verify audit chain",
+      "vi": "Kiểm chứng audit"
+    },
+    "auth": "manager",
+    "body": null,
+    "query": {},
+    "response": {
+      "valid": true,
+      "entries": 0,
+      "head": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "note": {
+      "en": "Compare external checkpoint for historical verification.",
+      "vi": "Đối chiếu checkpoint bên ngoài."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  },
+  {
+    "id": "get-audit-ledger-export",
+    "group": {
+      "en": "Audit & metrics",
+      "vi": "Audit và chỉ số"
+    },
+    "method": "GET",
+    "path": "/audit-ledger/export",
+    "title": {
+      "en": "Export audit evidence",
+      "vi": "Xuất minh chứng audit"
+    },
+    "auth": "manager",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "JSON bundle up to 10 MiB.",
+      "vi": "Gói JSON tối đa 10 MiB."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "get-metrics",
+    "group": {
+      "en": "Audit & metrics",
+      "vi": "Audit và chỉ số"
+    },
+    "method": "GET",
+    "path": "/metrics",
+    "title": {
+      "en": "Read workspace metrics",
+      "vi": "Chỉ số workspace"
+    },
+    "auth": "manager",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "en": "Prometheus text; manager/owner only.",
+      "vi": "Text Prometheus, chỉ quản lý/chủ."
+    },
+    "idempotency": false,
+    "live": true,
+    "multipart": false
+  }
+]
