@@ -32,5 +32,8 @@ if ! mv -- "$STAGE" "$ROOT/docs"; then
 fi
 # Only update the tracked landing page, preserving all other Caddy sites.
 install -m 644 landing/index.html "$ROOT/index.html"
+install -d -m 755 "$ROOT/en"
+install -m 644 landing/en/index.html "$ROOT/en/index.html"
+install -m 644 landing/assets/site.js "$ROOT/assets/site.js"
 echo "DX-TRACE Docs: https://dxtrace.hieuds.com/docs/"
 if [ -n "$OLD" ]; then echo "Previous docs: $OLD"; fi

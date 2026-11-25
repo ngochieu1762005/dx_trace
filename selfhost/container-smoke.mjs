@@ -22,3 +22,17 @@ assert.equal(denied.status,403,'gateway must require its own internal token');
 await assert.rejects(()=>fetch('http://core:8081/api/health',{signal:AbortSignal.timeout(1500)}),
   'app must not resolve Core on the isolated network');
 console.log('PASS non-root startup, migrations, isolated app/gateway/core networks and authorization');
+
+const apiExplorer=await fetch(base+'/api-explorer/index.html',{headers});
+assert.equal(apiExplorer.status,200,'API explorer must be included in the App build');
+assert.match(await apiExplorer.text(),/data-live="1"/);
+const explorerCatalog=await fetch(base+'/api-explorer/catalog.json',{headers});
+assert.equal(explorerCatalog.status,200);
+assert.match(explorerCatalog.headers.get('content-type'),/application\/json/);
+const endpoints=await explorerCatalog.json();
+assert.ok(endpoints.length>=50);
+assert.ok(endpoints.every(e=>!e.live||e.method==='GET'));
+const training=await fetch(base+'/api/catalog?area=training',{headers});
+assert.equal(training.status,200);
+assert.ok(Array.isArray((await training.json()).models));
+console.log('PASS API Explorer assets and authenticated training catalog');

@@ -29,3 +29,5 @@ article pre:has(code.language-mermaid){white-space:pre}
 :root[data-theme=dark] .http-method.get{color:#9ae6b4;background:#244237}:root[data-theme=dark] .http-method.post{color:#8ab4ff;background:#253b58}
 article tr[hidden]{display:none!important}#results strong,#results .search-snippet{display:block}.search-snippet{font-size:12px;line-height:1.45;color:var(--muted);margin-top:4px}
 @media print{.api-tools{display:none}}
+
+.locale{font-size:13px;white-space:nowrap;color:var(--blue);font-weight:600;padding:6px 8px;border:1px solid var(--line);border-radius:7px}@media(max-width:760px){.locale{font-size:11px;padding:4px 5px}.brand span{display:none}.top-actions{gap:5px}}
