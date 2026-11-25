@@ -159,7 +159,7 @@ Trong bộ mẫu SUA-005: Long Biên đã nhận 30 hộp và trả 17; Tây H�
 Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch → Áp dụng mô hình** bằng tài khoản chủ không gian. Có mẫu bảo trì thiết bị, mua sắm, kiểm tra chất lượng và yêu cầu khách hàng. Mẫu mua sắm trên 5 triệu đồng yêu cầu chuyển cấp trước khi chủ không gian khác người tạo duyệt. [Cấu hình và giới hạn workflow](docs/PLATFORM.md).
 
 <a id="architecture"></a>
-## 🏗️ System Architecture
+## System Architecture
 
 [![Kiến trúc toàn hệ thống: danh tính, gateway, hai ứng dụng, Core, dữ liệu và tích hợp](docs/assets/architecture-current.svg)](docs/assets/architecture-current.svg)
 
@@ -228,7 +228,7 @@ QR được giải mã ngay trong trình duyệt. [Danh mục API](docs/API.md) 
 Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflow được minh họa bằng vận hành kho và mô hình mở rộng. [Bảng đối chiếu yêu cầu](REQUIREMENTS.md) dẫn đến mã và kiểm thử; đây không phải xác nhận của ban tổ chức hay cam kết điểm thi.
 
 <a id="technologies"></a>
-## 🛠️ Technologies Used
+## Technologies Used
 
 | Lớp | Công nghệ | Vai trò |
 | --- | --- | --- |
@@ -245,7 +245,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 [Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc và giấy phép](DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
 
 <a id="requirements"></a>
-## 💻 System Requirements
+## System Requirements
 
 | Mục đích | CPU đề xuất | RAM | Dung lượng trống | Phần mềm |
 | --- | --- | --- | --- | --- |
@@ -255,7 +255,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 Đây là cấu hình khởi điểm để trình diễn, không phải mức tối thiểu đã đo tải. Dành thêm dung lượng cho tệp và bản sao lưu. Lần đầu cần Internet để tải thư viện/image; tra sản phẩm và AI cần Internet khi sử dụng. Camera trên điện thoại cần HTTPS và quyền camera.
 
 <a id="quick-setup"></a>
-## 🚀 Quick Setup
+## Quick Setup
 
 ### Chạy ngay trên máy cá nhân
 
