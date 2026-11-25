@@ -34,8 +34,7 @@ async function deployed(c:any){
 async function lookup(c:any,businessKey:string){
  const tid=await tenant(c);
  const r=await query('/history/historic-process-instances',{businessKey,tenantId:tid,size:'10'});
- const matches=r.data.filter((x:any)=>x.businessKey===businessKey&&x.tenantId===tid&&
-  (x.processDefinitionKey===definition||x.processDefinitionId?.startsWith(definition+':')));
+ const matches=r.data.filter((x:any)=>x.businessKey===businessKey&&x.tenantId===tid);
  if(matches.length>1)fail(409,'Duplicate engine instances; manual reconciliation required');
  return matches[0];
 }

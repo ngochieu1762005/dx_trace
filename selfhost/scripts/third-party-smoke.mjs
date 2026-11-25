@@ -77,3 +77,49 @@ try{
   const res=await request('/repository/deployments/'+encodeURIComponent(deploy.id)+'?cascade=true',{method:'DELETE'});
   assert.ok(res.ok,'acceptance deployment cleanup failed');
 }
+
+
+// All business calls below cross the actual APISIX gateway, using synthetic
+// identities ONLY inside this disposable trusted test network.
+const stamp=randomUUID(),owner='owner-'+stamp,manager='manager-'+stamp,staff='staff-'+stamp,outsider='outsider-'+stamp;
+async function api(path,who=owner,body,key=randomUUID(),expected=200){
+ const response=await fetchSafe(gateway+'/api/'+path,{method:body===undefined?'GET':'POST',
+ headers:{...headers,'x-forwarded-user':who,'x-forwarded-email':who+'@example.invalid','idempotency-key':key,'content-type':'application/json'},
+ body:body===undefined?undefined:JSON.stringify(body)});
+ assert.equal(response.status,expected,path+' returned '+response.status);
+ return response.json();
+}
+await api('state');
+await api('members',owner,{email:manager+'@example.invalid',role:'manager'});
+await api('members',owner,{email:staff+'@example.invalid',role:'warehouse'});
+await api('state',manager);await api('state',staff);
+const app=JSON.parse(await readFile('/checks/supplier-review.json','utf8'));
+const plan=await api('apps/plan',owner,{manifest:app});
+assert.equal(plan.baseVersion,0);
+await api('apps/install',owner,{manifest:app,baseVersion:plan.baseVersion});
+assert.ok((await api('apps')).applications.some(a=>a.id===app.metadata.id));
+assert.equal((await api('apps',outsider)).applications.length,0);
+const rec=await api('models/supplier_review/records',staff,{data:{supplier:'Fixture supplier',reference:'TEST-1',risk:'Thấp'}});
+assert.ok(rec.id);
+assert.equal((await api('models/supplier_review/records',manager)).records.length,1);
+await api('models/supplier_review/records',outsider,undefined,randomUUID(),404);
+console.log('PASS independent supplier application installation, record creation and tenant isolation through APISIX');
+const idem=randomUUID(),body={reference:'TEST-REVIEW'};
+const started=await api('flowable-review/start',owner,body,idem);
+assert.ok(started.id);assert.deepEqual(started.tasks.map(t=>t.step).sort(),['inventory','quality']);
+assert.equal((await api('flowable-review/start',owner,body,idem)).id,started.id);
+await api('flowable-review/start',owner,{reference:'different'},idem,409);
+const path='flowable-review/'+encodeURIComponent(started.id),quality=started.tasks.find(t=>t.step==='quality'),inventory=started.tasks.find(t=>t.step==='inventory');
+const decision=t=>({taskId:t.id,approved:true,reason:'Acceptance fixture'});
+await api(path,outsider,undefined,randomUUID(),404);
+await api(path+'/complete',owner,decision(quality),randomUUID(),403);
+await api(path+'/complete',staff,decision(quality),randomUUID(),403);
+await api(path+'/complete',staff,decision(inventory));
+assert.equal((await api(path,manager)).tasks.length,1);
+await api(path+'/complete',manager,decision(quality));
+const final=await poll(async()=>{const v=await api(path,manager);return v.tasks.find(t=>t.step==='approval');},'native review timer',40);
+const ended=await api(path+'/complete',manager,decision(final));
+assert.equal(ended.status,'ended');
+assert.equal(ended.tasks.length,0);
+await api(path+'/complete',manager,decision(final),randomUUID(),409);
+console.log('PASS native Flowable API: idempotent start, tenant denial, roles, no self-approval, parallel join, timer, final approval');
