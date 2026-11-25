@@ -3,14 +3,9 @@
 **Tiếng Việt** · [English](README.en.md)
 
 
-<img src="docs/assets/project-banner.svg" alt="DX-TRACE — Nền tảng truy xuất và điều phối thu hồi thực phẩm" width="100%">
-
 # DX-TRACE
-### Open-Core Digital Transformation Platform
 
-**Truy xuất đến cùng. Thu hồi có kiểm soát.**
-
-Nền tảng DX-OS nguồn mở cho quản lý chuỗi cung ứng thực phẩm, điều phối thu hồi và xây dựng ứng dụng nghiệp vụ trên cùng một lõi.
+Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi.
 
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases)
@@ -26,6 +21,15 @@ Nền tảng DX-OS nguồn mở cho quản lý chuỗi cung ứng thực phẩm,
 [**Live Website**](https://dxtrace.hieuds.com/) · [**Ứng dụng**](https://app.dxtrace.hieuds.com/) · [**Tài liệu**](https://dxtrace.hieuds.com/docs/) · [**API Reference**](https://dxtrace.hieuds.com/docs/api-reference/) · [**Quick Start**](#quick-setup) · [**System Architecture**](#architecture) · [**Demo Guide**](docs/DEMO.md) · [**Technical Evidence**](docs/EVIDENCE.md)
 
 </div>
+
+## Bắt đầu theo nhu cầu
+
+| Bạn muốn | Mở tài liệu |
+| --- | --- |
+| Chạy thử trên máy cá nhân | [Cài đặt nhanh](#quick-setup) |
+| Cài trên máy chủ | [Hướng dẫn tự triển khai](selfhost/README.md) |
+| Hiểu đường đi của dữ liệu | [Kiến trúc hệ thống](#architecture) |
+| Kiểm tra luồng nghiệp vụ | [Kịch bản kiểm định và thu hồi](docs/OPERATING-WORKFLOWS.md) |
 
 DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản → sự cố → thu hồi → đối soát** trong một quy trình thống nhất. Khi có lô hàng không đạt yêu cầu, hệ thống hỗ trợ xác định vị trí và lượng hàng liên quan, kiểm soát các quyết định phê duyệt, ghi nhận lịch sử thao tác và hỗ trợ truy xuất nguồn gốc bằng QR/mã vạch.
 

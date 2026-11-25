@@ -1,5 +1,7 @@
 # Tài liệu DX-TRACE
 
+[Trang giới thiệu](https://dxtrace.hieuds.com/) · [Đọc tài liệu trực tuyến](https://dxtrace.hieuds.com/docs/) · [Tra cứu API](API.md) · [Về README](../README.md)
+
 Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Từ **v0.0.7**, repository bổ sung Gateway tách mạng, process runtime song song/timer, External OIDC API tùy chọn và công cụ nghiệm thu. Mã đã qua CI; các bước Keycloak/khôi phục/tải thật trên VPS vẫn cần nghiệm thu riêng. Dùng tag riêng khi cần tái lập phiên bản cũ.
 
 | Nhu cầu | Tài liệu |

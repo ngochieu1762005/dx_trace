@@ -31,3 +31,10 @@ article tr[hidden]{display:none!important}#results strong,#results .search-snipp
 @media print{.api-tools{display:none}}
 
 .locale{font-size:13px;white-space:nowrap;color:var(--blue);font-weight:600;padding:6px 8px;border:1px solid var(--line);border-radius:7px}@media(max-width:760px){.locale{font-size:11px;padding:4px 5px}.brand span{display:none}.top-actions{gap:5px}}
+
+/* Keep the reading column quiet, with the same blue rule as the product masthead. */
+.start{border-radius:6px;border-top:3px solid var(--blue);background:var(--surface);box-shadow:none}
+article p,article>ul,article>ol{max-width:72ch}
+article h2{scroll-margin-top:calc(var(--header) + 16px)}
+.sidebar a[aria-current=page]{border-inline-start:3px solid var(--blue)}
+footer{flex-wrap:wrap}

@@ -2,13 +2,9 @@
 
 [Tiếng Việt](README.md) · **English**
 
-<img src="docs/assets/project-banner.svg" alt="DX-TRACE" width="100%">
-
 # DX-TRACE
 
-### Open-Core Digital Transformation Platform
-
-**Trace every lot. Coordinate every recall.**
+Food traceability, warehouse operations and recall coordination.
 
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
@@ -17,6 +13,14 @@
 [Product](https://dxtrace.hieuds.com/en/) · [Application](https://app.dxtrace.hieuds.com/) · [Documentation](https://dxtrace.hieuds.com/docs/en/) · [API Reference](https://dxtrace.hieuds.com/docs/en/api-reference/)
 
 </div>
+
+## Start here
+
+| Goal | Guide |
+| --- | --- |
+| Run the application locally | [Quick start](https://dxtrace.hieuds.com/docs/en/quickstart/) |
+| Understand the system | [Architecture](#architecture) |
+| Inspect the HTTP interface | [API reference](https://dxtrace.hieuds.com/docs/en/api-reference/) |
 
 DX-TRACE is an open-source platform for warehouse traceability, food quality and recall coordination. It connects lots, shipments, storage conditions, incidents and reconciliation. The reusable headless Core supports declarative business applications and an independently deployed Quality Portal.
 
