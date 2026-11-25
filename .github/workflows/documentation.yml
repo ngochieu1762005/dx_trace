@@ -20,6 +20,7 @@ jobs:
       - run: python website/verify.py /tmp/dxtrace-docs
       - run: node --check public/api-explorer/explorer.js && node --check website/static/site.js && node --check landing/assets/site.js
       - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.DXTRACE_PUBLISH_GITHUB_PAGES == 'true'
         with:
           path: /tmp/dxtrace-docs
       - uses: actions/upload-artifact@v4
@@ -28,7 +29,7 @@ jobs:
           path: /tmp/dxtrace-docs
           include-hidden-files: true
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.DXTRACE_PUBLISH_GITHUB_PAGES == 'true'
     needs: build
     permissions:
       pages: write
