@@ -14,7 +14,7 @@ for(const name of ['core','gateway-api','flowable','workflow-db','quality-portal
 }
 if(s.flowable){
  assert.ok(net('flowable').includes('workflowdb')&&net('flowable').includes('workflowapi'));
- assert.ok(net('core').includes('workflowapi')&&!net('app').includes('workflowapi'));
+ assert.ok(net('core').includes('coreworkflow')&&net('flowable').includes('coreworkflow')&&!net('core').includes('workflowapi')&&!net('app').includes('workflowapi')&&!net('app').includes('coreworkflow'));
 }
 assert.ok(typeof s.core.environment.DX_CORE_TOKEN==='string'&&s.core.environment.DX_CORE_TOKEN.length>=32&&typeof s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN==='string'&&s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN.length>=32&&s.core.environment.DX_CORE_TOKEN!==s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN,'Credentials must be distinct and strong');
 assert.equal(s.app.environment.DX_CORE_URL,'http://gateway-api:8082');

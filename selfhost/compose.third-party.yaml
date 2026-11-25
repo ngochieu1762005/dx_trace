@@ -7,7 +7,7 @@ services:
       DX_FLOWABLE_URL: http://flowable:8080/flowable-rest/service
     volumes:
       - ./flowable/review.bpmn20.xml:/app/selfhost/flowable/review.bpmn20.xml:ro
-    networks: [privcore, workflowapi]
+    networks: [privcore, coreworkflow]
     depends_on: [flowable]
   workflow-db:
     image: postgres:17-alpine
@@ -37,7 +37,7 @@ services:
       FLOWABLE_PROCESS_SERVLET_PATH: /service
       FLOWABLE_REST_APP_AUTHENTICATION_MODE: verify-privilege
       FLOWABLE_ASYNC_EXECUTOR_ACTIVATE: "true"
-    networks: [workflowdb, workflowapi]
+    networks: [workflowdb, coreworkflow, workflowapi]
     depends_on:
       workflow-db:
         condition: service_healthy
@@ -60,3 +60,4 @@ volumes:
 networks:
   workflowdb: {internal: true}
   workflowapi: {internal: true}
+  coreworkflow: {internal: true}
