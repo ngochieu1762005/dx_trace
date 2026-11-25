@@ -13,3 +13,15 @@
 @media(max-width:420px){.header .brand .brand-logo{width:150px}}
 
 .verification-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:28px}.quality-story{border:1px solid #cfdef0;border-radius:18px;background:#f5f9ff;padding:36px}.story-label{font-size:11px;letter-spacing:.12em;font-weight:700;color:#1967d2}.quality-story h3{font-size:30px;line-height:1.25;margin:16px 0 26px;letter-spacing:-.03em}.quality-story ol{padding:0;list-style:none;margin:0 0 28px}.quality-story li{display:flex;gap:16px;padding:18px 0;border-top:1px solid #dce6f3}.quality-story li>span{font-size:12px;color:#1967d2;font-weight:700;padding-top:4px}.quality-story li b{font-size:17px}.quality-story li p{font-size:14px;color:#586b80;margin:6px 0 0}.verification-cards{display:grid;gap:16px}.verification-cards article{border:1px solid #e0e6ee;border-radius:14px;padding:25px 28px}.verification-cards h3{font-size:23px;margin:9px 0}.verification-cards p{color:#586b80;font-size:15px;margin:0 0 12px}.verification-cards a{color:#1967d2;font-size:13px;font-weight:700}@media(max-width:800px){.verification-grid{grid-template-columns:1fr}.quality-story{padding:25px}.quality-story h3{font-size:27px}.verification-cards article{padding:24px}}
+
+/* Product masthead and the sample warehouse record share a single baseline. */
+.hero-surface{background:#f5f8fb;color:#172d44;border-bottom:1px solid #ced9e4}
+.hero{padding-block:clamp(40px,6vw,84px)}
+.hero h1{font-size:clamp(38px,4.2vw,64px);line-height:1.13;letter-spacing:-.045em}
+.hero h1 span{color:#1659ad}
+.hero .eyebrow,.hero .text-link{color:#174e89}
+.hero-copy>p,.hero-copy .hero-note{color:#455c71}
+.hero .button{background:#195bb5;border-color:#195bb5;color:white}
+.hero .button:hover{background:#124b98}
+.hero-copy .hero-note{margin-bottom:0;max-width:46ch}
+.trace-preview{border:1px solid #b9c9d8;border-top:4px solid #1967d2;border-radius:6px;box-shadow:0 6px 18px #183c6010}
