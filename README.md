@@ -178,7 +178,8 @@ flowchart TD
     H -->|"POST /api/ingest · Bearer thiết bị"| A
     A -->|"GET tệp giao diện kiểm định"| Q["Quality Portal"]
     A -->|"/api · khóa ứng dụng"| G["Cổng API nội bộ"]
-    E["API tích hợp tùy chọn"] -->|"Đọc qua JWT và chính sách client"| G
+    X["Ứng dụng tích hợp"] -->|"JWT qua tuyến HTTPS riêng"| E["API tích hợp tùy chọn"]
+    E -->|"Khóa ứng dụng · chỉ đọc theo chính sách client"| G
     G -->|"Khóa Core riêng"| C["Lõi nghiệp vụ"]
     C --> B["SQLite nghiệp vụ"]
     C --> F["Kho tệp minh chứng"]
