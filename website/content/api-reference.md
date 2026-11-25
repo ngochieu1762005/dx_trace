@@ -1,6 +1,6 @@
 # API Reference
 
-Danh mục endpoint dựa trên router hiện tại. Các route dưới đây có tiền tố /api. **Session** là phiên cùng nguồn; **Device** là Bearer token của thiết bị. Quyền chi tiết vẫn được kiểm tra ở Core và model. Danh mục có API Explorer tương tác: chỉnh tham số, JSON body và sinh lệnh cURL/JavaScript/Python; phản hồi mẫu có ghi rõ minh họa. Console riêng trên origin ứng dụng cho phép gọi GET thật với phiên đăng nhập, giới hạn Kho thực hành. POST chỉ sinh code, không thực thi từ Docs.
+Danh mục endpoint dựa trên router hiện tại. Các route dưới đây có tiền tố /api. **Session** là phiên cùng nguồn; **Device** là Bearer token của thiết bị. Quyền chi tiết vẫn được kiểm tra ở Core và model. Tài liệu cung cấp hợp đồng HTTP, tham số và ví dụ tích hợp. Website tài liệu không thực thi yêu cầu API.
 
 ## Core và kho
 

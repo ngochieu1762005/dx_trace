@@ -14,7 +14,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace)](https://github.com/ngochieu1762005/dx_trace/releases)
 
-[Product](https://dxtrace.hieuds.com/en/) · [Application](https://app.dxtrace.hieuds.com/) · [Documentation](https://dxtrace.hieuds.com/docs/en/) · [API Explorer](https://dxtrace.hieuds.com/docs/api-explorer/en.html)
+[Product](https://dxtrace.hieuds.com/en/) · [Application](https://app.dxtrace.hieuds.com/) · [Documentation](https://dxtrace.hieuds.com/docs/en/) · [API Reference](https://dxtrace.hieuds.com/docs/en/api-reference/)
 
 </div>
 
@@ -64,7 +64,7 @@ node tools/dxtrace.mjs lint examples/maintenance/app.json
 node tools/dxtrace.mjs bundle-plan examples/bundles/operations.json
 ```
 
-See [AppKit tutorial](docs/en/app-tutorial.md), [manifest contract](docs/en/manifest-reference.md) and [API reference](docs/en/api-reference.md). The interactive reference generates example cURL, JavaScript and Python requests. Selected live GET requests run only on the authenticated application origin in training mode.
+See [AppKit tutorial](docs/en/app-tutorial.md), [manifest contract](docs/en/manifest-reference.md) and [API reference](docs/en/api-reference.md). The reference documents HTTP endpoints, authentication, parameters and integration examples.
 
 ## Evidence and limits
 

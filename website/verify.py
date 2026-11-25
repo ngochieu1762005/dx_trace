@@ -71,20 +71,9 @@ for item in en_sections:
     parser=Links()
     parser.feed((english/url.path).read_text(encoding="utf-8"))
     assert url.fragment in parser.ids
-catalog=json.loads((root/"docs/api-explorer/catalog.json").read_text(encoding="utf-8"))
-assert len(catalog)>=50 and len({x["id"] for x in catalog})==len(catalog)
-assert all(not x["live"] or x["method"]=="GET" for x in catalog)
-assert all(x["title"]["vi"] and x["title"]["en"] for x in catalog)
-print("Verified",len(en_entries),"English pages and",len(catalog),"API endpoints")
-
-for name,lang in (("index.html","vi"),("en.html","en")):
-    page=(root/"docs/api-explorer"/name).read_text(encoding="utf-8")
-    assert f'<html lang="{lang}">' in page and 'data-live="0"' in page
+assert not (root/"docs/api-explorer").exists(), "Public API Explorer must not be published"
+for path in (root/"docs").rglob("*.html"):
     parser=Links()
-    parser.feed(page)
-    for value in parser.links:
-        u=urlsplit(value)
-        if u.scheme or u.netloc or not u.path:
-            continue
-        assert (root/"docs/api-explorer"/unquote(u.path)).exists(),value
-print("Verified public explorer language editions")
+    parser.feed(path.read_text(encoding="utf-8"))
+    assert all("/docs/api-explorer" not in link and "api-explorer/" not in link for link in parser.links), path
+print("Verified",len(en_entries),"English pages; public API Explorer omitted")

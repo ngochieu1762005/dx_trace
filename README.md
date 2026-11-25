@@ -23,7 +23,7 @@ Nền tảng DX-OS nguồn mở cho quản lý chuỗi cung ứng thực phẩm,
 ![Docker](https://img.shields.io/badge/Deployment-Docker_Compose-2496ed?logo=docker&logoColor=white)
 ![SQLite](https://img.shields.io/badge/Core_Data-SQLite-003b57?logo=sqlite&logoColor=white)
 
-[**Live Website**](https://dxtrace.hieuds.com/) · [**Ứng dụng**](https://app.dxtrace.hieuds.com/) · [**Tài liệu**](https://dxtrace.hieuds.com/docs/) · [**API Explorer**](https://dxtrace.hieuds.com/docs/api-explorer/) · [**Quick Start**](#quick-setup) · [**System Architecture**](#architecture) · [**Demo Guide**](docs/DEMO.md) · [**Technical Evidence**](docs/EVIDENCE.md)
+[**Live Website**](https://dxtrace.hieuds.com/) · [**Ứng dụng**](https://app.dxtrace.hieuds.com/) · [**Tài liệu**](https://dxtrace.hieuds.com/docs/) · [**API Reference**](https://dxtrace.hieuds.com/docs/api-reference/) · [**Quick Start**](#quick-setup) · [**System Architecture**](#architecture) · [**Demo Guide**](docs/DEMO.md) · [**Technical Evidence**](docs/EVIDENCE.md)
 
 </div>
 
