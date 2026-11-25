@@ -53,7 +53,7 @@ Use a printed label and an HTTPS camera session to test scanning on a phone. Use
 
 ## Architecture
 
-![Architecture](docs/assets/architecture-current.svg)
+![Architecture](docs/assets/architecture-current-en.svg)
 
 | Layer | Implementation |
 | --- | --- |

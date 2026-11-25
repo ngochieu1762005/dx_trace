@@ -163,39 +163,17 @@ Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch �
 
 [![Kiến trúc toàn hệ thống: danh tính, gateway, hai ứng dụng, Core, dữ liệu và tích hợp](docs/assets/architecture-current.svg)](docs/assets/architecture-current.svg)
 
-Sơ đồ thể hiện các dịch vụ và đường đi chính. Đầu dò dùng Bearer token qua tuyến `/api/ingest`; không sử dụng phiên người dùng. API đối tác đọc-only là profile tùy chọn, cần cấu hình Keycloak và tuyến reverse proxy riêng. Các bước nghiệp vụ mới: [quy trình liên thông](docs/OPERATING-WORKFLOWS.md).
+Sơ đồ mô tả cấu hình Compose trên nhánh `main` và cách đặt Caddy trên VPS Ubuntu. Xem [bản đồ kiến trúc đầy đủ](website/content/architecture-map.md) để đối chiếu từng tuyến với cấu hình, dữ liệu và mã nguồn.
 
-### Biên truy cập và dịch vụ
+| Tuyến | Đường đi | Điểm phân quyền |
+| --- | --- | --- |
+| Web kho | Caddy → OAuth2 Proxy → App → cổng API → Core | Keycloak xác thực tài khoản. Core kiểm quyền theo kho và thao tác. |
+| Cổng kiểm định | App lấy tệp từ `quality-portal:8090`. Trình duyệt gọi `/api` cùng tên miền kho. | Dùng cùng phiên đăng nhập. Core kiểm quyền lập phiếu, thẩm định và cách ly. |
+| Đầu dò | `POST /api/ingest` qua Caddy → App → cổng API → Core | Core kiểm Bearer của thiết bị và xác định kho nhận số đo. |
+| API tích hợp tùy chọn | Tuyến HTTPS riêng → `external-api` → cổng API → Core | JWT Keycloak và chính sách đọc theo client, mô hình. |
+| Website và tài liệu | Caddy trên VPS phục vụ tệp tĩnh. Đường dẫn `/login` chuyển sang tên miền kho. | Nội dung công khai. |
 
-```mermaid
-flowchart TD
-    Browser["Trình duyệt"] --> Edge["Caddy · HTTPS"]
-    Device["Cảm biến · Bearer token"] --> Edge
-    Edge --> Signin["OAuth2 Proxy"]
-    Signin <--> Identity["Keycloak · OIDC"]
-    Identity --> IdentityDB["PostgreSQL · danh tính"]
-    Signin --> App["Web app · React và API proxy"]
-    Edge -->|"POST /api/ingest"| App
-    App -->|"Chỉ GET tệp tĩnh, không gửi danh tính"| QA["Quality Portal · service riêng"]
-    App -->|"App token, dữ liệu và danh tính"| Policy["API Gateway · policy & quota"]
-    Policy -->|"Core token riêng"| Core["Headless Core · Node.js"]
-    Core --> SQL["SQLite · nghiệp vụ"]
-    Core --> Objects["Tệp theo SHA-256"]
-    Core --> Integration["Tích hợp ngoài có cấu hình"]
-```
-
-| Dịch vụ | Trách nhiệm và dữ liệu |
-| --- | --- |
-| `gateway` | Caddy công bố 80/443 trong cấu hình Docker chuẩn; loại header danh tính không tin cậy. Khi dùng Caddy trên host, bỏ container này bằng override. |
-| `signin` | Xác thực OIDC, quản lý cookie và chuyển danh tính đã xác minh đến `app:8080`. |
-| `identity` / `identitydb` | Realm `warehouse`, client `dx-trace`; PostgreSQL chỉ lưu danh tính, không lưu lô hàng. |
-| `app` | Phục vụ giao diện và chuyển API đến Gateway; chỉ nối appnet, không gắn volume kho. |
-| `gateway-api` | Gateway chính sách nội bộ ở 8082; kiểm khóa app, giới hạn lưu lượng, lọc header, thay khóa Core; không publish cổng host. |
-| `core` | API riêng ở cổng nội bộ 8081, yêu cầu `DX_CORE_TOKEN`, không phục vụ giao diện và không publish cổng host. |
-
-Trên nhánh `main` sau v0.0.6, App → Gateway → Core dùng hai khóa và hai mạng Docker khác nhau; xem [sơ đồ, kiểm thử OIDC thực và cách nâng cấp VPS](docs/GATEWAY-AND-SSO.md). **Đây chưa phải nội dung của tag v0.0.6.**
-
-Có **một giao diện kho thống nhất** và **Quality Control Portal chạy riêng** từ v0.0.6. Đề xuất, thu hồi và nghiệp vụ mở rộng nằm trong giao diện kho; Portal chất lượng là frontend độc lập dùng cùng Core. [Ranh giới bảo mật và mô hình triển khai](docs/HEADLESS-CORE.md).
+`appnet` nối App với cổng API. `privcore` nối cổng API với Core. Khóa dịch vụ được thay ở cổng API trước khi yêu cầu đến Core. PostgreSQL nằm ở mạng `dbnet` phục vụ Keycloak. Trên VPS Ubuntu, Caddy chuyển yêu cầu đến cổng loopback 8180 cho OAuth2 Proxy, 8181 cho Keycloak và 8182 cho tuyến đầu dò của App. [Compose](selfhost/compose.yaml) · [Cấu hình Ubuntu](selfhost/compose.ubuntu-edge.yaml)
 
 ### Dữ liệu và giao dịch
 

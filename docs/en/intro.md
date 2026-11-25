@@ -4,7 +4,7 @@ DX-TRACE is an MIT-licensed open-core platform for food supply-chain traceabilit
 
 ## Explore the platform
 
-![Current architecture](../../docs/assets/architecture-current.svg)
+![Current architecture](../../docs/assets/architecture-current-en.svg)
 
 - [Quick start](quickstart.md): run a local training workspace.
 - [Architecture](architecture-map.md): understand trust boundaries and shared services.
