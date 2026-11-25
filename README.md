@@ -35,6 +35,33 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 Đây không chỉ là giao diện quản lý kho: **DX-TRACE có lõi API headless**, mô hình nghiệp vụ có thể khai báo, ứng dụng thứ hai triển khai độc lập và hạ tầng danh tính dùng chung. Các khẳng định kỹ thuật đều được liên kết tới mã nguồn, kiểm thử hoặc tài liệu nghiệm thu; những hạng mục chưa xác minh được ghi rõ.
 
+## Theo dấu một lô hàng
+
+Một cửa hàng đã nhận một phần lô hàng thì kết quả kiểm định báo không đạt. Người trực kho cần biết **phần nào còn có thể chặn giao, phần nào đã tới cửa hàng và ai có quyền quyết định thu hồi**. Có thể lần theo cùng một mã lô qua các bước dưới đây trên nhánh `main`.
+
+| Bước | Người thực hiện và thao tác | Kết quả cần đối chiếu |
+| --- | --- | --- |
+| 1 · Nhận hàng | Nhân viên kho chọn **Kho thực hành**, mở **Lô hàng**, ghi lại mã lô, lượng nhập và hạn dùng | Tra cứu lại đúng lô. Nếu nhiều lô cùng một sản phẩm, dùng mã lô để phân biệt. |
+| 2 · Giao nhận | Tạo phiếu xuất cho điểm nhận, giữ hàng rồi xác nhận giao | Kiểm tra điểm đến, số lượng và trạng thái phiếu trước khi chuyển sang kiểm định. |
+| 3 · Kiểm định | Trong Quality Portal, chọn lô của kho hiện tại và gửi phiếu. Người thẩm định khác người lập ghi kết quả **Không đạt** | Phiếu lưu lý do. Quyết định cách ly là một thao tác riêng của quản lý. |
+| 4 · Khoanh vùng | Quản lý chọn **Cách ly & mở sự cố**, sau đó tra lại lô trong kho | Phiếu liên kết với sự cố. Lô bị chặn xuất mới và chặn xác nhận giao đối với phiếu đang giữ hàng. |
+| 5 · Đối soát | Người có quyền duyệt thu hồi, ghi lượng trả của từng điểm nhận rồi xem nhật ký | Đối chiếu lượng đã giao với lượng đã thu về. Giữ mốc kiểm chứng riêng khi xuất nhật ký. |
+
+[Hướng dẫn thao tác](docs/OPERATING-WORKFLOWS.md) · [Quyền trong Quality Portal](docs/QUALITY-PORTAL.md) · [Kiểm tra nhật ký độc lập](docs/AUDIT-EVIDENCE.md)
+
+### Tự kiểm tra từ mã nguồn
+
+Sau khi cài các gói phụ thuộc, chạy từng lệnh tại thư mục chứa `package.json`. Mỗi lệnh kiểm tra một ranh giới khác nhau của ứng dụng.
+
+| Câu hỏi | Lệnh kiểm tra |
+| --- | --- |
+| Bộ nhận dạng xử lý dữ liệu quét thế nào? | `node --test tests/scan.test.mjs` |
+| Phiếu không đạt có được cách ly đúng kho và đúng quyền? | `node --test tests/quality-portal.test.mjs` |
+| Hai nhánh quy trình và bộ hẹn giờ chạy thế nào? | `node --test tests/process-platform.test.mjs tests/process-timer.test.mjs` |
+| Có thể phát hiện thay đổi trong gói nhật ký đã xuất? | `node --test tests/audit-proof.test.mjs` |
+
+Kiểm tra camera bằng tem in và điện thoại qua HTTPS. Kiểm tra đăng nhập bằng hai tài khoản trên bản triển khai có Keycloak. Hai phép thử này cần thiết bị hoặc phiên đăng nhập thật. [Quy trình nghiệm thu](docs/ACCEPTANCE-2026.md)
+
 ## Quy trình liên thông trên nhánh main
 
 **Việc cần làm → kiểm định → cách ly → thu hồi → đối soát → minh chứng.** Giao diện giữ đúng vùng kho khi chuyển giữa ứng dụng; người xử lý thấy các bước theo quyền và trạng thái thực tế.
@@ -232,7 +259,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 
 ### Chạy ngay trên máy cá nhân
 
-Tải [ZIP v0.0.6](https://github.com/ngochieu1762005/dx_trace/releases/download/v0.0.6/DX-TRACE-v0.0.6.zip), giải nén và mở terminal tại thư mục chứa `package.json`:
+Mở [trang phát hành](https://github.com/ngochieu1762005/dx_trace/releases), chọn phiên bản cần chạy và tải **Source code (zip)**. Giải nén rồi mở terminal tại thư mục chứa `package.json`.
 
 ```bash
 node -v
