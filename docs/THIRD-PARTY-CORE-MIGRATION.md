@@ -1,23 +1,35 @@
-# Apache APISIX and Flowable OSS migration
+# Chuyển đổi Apache APISIX và Flowable OSS
 
-Status: candidate integration; not a production rollout or replacement of all existing workflows.
+**Trạng thái:** cấu hình tích hợp đang được đánh giá, chưa phát hành hoặc triển khai VPS. [English](en/third-party-core-migration.md).
 
-## Architecture
+## Kiến trúc mục tiêu
 
-Browser → Caddy → OAuth2 Proxy / Keycloak → application → APISIX → DX-TRACE Core.
-Flowable REST and its PostgreSQL database run on private networks. The current
-business workflows still use the existing Core runtime until a separate
-migration connects them to Flowable. The acceptance process is independent.
+```mermaid
+flowchart TD
+  U[Trình duyệt] --> C[Caddy HTTPS]
+  C --> S[OAuth2 Proxy / Keycloak]
+  S --> A[Warehouse App / Quality Portal]
+  A --> G[Apache APISIX]
+  G --> K[DX-TRACE Headless Core]
+  K --> D[(Dữ liệu nghiệp vụ)]
+  K -. Tích hợp chưa hoàn tất .-> F[Flowable OSS]
+  F --> P[(PostgreSQL riêng)]
+```
 
-## Evaluate on an isolated test machine
+| Thành phần | Bản mặc định hiện tại | Phương án chuyển đổi |
+| --- | --- | --- |
+| API Gateway | Node.js, chính sách nội bộ | APISIX standalone, khóa dịch vụ, giới hạn request |
+| Workflow | Engine JavaScript, tập con BPMN | Flowable REST, BPMN thực thi, timer và tác vụ song song |
+| SSO | Keycloak + OAuth2 Proxy | Giữ nguyên |
+| Dữ liệu nghiệp vụ | SQLite và kho tệp | Giữ nguyên; PostgreSQL mới chỉ phục vụ Flowable |
 
-Docker Compose 2.24.4+ is required for override tags. Create an independent
-environment using the existing setup instructions. Add separate random
-32+ character values for DX_FLOWABLE_DB_PASSWORD and DX_FLOWABLE_API_PASSWORD
-to its private .env. Use different DX_CORE_TOKEN and DX_GATEWAY_APP_TOKEN.
-Never commit or print those values.
+Flowable chưa điều phối các hồ sơ kho thực tế. Quyền theo kho, chống tự duyệt, audit và tính toàn vẹn giao dịch vẫn thuộc Core. Các API công khai và sơ đồ kiến trúc hiện hành chưa thay đổi.
 
-From selfhost:
+## Kiểm thử trên môi trường cô lập
+
+Cần Docker Compose 2.24.4 trở lên. Tạo tệp `.env` riêng theo hướng dẫn cài đặt; thêm hai bí mật ngẫu nhiên tối thiểu 32 ký tự `DX_FLOWABLE_DB_PASSWORD` và `DX_FLOWABLE_API_PASSWORD`. Không tái sử dụng khóa Core hoặc gateway, không commit bí mật.
+
+Tại thư mục `selfhost`:
 
 ```sh
 docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test config --quiet
@@ -26,30 +38,19 @@ docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml 
 docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml down
 ```
 
-No production port is exposed by these selected services. No existing production
-volume is mounted if the test project name is unique. Do not run this against
-an existing installation. Do not delete production volumes.
+Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không xóa volume production. Kịch bản tạo quy trình BPMN thử, hoàn tất hai tác vụ song song, kiểm timer và lịch sử; chưa kiểm toàn bộ nghiệp vụ kho.
 
-The overlay replaces the gateway service implementation, retaining the current
-internal port and application interface. Unauthorized status may differ from
-the old 403 contract. It deliberately has no public admin API. The Flowable test
-deploys a disposable BPMN process, completes parallel tasks, waits for a real
-timer and checks historical completion. It does not exercise warehouse workflows.
+## Điều kiện chuyển sang vận hành
 
-## Cutover requirements
+- Kiểm chứng APISIX: xác thực, nguồn header, rate limit, kích thước request/response, chuyển hướng và tương thích API.
+- Ánh xạ phiên bản model, workspace, process instance và task vào Flowable; giữ kiểm quyền tại Core.
+- Dùng outbox bền vững, đối soát retry không rõ kết quả, chống khởi tạo trùng và giữ audit.
+- Hoàn tất hoặc di chuyển quy trình cũ đang chạy trước khi tắt timer worker; không chạy lại phê duyệt lịch sử.
+- Nghiệm thu cô lập tenant, mất kết nối, khởi động lại, sao lưu/khôi phục, rollback và SSO trên VPS.
+- Cập nhật SBOM, giấy phép, digest image và tài liệu phát hành trước khi chuyển mặc định.
 
-- Validate APISIX authentication, header provenance, rate limiting, body limits,
-  redirect/response-size policies, and current app/external API behavior.
-- Map model versions and workspace identifiers to Flowable definitions/instances.
-  Keep RBAC, separation of duties, audit and inventory invariants in the Core.
-- Persist engine instance/task identifiers and operation intents in a durable
-  outbox, reconcile ambiguous retries, and never start duplicate instances.
-- Drain or explicitly migrate in-flight legacy processes before disabling their
-  timer worker. Never silently replay historical approvals or inventory writes.
-- Implement and test tenant isolation, engine downtime, restart recovery, backup
-  and restore, and rollback before removing the legacy implementation.
-- Update CI, documentation, dependency notices and SBOM before release.
+## Nguồn và giấy phép
 
-Upstream: Apache APISIX 3.21.0 and Flowable OSS 7.2.0 (Apache-2.0). PostgreSQL
-17 (PostgreSQL License). Image tags are pinned, not digest-verified; review
-upstream security advisories and pin digests before production.
+[Apache APISIX](https://github.com/apache/apisix) 3.21.0 và [Flowable OSS](https://github.com/flowable/flowable-engine) 7.2.0 dùng Apache-2.0. PostgreSQL 17 dùng PostgreSQL License. Tag image là cấu hình ứng viên, chưa xác minh digest và kết quả chạy.
+
+[Cấu hình triển khai](../selfhost/compose.third-party.yaml) · [CI tích hợp](../.github/workflows/third-party-core.yml) · [Kiến trúc hiện tại](HEADLESS-CORE.md).

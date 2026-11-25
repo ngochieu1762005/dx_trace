@@ -14,6 +14,8 @@ Food traceability, warehouse operations and recall coordination.
 
 </div>
 
+**Core infrastructure migration (under evaluation):** Apache APISIX is the candidate replacement for the custom gateway; Flowable OSS is the target BPMN engine. The default deployment retains the existing gateway and business workflow runtime until acceptance, state migration and release are complete. See the [architecture and migration plan](docs/en/third-party-core-migration.md).
+
 ## Start here
 
 | Goal | Guide |
