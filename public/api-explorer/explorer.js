@@ -18,7 +18,7 @@ function choices(){
 }
 function choose(){
  current=catalog.find(e=>e.id===select.value)||null;params.replaceChildren();response.textContent='';el('run').disabled=true;
- if(!current){el('note').textContent=t('Không có endpoint phù hợp.','No matching endpoint.');output.textContent='';return}
+ if(!current){el('open-live').hidden=true;el('note').textContent=t('Không có endpoint phù hợp.','No matching endpoint.');output.textContent='';return}
  requestId=crypto.randomUUID();
  el('note').textContent=txt(current.note);
  el('auth').textContent=current.auth+(current.idempotency?' · Idempotency-Key':'');
