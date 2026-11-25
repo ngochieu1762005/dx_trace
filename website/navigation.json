@@ -65,22 +65,22 @@
       [
         "architecture",
         "docs/HEADLESS-CORE.md",
-        "Headless Core"
+        "Lõi API dùng chung"
       ],
       [
         "gateway-sso",
         "docs/GATEWAY-AND-SSO.md",
-        "Gateway & SSO"
+        "Cổng API và đăng nhập một lần"
       ],
       [
         "external-api",
         "docs/EXTERNAL-API.md",
-        "External OIDC API"
+        "API tích hợp qua OIDC"
       ],
       [
         "quality-portal",
         "docs/QUALITY-PORTAL.md",
-        "Quality Portal"
+        "Cổng kiểm định chất lượng"
       ]
     ]
   ],
@@ -110,7 +110,7 @@
       [
         "application-bundles",
         "docs/APPLICATION-BUNDLES.md",
-        "AppKit v2 · Bundles"
+        "AppKit v2 · Gói nghiệp vụ"
       ],
       [
         "model-governance",
@@ -130,7 +130,7 @@
       [
         "process-runtime",
         "docs/PROCESS-RUNTIME.md",
-        "Process Runtime"
+        "Bộ thực thi quy trình"
       ],
       [
         "api",
@@ -150,7 +150,7 @@
       [
         "api-reference",
         "website/content/api-reference.md",
-        "API Reference"
+        "Tham chiếu API"
       ],
       [
         "api-examples",

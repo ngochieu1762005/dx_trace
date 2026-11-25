@@ -111,11 +111,39 @@ def build(out, lang='vi'):
                 k,_,t=entries[i+offset]
                 paging+='<a href="'+E(link(k))+'"><small>'+label+"</small><strong>"+E(t)+"</strong></a>"
         cards = ""
-        if key=="intro":
-            cards='<div class="start"><div class="eyebrow">OPEN-CORE · DEVELOPER PORTAL</div><p class="lead">Xây dựng ứng dụng nghiệp vụ.<br>Truy xuất đến cùng.</p><p>Một nền tảng. Nhiều ứng dụng. Chung dữ liệu và danh tính.</p><div class="actions"><a class="primary" href="../quickstart/index.html">Bắt đầu ngay →</a><a href="../architecture/index.html">Khám phá kiến trúc</a></div></div><div class="cards">'+''.join('<a href="'+link(k)+'"><span class="card-icon">'+icon+'</span><strong>'+label+'</strong><span>'+desc+'</span></a>' for k,icon,label,desc in [('quickstart','↗','Bắt đầu nhanh','Chạy demo và cài ứng dụng'),('warehouse-guide','▤','Hướng dẫn người dùng','Kho, truy xuất và thu hồi'),('app-tutorial','◇','Xây dựng ứng dụng','Tutorial và AppKit'),('api-reference','⌘','API Reference','Hợp đồng HTTP và ví dụ'),('deployment-checklist','↗','Triển khai','Docker, bảo mật và vận hành'),('evaluation','✓','Kiểm chứng','Ma trận và kịch bản nghiệm thu')])+'</div>'
-        if en and key=="intro":
-            cards = '<div class="start"><div class="eyebrow">OPEN-CORE · DEVELOPER PORTAL</div><p class="lead">Build business applications.<br>Trace every step.</p><p>One platform. Shared data and identity.</p><div class="actions"><a class="primary" href="../quickstart/index.html">Get started →</a><a href="../architecture/index.html">Explore architecture</a></div></div>'
-        api_filter = '<div class="api-tools"><label for="api-filter">Tìm endpoint</label><input id="api-filter" type="search" placeholder="Ví dụ: bundle, /models, GET…"><span id="api-count" aria-live="polite"></span></div>' if key=="api-reference" and not en else ""
+        if key == "intro":
+            if en:
+                heading = "DX-TRACE documentation"
+                description = "Install DX-TRACE, run warehouse operations and connect your own applications."
+                primary = "Run locally"
+                architecture = "View system architecture"
+                guides = [
+                    ("warehouse-guide", "Operate the warehouse", "Receive stock, dispatch a lot and trace delivery destinations."),
+                    ("recall-guide", "Coordinate a recall", "Review an inspection, quarantine the lot and reconcile returns."),
+                    ("deployment-checklist", "Deploy on a server", "Prepare services, accounts and backups."),
+                    ("api-reference", "Integrate with the API", "Find HTTP routes, authentication and request examples."),
+                ]
+            else:
+                heading = "Tài liệu DX-TRACE"
+                description = "Cài ứng dụng, vận hành kho và kết nối hệ thống của bạn."
+                primary = "Chạy trên máy cá nhân"
+                architecture = "Xem kiến trúc hệ thống"
+                guides = [
+                    ("warehouse-guide", "Vận hành kho", "Nhập hàng, lập phiếu xuất và truy đến từng điểm nhận."),
+                    ("recall-guide", "Điều phối thu hồi", "Thẩm định phiếu, cách ly lô và đối soát hàng trả."),
+                    ("deployment-checklist", "Triển khai trên máy chủ", "Chuẩn bị dịch vụ, tài khoản và bản sao lưu."),
+                    ("api-reference", "Tích hợp qua API", "Tra đường dẫn HTTP, quyền và ví dụ gửi yêu cầu."),
+                ]
+            cards = (
+                f'<section class="start" aria-labelledby="docs-title"><h2 id="docs-title">{heading}</h2>'
+                f'<p>{description}</p><div class="actions"><a class="primary" href="{link("quickstart")}">{primary}</a>'
+                f'<a href="{link("architecture")}">{architecture}</a></div></section>'
+                '<div class="cards">' + ''.join(
+                    f'<a href="{link(route)}"><strong>{label}</strong><span>{desc}</span></a>'
+                    for route, label, desc in guides
+                ) + '</div>'
+            )
+        api_filter = '<div class="api-tools"><label for="api-filter">Tìm đường dẫn API</label><input id="api-filter" type="search" placeholder="Ví dụ: bundle, /models, GET…"><span id="api-count" aria-live="polite"></span></div>' if key=="api-reference" and not en else ""
         page = f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="{E(title)} · Tài liệu kỹ thuật DX-TRACE">
@@ -123,14 +151,14 @@ def build(out, lang='vi'):
 <link rel="icon" type="image/svg+xml" href="../assets/brand.svg"><link rel="stylesheet" href="../assets/site.css"><script defer src="../assets/site.js"></script></head>
 <body data-root="../"><a class="skip" href="#content">Bỏ qua điều hướng</a>
 <header class="topbar"><button class="menu" id="menu" type="button" aria-label="Menu tài liệu" aria-controls="sidebar" aria-expanded="false">☰</button>
-<a class="brand" href="../intro/index.html"><img src="../assets/brand.svg" width="36" height="36" alt=""><strong>DX-TRACE</strong><span>Docs</span></a>
+<a class="brand" href="../intro/index.html"><img src="../assets/brand.svg" width="36" height="36" alt=""><strong>DX-TRACE</strong><span>{"Docs" if en else "Tài liệu"}</span></a>
 <nav class="toplinks"><a href="https://dxtrace.hieuds.com/login">{"Open workspace" if en else "Vào kho"}</a><a href="../api-reference/index.html">API</a><a href="https://dxtrace.hieuds.com/">Sản phẩm</a></nav>
 <div class="top-actions"><a class="locale" href="{("../../"+key+"/index.html") if en else ("../en/"+key+"/index.html")}" hreflang="{"vi" if en else "en"}">{"Tiếng Việt" if en else "English"}</a><button id="search-open" class="search-trigger" type="button">⌕ <span>Tìm tài liệu</span> <kbd>Ctrl K</kbd></button><button id="theme" type="button" aria-label="Đổi giao diện sáng tối">◐</button><a class="github" href="{REPO}">GitHub ↗</a></div></header>
 <div class="layout"><aside id="sidebar" class="sidebar" aria-label="Mục lục tài liệu"><div class="version"><span class="dot"></span> MAIN <code>{revision[:7]}</code></div><label class="sidebar-label" for="nav-filter">Danh mục tài liệu</label><input id="nav-filter" type="search" placeholder="Lọc danh mục…" autocomplete="off">{sidebar}</aside>
 <main id="content" class="main"><div class="breadcrumb">Tài liệu <span>›</span> {E(section)} <span>›</span> {E(title)}</div>{cards}{api_filter}<article>{body}</article><div class="page-feedback"><strong>Tài liệu này có hữu ích?</strong><a href="{REPO}/issues/new">Gửi góp ý hoặc báo lỗi ↗</a></div>
 <div class="source"><a href="{REPO}/blob/{revision}/{quote(source,safe='/')}">Xem nguồn tài liệu ↗</a><span>MIT · {revision[:7]}</span></div><nav class="pagination" aria-label="Trang liền kề">{paging}</nav></main>
 <aside class="toc" aria-label="Mục lục trang"><strong>Trong trang này</strong>{toc or '<span>Giới thiệu</span>'}<div class="toc-bottom"><button type="button" id="print-page">In / lưu PDF</button><a href="{REPO}/issues">Góp ý tài liệu ↗</a></div></aside></div>
-<footer><a href="https://dxtrace.hieuds.com/{'en/' if en else ''}">{"Product home" if en else "Trang giới thiệu"}</a><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="https://app.dxtrace.hieuds.com/">Ứng dụng ↗</a></footer>
+<footer><a href="https://dxtrace.hieuds.com/{'en/' if en else ''}">{"Product home" if en else "Trang giới thiệu"}</a><a href="{REPO}/releases">{"Releases" if en else "Bản phát hành"}</a><a href="{REPO}/issues">{"Issues" if en else "Báo lỗi"}</a><a href="https://app.dxtrace.hieuds.com/">Ứng dụng ↗</a></footer>
 <dialog id="search-dialog"><form method="dialog" class="search-head"><label for="search-input">Tìm kiếm tài liệu</label><button aria-label="Đóng tìm kiếm">×</button></form><input id="search-input" type="search" placeholder="Keycloak, AppKit, BPMN…" autocomplete="off"><div id="results" aria-live="polite"></div></dialog></body></html>"""
         if en:
             # Translate template chrome only; English article and navigation are authored separately.

@@ -25,3 +25,37 @@
 .hero .button:hover{background:#124b98}
 .hero-copy .hero-note{margin-bottom:0;max-width:46ch}
 .trace-preview{border:1px solid #b9c9d8;border-top:4px solid #1967d2;border-radius:6px;box-shadow:0 6px 18px #183c6010}
+
+/* Product masthead */
+.hero-surface {
+  background: #10263c;
+  color: #f7fbff;
+  border-bottom: 0;
+}
+.hero {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(30px, 5vw, 80px);
+}
+.hero h1 { color: #f7fbff; }
+.hero h1 span { color: #a6ccff; }
+.hero .eyebrow, .hero .text-link { color: #a6ccff; }
+.hero-copy > p, .hero-copy .hero-note { color: #cedceb; }
+.hero .button { background: #edf5ff; border-color: #edf5ff; color: #143c68; }
+.hero .button:hover { background: #cde4ff; }
+.trace-preview {
+  min-width: 0;
+  color: var(--ink);
+  border: 1px solid #afc8e3;
+  border-radius: 12px;
+  box-shadow: 0 18px 48px #07162677;
+  transform: none;
+}
+.trace-preview .table-wrap { overflow-x: auto; }
+.evidence { background: #f3f7fb; border-bottom: 1px solid var(--line); }
+.section-head h2 { max-width: 19ch; }
+.features article h3 { margin-top: 0; }
+.feature-tags span { background: transparent; border: 1px solid var(--line); }
+@media (max-width: 760px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero h1 { font-size: clamp(34px, 8.5vw, 47px); }
+}

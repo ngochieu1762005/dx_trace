@@ -18,7 +18,7 @@ Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi
 ![Docker](https://img.shields.io/badge/Deployment-Docker_Compose-2496ed?logo=docker&logoColor=white)
 ![SQLite](https://img.shields.io/badge/Core_Data-SQLite-003b57?logo=sqlite&logoColor=white)
 
-[**Live Website**](https://dxtrace.hieuds.com/) · [**Ứng dụng**](https://app.dxtrace.hieuds.com/) · [**Tài liệu**](https://dxtrace.hieuds.com/docs/) · [**API Reference**](https://dxtrace.hieuds.com/docs/api-reference/) · [**Quick Start**](#quick-setup) · [**System Architecture**](#architecture) · [**Demo Guide**](docs/DEMO.md) · [**Technical Evidence**](docs/EVIDENCE.md)
+[**Trang giới thiệu**](https://dxtrace.hieuds.com/) · [**Ứng dụng**](https://app.dxtrace.hieuds.com/) · [**Tài liệu**](https://dxtrace.hieuds.com/docs/) · [**Tham chiếu API**](https://dxtrace.hieuds.com/docs/api-reference/) · [**Cài đặt nhanh**](#quick-setup) · [**Kiến trúc hệ thống**](#architecture) · [**Hướng dẫn trình diễn**](docs/DEMO.md) · [**Minh chứng kỹ thuật**](docs/EVIDENCE.md)
 
 </div>
 
@@ -81,13 +81,13 @@ Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của 
 
 | Năng lực | DX-TRACE triển khai như thế nào | Minh chứng |
 | :--- | :--- | :--- |
-| **Reusable Headless Core** | Core API riêng, không phụ thuộc vào giao diện web hoặc Quality Portal | [Kiến trúc](docs/HEADLESS-CORE.md) · [Kiểm thử](tests/headless-core.test.mjs) |
-| **Identity / SSO** | Keycloak + OAuth2 Proxy; danh tính dùng chung và phân quyền tại Core | [Cấu hình](selfhost/compose.yaml) · [Kiểm chứng 2 người dùng](docs/GATEWAY-AND-SSO.md) |
-| **Isolated API Gateway** | Gateway chính sách nội bộ, hai khóa dịch vụ khác nhau, mạng Docker phân tách, kiểm soát request | [Gateway](selfhost/api-gateway.mjs) · [Bài kiểm](tests/api-gateway.test.mjs) |
-| **Declarative AppKit** | Cài mô hình ứng dụng từ manifest, kế thừa biểu mẫu, quyền và workflow | [AppKit](docs/APPKIT.md) · [Ví dụ](examples/maintenance/app.json) |
-| **Workflow / BPMN interchange** | Quy trình máy trạng thái có kiểm tra quyền, chống tự duyệt; nhập/xuất tập con BPMN 2.0 | [Đặc tả BPMN](docs/BPMN.md) · [Bài kiểm](tests/bpmn.test.mjs) |
-| **Independent Quality Portal** | Frontend thứ hai chạy container riêng, dùng API lõi và phiên SSO cùng nguồn | [Quality Portal](docs/QUALITY-PORTAL.md) · [Mã nguồn](apps/quality-portal/) |
-| **Open-source evidence** | GitHub CI, Docker smoke test, kiểm tra bí mật, SPDX SBOM và quy trình phát hành có attestations | [CI](.github/workflows/ci.yml) · [Supply chain](docs/SUPPLY-CHAIN.md) |
+| **Lõi API dùng chung** | Core API riêng, không phụ thuộc vào giao diện web hoặc Quality Portal | [Kiến trúc](docs/HEADLESS-CORE.md) · [Kiểm thử](tests/headless-core.test.mjs) |
+| **Danh tính và đăng nhập một lần** | Keycloak + OAuth2 Proxy; danh tính dùng chung và phân quyền tại Core | [Cấu hình](selfhost/compose.yaml) · [Kiểm chứng 2 người dùng](docs/GATEWAY-AND-SSO.md) |
+| **Cổng API cách ly** | Gateway chính sách nội bộ, hai khóa dịch vụ khác nhau, mạng Docker phân tách, kiểm soát request | [Gateway](selfhost/api-gateway.mjs) · [Bài kiểm](tests/api-gateway.test.mjs) |
+| **Khai báo ứng dụng với AppKit** | Cài mô hình ứng dụng từ manifest, kế thừa biểu mẫu, quyền và workflow | [AppKit](docs/APPKIT.md) · [Ví dụ](examples/maintenance/app.json) |
+| **Quy trình và trao đổi BPMN** | Quy trình máy trạng thái có kiểm tra quyền, chống tự duyệt; nhập/xuất tập con BPMN 2.0 | [Đặc tả BPMN](docs/BPMN.md) · [Bài kiểm](tests/bpmn.test.mjs) |
+| **Cổng kiểm định chất lượng độc lập** | Frontend thứ hai chạy container riêng, dùng API lõi và phiên SSO cùng nguồn | [Quality Portal](docs/QUALITY-PORTAL.md) · [Mã nguồn](apps/quality-portal/) |
+| **Minh chứng mã nguồn mở** | GitHub CI, Docker smoke test, kiểm tra bí mật, SPDX SBOM và quy trình phát hành có attestations | [CI](.github/workflows/ci.yml) · [Supply chain](docs/SUPPLY-CHAIN.md) |
 
 ### Phiên bản và mức độ xác minh
 
@@ -98,7 +98,7 @@ Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của 
 | **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
 | **Nghiệm thu tiếp theo** | SSO trên VPS, phục hồi toàn stack, camera thật và đo tải qua HTTPS; API OIDC đọc-only đã có ở v0.0.7 | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
 
-> **Lưu ý khi tái lập:** Release `v0.0.6` và mã `main` hiện không hoàn toàn giống nhau. Tài liệu và bài kiểm về Gateway mới áp dụng cho `main`; tag `v0.0.6` không chứa những thay đổi đó. Trên VPS đang hoạt động, không chạy lại `setup.mjs` hoặc nâng cấp Compose khi chưa sao lưu và bổ sung khóa `DX_GATEWAY_APP_TOKEN`. Xem [quy trình chuyển đổi an toàn](docs/GATEWAY-AND-SSO.md).
+> Khi nâng cấp VPS đang chạy, làm theo [quy trình chuyển đổi](docs/GATEWAY-AND-SSO.md) để sao lưu, bổ sung khóa dịch vụ nếu cần và kiểm tra trước khi đưa kho vào hoạt động.
 
 **Dự án được duy trì bởi [Nguyễn Ngọc Hiếu](AUTHORS.md).** Phần giới thiệu dành cho người dùng; các giới hạn kỹ thuật và kết quả thực nghiệm được công bố trong [tài liệu](docs/README.md), [bảng đối chiếu DX-OS](REQUIREMENTS.md) và [ma trận minh chứng](docs/EVIDENCE.md).
 
@@ -106,9 +106,9 @@ Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của 
 
 | Nâng cấp | Trạng thái mã nguồn | Điều kiện để công bố đã nghiệm thu |
 | --- | --- | --- |
-| **Executable Parallel Process** | Bổ sung fork/join tối đa 5 nhánh, userTask theo vai trò, timer được lưu vào hồ sơ và xử lý bởi Core; vẫn là **tập con thực thi**, chưa hỗ trợ toàn bộ BPMN XML | [Đặc tả và giới hạn](docs/PROCESS-RUNTIME.md) · [Unit tests](tests/process-platform.test.mjs) |
-| **External API v1** | Resource server tùy chọn cho JWT Keycloak RS256, danh sách client/model, quota và nhật ký; mặc định tắt, chỉ đọc | [Hướng dẫn OAuth client](docs/EXTERNAL-API.md) · [Tests](tests/external-api.test.mjs) |
-| **Reproducible acceptance** | Thêm công cụ kiểm SSO thật, bài đo HTTPS và thử phục hồi Keycloak+SQLite cô lập | [Bảng nghiệm thu](docs/ACCEPTANCE-2026.md) · Cần chạy trên VPS/staging với dữ liệu thật |
+| **Quy trình song song có thể thực thi** | Bổ sung fork/join tối đa 5 nhánh, userTask theo vai trò, timer được lưu vào hồ sơ và xử lý bởi Core; vẫn là **tập con thực thi**, chưa hỗ trợ toàn bộ BPMN XML | [Đặc tả và giới hạn](docs/PROCESS-RUNTIME.md) · [Unit tests](tests/process-platform.test.mjs) |
+| **API tích hợp bên ngoài v1** | Resource server tùy chọn cho JWT Keycloak RS256, danh sách client/model, quota và nhật ký; mặc định tắt, chỉ đọc | [Hướng dẫn OAuth client](docs/EXTERNAL-API.md) · [Tests](tests/external-api.test.mjs) |
+| **Nghiệm thu có thể tái lập** | Thêm công cụ kiểm SSO thật, bài đo HTTPS và thử phục hồi Keycloak+SQLite cô lập | [Bảng nghiệm thu](docs/ACCEPTANCE-2026.md) · Cần chạy trên VPS/staging với dữ liệu thật |
 
 **Lưu ý:** Các phần mới đã merge từ [PR #21](https://github.com/ngochieu1762005/dx_trace/pull/21) và thuộc mã nguồn v0.0.7. CI đã kiểm tra nhưng chưa xác nhận đầy đủ trên VPS. Không bật API bên ngoài khi chưa thiết lập chính sách và kiểm thử xác thực thật.
 
@@ -117,10 +117,10 @@ Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của 
 
 - [Điểm nổi bật và phạm vi phiên bản](#điểm-nổi-bật)
 - [Bài toán và tính năng](#features)
-- [System Architecture](#architecture)
-- [Technologies Used](#technologies)
-- [System Requirements](#requirements)
-- [Quick Setup](#quick-setup)
+- [Kiến trúc hệ thống](#architecture)
+- [Công nghệ sử dụng](#technologies)
+- [Yêu cầu hệ thống](#requirements)
+- [Cài đặt nhanh](#quick-setup)
 - [Kiểm thử và minh chứng](#detailed-setup)
 - [Nâng cấp và giới hạn](#changelog)
 - [Đóng góp, giấy phép, liên hệ](#contribution)
@@ -159,7 +159,7 @@ Trong bộ mẫu SUA-005: Long Biên đã nhận 30 hộp và trả 17; Tây H�
 Chọn **Nghiệp vụ mở rộng → Thư viện mẫu → Xem kế hoạch → Áp dụng mô hình** bằng tài khoản chủ không gian. Có mẫu bảo trì thiết bị, mua sắm, kiểm tra chất lượng và yêu cầu khách hàng. Mẫu mua sắm trên 5 triệu đồng yêu cầu chuyển cấp trước khi chủ không gian khác người tạo duyệt. [Cấu hình và giới hạn workflow](docs/PLATFORM.md).
 
 <a id="architecture"></a>
-## System Architecture
+## Kiến trúc hệ thống
 
 [![Kiến trúc toàn hệ thống: danh tính, gateway, hai ứng dụng, Core, dữ liệu và tích hợp](docs/assets/architecture-current.svg)](docs/assets/architecture-current.svg)
 
@@ -228,7 +228,7 @@ QR được giải mã ngay trong trình duyệt. [Danh mục API](docs/API.md) 
 Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflow được minh họa bằng vận hành kho và mô hình mở rộng. [Bảng đối chiếu yêu cầu](REQUIREMENTS.md) dẫn đến mã và kiểm thử; đây không phải xác nhận của ban tổ chức hay cam kết điểm thi.
 
 <a id="technologies"></a>
-## Technologies Used
+## Công nghệ sử dụng
 
 | Lớp | Công nghệ | Vai trò |
 | --- | --- | --- |
@@ -245,7 +245,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 [Giao thức BPMN](docs/BPMN.md) · [AppKit](docs/APPKIT.md) · [Danh mục phụ thuộc và giấy phép](DEPENDENCIES.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Nguồn biểu trưng](docs/assets/LOGOS.md).
 
 <a id="requirements"></a>
-## System Requirements
+## Yêu cầu hệ thống
 
 | Mục đích | CPU đề xuất | RAM | Dung lượng trống | Phần mềm |
 | --- | --- | --- | --- | --- |
@@ -255,7 +255,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 Đây là cấu hình khởi điểm để trình diễn, không phải mức tối thiểu đã đo tải. Dành thêm dung lượng cho tệp và bản sao lưu. Lần đầu cần Internet để tải thư viện/image; tra sản phẩm và AI cần Internet khi sử dụng. Camera trên điện thoại cần HTTPS và quyền camera.
 
 <a id="quick-setup"></a>
-## Quick Setup
+## Cài đặt nhanh
 
 ### Chạy ngay trên máy cá nhân
 
@@ -303,6 +303,16 @@ Thay tên miền ví dụ bằng tên miền của bạn. Setup chỉ chạy l�
 
 <a id="detailed-setup"></a>
 ## Kiểm thử và minh chứng
+
+| Kiểm tra sau khi cài | Cách thực hiện | Kết quả mong đợi |
+| --- | --- | --- |
+| Mở được kho | Đăng nhập bằng tài khoản kho được cấp và mở **Tổng quan** | Giao diện hiển thị tên không gian và dữ liệu theo quyền tài khoản |
+| Dữ liệu thực hành tách riêng | Chuyển sang **Kho thực hành**, thực hiện một thao tác mẫu rồi trở lại **Kho vận hành** | Thao tác vừa thực hiện chỉ xuất hiện ở kho thực hành |
+| Luồng kiểm định qua hai giao diện | Dùng hai tài khoản, lập phiếu kiểm định rồi thẩm định trên cùng lô | Người lập và người duyệt xuất hiện riêng trong lịch sử phiếu |
+| Truy xuất theo mã lô | Quét QR của một tem lô hoặc nhập mã lô trực tiếp | Kết quả mở đúng hồ sơ lô và liệt kê các điểm đã nhận hàng |
+| Ứng dụng và lõi đang chạy | Chạy `docker compose ps` tại thư mục `selfhost/` với đúng bộ tệp Compose đã triển khai | Các dịch vụ của cấu hình đang chạy và không lặp lại trạng thái khởi động |
+
+Xem [hướng dẫn bắt đầu](https://dxtrace.hieuds.com/docs/quickstart/) để xử lý lỗi cài đặt trên máy cá nhân và [bảng nghiệm thu](docs/ACCEPTANCE-2026.md) để lưu kết quả khi triển khai.
 
 Từ gốc repository sau khi cài phụ thuộc:
 
