@@ -1,0 +1,322 @@
+[
+  [
+    "Getting started",
+    [
+      [
+        "intro",
+        "docs/en/intro.md",
+        "Introduction"
+      ],
+      [
+        "quickstart",
+        "docs/en/quickstart.md",
+        "Quick start"
+      ],
+      [
+        "learning-paths",
+        "docs/en/learning-paths.md",
+        "Learning paths"
+      ],
+      [
+        "glossary",
+        "docs/en/glossary.md",
+        "Glossary"
+      ],
+      [
+        "demo",
+        "docs/en/demo.md",
+        "Demo walkthrough"
+      ]
+    ]
+  ],
+  [
+    "User guides",
+    [
+      [
+        "warehouse-guide",
+        "docs/en/warehouse-guide.md",
+        "Warehouse and traceability"
+      ],
+      [
+        "recall-guide",
+        "docs/en/recall-guide.md",
+        "Inspection and recall"
+      ],
+      [
+        "sensor-guide",
+        "docs/en/sensor-guide.md",
+        "Sensors and monitoring"
+      ],
+      [
+        "identity-guide",
+        "docs/en/identity-guide.md",
+        "Accounts and permissions"
+      ]
+    ]
+  ],
+  [
+    "Architecture",
+    [
+      [
+        "architecture-map",
+        "docs/en/architecture-map.md",
+        "System map"
+      ],
+      [
+        "architecture",
+        "docs/en/architecture.md",
+        "Headless Core"
+      ],
+      [
+        "gateway-sso",
+        "docs/en/gateway-sso.md",
+        "Gateway and SSO"
+      ],
+      [
+        "external-api",
+        "docs/en/external-api.md",
+        "External OIDC API"
+      ],
+      [
+        "quality-portal",
+        "docs/en/quality-portal.md",
+        "Quality Portal"
+      ]
+    ]
+  ],
+  [
+    "Application development",
+    [
+      [
+        "app-tutorial",
+        "docs/en/app-tutorial.md",
+        "Tutorial: build an application"
+      ],
+      [
+        "manifest-reference",
+        "docs/en/manifest-reference.md",
+        "Manifest reference"
+      ],
+      [
+        "platform",
+        "docs/en/platform.md",
+        "Declarative models"
+      ],
+      [
+        "appkit",
+        "docs/en/appkit.md",
+        "AppKit v1"
+      ],
+      [
+        "application-bundles",
+        "docs/en/application-bundles.md",
+        "AppKit v2: bundles"
+      ],
+      [
+        "model-governance",
+        "docs/en/model-governance.md",
+        "Data governance"
+      ],
+      [
+        "model-access",
+        "docs/en/model-access.md",
+        "Model-specific access"
+      ],
+      [
+        "bpmn",
+        "docs/en/bpmn.md",
+        "BPMN interchange"
+      ],
+      [
+        "process-runtime",
+        "docs/en/process-runtime.md",
+        "Process runtime"
+      ],
+      [
+        "api",
+        "docs/en/api.md",
+        "HTTP API overview"
+      ],
+      [
+        "codebase",
+        "docs/en/codebase.md",
+        "Source map"
+      ],
+      [
+        "api-auth",
+        "docs/en/api-auth.md",
+        "API authentication and errors"
+      ],
+      [
+        "api-reference",
+        "docs/en/api-reference.md",
+        "API Reference"
+      ],
+      [
+        "api-examples",
+        "docs/en/api-examples.md",
+        "API examples"
+      ]
+    ]
+  ],
+  [
+    "Deployment & operations",
+    [
+      [
+        "deployment-checklist",
+        "docs/en/deployment-checklist.md",
+        "Deployment checklist"
+      ],
+      [
+        "selfhost",
+        "docs/en/selfhost.md",
+        "Docker Compose"
+      ],
+      [
+        "ubuntu",
+        "docs/en/ubuntu.md",
+        "Ubuntu and host Caddy"
+      ],
+      [
+        "operations",
+        "docs/en/operations.md",
+        "Operations and recovery"
+      ],
+      [
+        "scanner",
+        "docs/en/scanner.md",
+        "ClamAV and catalog"
+      ],
+      [
+        "postgres",
+        "docs/en/postgres.md",
+        "PostgreSQL migration"
+      ],
+      [
+        "operating-workflows",
+        "docs/en/operating-workflows.md",
+        "Operating workflows"
+      ],
+      [
+        "troubleshooting",
+        "docs/en/troubleshooting.md",
+        "Troubleshooting"
+      ],
+      [
+        "backup-restore",
+        "docs/en/backup-restore.md",
+        "Backup and restore"
+      ],
+      [
+        "docs-deploy",
+        "docs/en/docs-deploy.md",
+        "Publish documentation"
+      ]
+    ]
+  ],
+  [
+    "Evidence & open source",
+    [
+      [
+        "capability-matrix",
+        "docs/en/capability-matrix.md",
+        "Capability matrix"
+      ],
+      [
+        "evaluation",
+        "docs/en/evaluation.md",
+        "Evaluation guide"
+      ],
+      [
+        "evidence",
+        "docs/en/evidence.md",
+        "Evidence matrix"
+      ],
+      [
+        "acceptance",
+        "docs/en/acceptance.md",
+        "Acceptance"
+      ],
+      [
+        "testing",
+        "docs/en/testing.md",
+        "Testing"
+      ],
+      [
+        "benchmark",
+        "docs/en/benchmark.md",
+        "Benchmark"
+      ],
+      [
+        "audit",
+        "docs/en/audit.md",
+        "Audit evidence"
+      ],
+      [
+        "supply-chain",
+        "docs/en/supply-chain.md",
+        "SBOM and supply chain"
+      ],
+      [
+        "dependencies",
+        "docs/en/dependencies.md",
+        "Dependencies"
+      ],
+      [
+        "contributing",
+        "docs/en/contributing.md",
+        "Contributing"
+      ],
+      [
+        "security",
+        "docs/en/security.md",
+        "Security"
+      ],
+      [
+        "roadmap",
+        "docs/en/roadmap.md",
+        "Roadmap"
+      ],
+      [
+        "changelog",
+        "docs/en/changelog.md",
+        "Changelog"
+      ],
+      [
+        "releases",
+        "docs/en/releases.md",
+        "Releases"
+      ],
+      [
+        "release-v0.0.2",
+        "docs/en/release-v0.0.2.md",
+        "v0.0.2"
+      ],
+      [
+        "release-v0.0.3",
+        "docs/en/release-v0.0.3.md",
+        "v0.0.3"
+      ],
+      [
+        "release-v0.0.4",
+        "docs/en/release-v0.0.4.md",
+        "v0.0.4"
+      ],
+      [
+        "release-v0.0.5",
+        "docs/en/release-v0.0.5.md",
+        "v0.0.5"
+      ],
+      [
+        "release-v0.0.6",
+        "docs/en/release-v0.0.6.md",
+        "v0.0.6"
+      ],
+      [
+        "release-v0.0.7",
+        "docs/en/release-v0.0.7.md",
+        "v0.0.7"
+      ]
+    ]
+  ]
+]

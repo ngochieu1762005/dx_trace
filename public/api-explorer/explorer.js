@@ -81,7 +81,7 @@ function generate(){
  output.textContent=code;el('status').textContent=t('Lệnh mẫu đã sẵn sàng.','Example request ready.');
  el('run').disabled=!(livePage&&current.live&&current.method==='GET');
  el('open-live').hidden=livePage||!current.live;
- el('open-live').href=origin+'/api-explorer/index.html?lang='+(en?'en':'vi')+'&op='+encodeURIComponent(current.id);
+ el('open-live').href=origin+'/api-explorer/'+(en?'en.html':'index.html')+'?op='+encodeURIComponent(current.id);
  }catch(e){output.textContent=e.message;el('run').disabled=true;el('open-live').hidden=true;el('status').textContent=t('Điền đầy đủ tham số.','Complete the parameters.')}
 }
 async function run(){
@@ -102,5 +102,5 @@ select.addEventListener('change',choose);filter.addEventListener('input',choices
 el('new-key').addEventListener('click',()=>{requestId=crypto.randomUUID();generate()});
 el('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(output.textContent);el('status').textContent=t('Đã sao chép.','Copied.')}catch{el('status').textContent=t('Không sao chép được.','Copy failed.')}});
 el('run').addEventListener('click',run);
-choices();const op=new URLSearchParams(location.search).get('op');if([...select.options].some(o=>o.value===op)){select.value=op;choose()}
+el('run').hidden=!livePage;choices();const op=new URLSearchParams(location.search).get('op');if([...select.options].some(o=>o.value===op)){select.value=op;choose()}
 })();

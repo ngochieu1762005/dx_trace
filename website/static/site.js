@@ -2,20 +2,22 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const root=document.body.dataset.root;
+const en=document.documentElement.lang==='en';
+const tr=(vi,english)=>en?english:vi;
 let theme;
 try{theme=localStorage.getItem('dx-docs-theme')}catch{}
 document.documentElement.dataset.theme=theme|| (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
 $('theme').addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;try{localStorage.setItem('dx-docs-theme',next)}catch{}});
 $('menu').addEventListener('click',()=>{const open=$('sidebar').classList.toggle('open');$('menu').setAttribute('aria-expanded',String(open))});
-for(const pre of document.querySelectorAll('pre')){const code=pre.querySelector('code');if(!code)continue;const button=document.createElement('button');button.type='button';button.textContent='Sao chép';button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='Đã chép';setTimeout(()=>button.textContent='Sao chép',1400)}catch{button.textContent='Không sao chép được'}});pre.append(button)}
+for(const pre of document.querySelectorAll('pre')){const code=pre.querySelector('code');if(!code)continue;const button=document.createElement('button');button.type='button';button.textContent=tr("Sao chép","Copy");button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent=tr("Đã chép","Copied");setTimeout(()=>button.textContent=tr("Sao chép","Copy"),1400)}catch{button.textContent=tr("Không sao chép được","Copy failed")}});pre.append(button)}
 const dialog=$('search-dialog'),input=$('search-input'),results=$('results');
 const normalize=s=>s.toLowerCase().normalize('NFD').replace(/\p{M}/gu,'').replace(/đ/g,'d');
 let index=null,loading=null;
 function message(s){const p=document.createElement('p');p.textContent=s;results.replaceChildren(p)}
 function search(){
  const query=normalize(input.value.trim());
- if(!query){message('Nhập từ khóa để tìm tài liệu và nội dung từng mục.');return}
- if(!index){message('Đang tải chỉ mục…');return}
+ if(!query){message(tr("Nhập từ khóa để tìm tài liệu và nội dung từng mục.","Search documentation and sections."));return}
+ if(!index){message(tr("Đang tải chỉ mục…","Loading index…"));return}
  const terms=query.split(/\s+/);
  const hits=index.map(item=>{
    const title=normalize(item.title),heading=normalize(item.heading||''),content=normalize(item.text);
@@ -27,7 +29,7 @@ function search(){
    if(heading.includes(query))score+=8;
    return {item,score};
  }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,15);
- if(!hits.length){message('Không tìm thấy tài liệu phù hợp.');return}
+ if(!hits.length){message(tr("Không tìm thấy tài liệu phù hợp.","No matching documents."));return}
  results.replaceChildren(...hits.map(({item})=>{
    const a=document.createElement('a'),strong=document.createElement('strong'),small=document.createElement('small'),snippet=document.createElement('span');
    a.href=root+item.path;strong.textContent=item.heading||item.title;
@@ -42,7 +44,7 @@ async function openSearch(){
  if(!dialog.open)dialog.showModal();input.focus();
  if(!index){
    loading??=Promise.all(['search.json','sections.json'].map(file=>fetch(root+'assets/'+file).then(r=>{if(!r.ok)throw Error('index unavailable');return r.json()}))).then(groups=>groups.flat());
-   try{index=await loading}catch{loading=null;message('Không thể tải chỉ mục.');return}
+   try{index=await loading}catch{loading=null;message(tr("Không thể tải chỉ mục.","Unable to load index."));return}
  }
  search();
 }

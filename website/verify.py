@@ -49,3 +49,30 @@ for entry in sections:
     parser.feed(path.read_text(encoding="utf-8"))
     assert parsed.fragment in parser.ids, entry["path"]
 print("Verified",len(sections),"section anchors")
+
+english=root/"docs/en"
+en_entries=json.loads((english/"assets/search.json").read_text(encoding="utf-8"))
+assert {x["path"] for x in en_entries}=={x["path"] for x in entries}, "Locale routes differ"
+for item in en_entries:
+    path=english/item["path"]
+    content=path.read_text(encoding="utf-8")
+    assert '<html lang="en">' in content
+    parser=Links()
+    parser.feed(content)
+    for value in parser.links:
+        parsed=urlsplit(value)
+        if parsed.scheme or parsed.netloc or not parsed.path:
+            continue
+        target=(path.parent/unquote(parsed.path)).resolve()
+        assert target.is_relative_to(root) and target.exists(), (path,value)
+en_sections=json.loads((english/"assets/sections.json").read_text(encoding="utf-8"))
+for item in en_sections:
+    url=urlsplit(item["path"])
+    parser=Links()
+    parser.feed((english/url.path).read_text(encoding="utf-8"))
+    assert url.fragment in parser.ids
+catalog=json.loads((root/"docs/api-explorer/catalog.json").read_text(encoding="utf-8"))
+assert len(catalog)>=50 and len({x["id"] for x in catalog})==len(catalog)
+assert all(not x["live"] or x["method"]=="GET" for x in catalog)
+assert all(x["title"]["vi"] and x["title"]["en"] for x in catalog)
+print("Verified",len(en_entries),"English pages and",len(catalog),"API endpoints")
