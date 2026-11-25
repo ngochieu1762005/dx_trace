@@ -18,6 +18,7 @@ jobs:
       - run: pip install -r website/requirements.txt
       - run: python website/build.py --out /tmp/dxtrace-docs
       - run: python website/verify.py /tmp/dxtrace-docs
+      - run: node --check public/api-explorer/explorer.js && node --check website/static/site.js && node --check landing/assets/site.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: /tmp/dxtrace-docs

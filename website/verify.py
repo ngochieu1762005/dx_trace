@@ -76,3 +76,15 @@ assert len(catalog)>=50 and len({x["id"] for x in catalog})==len(catalog)
 assert all(not x["live"] or x["method"]=="GET" for x in catalog)
 assert all(x["title"]["vi"] and x["title"]["en"] for x in catalog)
 print("Verified",len(en_entries),"English pages and",len(catalog),"API endpoints")
+
+for name,lang in (("index.html","vi"),("en.html","en")):
+    page=(root/"docs/api-explorer"/name).read_text(encoding="utf-8")
+    assert f'<html lang="{lang}">' in page and 'data-live="0"' in page
+    parser=Links()
+    parser.feed(page)
+    for value in parser.links:
+        u=urlsplit(value)
+        if u.scheme or u.netloc or not u.path:
+            continue
+        assert (root/"docs/api-explorer"/unquote(u.path)).exists(),value
+print("Verified public explorer language editions")
