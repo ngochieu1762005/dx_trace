@@ -13,6 +13,16 @@
         "Bắt đầu nhanh"
       ],
       [
+        "learning-paths",
+        "website/content/learning-paths.md",
+        "Lộ trình sử dụng"
+      ],
+      [
+        "glossary",
+        "website/content/glossary.md",
+        "Thuật ngữ"
+      ],
+      [
         "demo",
         "docs/DEMO.md",
         "Kịch bản trình diễn"
@@ -20,8 +30,38 @@
     ]
   ],
   [
+    "Hướng dẫn người dùng",
+    [
+      [
+        "warehouse-guide",
+        "website/content/warehouse-guide.md",
+        "Quản lý kho và truy xuất"
+      ],
+      [
+        "recall-guide",
+        "website/content/recall-guide.md",
+        "Kiểm định và thu hồi"
+      ],
+      [
+        "sensor-guide",
+        "website/content/sensor-guide.md",
+        "Thiết bị và giám sát"
+      ],
+      [
+        "identity-guide",
+        "website/content/identity-guide.md",
+        "Tài khoản và quyền"
+      ]
+    ]
+  ],
+  [
     "Kiến trúc",
     [
+      [
+        "architecture-map",
+        "website/content/architecture-map.md",
+        "Bản đồ hệ thống"
+      ],
       [
         "architecture",
         "docs/HEADLESS-CORE.md",
@@ -47,6 +87,16 @@
   [
     "Phát triển ứng dụng",
     [
+      [
+        "app-tutorial",
+        "website/content/app-tutorial.md",
+        "Tutorial · Tạo ứng dụng"
+      ],
+      [
+        "manifest-reference",
+        "website/content/manifest-reference.md",
+        "Đặc tả manifest"
+      ],
       [
         "platform",
         "docs/PLATFORM.md",
@@ -91,12 +141,32 @@
         "codebase",
         "docs/CODEBASE.md",
         "Bản đồ mã nguồn"
+      ],
+      [
+        "api-auth",
+        "website/content/api-auth.md",
+        "API · Xác thực và lỗi"
+      ],
+      [
+        "api-reference",
+        "website/content/api-reference.md",
+        "API Reference"
+      ],
+      [
+        "api-examples",
+        "website/content/api-examples.md",
+        "API · Ví dụ tích hợp"
       ]
     ]
   ],
   [
     "Triển khai & vận hành",
     [
+      [
+        "deployment-checklist",
+        "website/content/deployment-checklist.md",
+        "Checklist triển khai"
+      ],
       [
         "selfhost",
         "selfhost/README.md",
@@ -126,12 +196,37 @@
         "operating-workflows",
         "docs/OPERATING-WORKFLOWS.md",
         "Quy trình vận hành"
+      ],
+      [
+        "troubleshooting",
+        "website/content/troubleshooting.md",
+        "Khắc phục sự cố"
+      ],
+      [
+        "backup-restore",
+        "website/content/backup-restore.md",
+        "Backup & Restore"
+      ],
+      [
+        "docs-deploy",
+        "website/content/docs-deploy.md",
+        "Xuất bản tài liệu"
       ]
     ]
   ],
   [
     "Kiểm chứng & nguồn mở",
     [
+      [
+        "capability-matrix",
+        "website/content/capability-matrix.md",
+        "Ma trận năng lực"
+      ],
+      [
+        "evaluation",
+        "website/content/evaluation.md",
+        "Hướng dẫn nghiệm thu"
+      ],
       [
         "evidence",
         "docs/EVIDENCE.md",
