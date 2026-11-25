@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: MIT
+name: Third-party core acceptance
+on:
+  pull_request:
+    paths:
+      - 'selfhost/compose.third-party.yaml'
+      - 'selfhost/apisix/**'
+      - 'selfhost/flowable/**'
+      - 'selfhost/scripts/third-party-smoke.mjs'
+      - '.github/workflows/third-party-core.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: selfhost
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate disposable credentials
+        shell: bash
+        run: |
+          umask 077
+          printf '%s\n' APP_HOST=app.example.invalid ID_HOST=id.example.invalid > .env
+          for key in DB_PASSWORD ADMIN_PASSWORD OIDC_CLIENT_SECRET COOKIE_SECRET DX_CORE_TOKEN DX_GATEWAY_APP_TOKEN DX_FLOWABLE_DB_PASSWORD DX_FLOWABLE_API_PASSWORD; do
+            value="$(openssl rand -hex 32)"
+            echo "::add-mask::$value"
+            printf '%s=%s\n' "$key" "$value" >> .env
+          done
+      - name: Validate and start isolated services
+        run: |
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test config --quiet
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml up -d --build core gateway-api flowable
+      - name: Exercise real gateway and BPMN engine
+        run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test run --rm migration-smoke
+      - name: Container status on failure
+        if: failure()
+        run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml ps -a
+      - name: Cleanup disposable stack
+        if: always()
+        run: |
+          if test -f .env; then
+            docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml down -v --remove-orphans
+            rm -f .env
+          fi
