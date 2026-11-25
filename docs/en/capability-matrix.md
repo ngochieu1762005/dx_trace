@@ -14,3 +14,7 @@
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/capability-matrix.md).
+
+## Main-branch infrastructure
+
+APISIX is default in Compose; optional Flowable provides independent review. See [native review](native-review.md) and [DX-OS governance](dxos-governance.md) for evidence and limits. Production acceptance is separate.
