@@ -44,6 +44,18 @@ Lưu thêm bản sao ngoài VPS, mã hóa và giới hạn quyền đọc. Kiể
 
 ## 3. Nâng cấp mã nguồn
 
+VPS Ubuntu có Caddy trên host: sử dụng script cập nhật mới, không cần Node trên host. Chạy trong cửa sổ bảo trì và tạm ngừng tích hợp ghi ngoài.
+
+```bash
+cd /opt/dx_trace
+git pull --ff-only origin main
+bash selfhost/scripts/update-ubuntu.sh --with-flowable
+```
+
+Bỏ `--with-flowable` nếu chỉ muốn APISIX (nếu Flowable đã bật, script giữ overlay). Script kiểm project hiện hữu, sao lưu SQLite/tệp, Keycloak và Flowable nếu đã bật; không xóa volume hoặc sửa Caddy. Cấu hình override ngoài chuẩn phải nâng cấp thủ công. Không chạy migration-smoke trên production. Cần cài python3-venv để dựng docs.
+
+### Thao tác thủ công cho APISIX
+
 Sau khi đã xác minh backup, từ `selfhost/`:
 
 ```bash
@@ -61,10 +73,11 @@ if ! grep -q '^DX_GATEWAY_APP_TOKEN=' selfhost/.env; then
   printf 'DX_GATEWAY_APP_TOKEN=%s\n' "$(openssl rand -hex 32)" >> selfhost/.env
 fi
 chmod 600 selfhost/.env
-node selfhost/doctor.mjs
+# Không cần Node trên host; kiểm Compose bên dưới.
 cd selfhost
 dc config --quiet
-dc build core gateway-api quality-portal app
+dc pull gateway-api
+dc build core quality-portal app
 dc up -d core gateway-api quality-portal app
 )
 ```

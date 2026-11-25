@@ -8,14 +8,14 @@
 | `app.example.org` | OAuth2 Proxy ở `127.0.0.1:8180`; ingest riêng qua app `127.0.0.1:8182` |
 | `id.example.org` | Keycloak ở `127.0.0.1:8181` |
 
-Thay domain bằng tên miền của bạn; giữ nguyên các website khác đang nằm trong Caddyfile. Chuẩn bị Docker, Compose v2, Node.js 24, Git và DNS cho cả ba domain.
+Thay domain bằng tên miền của bạn; giữ nguyên các website khác đang nằm trong Caddyfile. Chuẩn bị Docker, Compose v2, Git và DNS cho cả ba domain.
 
 ## 1. Lấy mã và tạo cấu hình lần đầu
 
 ```bash
 git clone https://github.com/ngochieu1762005/dx_trace.git
 cd dx_trace
-node selfhost/setup.mjs app.example.org id.example.org
+docker run --rm -v "$PWD/selfhost:/work" -w /work node:24-alpine node setup.mjs app.example.org id.example.org
 cd selfhost
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml config --quiet
 docker compose -f compose.yaml -f compose.ubuntu-edge.yaml up -d --build \
@@ -98,4 +98,4 @@ Landing/OIDC mong đợi 200; app chưa đăng nhập thường 302. Sau đó ph
 
 ## 6. Nâng cấp và phục hồi
 
-Dùng [OPERATIONS.md](OPERATIONS.md) với đúng hai file Compose. Luôn sao lưu SQLite+tệp, Keycloak và cấu hình trước migration. Đồng bộ landing riêng; chỉ reload Caddy sau validate. Không chạy lại setup, không xóa volume và không sửa các domain ngoài phạm vi DX-TRACE.
+Dùng [OPERATIONS.md](OPERATIONS.md) và script `selfhost/scripts/update-ubuntu.sh`. Giữ hai file Compose chuẩn, thêm compose.third-party.yaml nếu bật Flowable. Luôn sao lưu SQLite+tệp, Keycloak và cấu hình trước migration. Đồng bộ landing riêng; chỉ reload Caddy sau validate. Không chạy lại setup, không xóa volume và không sửa các domain ngoài phạm vi DX-TRACE.

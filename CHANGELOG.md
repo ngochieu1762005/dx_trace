@@ -4,6 +4,10 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+- APISIX mặc định trong Compose; overlay Flowable thực thi thẩm định độc lập, không chuyển workflow cũ.
+- AppKit Supplier Review, xuất dữ liệu lạnh có checksum, lineage cảm biến và kiểm topology. CI tích hợp PR #35 đạt; chưa nghiệm thu VPS.
+- Đồng bộ tài liệu song ngữ và quy trình nâng cấp Ubuntu không cần Node trên host.
+
 ### Added
 
 - Quy trình kiểm định–kho: quản lý liên kết phiếu không đạt với sự cố và cách ly lô trong cùng transaction; giữ lịch sử, kiểm phiên bản và chống gửi trùng theo người thực hiện.
@@ -24,7 +28,7 @@ Nhật ký thay đổi của DX-TRACE.
 
 ### Compatibility
 
-Không đổi schema cơ sở dữ liệu, không đặt lại dữ liệu kho. Cấu hình Gateway của v0.0.7 vẫn bắt buộc; đọc [hướng dẫn chuyển đổi](docs/GATEWAY-AND-SSO.md) nếu nâng từ bản cũ.
+Thêm bảng mapping native_review_requests theo cách additive; không đặt lại dữ liệu kho. Cấu hình Gateway của v0.0.7 vẫn bắt buộc; đọc [hướng dẫn chuyển đổi](docs/GATEWAY-AND-SSO.md) nếu nâng từ bản cũ.
 
 ## [0.0.7] — 2026-11-23 — Parallel Workflow & External OIDC API
 
