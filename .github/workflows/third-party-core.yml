@@ -11,6 +11,7 @@ on:
       - 'examples/**'
       - 'tools/archive-sensors.mjs'
       - 'tools/verify-stack.mjs'
+      - 'tools/sensor-client.mjs'
       - 'tests/cold-archive.test.mjs'
       - 'selfhost/apisix/**'
       - 'selfhost/flowable/**'
@@ -46,6 +47,7 @@ jobs:
         run: |
           node ../tools/verify-stack.mjs -f compose.yaml -f compose.third-party.yaml
           node --test ../tests/cold-archive.test.mjs
+          node --check ../tools/sensor-client.mjs
       - name: Validate and start isolated services
         run: |
           docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test config --quiet

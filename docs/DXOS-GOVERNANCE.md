@@ -14,3 +14,15 @@ The existing device key and POST /api/ingest validate identity, temperature, tim
 
 ## Zero Trust / GitOps
 APISIX private network and separate gateway/Core credentials, Core RBAC/workspace isolation, Flowable private database and API networks, no exposed engine or database port. `node tools/verify-stack.mjs -f selfhost/compose.yaml -f selfhost/compose.third-party.yaml` validates the rendered Compose topology without printing secrets (run with a properly configured env file). PR CI is a desired-state gate, not continuous deployment reconciliation. Use reviewed commits and preserve production volumes. No automatic deployment or production claims.
+
+## Controlled device demonstration
+Create a dedicated device in a disposable training workspace, then set the token without writing it to source. From a host where the training endpoint is deliberately exposed with TLS:
+
+```sh
+read -rsp 'Training device token: ' DX_DEVICE_TOKEN; echo
+export DX_DEVICE_TOKEN
+node tools/sensor-client.mjs https://app.example.org/api/ingest 12 3 --training-fixture
+unset DX_DEVICE_TOKEN
+```
+
+The script sends real HTTP requests with synthetic measurements and preserves the same sample ID/body during retries. Never use a production lot or a real device token for this fixture. The operator must configure ingress for device-token authentication; do not bypass SSO for other routes. Verify in the UI and lineage API, then revoke the training device. A hardware sensor has not been certified by this test.

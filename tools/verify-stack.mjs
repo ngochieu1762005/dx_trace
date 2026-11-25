@@ -16,6 +16,6 @@ if(s.flowable){
  assert.ok(net('flowable').includes('workflowdb')&&net('flowable').includes('workflowapi'));
  assert.ok(net('core').includes('workflowapi')&&!net('app').includes('workflowapi'));
 }
-assert.notEqual(s.core.environment.DX_CORE_TOKEN,s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN);
+assert.ok(typeof s.core.environment.DX_CORE_TOKEN==='string'&&s.core.environment.DX_CORE_TOKEN.length>=32&&typeof s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN==='string'&&s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN.length>=32&&s.core.environment.DX_CORE_TOKEN!==s['gateway-api'].environment.DX_GATEWAY_APP_TOKEN,'Credentials must be distinct and strong');
 assert.equal(s.app.environment.DX_CORE_URL,'http://gateway-api:8082');
 console.log('PASS desired-state gateway, service network isolation, port policy and credential separation (values hidden)');

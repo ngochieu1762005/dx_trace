@@ -123,3 +123,32 @@ assert.equal(ended.status,'ended');
 assert.equal(ended.tasks.length,0);
 await api(path+'/complete',manager,decision(final),randomUUID(),409);
 console.log('PASS native Flowable API: idempotent start, tenant denial, roles, no self-approval, parallel join, timer, final approval');
+
+
+// IT/OT: a synthetic device has its own key, not an SSO or Core credential.
+// Create a lot, transmit three real HTTP samples, verify lineage and incident.
+const supplier=await api('partners',owner,{name:'Fixture supplier',kind:'supplier'});
+const lot=await api('lots',owner,{code:'TEST-COLD-'+stamp,product:'Acceptance only',supplier:supplier.id,quantity:100,unit:'kg',expiry:new Date(Date.now()+86400000*30).toISOString().slice(0,10),location:'Fixture warehouse',min_temp:2,max_temp:8});
+const device=await api('devices',owner,{name:'Synthetic test sensor',lot:lot.id});
+const send=async(body,token=device.token,status=200)=>{
+ const result=await fetchSafe(gateway+'/api/ingest',{method:'POST',headers:{...headers,'content-type':'application/json',authorization:'Bearer '+token},body:JSON.stringify(body)});
+ assert.equal(result.status,status,'sensor ingest status');
+ return result.json();
+};
+const reading={id:'sample-'+randomUUID(),temperature:12,recorded:new Date().toISOString()};
+await send(reading,'invalid',401);
+const initial=await send(reading);
+assert.equal((await send(reading)).id,initial.id);
+await send({...reading,temperature:13},device.token,409);
+for(let i=0;i<2;i++)await send({id:'sample-'+randomUUID(),temperature:12,recorded:new Date().toISOString()});
+const history=await api('sensor-history/'+device.id);
+assert.equal(history.readings.length,3);
+const lineagePath='sensor-lineage/'+device.id+'?reading='+encodeURIComponent(reading.id);
+const lineage=await api(lineagePath);
+assert.equal(lineage.lot,lot.id);assert.equal(lineage.reading.id,initial.id);
+await api(lineagePath,staff,undefined,randomUUID(),403);
+await api(lineagePath,outsider,undefined,randomUUID(),404);
+assert.ok((await api('state')).incidents.some(i=>i.lot===lot.id));
+await api('devices/'+device.id+'/revoke',owner,{});
+await send({...reading,id:randomUUID()},device.token,401);
+console.log('PASS IT/OT: per-device key, replay/conflict, telemetry history, lineage, threshold incident, revocation');
