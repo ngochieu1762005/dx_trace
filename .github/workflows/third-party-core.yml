@@ -3,7 +3,13 @@ name: Third-party core acceptance
 on:
   pull_request:
     paths:
+      - 'selfhost/compose.yaml'
       - 'selfhost/compose.third-party.yaml'
+      - 'lib/native-review.ts'
+      - 'selfhost/runtime.mjs'
+      - 'app/api/**'
+      - 'examples/**'
+      - 'tools/archive-sensors.mjs'
       - 'selfhost/apisix/**'
       - 'selfhost/flowable/**'
       - 'selfhost/scripts/third-party-smoke.mjs'

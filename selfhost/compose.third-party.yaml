@@ -1,17 +1,14 @@
 # SPDX-License-Identifier: MIT
 # Candidate migration overlay. Do not apply to production until acceptance passes.
 services:
-  gateway-api:
-    image: apache/apisix:3.21.0-debian
-    build: !reset null
-    command: !reset null
-    environment: !override
-      DX_GATEWAY_APP_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
-      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+  core:
+    environment:
+      DX_FLOWABLE_API_PASSWORD: ${DX_FLOWABLE_API_PASSWORD:?}
+      DX_FLOWABLE_URL: http://flowable:8080/flowable-rest/service
     volumes:
-      - ./apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
-      - ./apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
-    # Retains appnet/privcore, internal DNS and port 8082 from base.
+      - ./flowable/review.bpmn20.xml:/app/selfhost/flowable/review.bpmn20.xml:ro
+    networks: [privcore, workflowapi]
+    depends_on: [flowable]
   workflow-db:
     image: postgres:17-alpine
     restart: unless-stopped

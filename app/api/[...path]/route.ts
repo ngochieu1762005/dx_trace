@@ -48,6 +48,7 @@ const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new Domai
 import {models as storedModels,plan as modelPlan,queryRecords,changePlatform,profileModel} from '../../../lib/platform-store.ts';
 import {escalateQuality} from '../../../lib/quality-bridge.ts';
 import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
+import {nativeReview} from '../../../lib/native-review.ts';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
  if(kind==='health')return json({status:'ok',version:'0.0.7',database:!!env.DB});
@@ -57,6 +58,7 @@ async function route(req:Request){try{
   const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='flowable-review')return json(await nativeReview(c,req,key,action));
  if(kind==='quality'&&action==='escalate'&&req.method==='POST'){
   return json(await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||''));
  }

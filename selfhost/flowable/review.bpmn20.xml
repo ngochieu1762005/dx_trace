@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: MIT -->
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="https://dxtrace.hieuds.com/workflows">
+ <process id="dxtrace_native_review_v1" name="Independent release review" isExecutable="true">
+  <startEvent id="start"/><parallelGateway id="fork"/>
+  <userTask id="quality" name="Quality review" flowable:candidateGroups="owner,manager"/>
+  <userTask id="inventory" name="Inventory review" flowable:candidateGroups="owner,manager,warehouse"/>
+  <parallelGateway id="join"/><exclusiveGateway id="decision" default="reject"/>
+  <intermediateCatchEvent id="cooldown"><timerEventDefinition><timeDuration xsi:type="tFormalExpression">PT2S</timeDuration></timerEventDefinition></intermediateCatchEvent>
+  <userTask id="approval" name="Final approval" flowable:candidateGroups="owner,manager"/>
+  <exclusiveGateway id="finalDecision" default="finalReject"/>
+  <endEvent id="accepted"/><endEvent id="rejected"/>
+  <sequenceFlow id="a" sourceRef="start" targetRef="fork"/>
+  <sequenceFlow id="b" sourceRef="fork" targetRef="quality"/>
+  <sequenceFlow id="c" sourceRef="fork" targetRef="inventory"/>
+  <sequenceFlow id="d" sourceRef="quality" targetRef="join"/>
+  <sequenceFlow id="e" sourceRef="inventory" targetRef="join"/>
+  <sequenceFlow id="f" sourceRef="join" targetRef="decision"/>
+  <sequenceFlow id="pass" sourceRef="decision" targetRef="cooldown"><conditionExpression xsi:type="tFormalExpression"><![CDATA[${qualityApproved && inventoryApproved}]]></conditionExpression></sequenceFlow>
+  <sequenceFlow id="reject" sourceRef="decision" targetRef="rejected"/>
+  <sequenceFlow id="g" sourceRef="cooldown" targetRef="approval"/>
+  <sequenceFlow id="h" sourceRef="approval" targetRef="finalDecision"/>
+  <sequenceFlow id="finalPass" sourceRef="finalDecision" targetRef="accepted"><conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalApproved}]]></conditionExpression></sequenceFlow>
+  <sequenceFlow id="finalReject" sourceRef="finalDecision" targetRef="rejected"/>
+ </process>
+</definitions>

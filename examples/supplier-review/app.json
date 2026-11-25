@@ -1,0 +1,96 @@
+{
+  "apiVersion": "dxtrace.io/v1",
+  "kind": "DeclarativeApplication",
+  "metadata": {
+    "id": "supplier_review",
+    "name": "Đánh giá nhà cung cấp",
+    "version": "1.0.0",
+    "description": "Ứng dụng độc lập cài qua AppKit"
+  },
+  "spec": {
+    "model": {
+      "id": "supplier_review",
+      "name": "Đánh giá nhà cung cấp",
+      "fields": [
+        {
+          "key": "supplier",
+          "label": "Nhà cung cấp",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "reference",
+          "label": "Mã hồ sơ",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "risk",
+          "label": "Mức rủi ro",
+          "type": "choice",
+          "options": [
+            "Thấp",
+            "Cao"
+          ],
+          "required": true
+        }
+      ],
+      "permissions": {
+        "read": [
+          "owner",
+          "manager",
+          "warehouse"
+        ],
+        "create": [
+          "owner",
+          "manager",
+          "warehouse"
+        ],
+        "scope": "own"
+      },
+      "workflow": {
+        "states": [
+          "draft",
+          "submitted",
+          "approved",
+          "rejected"
+        ],
+        "initial": "draft",
+        "terminal": [
+          "approved",
+          "rejected"
+        ],
+        "transitions": [
+          {
+            "from": "draft",
+            "to": "submitted",
+            "roles": [
+              "owner",
+              "manager",
+              "warehouse"
+            ]
+          },
+          {
+            "from": "submitted",
+            "to": "approved",
+            "roles": [
+              "owner",
+              "manager"
+            ],
+            "differentActor": true
+          },
+          {
+            "from": "submitted",
+            "to": "rejected",
+            "roles": [
+              "owner",
+              "manager"
+            ],
+            "differentActor": true,
+            "reasonRequired": true
+          }
+        ]
+      }
+    }
+  }
+}
