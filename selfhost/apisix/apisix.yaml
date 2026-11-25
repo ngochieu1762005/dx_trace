@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: MIT
+# No public port or administrative API. OAuth2 Proxy remains the browser SSO boundary.
+consumers:
+  - username: dxtrace-internal-app
+    plugins:
+      key-auth:
+        key: "${{DX_GATEWAY_APP_TOKEN}}"
+routes:
+  - id: core
+    uri: /api/*
+    methods: [GET, POST]
+    # Require header even though key-auth can also accept query credentials.
+    vars:
+      - [http_x_dx_core_token, "~~", ".+"]
+    plugins:
+      key-auth:
+        header: x-dx-core-token
+        query: dx_internal_unused
+        hide_credentials: true
+      proxy-rewrite:
+        headers:
+          set:
+            x-dx-core-token: "${{DX_CORE_TOKEN}}"
+      limit-count:
+        count: 120
+        time_window: 60
+        rejected_code: 429
+        key_type: var
+        key: http_x_forwarded_user
+        policy: local
+      request-id:
+        header_name: X-Request-Id
+        include_in_response: true
+      client-control:
+        max_body_size: 6291456
+      response-rewrite:
+        headers:
+          set:
+            Cache-Control: no-store
+            X-Content-Type-Options: nosniff
+    upstream:
+      type: roundrobin
+      nodes:
+        "core:8081": 1
+      retries: 0
+      timeout:
+        connect: 5
+        send: 25
+        read: 25
+#END

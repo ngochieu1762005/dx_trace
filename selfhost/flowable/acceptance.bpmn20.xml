@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: MIT -->
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  targetNamespace="https://dxtrace.hieuds.com/workflow/acceptance">
+  <process id="dxtrace_acceptance" name="DX-TRACE engine acceptance" isExecutable="true">
+    <startEvent id="start"/>
+    <parallelGateway id="fork"/>
+    <userTask id="quality" name="Quality review"/>
+    <userTask id="inventory" name="Inventory review"/>
+    <parallelGateway id="join"/>
+    <intermediateCatchEvent id="wait">
+      <timerEventDefinition><timeDuration xsi:type="tFormalExpression">PT2S</timeDuration></timerEventDefinition>
+    </intermediateCatchEvent>
+    <endEvent id="end"/>
+    <sequenceFlow id="f1" sourceRef="start" targetRef="fork"/>
+    <sequenceFlow id="f2" sourceRef="fork" targetRef="quality"/>
+    <sequenceFlow id="f3" sourceRef="fork" targetRef="inventory"/>
+    <sequenceFlow id="f4" sourceRef="quality" targetRef="join"/>
+    <sequenceFlow id="f5" sourceRef="inventory" targetRef="join"/>
+    <sequenceFlow id="f6" sourceRef="join" targetRef="wait"/>
+    <sequenceFlow id="f7" sourceRef="wait" targetRef="end"/>
+  </process>
+</definitions>

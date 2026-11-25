@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: MIT
+# Candidate migration overlay. Do not apply to production until acceptance passes.
+services:
+  gateway-api:
+    image: apache/apisix:3.21.0-debian
+    build: !reset null
+    command: !reset null
+    environment: !override
+      DX_GATEWAY_APP_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
+      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+    volumes:
+      - ./apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+    # Retains appnet/privcore, internal DNS and port 8082 from base.
+  workflow-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: flowable
+      POSTGRES_USER: flowable
+      POSTGRES_PASSWORD: ${DX_FLOWABLE_DB_PASSWORD:?}
+    volumes: [workflowdata:/var/lib/postgresql/data]
+    networks: [workflowdb]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flowable -d flowable"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  flowable:
+    image: flowable/flowable-rest:7.2.0
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://workflow-db:5432/flowable
+      SPRING_DATASOURCE_USERNAME: flowable
+      SPRING_DATASOURCE_PASSWORD: ${DX_FLOWABLE_DB_PASSWORD:?}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      FLOWABLE_REST_APP_ADMIN_USER-ID: dxtrace-workflow
+      FLOWABLE_REST_APP_ADMIN_PASSWORD: ${DX_FLOWABLE_API_PASSWORD:?}
+      FLOWABLE_REST_APP_CREATE_DEMO_DEFINITIONS: "false"
+      FLOWABLE_PROCESS_SERVLET_PATH: /service
+      FLOWABLE_REST_APP_AUTHENTICATION_MODE: verify-privilege
+      FLOWABLE_ASYNC_EXECUTOR_ACTIVATE: "true"
+    networks: [workflowdb, workflowapi]
+    depends_on:
+      workflow-db:
+        condition: service_healthy
+  migration-smoke:
+    profiles: [migration-test]
+    image: node:24-alpine
+    environment:
+      DX_GATEWAY_APP_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
+      DX_CORE_TOKEN: ${DX_CORE_TOKEN:?}
+      DX_FLOWABLE_API_PASSWORD: ${DX_FLOWABLE_API_PASSWORD:?}
+    volumes:
+      - ./scripts/third-party-smoke.mjs:/checks/smoke.mjs:ro
+      - ./flowable/acceptance.bpmn20.xml:/checks/acceptance.bpmn20.xml:ro
+    command: ["node", "/checks/smoke.mjs"]
+    networks: [appnet, workflowapi]
+    depends_on: [gateway-api, flowable]
+volumes:
+  workflowdata: {}
+networks:
+  workflowdb: {internal: true}
+  workflowapi: {internal: true}
