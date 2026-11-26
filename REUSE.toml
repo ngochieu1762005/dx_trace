@@ -27,5 +27,5 @@ SPDX-License-Identifier = "MIT"
 [[annotations]]
 path = ["docs/assets/architecture*.svg", "docs/assets/project-overview.svg", "docs/assets/delivery.svg", "docs/assets/recall-flow.svg", "docs/assets/barcode-flow.svg"]
 precedence = "override"
-SPDX-FileCopyrightText = ["2026 DX-TRACE contributors", "2015 konpa and upstream logo authors listed in docs/assets/LOGOS.md"]
-SPDX-License-Identifier = "MIT AND LicenseRef-Embedded-Marks"
+SPDX-FileCopyrightText = ["2026 DX-TRACE contributors", "2015 konpa and Devicon contributors"]
+SPDX-License-Identifier = "MIT"

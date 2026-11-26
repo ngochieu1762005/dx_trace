@@ -1,1 +1,0 @@
-Embedded third-party artwork and trademarks retain their original terms. See docs/assets/LOGOS.md and docs/assets/DEVICON-LICENSE.txt for sources and notices. No separate permission for use of trademarks is granted by DX-TRACE. Verify the terms of each remaining upstream logo before redistributing it separately.
