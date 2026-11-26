@@ -68,3 +68,7 @@ python3 -m unittest discover -s tests -p '*_test.py'
 ```
 
 Xem [hướng dẫn kiểm thử](../../docs/TESTING.md) để biết phạm vi của từng nhóm và cách đọc kết quả.
+
+## Chọn bước tiếp theo sau lần mở đầu
+
+Muốn thử luồng nhập–xuất, dùng hai lô cùng sản phẩm để tập phân biệt mã vạch và mã lô trong [hướng dẫn kho](warehouse-guide.md). Muốn xem ngay một quyết định quản lý có số liệu cụ thể, mở [hồ sơ HDPI](hdpi.md) và tính lượng hàng còn phải thu. Khi cần chứng minh hai người lập và duyệt độc lập, chuyển sang bản có SSO và hai tài khoản cùng không gian.

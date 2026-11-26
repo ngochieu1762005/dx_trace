@@ -25,3 +25,7 @@
 - 1 phút: giới hạn và kế hoạch phát triển.
 
 Không dùng dữ liệu thật để chứng minh lỗi bảo mật. Ghi commit, môi trường, điều kiện đo, kết quả đạt/chưa đạt. Không dùng kết quả benchmark loopback để suy ra sức chịu tải production. [Kịch bản demo](../../docs/DEMO.md) · [Ma trận minh chứng](../../docs/EVIDENCE.md) · [Acceptance](../../docs/ACCEPTANCE-2026.md).
+
+## Một phép thử có thể lặp lại
+
+Ghi commit, vùng kho, vai trò, mã lô và số lượng ban đầu. Với một phiếu giữ hàng trên lô đang hoạt động, lập kiểm định rồi cách ly lô bằng tài khoản có quyền. Thử xác nhận giao phiếu đang giữ. Ghi lại phản hồi, trạng thái phiếu và lượng hàng sau lần thử. Chỉ kết luận lệnh chặn giao đạt khi cả trạng thái và số lượng đều đúng. [Theo dõi cả bốn thành phần HDPI](hdpi.md).

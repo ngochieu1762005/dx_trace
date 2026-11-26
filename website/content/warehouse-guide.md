@@ -37,3 +37,9 @@ Dùng mã lô hoặc QR để mở hồ sơ. Đối chiếu nhà cung cấp, phi
 - Đối chiếu lượng giữ, đã giao và nhận trả tại báo cáo thu hồi.
 
 [Quy trình thu hồi](recall-guide.md) · [API kho](api-reference.md).
+
+## Thử với hai lô cùng mã vạch
+
+Trong Kho thực hành, tạo hai lô cùng sản phẩm với mã lô và hạn dùng khác nhau. Quét mã vạch trên bao bì để nhận diện sản phẩm, rồi đối chiếu mã lô và hạn dùng trước khi chọn hàng để giao. Khi cần truy xuất một lần nhập cụ thể, quét tem QR của lô đó. Nếu tra cứu bên ngoài thiếu tên hàng, đọc nhãn và nhập thủ công.
+
+Để kiểm tra lượng giữ, nhập 50 hộp, lập phiếu giữ 12 hộp và xem lại tồn khả dụng. Nếu chưa có nghiệp vụ khác, còn 38 hộp khả dụng. Hủy phiếu trước khi giao rồi kiểm tra lại 50 hộp. Với phiếu đã giao, xem hướng dẫn nhận trả trong hồ sơ thu hồi.

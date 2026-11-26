@@ -8,6 +8,11 @@
         "Introduction"
       ],
       [
+        "hdpi",
+        "docs/en/hdpi.md",
+        "HDPI in warehouse operations"
+      ],
+      [
         "quickstart",
         "docs/en/quickstart.md",
         "Quick start"

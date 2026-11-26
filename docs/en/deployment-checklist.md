@@ -8,6 +8,10 @@ Confirm Linux, Docker Compose v2, Node 24, DNS/TLS, storage capacity and the cor
 
 Check Compose configuration, internal Core health, real SSO with two accounts, workspace separation, roles, record lifecycle, audit, and recovery. Scanner and external OIDC are optional and require separate tests. Never remove production volumes.
 
+## Check the public route after container startup
+
+Open the landing page in a private window, sign into the warehouse and verify the return destination. Look up a known lot and open Quality Portal with the same account. Record each result separately. A successful Core health check covers that endpoint; the browser round trip also exercises callback, session and workspace access.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/deployment-checklist.md).

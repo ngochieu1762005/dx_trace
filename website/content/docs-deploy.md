@@ -28,3 +28,7 @@ Script dựng và kiểm tra tài liệu hai ngôn ngữ, sao lưu thư mục t�
 ## GitHub Pages
 
 Settings → Pages → GitHub Actions. Workflow Documentation tạo artifact và xuất bản khi được bật. Website VPS không phụ thuộc GitHub Pages.
+
+## Kiểm tra đúng bản tài liệu trên VPS
+
+Sau khi script triển khai hoàn tất, mở trang đầu tiếng Việt và chọn **HDPI trong vận hành kho**. Chuyển sang tiếng Anh và kiểm tra vẫn ở cùng chủ đề. Tìm SUA-005 bằng ô tìm kiếm rồi mở kết quả. Nếu bản dựng đã có trang mới nhưng tên miền còn giao diện cũ, so thư mục docs trong document root của Caddy với thư mục mà script vừa xuất bản.

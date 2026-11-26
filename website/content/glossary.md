@@ -18,3 +18,7 @@
 | Quarantine | Cách ly lô hoặc tệp, không cho xuất/tải khi chưa đủ điều kiện |
 | SBOM | Danh mục thành phần phần mềm và phụ thuộc |
 | PoF | Điều kiện minh chứng phần mềm nguồn mở; đối chiếu thể lệ chính thức |
+
+## Mã nào dùng để tra việc gì?
+
+**Mã sản phẩm** nhận diện mặt hàng trên bao bì. **Mã lô** phân biệt đợt nhập có hạn dùng và điều kiện bảo quản riêng. **Mã phiếu giao** xác định lần giao cho một điểm nhận. Khi cửa hàng trả một phần hàng, bắt đầu từ phiếu giao để ghi đúng lượng trả rồi đối chiếu số còn lại theo lô.

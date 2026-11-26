@@ -24,3 +24,9 @@ Không restore đè DB production, không dùng --clean trên DB đang phục v�
 ## PostgreSQL migration
 
 [Hướng dẫn migration](../../docs/POSTGRES-MIGRATION.md) xuất từ backup hoàn chỉnh, xác minh row count và digest từng bảng trong PostgreSQL. Runtime chưa chuyển sang PostgreSQL; không trỏ app vào schema import.
+
+## Đối chiếu sau khi phục hồi thử
+
+Trước khi sao lưu, ghi lại mã một lô đang hoạt động, một phiếu đã giao và một hồ sơ đang xử lý. Nếu kho có tệp đính kèm, chọn một tệp để đối chiếu. Sau khi phục hồi vào môi trường riêng, đăng nhập đúng không gian, tìm lại từng mã và so điểm nhận, số lượng, trạng thái cùng lịch sử. Mở tệp và đối chiếu checksum với bản sao lưu.
+
+Ghi riêng thời điểm sao lưu kho và danh tính. Nếu hồ sơ còn nhưng người dùng không đăng nhập được, kiểm tra phần phục hồi Keycloak và đường callback trước khi kết luận dữ liệu kho bị mất.

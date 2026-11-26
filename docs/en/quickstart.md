@@ -24,6 +24,10 @@ pnpm test
 
 For production use [Docker Compose](selfhost.md) and [deployment checklist](deployment-checklist.md).
 
+## Continue after the first launch
+
+To practise receiving and dispatch, use two lots of one product in the [warehouse guide](warehouse-guide.md). For a management decision with concrete figures, open the [HDPI case](hdpi.md) and calculate the outstanding returns. Use an SSO deployment with two accounts in the same workspace to demonstrate independent author and reviewer actions.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/quickstart.md).

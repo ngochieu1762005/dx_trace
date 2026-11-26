@@ -12,6 +12,10 @@ apiVersion dxtrace.io/v2; kind ApplicationBundle; spec.applications contains 1â€
 
 [Example manifest](../../examples/maintenance/app.json) Â· [Example bundle](../../examples/bundles/operations.json).
 
+## Review a form change before applying it
+
+Add an optional notes field to a copy of the maintenance manifest. Plan against a workspace with existing records, record the base version and apply. Open a record created before the change and create another with notes. If the base version has changed, plan again against the current definition. Check both records before handing over the form.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/manifest-reference.md).

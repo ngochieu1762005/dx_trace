@@ -20,6 +20,10 @@ console.log(r.status,await r.json());
 
 Install the maintenance model first. Preserve the same key and body for retries. The priority value must match the installed model; it is intentionally not translated.
 
+## Verify the example against stored data
+
+After creation, retain the returned ID and read the records in the same training area. Compare equipment and state before requesting a transition. If a transition response is lost, read back that ID before issuing a new command. For approval checks, use a second session with an authorised account in the same workspace.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/api-examples.md).

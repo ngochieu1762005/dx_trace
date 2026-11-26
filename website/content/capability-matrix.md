@@ -21,3 +21,7 @@ Bảng mô tả mã nguồn main, không tự khẳng định mọi tính năng 
 | Supply chain | [SBOM](../../docs/SUPPLY-CHAIN.md) | CI không thay thế audit bảo mật độc lập |
 
 Đối chiếu commit, release, cấu hình triển khai và [CI](https://github.com/ngochieu1762005/dx_trace/actions) khi đánh giá.
+
+## Chọn minh chứng cho từng loại kết quả
+
+Đối với quyền duyệt, lưu kết quả bằng hai tài khoản và ID hồ sơ. Đối với thiết bị, ghi ID mẫu, thời điểm đo và lô nhận số liệu. Đối với phục hồi, tìm lại hồ sơ cũ trong môi trường phục hồi riêng. Gắn mỗi kết quả với commit và môi trường chạy để người tiếp nhận có thể làm lại cùng phép thử.

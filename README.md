@@ -37,6 +37,19 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 Đây không chỉ là giao diện quản lý kho: **DX-TRACE có lõi API headless**, mô hình nghiệp vụ có thể khai báo, ứng dụng thứ hai triển khai độc lập và hạ tầng danh tính dùng chung. Các khẳng định kỹ thuật đều được liên kết tới mã nguồn, kiểm thử hoặc tài liệu nghiệm thu; những hạng mục chưa xác minh được ghi rõ.
 
+## HDPI trong DX-TRACE
+
+Một lô sữa chua đã giao đến hai cửa hàng thì bị phát hiện bảo quản sai nhiệt độ. Bốn thành phần H–P–D–I cùng xuất hiện trong cách kho xử lý lô này.
+
+| Thành phần | Biểu hiện trong ứng dụng |
+| --- | --- |
+| **H · Human · Con người** | Nhân viên kho ghi nhận giao hàng, người thẩm định kết luận chất lượng, quản lý quyết định cách ly và duyệt thu hồi. |
+| **P · Process · Quy trình** | Từ phiếu kiểm định không đạt, quản lý mở sự cố, xử lý phiếu chưa giao và thu hàng đã giao trước khi đóng hồ sơ. |
+| **D · Data · Dữ liệu** | Mã lô nối nhà cung cấp, hạn dùng, số đo, phiếu giao, điểm nhận và lượng đã trả. Mã sản phẩm có thể dùng chung cho nhiều lô. |
+| **I · Intelligence · Hỗ trợ quyết định** | Quy tắc nhiệt độ giúp phát hiện lô có vấn đề. Số liệu giao và nhận trả cho biết điểm nào còn thiếu hàng. Người quản lý chịu trách nhiệm về quyết định thu hồi. |
+
+[Thực hành HDPI với một lô hàng](website/content/hdpi.md)
+
 ## Theo dấu một lô hàng
 
 Một cửa hàng đã nhận một phần lô hàng thì kết quả kiểm định báo không đạt. Người trực kho cần biết **phần nào còn có thể chặn giao, phần nào đã tới cửa hàng và ai có quyền quyết định thu hồi**. Có thể lần theo cùng một mã lô qua các bước dưới đây trên nhánh `main`.

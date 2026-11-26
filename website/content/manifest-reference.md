@@ -37,3 +37,7 @@ apiVersion dxtrace.io/v2, kind ApplicationBundle; metadata gồm id/name/version
 ## Nguồn chuẩn
 
 [Validator](../../lib/platform.mjs) · [AppKit](../../lib/appkit.mjs) · [Bundle](../../lib/application-bundle.mjs) · [Mẫu bảo trì](../../examples/maintenance/app.json).
+
+## Đọc kế hoạch trước khi đổi biểu mẫu
+
+Thử thêm trường ghi chú tùy chọn vào bản sao manifest bảo trì. Đọc kế hoạch trên kho có hồ sơ cũ, ghi lại phiên bản cơ sở rồi áp dụng. Mở lại một hồ sơ được tạo trước thay đổi và tạo thêm hồ sơ có ghi chú. Nếu phiên bản cơ sở đã đổi, lập kế hoạch mới từ định nghĩa hiện tại. Kiểm cả hồ sơ cũ lẫn mới trước khi bàn giao biểu mẫu.

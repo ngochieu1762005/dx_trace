@@ -38,3 +38,7 @@ The Core process executes warehouse rules, AppKit transitions and persisted time
 - Local demo mode uses a loopback server and a synthetic account. Use the Docker deployment for separate services and an identity provider. The PostgreSQL migration test exercises offline export and import of business data.
 
 [API reference](api-reference.md) · [Acceptance](acceptance.md) · [Vietnamese architecture reference](../../website/content/architecture-map.md)
+
+## Trace a record across both applications
+
+Open a lot in the warehouse, select the same lot in Quality Portal and retain the inspection ID on submission. After a failed review and the quarantine action, return to the warehouse and match the incident to the original lot. This exercises both interfaces and their shared Core data. Test the optional Flowable engine separately using its independent review process.

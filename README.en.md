@@ -26,6 +26,19 @@ Food traceability, warehouse operations and recall coordination.
 
 DX-TRACE is an open-source platform for warehouse traceability, food quality and recall coordination. It connects lots, shipments, storage conditions, incidents and reconciliation. The reusable headless Core supports declarative business applications and an independently deployed Quality Portal.
 
+## HDPI in DX-TRACE
+
+Two stores have received chilled stock when a temperature excursion is discovered. The warehouse can follow one lot across all four H–P–D–I dimensions.
+
+| Dimension | Where it appears |
+| --- | --- |
+| **H · Human** | Warehouse staff record deliveries, a reviewer assesses quality and a manager authorises quarantine and recall. |
+| **P · Process** | A failed inspection can lead to an incident. Staff cancel outstanding reservations and collect delivered goods before closing it. |
+| **D · Data** | The lot links supplier, expiry, readings, shipments, destinations and returns. Several lots can share one product barcode. |
+| **I · Intelligence** | Temperature rules flag suspect stock. Delivery and return figures identify destinations with outstanding quantities. A manager owns the recall decision. |
+
+[Work through the HDPI case](docs/en/hdpi.md)
+
 ## Follow a lot through a recall
 
 A store has already received part of a lot when an inspection fails. The warehouse needs to identify stock it can still hold, destinations that have received goods and the person authorised to approve a recall. To follow the case on `main`, use the same practice workspace and lot throughout.
@@ -112,4 +125,3 @@ See [testing](docs/en/testing.md), [evidence](docs/en/evidence.md), [benchmark](
 [English documentation](docs/en/README.md) · [Vietnamese canonical documentation](docs/README.md) · [Contributing](docs/en/contributing.md) · [Security](docs/en/security.md) · [Authors](AUTHORS.md) · [License](LICENSE)
 
 The English guides are separately authored summaries of the canonical technical material, with links to exact source. They are not complete line-by-line translations. The operational application UI is currently Vietnamese.
-

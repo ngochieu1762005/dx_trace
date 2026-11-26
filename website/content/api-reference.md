@@ -104,3 +104,7 @@ Apply và lệnh record cần khóa lệnh. OpenAPI hiện sinh theo từng mode
 Flowable yêu cầu overlay; 503 khi chưa cấu hình, 403 khi không đủ quyền, 404 ngoài workspace, 409 khi xung đột hoặc kết quả chưa chắc chắn. Đọc trạng thái trước khi thử lại thao tác complete. Quy trình thẩm định không tự giải phóng lô.
 
 [Hướng dẫn Flowable](../../docs/NATIVE-REVIEW.md).
+
+## Chọn điểm vào khi tích hợp
+
+Ứng dụng dùng phiên trình duyệt gọi API trên tên miền ứng dụng. Thiết bị gắn với lô gửi mẫu đến ingest bằng khóa riêng. Khi tích hợp mô hình khai báo, đọc OpenAPI của chính model đã cài để lấy cấu trúc trường hiện tại. [Ví dụ đọc, tạo và chuyển bước hồ sơ](api-examples.md) · [Xác thực và xử lý lỗi](api-auth.md).

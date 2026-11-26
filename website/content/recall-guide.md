@@ -23,3 +23,7 @@ Core từ chối nếu sự cố chưa được duyệt hoặc vẫn còn phiế
 ## Minh chứng
 
 Lưu ID lô, sự cố, phiếu, số liệu trước/sau và kết quả audit. Không dùng trợ lý AI để tự quyết định an toàn thực phẩm. Đọc [Quality Portal](../../docs/QUALITY-PORTAL.md) và [quy trình vận hành](../../docs/OPERATING-WORKFLOWS.md).
+
+## Bàn giao một hồ sơ đang thu hồi
+
+Với từng điểm nhận, ghi mã phiếu, lượng đã giao, đã trả và phần còn thiếu. Bàn giao riêng danh sách phiếu giữ hàng cần hủy. Khi một điểm trả thêm, đối chiếu đúng phiếu trước khi ghi số mới để lần bàn giao sau có thể lần lại thay đổi. [Ví dụ HDPI với SUA-005](hdpi.md).

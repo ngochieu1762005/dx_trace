@@ -8,6 +8,10 @@ Submit a quality record, have an authorized reviewer reject it when appropriate,
 
 Only an approved incident with no unresolved reserved or delivered shipments may close. Closing does not reactivate the lot. Record actual quantities and audit evidence. AI output is not a food-safety determination.
 
+## Hand over an open recall
+
+For each destination retain shipment ID, delivered quantity, returned quantity and outstanding balance. Hand over undelivered reservations separately. When more goods arrive, match them to the shipment before recording the return so the next operator can trace the adjustment. [Worked HDPI case](hdpi.md).
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/recall-guide.md).

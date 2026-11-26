@@ -26,3 +26,7 @@
 Không chạy lại setup, không docker compose down -v, không đổi tên project Compose, không xóa DB, không in token trong log. Dùng script update-ubuntu.sh cho stack Ubuntu chuẩn; không chạy smoke fixture trên production. Đọc [Vận hành](../../selfhost/OPERATIONS.md) trước khi đổi phiên bản.
 
 [Ubuntu và Caddy](../../selfhost/DEPLOY_SAAS_UBUNTU.md) · [Yêu cầu hệ thống](../../REQUIREMENTS.md).
+
+## Kiểm tra qua tên miền sau khi container khởi động
+
+Mở trang giới thiệu bằng cửa sổ riêng tư, chọn đăng nhập kho và xác nhận quay về giao diện kho sau bước xác thực. Tra một mã lô đã biết, rồi mở Quality Portal bằng cùng tài khoản. Ghi riêng kết quả từng bước. Core trả 200 chỉ xác nhận tuyến kiểm tra sức khỏe; phép thử qua trình duyệt còn kiểm tra callback, phiên và quyền ở không gian đang dùng.

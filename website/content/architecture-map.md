@@ -75,3 +75,7 @@ Overlay tùy chọn kết nối Core với Flowable qua `coreworkflow`; PostgreS
 | Chuyển dữ liệu sang PostgreSQL | Dùng công cụ xuất và kiểm thử nhập ngoại tuyến. Runtime nghiệp vụ mặc định vẫn là SQLite. |
 
 [Bản đồ mã nguồn](../../docs/CODEBASE.md) · [Bảng nghiệm thu](../../docs/ACCEPTANCE-2026.md) · [Thử chuyển dữ liệu PostgreSQL](../../docs/POSTGRES-MIGRATION.md)
+
+## Lần theo một phiếu giữa hai ứng dụng
+
+Mở lô ở ứng dụng kho, chọn cùng lô trong Quality Portal và ghi mã phiếu sau khi gửi. Sau kết luận không đạt và thao tác cách ly, quay lại kho đối chiếu sự cố với lô ban đầu. Phép thử đi qua hai giao diện và cùng dữ liệu Core. Để thử engine Flowable tùy chọn, dùng quy trình thẩm định độc lập trong hướng dẫn tích hợp.

@@ -17,6 +17,10 @@ docker compose -f compose.yaml -f compose.ubuntu-edge.yaml ps
 
 Do not bypass authorization, delete volumes or publish raw secrets in issue reports.
 
+## Locate a failure after sign-in
+
+Record the final callback destination and the status of the first failed request in the Network panel. For an OAuth2 Proxy 502, correlate the timestamp with app and gateway logs. If the interface loads but the API returns 401, compare the session email with the invited email. For a successful read with an empty list, check workspace and data area. Share only the status and redacted error.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/troubleshooting.md).

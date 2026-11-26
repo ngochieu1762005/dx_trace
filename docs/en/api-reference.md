@@ -90,6 +90,10 @@ Base: application origin + /api. Session authentication for business resources, 
 
 Generated per-model OpenAPI is distinct from this manually curated whole-platform catalog.
 
+## Choose the integration entry point
+
+Browser clients use the application domain and session. Lot-bound devices send measurements to ingestion with their own credentials. For declarative models, read the installed model’s OpenAPI description to discover its current fields. [Read, create and transition examples](api-examples.md) · [Authentication and errors](api-auth.md).
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/api-reference.md).

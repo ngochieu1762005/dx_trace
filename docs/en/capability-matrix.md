@@ -11,6 +11,10 @@
 | Audit | [Audit](audit.md) | External checkpoint required |
 | Supply chain | [SBOM](supply-chain.md) | Not an independent security audit |
 
+## Choose evidence for the claim
+
+For approval rights, retain the two-account result and record ID. For ingestion, retain sample ID, timestamp and destination lot. For recovery, locate a pre-existing record in the restored environment. Attach the revision and environment to each result so another operator can repeat the check.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/capability-matrix.md).

@@ -30,3 +30,7 @@ API nghiệp vụ có tiền tố /api trên domain ứng dụng, không phải 
 Lỗi Core thường có JSON {"error":"..."}. Proxy có thể trả HTML hoặc body khác, nên kiểm content-type trước khi parse. Không retry vô hạn; không tự cấp lại quyền khi nhận 403.
 
 [API Reference](api-reference.md) · [External API](../../docs/EXTERNAL-API.md).
+
+## Xử lý khi mất phản hồi sau khi bấm lưu
+
+Giữ lại mã lệnh, nội dung gửi và vùng kho. Nếu endpoint hỗ trợ khóa chống trùng, gửi lại cùng yêu cầu với cùng khóa. Khi nhận 409, đọc lại hồ sơ và đối chiếu trạng thái, phiên bản cùng lịch sử. Nếu thay đổi đã xuất hiện, kết thúc thao tác. Nếu một người khác đã cập nhật, cho người dùng xem dữ liệu mới trước khi gửi một quyết định mới. Với endpoint có cơ chế riêng như ingest, dùng ID mẫu theo hướng dẫn thiết bị.

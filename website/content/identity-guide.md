@@ -27,3 +27,7 @@ permissions.read và permissions.create quy định vai trò. scope là all ho�
 Dùng ít nhất hai tài khoản thực; thử viewer ghi dữ liệu, người tạo tự duyệt khi differentActor bật, user ngoài workspace đọc model, thu hồi quyền. Không giả header danh tính trên Internet.
 
 [Gateway và SSO](../../docs/GATEWAY-AND-SSO.md) · [Model access](../../docs/MODEL-ACCESS.md).
+
+## Khi hai người thấy hai kho khác nhau
+
+Mở cùng mã lô trên hai trình duyệt đã đăng nhập bằng hai tài khoản. So tên không gian, vùng thực hành/vận hành và email nhận lời mời trước khi so vai trò. Nếu cùng thấy lô nhưng chỉ một người thấy phiếu kiểm định, xem phạm vi đọc của mô hình. Quyền đọc hồ sơ và quyền chuyển bước được kiểm tra riêng.

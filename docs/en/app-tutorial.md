@@ -16,6 +16,10 @@ As owner in training, select the maintenance manifest in AppKit, review plan rej
 
 Add an optional field, preview again and apply the exact new plan. Incompatible changes with existing data are rejected. Use [bundles](application-bundles.md) for multiple models.
 
+## Hand over to a reviewer
+
+Keep the maintenance record ID after submission. Sign in as a manager in the same workspace, find that ID and verify the equipment, priority and reason before approval. Reopen it as the author to confirm the outcome. If the reviewer cannot see it, check role-specific read scope before changing the workflow.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/app-tutorial.md).

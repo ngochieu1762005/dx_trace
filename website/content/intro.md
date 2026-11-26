@@ -33,3 +33,13 @@ Tài liệu được dựng từ mã nguồn hiện tại, không đồng nghĩa
 ## Giấy phép
 
 MIT · DX-TRACE contributors. [Đóng góp](../../CONTRIBUTING.md) · [Bảo mật](../../SECURITY.md).
+
+## Tìm đúng hướng dẫn
+
+| Việc cần làm | Bắt đầu từ đâu | Dấu hiệu hoàn tất |
+| --- | --- | --- |
+| Hiểu dự án qua một lô cụ thể | [HDPI trong vận hành kho](hdpi.md) | Giải thích được vì sao hàng đang giữ và hàng đã giao phải xử lý khác nhau. |
+| Đưa một lô vào kho | [Nhập và giao lô](warehouse-guide.md) | Tra lại được đúng nhà cung cấp và điểm nhận bằng mã lô. |
+| Nối thiết bị | [Gửi số đo](sensor-guide.md) | Một lần gửi lại cùng mẫu chỉ tương ứng với một phép đo. |
+| Viết ứng dụng dùng chung Core | [Tạo mô hình](app-tutorial.md) và [quy ước API](api-auth.md) | Một người lập phiếu, người có quyền xử lý và lịch sử ghi đúng tác nhân. |
+| Bàn giao máy chủ | [Kiểm tra triển khai](deployment-checklist.md) và [phục hồi](backup-restore.md) | Đăng nhập được từ trình duyệt và đọc lại được hồ sơ từ bản phục hồi riêng. |

@@ -10,6 +10,12 @@ POST /api/ingest with Bearer authentication and JSON fields id, temperature, rec
 
 See the [API reference](api-reference.md) for request examples.
 
+## Investigate a missing reading
+
+Check the device-to-lot assignment and compare its measurement time with the server clock. If connectivity was lost after transmission, resend the same ID, value and timestamp within the acceptance window. Record the result before taking the next reading. Retries of one sample do not represent three excursions.
+
+Compare recent readings with this lot’s storage range. A stale-device warning indicates a gap in observations. Assessing the temperature during that gap requires additional measurement evidence.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/sensor-guide.md).

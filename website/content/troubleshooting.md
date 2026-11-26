@@ -27,3 +27,7 @@ Kiểm hostname và cấu hình đúng trước khi chạy. Không chia sẻ log
 ## Thu thập thông tin lỗi
 
 Ghi commit, thời điểm, route, HTTP status, vai trò, kho đang chọn, thao tác tái hiện và kết quả mong đợi. Không gửi cookie, token, mật khẩu hoặc hồ sơ thật lên issue.
+
+## Khoanh vùng lỗi sau đăng nhập
+
+Ghi URL cuối sau callback và mã HTTP của yêu cầu đầu tiên thất bại trong thẻ Network. Nếu thấy trang 502 của OAuth2 Proxy, đối chiếu thời điểm với log app và gateway. Nếu đã thấy giao diện nhưng API trả 401, xem trường email trong phiên người dùng và đối chiếu với email được mời. Nếu API đọc thành công nhưng danh sách trống, kiểm tra tên kho và vùng dữ liệu. Chỉ chia sẻ mã HTTP và thông báo lỗi đã lọc.

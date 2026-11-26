@@ -23,6 +23,10 @@ The script publishes both documentation languages and backs up the previous docu
 
 The public docs are static and independently deployable. GitHub Pages remains optional.
 
+## Check which documentation is served
+
+After deployment open the Vietnamese index and select the HDPI guide. Switch to English and check the topic is preserved. Search for SUA-005 and open a result. If the build contains the page but the domain shows an older edition, compare Caddy’s document root with the directory published by the deployment script.
+
 ## Full source and translation status
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/docs-deploy.md).

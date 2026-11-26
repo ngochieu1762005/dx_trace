@@ -72,3 +72,7 @@ await dx('audit-ledger/verify');
 Chỉ owner/manager. Giữ checkpoint ngoài DB nếu muốn kiểm chứng lịch sử theo thời gian.
 
 [API Reference](api-reference.md) · [External OIDC API](../../docs/EXTERNAL-API.md).
+
+## Đối chiếu ví dụ với dữ liệu đang dùng
+
+Sau lệnh tạo, giữ ID trả về rồi đọc lại danh sách hồ sơ trong cùng vùng training. So equipment và trạng thái trước khi chuyển bước. Nếu mất phản hồi lúc chuyển bước, đọc lại theo ID trước khi tạo lệnh mới. Khi kiểm tra quyền duyệt, dùng phiên thứ hai của tài khoản được cấp quyền trong cùng kho.

@@ -40,3 +40,7 @@ Kế hoạch offline giả định kho trống; kế hoạch API mới dùng d�
 Mô hình xuất hiện trong danh sách app, biểu mẫu sinh từ định nghĩa, phân quyền đúng, hai lần gửi cùng khóa không tạo trùng và audit hợp lệ.
 
 [Đặc tả manifest](manifest-reference.md) · [API examples](api-examples.md).
+
+## Bàn giao cho người duyệt
+
+Ghi ID hồ sơ bảo trì sau khi gửi. Đăng nhập bằng tài khoản quản lý trong cùng không gian, tìm hồ sơ theo ID và kiểm lại thiết bị, mức ưu tiên và lý do trước khi duyệt. Mở lại bằng tài khoản người lập để đối chiếu kết quả. Nếu người duyệt không thấy hồ sơ, kiểm phạm vi đọc theo vai trò trước khi sửa workflow.

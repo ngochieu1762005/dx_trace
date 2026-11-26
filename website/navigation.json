@@ -8,6 +8,11 @@
         "Giới thiệu"
       ],
       [
+        "hdpi",
+        "website/content/hdpi.md",
+        "HDPI trong vận hành kho"
+      ],
+      [
         "quickstart",
         "website/content/quickstart.md",
         "Bắt đầu nhanh"

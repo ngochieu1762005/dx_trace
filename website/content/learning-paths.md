@@ -16,3 +16,7 @@ Chọn đúng môi trường trước khi thao tác. Kho thực hành có dữ l
 2. Thử thao tác mới trong kho thực hành.
 3. Không chia sẻ token, mật khẩu, dữ liệu người dùng hoặc bản sao lưu.
 4. Đối chiếu kết quả nghiệp vụ trên màn hình và nhật ký.
+
+## Bắt đầu một ca làm việc trong kho
+
+Người giao ca đưa mã một lô đang xử lý và mã phiếu liên quan. Người nhận ca tra lại bằng tài khoản của mình, xác nhận đang ở đúng kho và đối chiếu lượng đã giao, còn giữ hoặc cần thu. Nếu hai bên thấy số khác nhau, đối chiếu thời điểm và từng phiếu trước khi sửa dữ liệu. [Xem ví dụ đối soát](hdpi.md).
