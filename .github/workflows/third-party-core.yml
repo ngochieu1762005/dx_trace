@@ -5,6 +5,8 @@ on:
     paths:
       - 'selfhost/compose.yaml'
       - 'selfhost/compose.third-party.yaml'
+      - 'selfhost/compose.sso-test.yaml'
+      - 'selfhost/scripts/*sso*'
       - 'lib/**'
       - 'apps/model-portal/**'
       - 'drizzle/**'
@@ -43,11 +45,14 @@ jobs:
         run: |
           umask 077
           printf '%s\n' APP_HOST=app.example.invalid ID_HOST=id.example.invalid > .env
-          for key in DB_PASSWORD ADMIN_PASSWORD OIDC_CLIENT_SECRET COOKIE_SECRET DX_CORE_TOKEN DX_GATEWAY_APP_TOKEN DX_FLOWABLE_DB_PASSWORD DX_FLOWABLE_API_PASSWORD; do
+          for key in DB_PASSWORD ADMIN_PASSWORD OIDC_CLIENT_SECRET DX_CORE_TOKEN DX_GATEWAY_APP_TOKEN DX_FLOWABLE_DB_PASSWORD DX_FLOWABLE_API_PASSWORD; do
             value="$(openssl rand -hex 32)"
             echo "::add-mask::$value"
             printf '%s=%s\n' "$key" "$value" >> .env
           done
+          cookie_value="$(openssl rand -base64 32 | tr '+/' '-_')"
+          echo "::add-mask::$cookie_value"
+          printf 'COOKIE_SECRET=%s\n' "$cookie_value" >> .env
       - name: Set up Node for governance checks
         uses: actions/setup-node@v4
         with:
@@ -63,6 +68,12 @@ jobs:
           docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml up -d --build core gateway-api flowable
       - name: Exercise real gateway and BPMN engine
         run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test run --rm migration-smoke
+      - name: Verify three portals through real Keycloak and OAuth2 Proxy sessions
+        run: |
+          python3 -m venv "$RUNNER_TEMP/sso-venv"
+          "$RUNNER_TEMP/sso-venv/bin/pip" -q install PyYAML==6.0.3
+          "$RUNNER_TEMP/sso-venv/bin/python" scripts/prepare-sso-test.py
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.sso-test.yaml --profile migration-test run --rm sso-smoke
       - name: Container status on failure
         if: failure()
         run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml ps -a
@@ -72,4 +83,5 @@ jobs:
           if test -f .env; then
             docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml down -v --remove-orphans
             rm -f .env
+            rm -rf .sso-test
           fi

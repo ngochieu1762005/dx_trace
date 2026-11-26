@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+# Reuse the production routing and header sanitization with an ephemeral CA.
+https://app.example.invalid, https://id.example.invalid {
+ tls /run/test-tls/server.crt /run/test-tls/server.key
+ @identity host id.example.invalid
+ handle @identity {
+  reverse_proxy identity:8080
+ }
+ handle {
+  request_header -X-Forwarded-User
+  request_header -X-Forwarded-Email
+  request_header -X-Forwarded-Groups
+  request_header -X-Forwarded-Preferred-Username
+  reverse_proxy signin:4180
+ }
+}
