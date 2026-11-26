@@ -6,7 +6,7 @@ const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8'
 test('restores locally served Google Sans and original Keycloak system fonts', () => {
   const app = read('app/globals.css');
   const landing = read('landing/assets/site.css');
-  const keycloak = read('selfhost/themes/dxtrace/login/resources/css/dxtrace-v3.css');
+  const keycloak = read('selfhost/themes/dxtrace/login/resources/css/dxtrace-v4.css');
   assert.match(app, /font-family:\s*['\"]Google Sans['\"]/);
   assert.match(landing, /font-family:Google Sans,Arial,sans-serif/);
   assert.match(keycloak, /font-family:"Segoe UI",Arial/);

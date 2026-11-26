@@ -20,4 +20,4 @@ Không có tuyên bố rằng các nhà cung cấp công nghệ tài trợ hoặ
 
 ## Ảnh kho phân phối thực phẩm
 
-Ảnh trang giới thiệu chụp tại Houston Food Bank ngày 22 tháng 9 năm 2017, do Lance Cheung thực hiện cho USDA. Bản gốc mang dấu Public Domain. Dự án thu nhỏ và chuyển ảnh sang WebP để phục vụ từ máy chủ của mình. [Ảnh và thông tin tác giả](https://commons.wikimedia.org/wiki/File:20170922-OSEC-LSC-0294_(36665189353).jpg)
+Ảnh trên trang giới thiệu và trang đăng nhập chụp tại Houston Food Bank ngày 22 tháng 9 năm 2017, do Lance Cheung thực hiện cho USDA. Bản gốc mang dấu Public Domain. Dự án thu nhỏ và chuyển ảnh sang WebP để phục vụ từ máy chủ của mình. [Ảnh và thông tin tác giả](https://commons.wikimedia.org/wiki/File:20170922-OSEC-LSC-0294_(36665189353).jpg)
