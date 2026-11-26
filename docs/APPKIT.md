@@ -1,5 +1,18 @@
 # Declarative application kit (v1)
 
+## Package SDK và CLI cho lập trình viên
+
+Một gói có `app.yaml`, các file JSON ở `schemas/` và BPMN ở `workflows/`. Dùng `import {loadPackage} from './tools/app-cli.mjs'` để đọc gói và `compilePackage(input)` từ `lib/app-package.mjs` để kiểm tra offline. API install/upgrade nhận cùng object `{manifest,files}`; Core tự kiểm lại. [Gói mẫu](../examples/maintenance/app.yaml) · [Bảy lệnh CLI](demo-guide.md)
+
+- `metadata.name` gồm 1–16 chữ thường và chữ số, bắt đầu bằng chữ. Dùng phiên bản số major.minor.patch; `spec.requiresCore` nhận khoảng đóng–mở như `>=0.0.7 <1.0.0`.
+- Mỗi schema dùng định dạng record model của DX-TRACE gồm name, fields, permissions. Tên file là resource ID. Mỗi BPMN cùng tên khai báo quy trình của resource đó. Các định nghĩa đã kiểm được cài vào workflow engine model. [Tập con BPMN](BPMN.md)
+- Quyền được đặt trong phạm vi gói. Read cho phép đọc theo role và scope của schema; create cho phép tạo/sửa theo role; approve kích hoạt các transition theo role, điều kiện, người tạo và phiên bản hồ sơ. Create và approve bao hàm quyền xem cần thiết. Endpoint dữ liệu dùng ID `pkg_<app>_<resource>`.
+- Mỗi app có một route `/<name>`. Core đăng ký theo workspace. Frontend tra cứu route qua APISIX, sau đó APISIX chuyển yêu cầu UI sang mạng portal. `model-portal` dùng trình hiển thị chung; `<name>-portal` dùng service riêng do operator đặt trên mạng Compose `portals`, trả HTML từ `GET /` ở cổng 8094. Mã HTML phải tuân theo CSP cùng origin. Gói bảo trì dùng một service độc lập và script form chung. Cài manifest cho các service đã provision không cần sửa cấu hình gateway hoặc khởi động lại Core. Chế độ loopback dùng renderer có sẵn.
+- API owner: GET /api/packages, GET /api/packages/{name}/status, POST /api/packages/{name}/{install,upgrade,rollback,uninstall}. Gửi revision từ status. Trạng thái chưa từng cài có revision 0. Sau lỗi mất kết nối đọc status trước khi thử lại. Snapshot, quyền, route và ledger cùng được commit. Phạm vi schema ổn định suốt vòng đời; thay đổi không tương thích dữ liệu hoặc workflow đang chạy bị từ chối. Gỡ app giữ dữ liệu và quyền sở hữu schema, sau đó cài lại để truy cập.
+- Chạy CLI trực tiếp bằng `node tools/dxtrace.mjs app …` hoặc dùng `dxtrace` trong bin của bản cài. Công cụ lint/catalog/openapi và các API DeclarativeApplication, ApplicationBundle hiện hữu tiếp tục hoạt động.
+
+
+
 DX-TRACE supports **versioned, declarative applications** that reuse the
 existing authenticated Core API, forms, record store, roles and workflow
 runtime. A manifest carries validated business schema and policy; installing

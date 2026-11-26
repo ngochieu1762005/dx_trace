@@ -19,6 +19,11 @@ const tables={
  platform_records:['workspace','model','id','actor','status','updated','due_at','payload'],
  platform_commands:['workspace','key','actor','fingerprint','result','created']
 };
+const optionalTables={
+ app_packages:['workspace','name','revision','active','versions'],
+ app_package_models:['workspace','model','package','archived'],
+ native_review_requests:['workspace','business_key','fingerprint','creator','reference','instance_id']
+};
 const integer=new Set(['expires','active','revision','seq','attempts','next_attempt','last_status']);
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const ident=s=>'"'+s+'"';
@@ -35,7 +40,7 @@ function sqlValue(value,column){
 const rowDigest=(row,columns)=>sha(columns.map(c=>row[c]===null?'-':hex(String(row[c]))).join(':'));
 const pgDigest=columns=>"encode(sha256(convert_to("+columns.map(c=>"COALESCE(encode(convert_to("+ident(c)+"::text,'UTF8'),'hex'),'-')").join("||':'||")+",'UTF8')),'hex')";
 function schema(){
- return ['0000_watery_mad_thinker.sql','0001_sensor_history.sql','0002_audit_ledger.sql','0003_platform_records.sql']
+ return ['0000_watery_mad_thinker.sql','0001_sensor_history.sql','0002_audit_ledger.sql','0003_platform_records.sql','0004_app_packages.sql']
   .map(name=>readFileSync(new URL('../drizzle/'+name,import.meta.url),'utf8')
     .replace(/^\s*--.*$/gm,'').replaceAll('`','"').replace(/\binteger\b/gi,'BIGINT')).join('\n');
 }
@@ -69,8 +74,9 @@ export function writePostgresExport(backup,out){
   const emit=s=>writeFileSync(fd,s);
   emit('-- DX-TRACE migration; contains private application data.\nBEGIN;\nCREATE SCHEMA dxtrace_import;\nSET LOCAL search_path TO dxtrace_import, pg_catalog;\n'+schema()+'\n');
   const report={schema:'dxtrace_import',tables:{}};
-  for(const [table,columns] of Object.entries(tables)){
+  for(const [table,columns] of Object.entries({...tables,...optionalTables})){
    const actual=db.prepare('PRAGMA table_info('+ident(table)+')').all().map(c=>c.name);
+   if(!actual.length&&Object.hasOwn(optionalTables,table))continue; // Pre-AppKit backup.
    if(actual.length!==columns.length||columns.some(c=>!actual.includes(c)))throw Error('Unexpected source schema: '+table);
    const stmt=db.prepare('SELECT '+columns.map(ident).join(',')+' FROM '+ident(table));
    stmt.setReadBigInts(true);

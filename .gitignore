@@ -34,3 +34,6 @@ __pycache__/
 
 # Third-party OIDC client allowlist (operator controlled; never commit)
 selfhost/external-clients.json
+
+# Ephemeral CI realm and TLS material
+selfhost/.sso-test/

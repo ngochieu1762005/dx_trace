@@ -1,4 +1,4 @@
-/* DX-TRACE | Inventory view regression tests. SPDX-License-Identifier: MIT.
+/* DX-TRACE | Inventory view regression tests. SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */
 import test from 'node:test';
 import assert from 'node:assert/strict';

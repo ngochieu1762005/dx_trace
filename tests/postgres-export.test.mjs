@@ -42,6 +42,16 @@ test('export verifies source, protects output and preserves bigint/null/UTF-8',t
  const failed=join(dir,'failed.sql');assert.throws(()=>writePostgresExport(dir,failed),/Audit chain/);
  assert.equal(existsSync(failed),false);
 });
+test('export preserves AppKit ownership, archived data and Flowable bindings',t=>{
+ const dir=fixture(t),db=new DatabaseSync(join(dir,'warehouse.sqlite'));
+ db.exec(readFileSync(new URL('../drizzle/0004_app_packages.sql',import.meta.url),'utf8'));
+ db.prepare('INSERT INTO app_packages VALUES(?,?,?,?,?)').run('ws-1','maintenance',2,0,'[]');
+ db.prepare('INSERT INTO app_package_models VALUES(?,?,?,?)').run('ws-1','pkg_maintenance_asset','maintenance','{}');
+ db.prepare('INSERT INTO native_review_requests VALUES(?,?,?,?,?,?)').run('ws-1','bk','fp','creator','INC-1','process-1');
+ db.close();
+ const report=writePostgresExport(dir,join(dir,'appkit.sql'));
+ for(const table of ['app_packages','app_package_models','native_review_requests'])assert.equal(report.tables[table].rows,1);
+});
 test('real PostgreSQL import verifies all tables and rejects repeated import or tampering',
  {skip:!process.env.DX_TEST_POSTGRES_CONTAINER},t=>{
  const dir=fixture(t),out=join(dir,'export.sql');writePostgresExport(dir,out);

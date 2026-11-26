@@ -8,6 +8,7 @@ import {PlatformError} from './platform.mjs';
 const fail=(message:string,status=422)=>{throw new PlatformError(message,status)};
 async function load(c:any,bundle:any){
   const defs=bundleDefinitions(bundle);
+  if(defs.some(d=>q('SELECT 1 FROM app_package_models WHERE workspace=? AND model=?',c.workspace,d.id).first()))fail('Use the owning package lifecycle',409);
   const all=await models(c);
   const records=(await q('SELECT payload FROM platform_records WHERE workspace=? AND model IN ('+
     defs.map(()=>'?').join(',')+')',c.workspace,...defs.map(d=>d.id)).all()).results.map((r:any)=>JSON.parse(r.payload));

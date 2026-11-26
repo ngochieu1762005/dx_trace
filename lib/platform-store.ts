@@ -47,6 +47,7 @@ async function changePlatformUnlocked(c:any,cmd:string,b:any,key:string){
   const prior=await q('SELECT * FROM platform_commands WHERE workspace=? AND key=?',c.workspace,key).first();
   if(prior){if(prior.fingerprint!==fingerprint||prior.actor!=='*'&&prior.actor!==who)fail('Mã yêu cầu đã được sử dụng',409);return JSON.parse(prior.result)}
   const all=await models(c);
+  if(cmd==='platform.apply' && q('SELECT 1 FROM app_package_models WHERE workspace=? AND model=?',c.workspace,b.definition?.id||'').first()) fail('Use the owning package lifecycle',409);
   const records=cmd==='platform.apply'?(await q('SELECT payload FROM platform_records WHERE workspace=? AND model=?',c.workspace,b.definition?.id||'').all()).results:cmd==='platform.create'?[]:(await q('SELECT payload FROM platform_records WHERE workspace=? AND model=? AND id=?',c.workspace,b.model,b.id||'').all()).results;
   const state={models:all,records:records.map((r:any)=>JSON.parse(r.payload))};
   const now=new Date().toISOString(),result=applyPlatform(state,cmd,b,{...actor(c),now,entity});

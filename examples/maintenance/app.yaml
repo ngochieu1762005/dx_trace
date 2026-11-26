@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: MIT
+apiVersion: dxtrace.io/v1
+kind: Application
+metadata:
+  name: maintenance
+  version: 1.0.0
+spec:
+  requiresCore: ">=0.0.7 <1.0.0"
+  permissions:
+    - asset:read
+    - asset:create
+    - maintenance:read
+    - maintenance:create
+    - maintenance:approve
+  workflows:
+    - workflows/maintenance.bpmn
+  schemas:
+    - schemas/maintenance.json
+    - schemas/asset.json
+  routes:
+    - path: /maintenance
+      service: maintenance-portal
+  audit:
+    enabled: true

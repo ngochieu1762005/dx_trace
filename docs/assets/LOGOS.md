@@ -1,17 +1,7 @@
-# Nguồn biểu trưng trong sơ đồ
+# Tài sản trong sơ đồ
 
-React, Vite, Docker, PostgreSQL, Node.js và SQLite dùng hình SVG từ [Devicon](https://github.com/devicons/devicon/tree/master/icons). [Giấy phép bộ biểu tượng](DEVICON-LICENSE.txt).
+Các biểu tượng React, Vite, Docker, PostgreSQL, Node.js, SQLite, Git, GitHub Actions và pnpm được lấy từ bộ Devicon. Bản phân phối giữ nguyên [thông báo MIT của Devicon](DEVICON-LICENSE.txt). [Kho nguồn Devicon](https://github.com/devicons/devicon/tree/master/icons)
 
-- [Caddy](https://github.com/caddyserver/website/blob/master/src/old/resources/images/caddy-logo.svg)
-- [Keycloak](https://www.keycloak.org/resources/images/icon.svg)
-- [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy/blob/master/docs/static/img/logos/OAuth2_Proxy_icon.svg)
+Những sơ đồ nhắc đến Caddy, Keycloak, OAuth2 Proxy, Open Food Facts và Groq sử dụng ký hiệu chức năng do DX-TRACE vẽ (định tuyến, đăng nhập, xác thực, thông tin hàng hóa và xử lý). Tên sản phẩm dùng để nhận diện công nghệ; nhãn hiệu thuộc chủ sở hữu tương ứng.
 
-Các biểu trưng nhận diện công nghệ thuộc về chủ sở hữu tương ứng.
-
-Git, GitHub Actions và pnpm sử dụng SVG của Devicon. Biểu trưng Open Food Facts lấy từ [kho nguồn chính thức](https://github.com/openfoodfacts/openfoodfacts-server/blob/main/html/images/logos/off-logo-horizontal-light.svg); biểu trưng Groq lấy từ [Lobe Icons](https://github.com/lobehub/lobe-icons/blob/master/packages/static-svg/icons/groq.svg). Các ký hiệu quét mã, đầu dò, kiểm dịch, kho tệp và nghiệp vụ là pictogram của sơ đồ DX-TRACE.
-
-## Phạm vi sử dụng
-
-Biểu trưng chỉ nhận diện công nghệ, không ngụ ý chứng nhận hoặc tài trợ. Các SVG kiến trúc cũ trong thư mục là tài sản lịch sử; kiến trúc hiện hành xem [README](../../README.md#architecture) và [Headless Core](../HEADLESS-CORE.md). Không dùng hình cũ để suy ra số dịch vụ hay ứng dụng hiện có.
-
-Hai bản sơ đồ hiện hành `architecture-current.svg` và `architecture-current-en.svg` tái sử dụng các logo nhúng đã được ghi nguồn trong tài liệu này (React, Caddy, Keycloak, OAuth2 Proxy, PostgreSQL, Node.js). Các khối và đường nối do dự án trình bày; logo không thể hiện bảo trợ hoặc chứng nhận.
+Khối, mũi tên, ký hiệu nghiệp vụ và cách trình bày của DX-TRACE áp dụng [MIT](../../LICENSE). Phạm vi triển khai hiện hành được mô tả trong [kiến trúc](../architecture.md).

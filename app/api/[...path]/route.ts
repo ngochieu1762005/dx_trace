@@ -48,6 +48,8 @@ const manager=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new Domai
 import {models as storedModels,plan as modelPlan,queryRecords,changePlatform,profileModel} from '../../../lib/platform-store.ts';
 import {escalateQuality} from '../../../lib/quality-bridge.ts';
 import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
+import {qualityRecall} from '../../../lib/quality-recall.ts';
+import {packages,portal,portalLinks} from '../../../lib/package-store.ts';
 import {nativeReview} from '../../../lib/native-review.ts';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
@@ -58,9 +60,17 @@ async function route(req:Request){try{
   const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='quality-recalls')return json(await qualityRecall(c,req,key,action));
+ if(kind==='packages')return json(await packages(c,req,key,action));
+ if(kind==='portals'&&key&&!action&&req.method==='GET')return json(portal(c,key));
  if(kind==='flowable-review')return json(await nativeReview(c,req,key,action));
  if(kind==='quality'&&action==='escalate'&&req.method==='POST'){
-  return json(await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||''));
+  const result=await escalateQuality(c,key,await req.json(),req.headers.get('idempotency-key')||'');
+  if(result.flowable){
+   try{await qualityRecall(c,req,result.incident,'sync');}
+   catch(error){if(error instanceof PlatformError)return json({...result,workflowPending:true,workflowMessage:error.message},202);throw error;}
+  }
+  return json(result);
  }
  if(kind==='catalog'&&req.method==='GET'){
   if(!key)return json({models:buildCatalog(await storedModels(c),c.role)});
@@ -114,7 +124,8 @@ async function route(req:Request){try{
     }});
    }
    const params=new URL(req.url).searchParams;if(key)params.set('model',key);
-   return json(await queryRecords(c,params));
+   const view=await queryRecords(c,params);
+   return json({...view,portals:portalLinks(c,view.models)});
   }
   if(req.method!=='POST')throw new DomainError('Phương thức không hỗ trợ',405);
   const body:any=await req.json();

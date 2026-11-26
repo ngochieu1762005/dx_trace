@@ -46,11 +46,12 @@ async function visible(c:any,id:string){
 async function view(c:any,id:string){
  const row=await visible(c,id),history=await lookup(c,row.business_key);
  if(!history||history.id!==id)fail(503,'Workflow history not available');
+ const who=await actor(c);
  const tasks=history.endTime?[]:(await query('/runtime/tasks',{processInstanceId:id,size:'20'})).data;
  return {id,reference:row.reference,status:history.endTime?'ended':'running',endedAt:history.endTime||null,
-  outcome:history.endActivityId||null,tasks:tasks.filter((t:any)=>roles[t.taskDefinitionKey]?.includes(c.role)).map((t:any)=>({id:t.id,step:t.taskDefinitionKey,name:t.name,assigned:!!t.assignee})),engine:'Flowable OSS'};
+  outcome:history.endActivityId||null,tasks:tasks.filter((t:any)=>roles[t.taskDefinitionKey]?.includes(c.role)).map((t:any)=>({id:t.id,step:t.taskDefinitionKey,name:t.name,assigned:!!t.assignee,canComplete:row.creator!==who&&(!t.assignee||t.assignee===who)})),engine:'Flowable OSS'};
 }
-export async function nativeReview(c:any,req:Request,key:string,action:string){
+export async function nativeReview(c:any,req:Request,key:string,action:string,recall?:{incident:string,reporter:string}){
  if(!['owner','manager','warehouse'].includes(c.role))fail(403,'Review access denied');base();
  if(req.method==='GET'&&key&&!action)return view(c,key);
  if(req.method!=='POST')return fail(404,'Unknown review route');
@@ -60,7 +61,9 @@ export async function nativeReview(c:any,req:Request,key:string,action:string){
    const idem=req.headers.get('idempotency-key')||'';
    const reference=typeof body?.reference==='string'?body.reference.trim():'';
    if(!idem||idem.length>100||!reference||reference.length>120)fail(422,'Reference and idempotency key required');
-   const who=await actor(c),businessKey=await hash(c.workspace+'\n'+who+'\n'+idem),fingerprint=await hash(reference);
+   const who=await actor(recall?{...c,id:recall.reporter}:c);
+   const businessKey=recall?await hash(JSON.stringify(['quality-recall',c.workspace,recall.incident])):await hash(c.workspace+'\n'+who+'\n'+idem);
+   const fingerprint=await hash(reference);
    const row:any=await q('SELECT * FROM native_review_requests WHERE workspace=? AND business_key=?',c.workspace,businessKey).first();
    if(row){
     if(row.fingerprint!==fingerprint)fail(409,'Idempotency key reused with different input');

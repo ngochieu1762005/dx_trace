@@ -68,6 +68,48 @@ function showDecision(record, edge) {
   el('decision-reason').required = !!edge.reasonRequired;
   el('decision').showModal();
 }
+function recallPanel(incident) {
+  const panel=document.createElement('section');
+  const load=line('button','Tác vụ thu hồi · Flowable','secondary');
+  load.type='button';panel.append(load);
+  const details=document.createElement('div');panel.append(details);
+  const path='/api/quality-recalls/'+encodeURIComponent(incident.id);
+  async function show(){
+    load.disabled=true;
+    try{
+      const result=await api(path);
+      details.replaceChildren();
+      const workflow=result.workflow;
+      if(!workflow || (workflow.status==='ended'&&!result.outcome)){
+        const sync=line('button','Đồng bộ với Flowable','secondary');
+        sync.onclick=async()=>{sync.disabled=true;try{await api(path+'/sync',{});await show();}catch(e){notice(e.message,true);}finally{sync.disabled=false;}};
+        details.append(sync);return;
+      }
+      if(workflow.status==='ended'){
+        details.append(line('p',result.outcome==='accepted'?'Đã phê duyệt thu hồi.':'Phương án thu hồi bị từ chối. Lô vẫn cách ly.'));return;
+      }
+      if(!workflow.tasks.length)details.append(line('p','Đang chờ bước tiếp theo. Bấm Tác vụ thu hồi để tải lại.'));
+      const labels={quality:'Thẩm định chất lượng',inventory:'Xác minh tồn kho',approval:'Phê duyệt thu hồi'};
+      for(const task of workflow.tasks){
+        details.append(line('p',labels[task.step]||task.name));
+        if(!task.canComplete)continue;
+        for(const approved of [true,false]){
+          const button=line('button',approved?'Đồng ý':'Từ chối','secondary');
+          button.onclick=async()=>{
+            const reason=prompt('Ghi lý do quyết định (tối đa 500 ký tự)')?.trim();
+            if(!reason)return;
+            button.disabled=true;
+            try{await api(path+'/complete',{taskId:task.id,approved,reason});await show();}
+            catch(e){notice(e.message,true);}finally{button.disabled=false;}
+          };
+          details.append(button);
+        }
+      }
+    }catch(e){notice(e.message,true);}finally{load.disabled=false;}
+  }
+  load.onclick=show;
+  return panel;
+}
 function drawRecord(record) {
   const article = document.createElement('article');
   article.className = 'record';
@@ -101,6 +143,8 @@ function drawRecord(record) {
   const lot=state.lots.find(item=>item.code===record.data.lot);
   if(record.warehouseIncident){
     article.append(line('p','Đã liên kết sự cố '+record.warehouseIncident.id,'linked'));
+    const incident=state.incidents?.find(item=>item.id===record.warehouseIncident.id);
+    if(incident?.review && ['owner','manager','warehouse'].includes(state.me.role))article.append(recallPanel(incident));
     const link=line('a','Xem sự cố trong kho →');
     link.href=areaPath('/#incidents/'+record.warehouseIncident.id);actions.append(link);
   }else if(record.status==='rejected'&&['owner','manager'].includes(state.me.role)){
@@ -146,7 +190,7 @@ async function refresh() {
   const query=new URLSearchParams({limit:'25',offset:String(state.offset),q:el('query').value.trim(),status:el('status-filter').value});
   const [view,session]=await Promise.all([api('/api/models/quality/records?'+query),api('/api/state')]);
   if(generation!==state.generation)return;
-  state.me=session.me;state.lots=session.lots;
+  state.me=session.me;state.lots=session.lots;state.incidents=session.incidents;
   const selected=el('lot').value;el('lot').replaceChildren(line('option','Chọn lô hàng'));el('lot').firstChild.value='';
   for(const lot of state.lots){const option=line('option',lot.code+' · '+lot.product);option.value=lot.code;el('lot').append(option);}
   el('lot').value=selected;
@@ -226,10 +270,11 @@ el('decision-form').addEventListener('submit',async(event)=>{
   if((escalate||edge.reasonRequired)&&!reason){el('decision-error').textContent='Cần ghi rõ lý do.';return;}
   const submit=event.currentTarget.querySelector('button[type=submit]');submit.disabled=true;
   try{
-    if(escalate)await api('/api/quality/'+record.id+'/escalate',{version:record.version,lot:lot.id,reason,severity:el('severity').value});
+    let escalation;
+    if(escalate)escalation=await api('/api/quality/'+record.id+'/escalate',{version:record.version,lot:lot.id,reason,severity:el('severity').value});
     else await api('/api/models/quality/transition',{id:record.id,version:record.version,target:edge.to,reason});
     state.pending=null;el('decision').close();await refresh();
-    notice(escalate?'Đã liên kết sự cố; lô bị chặn xuất.':'Đã cập nhật kết quả thẩm định.');
+    notice(escalation?.workflowPending?'Lô đã cách ly. Mở Tác vụ thu hồi để đồng bộ với Flowable.':escalate?'Đã liên kết sự cố; lô bị chặn xuất.':'Đã cập nhật kết quả thẩm định.');
   }catch(error){el('decision-error').textContent=error.message;notice(error.message,true);}
   finally{submit.disabled=false;}
 });

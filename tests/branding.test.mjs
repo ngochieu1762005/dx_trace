@@ -1,4 +1,4 @@
-// DX-TRACE brand and font regression tests. SPDX-License-Identifier: MIT.
+// DX-TRACE brand and font regression tests. SPDX-License-Identifier: MIT
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';

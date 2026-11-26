@@ -6,6 +6,22 @@ consumers:
       key-auth:
         key: "${{DX_GATEWAY_APP_TOKEN}}"
 routes:
+  - id: appkit-ui
+    uri: /appkit-ui/*
+    methods: [GET]
+    vars:
+      - [http_x_dx_core_token, "~~", ".+"]
+    plugins:
+      key-auth:
+        header: x-dx-core-token
+        hide_credentials: true
+      proxy-rewrite:
+        headers:
+          remove: [Cookie, Authorization, X-Forwarded-User, X-Forwarded-Email, X-Dx-Core-Token]
+    upstream:
+      type: roundrobin
+      nodes:
+        "model-portal:8094": 1
   - id: core
     uri: /api/*
     methods: [GET, POST]

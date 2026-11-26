@@ -83,7 +83,7 @@ async function changeUnlocked(c:any,cmd:string,b:any,key:string){
   out.state.requests[key]={fingerprint,result:out.result};const keys=Object.keys(out.state.requests);while(keys.length>600)delete out.state.requests[keys.shift()!];
   const last:any=await q('SELECT hash FROM audit_ledger WHERE workspace=? ORDER BY seq DESC LIMIT 1',c.workspace).first();
   const previousHash=last?.hash||'0'.repeat(64),created=new Date().toISOString();
-  const payload=JSON.stringify({action:cmd,actor:c.email||c.name,entity:out.result.id,created});
+  const payload=JSON.stringify({action:cmd,actor:c.email||c.name,entity:out.result.id,created,...(cmd.startsWith('quality.')?{quality:b}:{})});
   const digest=await hash(previousHash+'\n'+(r.revision+1)+'\n'+payload);
   const ledger=q('INSERT INTO audit_ledger(workspace,seq,previous,hash,payload,created) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',c.workspace,r.revision+1,previousHash,digest,payload,created,c.workspace,r.revision);
   const revisionUpdate=()=>q('UPDATE workspaces SET state=?,revision=revision+1 WHERE id=? AND revision=?',JSON.stringify(out.state),c.workspace,r.revision);

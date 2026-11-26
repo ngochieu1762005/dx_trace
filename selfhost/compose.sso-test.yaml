@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: MIT
+# Disposable CI only. Workstation and production use the normal gateway.
+services:
+  gateway:
+    ports: !reset []
+    volumes:
+      - ./scripts/sso-test.Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./.sso-test/tls:/run/test-tls:ro
+    networks:
+      edge:
+        aliases: [app.example.invalid, id.example.invalid]
+      appnet: {}
+  identity:
+    volumes:
+      - ./.sso-test/warehouse.json:/opt/keycloak/data/import/warehouse.json:ro
+  signin:
+    environment:
+      OAUTH2_PROXY_PROVIDER_CA_FILES: /run/test-ca.crt
+    volumes:
+      - ./.sso-test/tls/server.crt:/run/test-ca.crt:ro
+  sso-smoke:
+    profiles: [migration-test]
+    image: python:3.13-alpine
+    volumes:
+      - ./scripts/sso-smoke.py:/checks/sso-smoke.py:ro
+      - ./.sso-test/tls/server.crt:/checks/ca.crt:ro
+      - ./.sso-test/users.json:/checks/users.json:ro
+      - ../examples/maintenance:/checks/package:ro
+      - ./.sso-test/manifest.json:/checks/manifest.json:ro
+    command: ["python","/checks/sso-smoke.py"]
+    networks: [edge]
+    depends_on: [gateway, signin, identity]

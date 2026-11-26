@@ -4,6 +4,11 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+- AppKit nhận gói Application YAML, schema và BPMN. CLI hỗ trợ init, validate, install, list, upgrade, rollback và uninstall. Demo bảo trì dùng hai loại hồ sơ và portal cùng SSO.
+- Luồng quality-recalls cách ly lô ngay khi báo cáo không đạt. Quyết định thu hồi được chiếu từ kết quả Flowable, có API đồng bộ lại và audit liên kết instance.
+- Các sơ đồ dùng ký hiệu chức năng tự vẽ cho năm công nghệ, giữ thông báo MIT cho bộ icon Devicon.
+- Thêm REUSE, hồ sơ PoF và kiểm thử đúng tar.gz sau khi xóa thư mục nguồn giải nén.
+
 - APISIX mặc định trong Compose; overlay Flowable thực thi thẩm định độc lập, không chuyển workflow cũ.
 - AppKit Supplier Review, xuất dữ liệu lạnh có checksum, lineage cảm biến và kiểm topology. CI tích hợp PR #35 đạt; chưa nghiệm thu VPS.
 - Đồng bộ tài liệu song ngữ và quy trình nâng cấp Ubuntu không cần Node trên host.

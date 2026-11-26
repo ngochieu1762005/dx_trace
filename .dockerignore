@@ -10,3 +10,5 @@ dist
 warehouse-*/
 
 selfhost/local-demo-data/
+
+selfhost/.sso-test/

@@ -37,12 +37,12 @@ export default function Platform({api,role,actor,selection=''}:any){
  <p className="muted">Nghiệp vụ mở rộng dùng chung tài khoản, quyền và nhật ký của kho hiện tại. Dữ liệu tự làm mới mỗi 30 giây.</p>
  {error&&<p role="alert" className="notice">{error}</p>}{message&&<p role="status" className="notice">{message}</p>}
  <div className="quick-actions"><div><h2>Hồ sơ cần xử lý</h2><p>{view.summary.total} hồ sơ được phép xem · {view.summary.overdue} quá hạn</p></div><button className="secondary" disabled={busy} onClick={()=>run(load)}>Làm mới</button></div>
- {view.models.some((m:any)=>m.definition.application?.uiPath)&&
+ {(view.portals?.length>0||view.models.some((m:any)=>m.definition.application?.uiPath))&&
   <section className="panel pad"><h2>Ứng dụng độc lập dùng chung DX-TRACE Core</h2>
    <p className="muted">Những ứng dụng dưới đây có giao diện riêng, nhưng sử dụng lại danh tính, phân quyền, dữ liệu, API và workflow hiện có.</p>
    <div className="actions">{view.models.filter((m:any)=>m.definition.application?.uiPath).map((m:any)=>
     <a key={m.id} className="button secondary" href={workspaceUrl(m.definition.application.uiPath,location.search)}>{m.definition.name} · Mở ứng dụng <span aria-hidden="true">↗</span></a>
-   )}</div>
+   )}{view.portals?.map((app:any)=><a key={app.path} className="button secondary" href={workspaceUrl(app.path,location.search)}>{app.name} · Mở ứng dụng <span aria-hidden="true">↗</span></a>)}</div>
   </section>}
  {model?<><details className="panel pad"><summary>Danh mục và chất lượng dữ liệu</summary>
   <p className="muted">Thống kê trên toàn bộ hồ sơ bạn được phép đọc của mô hình đang chọn; không chỉ trang hiện tại.</p>

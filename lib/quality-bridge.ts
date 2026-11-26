@@ -44,12 +44,16 @@ export async function escalateQuality(c:any,id:string,body:any,key:string){
    }else{
     state.events.unshift({id:crypto.randomUUID(),actor:who,action:command,entity:incidentId,detail:'Liên kết kiểm định '+id+' với sự cố đang mở của '+lot.code,created:now});
    }
+   const incident=state.incidents.find((item:any)=>item.id===incidentId);
+   if(!open&&process.env.DX_FLOWABLE_URL){
+    incident.review={engine:'Flowable',ticket:await hash(JSON.stringify(['quality',c.workspace,id,incidentId])),reporter:c.id,instance:null,outcome:null};
+   }
    record.warehouseIncident={id:incidentId,lot:lot.id,lotCode:lot.code,actor:who,created:now,reason};
    record.history.push({action:command,actor:who,created:now,incident:incidentId,reason});
    record.version++;record.updated=now;
    const content=JSON.stringify(record),warehouseContent=JSON.stringify(state);
    if(Buffer.byteLength(content)>524288||warehouseContent.length>1800000)fail('Dữ liệu vượt giới hạn lưu trữ',422);
-   const result={id,version:record.version,incident:incidentId,lot:lot.id,reused:!!open};
+   const result={id,version:record.version,incident:incidentId,lot:lot.id,reused:!!open,...(incident.review?{flowable:true}:{})};
    const previous=(await q('SELECT hash FROM audit_ledger WHERE workspace=? ORDER BY seq DESC LIMIT 1',c.workspace).first())?.hash||'0'.repeat(64);
    const payload=JSON.stringify({action:command,actor:who,entity:id,incident:incidentId,lot:lot.id,reason,created:now});
    const digest=await hash(previous+'\n'+(revision+1)+'\n'+payload);

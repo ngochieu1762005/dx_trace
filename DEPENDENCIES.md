@@ -74,3 +74,5 @@ python3 -m unittest discover -s tests -p '*_test.py'
 ```
 
 Khi thêm/nâng gói: ghi mục đích, cập nhật package và lockfile cùng nhau, đọc giấy phép của phiên bản chọn, kiểm thử phần bị ảnh hưởng và cập nhật hai danh mục phụ thuộc. Khi đổi image, kiểm cả container và hướng dẫn migration/rollback. CI trên nhánh sau v0.0.6 có pipeline tạo **SPDX SBOM từ dependency đã cài** và kiểm định định dạng, bên cạnh kiểm dấu hiệu bí mật. Xem [quy trình supply chain](docs/SUPPLY-CHAIN.md). Chưa có kiểm toán tương thích giấy phép toàn bộ thư viện, CVE đầy đủ hoặc SBOM cho từng container.
+
+CLI AppKit dùng yaml 2.8.2 (ISC) để đọc manifest của extension. [Bảng đối chiếu giấy phép](docs/dependency-licenses.md).

@@ -31,6 +31,7 @@
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 const origin=new URL(process.env.PUBLIC_ORIGIN).origin;
 const localDemo = process.env.DX_LOCAL_DEMO === '1';
 const coreUrl = process.env.DX_CORE_URL;
@@ -57,7 +58,7 @@ if (qualityOrigin && (qualityOrigin.protocol !== 'http:' ||
     qualityOrigin.search || qualityOrigin.hash)) {
  throw new Error('DX_QUALITY_PORTAL_URL must point to the private quality-portal service');
 }
-const root=path.resolve('selfhost/generated/web');
+const root=fileURLToPath(new URL('./generated/web',import.meta.url));
 const mime={'.json':'application/json; charset=utf-8','.html':'text/html; charset=utf-8','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2'};
 createServer(async(req,res)=>{
  try{
@@ -115,6 +116,32 @@ createServer(async(req,res)=>{
      res.writeHead(503,{'cache-control':'no-store'}).end();
    }
    return;
+ }
+ // Look up the workspace route on each navigation, including after uninstall.
+ if(req.method==='GET' && /^\/[a-z][a-z0-9]{0,15}\/?$/.test(url.pathname)){
+   const name=url.pathname.split('/')[1];
+   const lookup='/api/portals/'+name+url.search;
+   let registration;
+   if(coreUrl){
+     const headers={'x-dx-core-token':process.env.DX_CORE_TOKEN};
+     for(const field of ['x-forwarded-user','x-forwarded-email'])if(typeof req.headers[field]==='string')headers[field]=req.headers[field];
+     registration=await fetch(new URL(lookup,coreUrl),{headers,redirect:'error',signal:AbortSignal.timeout(5000)});
+   }else{
+     const subject=req.headers['x-forwarded-user'],email=req.headers['x-forwarded-email'];
+     const user=localDemo?{userId:'demo:local',email:'demo@localhost.invalid',displayName:'Quản lý kho mẫu'}:
+       subject&&email?{userId:'oidc:'+subject,email,displayName:email}:null;
+     registration=await localBackend.identity.run(user,()=>localBackend.GET(new Request(new URL(lookup,origin))));
+   }
+   if(!registration.ok){res.writeHead(registration.status,{'cache-control':'no-store'}).end();return;}
+   const {route}=await registration.json();
+   let html;
+   if(coreUrl){
+     const page=await fetch(new URL('/appkit-ui/'+route.service,coreUrl),{headers:{'x-dx-core-token':process.env.DX_CORE_TOKEN},redirect:'error',signal:AbortSignal.timeout(5000)});
+     if(!page.ok){res.writeHead(503).end();return;}
+     html=await page.text();
+   }else html=await readFile(new URL('../apps/model-portal/index.html',import.meta.url));
+   res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff',
+     'content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"}).end(html);return;
  }
  if(url.pathname.startsWith('/api/')){
  if(!['GET','POST'].includes(req.method)){res.writeHead(405).end();return}

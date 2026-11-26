@@ -1,4 +1,4 @@
-/* DX-TRACE | Product navigation. SPDX-License-Identifier: MIT. */
+/* DX-TRACE | Product navigation. SPDX-License-Identifier: MIT */
 const menu = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#site-nav');
 

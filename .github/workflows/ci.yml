@@ -66,6 +66,12 @@ jobs:
           node-version: 24
       - run: npm install --global pnpm@11.25.0
       - run: pnpm install --frozen-lockfile
+      - name: Validate per-file SPDX licensing
+        run: pipx run --spec reuse==6.3.0 reuse lint
+      - name: Exercise a clean source archive and installed runtime
+        run: |
+          git archive --format=tar.gz --prefix=DX-TRACE/ -o "$RUNNER_TEMP/source.tar.gz" HEAD
+          bash scripts/verify-release.sh "$RUNNER_TEMP/source.tar.gz"
       - name: Check tracked source for leaked credentials
         run: node tools/check-secrets.mjs
       - name: Validate standalone portal JavaScript syntax

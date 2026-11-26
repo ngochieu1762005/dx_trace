@@ -1,0 +1,31 @@
+version = 1
+
+[[annotations]]
+path = ["**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 DX-TRACE contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["**/*.woff2", "**/fonts/LICENSE.txt", "public/fonts/google-sans/LICENSE.txt"]
+precedence = "override"
+SPDX-FileCopyrightText = "2017 Google, Inc."
+SPDX-License-Identifier = "OFL-1.1"
+
+[[annotations]]
+path = ["**/food-distribution.webp"]
+precedence = "override"
+SPDX-FileCopyrightText = "2017 Lance Cheung, USDA"
+SPDX-License-Identifier = "LicenseRef-US-Government-Work"
+
+[[annotations]]
+path = ["docs/assets/DEVICON-LICENSE.txt"]
+precedence = "override"
+SPDX-FileCopyrightText = "2015 konpa"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["docs/assets/architecture*.svg", "docs/assets/project-overview.svg", "docs/assets/delivery.svg", "docs/assets/recall-flow.svg", "docs/assets/barcode-flow.svg"]
+precedence = "override"
+SPDX-FileCopyrightText = ["2026 DX-TRACE contributors", "2015 konpa and Devicon contributors"]
+SPDX-License-Identifier = "MIT"
