@@ -1,0 +1,175 @@
+/* DX-TRACE | Keycloak login theme. SPDX-License-Identifier: MIT. */
+:root {
+  color-scheme: light;
+  --dx-paper: #fafbf8;
+  --dx-ink: #192b38;
+  --dx-blue: #185bc1;
+  --dx-line: #ccd5d6;
+}
+
+html.login-pf, .login-pf body {
+  background: var(--dx-paper);
+  color: var(--dx-ink);
+}
+
+.login-pf body {
+  height: auto;
+  margin: 0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.login-pf .login-pf-page {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-content: center;
+  width: min(100%, 1160px);
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 68px);
+}
+
+.login-pf-page #kc-header {
+  display: flex;
+  margin: 0;
+  min-height: 510px;
+  padding: 0;
+  border-radius: 12px 0 0 12px;
+  background: linear-gradient(180deg, #0c223bd9, transparent 45%, #0a1f35ed),
+    #17354d url("../img/food-distribution.webp") 50% 50% / cover no-repeat;
+  color: white;
+}
+
+.login-pf-page #kc-header-wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  padding: clamp(24px, 3.2vw, 46px);
+  text-align: start;
+  text-transform: none;
+  color: inherit;
+  white-space: normal;
+  letter-spacing: normal;
+}
+
+#kc-header-wrapper strong {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 21px;
+  letter-spacing: -.04em;
+}
+
+#kc-header-wrapper strong::before {
+  content: "";
+  width: 38px;
+  height: 38px;
+  background: url("../img/dxtrace-mark.svg") center / contain no-repeat;
+}
+
+#kc-header-wrapper span {
+  max-width: 10em;
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.login-pf-page .card-pf {
+  box-sizing: border-box;
+  align-self: stretch;
+  align-content: center;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(28px, 4vw, 64px);
+  border: 1px solid var(--dx-line);
+  border-inline-start: 0;
+  border-radius: 0 12px 12px 0;
+  background: white;
+  box-shadow: none;
+  overflow-wrap: anywhere;
+}
+
+.card-pf .login-pf-header { margin-bottom: 26px; text-align: start; }
+.card-pf h1#kc-page-title {
+  margin: 0;
+  color: var(--dx-ink);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -.045em;
+  text-align: start;
+}
+
+.card-pf #kc-locale { position: relative; inset: auto; text-align: end; }
+.card-pf .form-group { margin-bottom: 18px; }
+.card-pf .pf-c-form__label { margin-bottom: 6px; color: var(--dx-ink); }
+.card-pf .pf-c-form-control {
+  min-height: 46px;
+  border: 1px solid #9baeb6;
+  border-radius: 5px;
+  background-color: white;
+  color: var(--dx-ink);
+  font: inherit;
+}
+
+.card-pf .pf-c-input-group .pf-c-form-control { border-radius: 5px 0 0 5px; }
+.card-pf [data-password-toggle] {
+  min-width: 46px;
+  border: 1px solid #9baeb6;
+  border-left: 0;
+  border-radius: 0 5px 5px 0;
+  background: #f5f8fa;
+}
+.card-pf [data-password-toggle]::after { border: 0; }
+.card-pf .pf-c-form-control[aria-invalid="true"] { border-color: #aa3029; }
+.card-pf .login-pf-settings { flex-wrap: wrap; gap: 8px; }
+.card-pf #kc-form-buttons { margin-bottom: 0; }
+.card-pf .pf-c-button.pf-m-primary {
+  min-height: 46px;
+  border-radius: 5px;
+  background: var(--dx-blue);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+}
+.card-pf .pf-c-button.pf-m-primary:hover { background: #124a9f; }
+.card-pf :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid #3079dd;
+  outline-offset: 2px;
+  z-index: 1;
+}
+.login-pf .card-pf a { color: var(--dx-blue); }
+.card-pf #kc-info { margin: 24px 0 0; }
+.card-pf #kc-info-wrapper {
+  background: #f1f5f7;
+  padding: 14px;
+  border-radius: 5px;
+}
+
+@media (max-width: 760px) {
+  .login-pf .login-pf-page {
+    grid-template-columns: minmax(0, 1fr);
+    width: min(100%, 540px);
+    padding: 20px 14px;
+  }
+  .login-pf-page #kc-header {
+    min-height: 0;
+    border-radius: 10px 10px 0 0;
+    background-position: center, center 43%;
+  }
+  .login-pf-page #kc-header-wrapper { gap: 16px; padding: 20px 24px; }
+  #kc-header-wrapper span { font-size: 23px; max-width: none; }
+  .login-pf-page .card-pf {
+    padding: 26px 24px;
+    border: 1px solid var(--dx-line);
+    border-radius: 0 0 10px 10px;
+  }
+}
