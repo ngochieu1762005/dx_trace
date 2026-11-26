@@ -51,10 +51,11 @@ services:
     volumes:
       - ./scripts/third-party-smoke.mjs:/checks/smoke.mjs:ro
       - ./flowable/acceptance.bpmn20.xml:/checks/acceptance.bpmn20.xml:ro
+      - ../examples/maintenance:/checks/maintenance:ro
       - ../examples/supplier-review/app.json:/checks/supplier-review.json:ro
     command: ["node", "/checks/smoke.mjs"]
     networks: [appnet, workflowapi]
-    depends_on: [gateway-api, flowable]
+    depends_on: [gateway-api, flowable, model-portal, maintenance-portal]
 volumes:
   workflowdata: {}
 networks:

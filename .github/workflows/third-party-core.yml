@@ -5,7 +5,9 @@ on:
     paths:
       - 'selfhost/compose.yaml'
       - 'selfhost/compose.third-party.yaml'
-      - 'lib/native-review.ts'
+      - 'lib/**'
+      - 'apps/model-portal/**'
+      - 'drizzle/**'
       - 'selfhost/runtime.mjs'
       - 'app/api/**'
       - 'examples/**'
@@ -17,6 +19,11 @@ on:
       - 'selfhost/flowable/**'
       - 'selfhost/scripts/third-party-smoke.mjs'
       - '.github/workflows/third-party-core.yml'
+  workflow_call:
+    inputs:
+      checkout_ref:
+        type: string
+        required: false
   workflow_dispatch:
 permissions:
   contents: read
@@ -29,6 +36,8 @@ jobs:
         working-directory: selfhost
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout_ref || github.sha }}
       - name: Generate disposable credentials
         shell: bash
         run: |

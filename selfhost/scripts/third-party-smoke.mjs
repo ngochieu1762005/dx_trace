@@ -152,3 +152,46 @@ assert.ok((await api('state')).incidents.some(i=>i.lot===lot.id));
 await api('devices/'+device.id+'/revoke',owner,{});
 await send({...reading,id:randomUUID()},device.token,401);
 console.log('PASS IT/OT: per-device key, replay/conflict, telemetry history, lineage, threshold incident, revocation');
+
+// A quality failure is one business case across APISIX, policy, Flowable and storage.
+const recallLot=await api('lots',owner,{code:'FAIL-'+stamp,product:'Test pump seal',supplier:supplier.id,quantity:5,unit:'pcs',expiry:'2099-01-01',location:'Fixture',min_temp:2,max_temp:8});
+const destination=await api('partners',owner,{name:'Fixture recipient',kind:'destination'});
+const report={lot:recallLot.id,reason:'Inspection failed',severity:'high'}, reportKey=randomUUID();
+const reported=await api('quality-recalls/start',staff,report,reportKey);
+const recallPath='quality-recalls/'+reported.incident;
+assert.equal((await api('quality-recalls/start',staff,report,reportKey)).workflow.id,reported.workflow.id);
+assert.equal((await api('state')).lots.find(l=>l.id===recallLot.id).status,'quarantine');
+await api('shipments',owner,{lot:recallLot.id,destination:destination.id,quantity:1},randomUUID(),409);
+await api('incidents/'+reported.incident+'/approve',manager,{},randomUUID(),409);
+await api(recallPath,outsider,undefined,randomUUID(),404);
+const work=(await api(recallPath,manager)).workflow.tasks;
+assert.deepEqual(work.map(t=>t.step).sort(),['inventory','quality']);
+await api(recallPath+'/complete',staff,decision(work.find(t=>t.step==='inventory')),randomUUID(),403);
+for(const task of work) await api(recallPath+'/complete',manager,decision(task));
+const approval=await poll(async()=>(await api(recallPath,manager)).workflow.tasks.find(t=>t.step==='approval'),'recall approval after timer',40);
+const accepted=await api(recallPath+'/complete',manager,decision(approval));
+assert.equal(accepted.workflow.outcome,'accepted');
+await api(recallPath+'/sync',manager,{});
+assert.equal((await api('state')).lots.find(l=>l.id===recallLot.id).status,'recall');
+const proof=await api('audit-ledger/export');
+assert.ok(JSON.stringify(proof).includes(reported.workflow.id));
+assert.equal((await api('audit-ledger/verify')).valid,true);
+console.log('PASS failed inspection, quarantine, shipping block, manager decision, idempotent projection and audit');
+
+const packageRoot='/checks/maintenance/';
+const manifest={apiVersion:'dxtrace.io/v1',kind:'Application',metadata:{name:'maintenance',version:'1.0.0'},
+  spec:{schemas:['schemas/asset.json','schemas/maintenance.json'],workflows:['workflows/maintenance.bpmn'],
+    permissions:['asset:read','asset:create','maintenance:read','maintenance:create','maintenance:approve'],
+    routes:[{path:'/maintenance',service:'maintenance-portal'}],audit:{enabled:true}}};
+const files={};
+for(const path of [...manifest.spec.schemas,...manifest.spec.workflows])files[path]=await readFile(packageRoot+path,'utf8');
+const pack={manifest,files};
+await api('packages/maintenance/install',owner,{revision:0,package:pack});
+const registered=await api('portals/maintenance',staff);
+assert.equal(registered.route.path,'/maintenance');
+const page=await fetchSafe(gateway+'/appkit-ui/'+registered.route.service,{headers});
+assert.equal(page.status,200);assert.match(await page.text(),/portal.mjs/);
+await api('portals/maintenance',outsider,undefined,randomUUID(),404);
+await api('packages/maintenance/uninstall',owner,{revision:1});
+await api('portals/maintenance',owner,undefined,randomUUID(),404);
+console.log('PASS registered maintenance route resolves an independent portal through APISIX');

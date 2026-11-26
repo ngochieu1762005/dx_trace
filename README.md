@@ -24,6 +24,11 @@ Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi
 
 **Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định của Compose. Flowable OSS 7.2.0 tùy chọn thực thi quy trình thẩm định độc lập; hồ sơ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; production cần nghiệm thu riêng. [Kiến trúc](docs/THIRD-PARTY-CORE-MIGRATION.md) · [Quản trị DX-OS](docs/DXOS-GOVERNANCE.md).
 
+## AppKit và minh chứng OLP 2026
+
+[Cài ứng dụng bảo trì, nâng cấp và rollback](docs/demo-guide.md) · [Build và chạy ngoài source](docs/build-from-source.md) · [Đối chiếu 6 tiêu chí PoF](docs/olp-compliance.md) · [Nguồn trạng thái giữa Core và Flowable](docs/architecture.md)
+
+
 ## Bắt đầu theo nhu cầu
 
 | Bạn muốn | Mở tài liệu |

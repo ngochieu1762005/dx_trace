@@ -1,0 +1,45 @@
+{
+  "name": "Yêu cầu bảo trì thiết bị",
+  "fields": [
+    {
+      "key": "equipment",
+      "label": "Thiết bị",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "description",
+      "label": "Mô tả",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "priority",
+      "label": "Ưu tiên",
+      "type": "choice",
+      "options": [
+        "Thường",
+        "Khẩn cấp"
+      ],
+      "required": true
+    },
+    {
+      "key": "cost",
+      "label": "Chi phí dự kiến",
+      "type": "number"
+    }
+  ],
+  "permissions": {
+    "read": [
+      "owner",
+      "manager",
+      "warehouse"
+    ],
+    "create": [
+      "owner",
+      "manager",
+      "warehouse"
+    ],
+    "scope": "own"
+  }
+}

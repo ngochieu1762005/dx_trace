@@ -1,4 +1,5 @@
-"""DX-TRACE Caddy routing regression tests. SPDX-License-Identifier: MIT."""
+"""DX-TRACE Caddy routing regression tests. SPDX-License-Identifier: MIT
+"""
 import importlib.util
 from pathlib import Path
 import unittest

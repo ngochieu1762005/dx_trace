@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:dx="https://dxtrace.hieuds.com/ns/workflow/v1" id="Definitions_maintenance" targetNamespace="https://dxtrace.hieuds.com/ns/workflow/v1">
+  <bpmn:process id="Process_maintenance" name="Yêu cầu bảo trì thiết bị" isExecutable="true">
+    <bpmn:startEvent id="Start_1" />
+    <bpmn:userTask id="Task_draft" name="draft" />
+    <bpmn:userTask id="Task_submitted" name="submitted" />
+    <bpmn:userTask id="Task_approved" name="approved" />
+    <bpmn:userTask id="Task_rejected" name="rejected" />
+    <bpmn:userTask id="Task_done" name="done" />
+    <bpmn:exclusiveGateway id="Gateway_submitted" dx:decision="manual" />
+    <bpmn:endEvent id="End_rejected" name="rejected" />
+    <bpmn:endEvent id="End_done" name="done" />
+    <bpmn:sequenceFlow id="Flow_start" sourceRef="Start_1" targetRef="Task_draft" />
+    <bpmn:sequenceFlow id="Flow_draft_submitted" sourceRef="Task_draft" targetRef="Task_submitted" dx:roles="owner,manager,warehouse" dx:dueHours="24" />
+    <bpmn:sequenceFlow id="Flow_split_submitted" sourceRef="Task_submitted" targetRef="Gateway_submitted" />
+    <bpmn:sequenceFlow id="Flow_submitted_approved" sourceRef="Gateway_submitted" targetRef="Task_approved" dx:roles="owner,manager" dx:differentActor="true" dx:dueHours="48" />
+    <bpmn:sequenceFlow id="Flow_submitted_rejected" sourceRef="Gateway_submitted" targetRef="Task_rejected" dx:roles="owner,manager" dx:reasonRequired="true" dx:differentActor="true" />
+    <bpmn:sequenceFlow id="Flow_approved_done" sourceRef="Task_approved" targetRef="Task_done" dx:roles="owner,manager,warehouse" dx:reasonRequired="true" />
+    <bpmn:sequenceFlow id="Flow_end_rejected" sourceRef="Task_rejected" targetRef="End_rejected" />
+    <bpmn:sequenceFlow id="Flow_end_done" sourceRef="Task_done" targetRef="End_done" />
+  </bpmn:process>
+</bpmn:definitions>

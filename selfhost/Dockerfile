@@ -36,7 +36,7 @@ WORKDIR /app
 COPY --from=build /app/selfhost/generated selfhost/generated
 COPY --from=build /app/selfhost/*.mjs selfhost/
 COPY --from=build /app/lib lib
-COPY --from=build /app/apps/quality-portal apps/quality-portal
+COPY --from=build /app/apps apps
 COPY --from=build /app/app/api app/api
 COPY --from=build /app/package.json .
 COPY --from=build /app/LICENSE .

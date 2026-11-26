@@ -1,0 +1,8 @@
+{
+  "name": "Danh mục thiết bị",
+  "fields": [
+    {"key":"code", "label":"Mã thiết bị", "type":"text", "required":true},
+    {"key":"location", "label":"Vị trí", "type":"text", "required":true}
+  ],
+  "permissions":{"read":["owner","manager","warehouse"],"create":["owner","manager"],"scope":"all"}
+}

@@ -158,6 +158,22 @@ services:
     cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
     networks: [appnet]
+  model-portal:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    command: ["node", "apps/model-portal/server.mjs"]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    environment:
+      DX_PORTAL_ROUTER: "1"
+    networks: [appnet, portals]
+  maintenance-portal:
+    build: {context: "..", dockerfile: selfhost/Dockerfile}
+    command: ["node", "apps/model-portal/server.mjs"]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    networks: [portals]
   # Presentation-only application: no warehouse volume or direct database access.
   app:
     build: {context: "..", dockerfile: selfhost/Dockerfile}
@@ -168,6 +184,6 @@ services:
       DX_QUALITY_PORTAL_URL: http://quality-portal:8090
       DX_CORE_TOKEN: ${DX_GATEWAY_APP_TOKEN:?}
     networks: [appnet]
-    depends_on: [gateway-api, quality-portal]
+    depends_on: [gateway-api, quality-portal, model-portal, maintenance-portal]
 volumes: {tls: {}, identitydata: {}, warehouse: {}}
-networks: {edge: {}, appnet: {}, privcore: {}, dbnet: {internal: true}}
+networks: {portals: {internal: true}, edge: {}, appnet: {}, privcore: {}, dbnet: {internal: true}}
