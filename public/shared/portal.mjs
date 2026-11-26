@@ -5,13 +5,17 @@ el('home').href='/?area='+area;
 async function api(path,body){
  const url=new URL('/api/'+path,location.origin);
  url.searchParams.set('area',area);
- const response=await fetch(url,{method:body?'POST':'GET',headers:body?{'content-type':'application/json','idempotency-key':crypto.randomUUID()}:{},body:body?JSON.stringify(body):undefined});
+ const fingerprint=body&&JSON.stringify([path,body]);
+ if(body&&pending?.fingerprint!==fingerprint)pending={fingerprint,key:crypto.randomUUID()};
+ const response=await fetch(url,{method:body?'POST':'GET',headers:body?{'content-type':'application/json','idempotency-key':pending.key}:{},body:body?JSON.stringify(body):undefined});
  const data=await response.json();
  if(!response.ok)throw Error(data.error||'Yêu cầu thất bại');
+ if(body)pending=null;
  return data;
 }
 const node=(tag,text)=>Object.assign(document.createElement(tag),{textContent:text});
-let role,offset=0;
+let role,actor,offset=0;
+let pending;
 async function refresh(append=false){
  const id=el('model').value;
  const result=await api('models/'+id+'/records?offset='+(append?offset:0));
@@ -30,7 +34,7 @@ async function refresh(append=false){
  for(const record of result.records){
    const card=node('article','');card.append(node('h3',record.id),node('strong',record.status));
    for(const field of model.fields) if(Object.hasOwn(record.data,field.key))card.append(node('p',field.label+' · '+record.data[field.key]));
-   for(const transition of model.workflow.transitions.filter(t=>t.from===record.status&&t.roles.includes(role))){
+   for(const transition of model.workflow.transitions.filter(t=>t.from===record.status&&t.roles.includes(role)&&(!t.differentActor||record.createdBy!==actor))){
      const button=node('button',transition.to);
      button.onclick=()=>perform(async()=>{
        const reason=transition.reasonRequired?prompt('Lý do chuyển bước'):'';
@@ -52,7 +56,7 @@ el('create').onsubmit=e=>{e.preventDefault();perform(async()=>{
 });};
 await perform(async()=>{
  const [portal,state]=await Promise.all([api('portals/'+location.pathname.split('/')[1]),api('state')]);
- role=state.me.role;el('title').textContent=portal.models[0].name;
+ role=state.me.role;actor=state.me.email;el('title').textContent=portal.models[0].name;
  for(const model of portal.models)el('model').add(new Option(model.name,model.id));
  await refresh();
 });

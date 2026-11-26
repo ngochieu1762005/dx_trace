@@ -15,8 +15,8 @@ spec:
   workflows:
     - workflows/maintenance.bpmn
   schemas:
-    - schemas/asset.json
     - schemas/maintenance.json
+    - schemas/asset.json
   routes:
     - path: /maintenance
       service: maintenance-portal

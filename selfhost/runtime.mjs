@@ -46,11 +46,6 @@ sql.exec(readFileSync(new URL('../drizzle/0002_audit_ledger.sql',import.meta.url
 sql.exec(readFileSync(new URL('../drizzle/0003_platform_records.sql',import.meta.url),'utf8'));
 sql.exec(readFileSync(new URL('../drizzle/0004_app_packages.sql',import.meta.url),'utf8'));
 migratePlatform(sql);
-sql.exec(`CREATE TABLE IF NOT EXISTS native_review_requests (
- workspace TEXT NOT NULL, business_key TEXT NOT NULL, fingerprint TEXT NOT NULL,
- creator TEXT NOT NULL, reference TEXT NOT NULL, instance_id TEXT UNIQUE,
- PRIMARY KEY(workspace,business_key)
-)`);
 function bound(query,args=[]){
  const stmt=sql.prepare(query);
  return {bind:(...values)=>bound(query,values),first:()=>stmt.get(...args)??null,

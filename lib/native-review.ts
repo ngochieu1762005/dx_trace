@@ -46,9 +46,10 @@ async function visible(c:any,id:string){
 async function view(c:any,id:string){
  const row=await visible(c,id),history=await lookup(c,row.business_key);
  if(!history||history.id!==id)fail(503,'Workflow history not available');
+ const who=await actor(c);
  const tasks=history.endTime?[]:(await query('/runtime/tasks',{processInstanceId:id,size:'20'})).data;
  return {id,reference:row.reference,status:history.endTime?'ended':'running',endedAt:history.endTime||null,
-  outcome:history.endActivityId||null,tasks:tasks.filter((t:any)=>roles[t.taskDefinitionKey]?.includes(c.role)).map((t:any)=>({id:t.id,step:t.taskDefinitionKey,name:t.name,assigned:!!t.assignee})),engine:'Flowable OSS'};
+  outcome:history.endActivityId||null,tasks:tasks.filter((t:any)=>roles[t.taskDefinitionKey]?.includes(c.role)).map((t:any)=>({id:t.id,step:t.taskDefinitionKey,name:t.name,assigned:!!t.assignee,canComplete:row.creator!==who&&(!t.assignee||t.assignee===who)})),engine:'Flowable OSS'};
 }
 export async function nativeReview(c:any,req:Request,key:string,action:string,recall?:{incident:string,reporter:string}){
  if(!['owner','manager','warehouse'].includes(c.role))fail(403,'Review access denied');base();

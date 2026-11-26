@@ -13,6 +13,16 @@ function describe(row:any) {
  return {name:app.name,version:app.version,revision:row.revision,active:!!row.active,route:app.route,
    permissions:app.permissions,models:app.models.map(m=>m.id),rollbackVersion:stack.at(-2)?.manifest.metadata.version??null};
 }
+export function portalLinks(c:any,models:any[]){
+ const visible=new Map(models.map(m=>[m.id,m.definition.name]));
+ const links=new Map();
+ for(const row of q('SELECT package,model FROM app_package_models WHERE workspace=? AND archived IS NULL ORDER BY package,model',c.workspace).all().results){
+   if(!visible.has(row.model))continue;
+   if(!links.has(row.package)||row.model==='pkg_'+row.package+'_'+row.package)
+     links.set(row.package,{path:'/'+row.package,name:visible.get(row.model)});
+ }
+ return [...links.values()];
+}
 export function portal(c:any,name:string) {
  const row=getPackage(c.workspace,name);
  if(!row?.active) fail('Portal not installed',404);

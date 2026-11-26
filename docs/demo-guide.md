@@ -23,6 +23,8 @@ dxtrace app uninstall maintenance
 
 ## Từ kiểm định không đạt đến thu hồi
 
+Trên Quality Portal có bật overlay, lập phiếu, gửi thẩm định và dùng người khác từ chối kết quả. Chọn **Cách ly & mở sự cố** cho lô chưa có sự cố mở. Trong hồ sơ đã liên kết, chọn **Tác vụ thu hồi · Flowable**. Người có vai trò phù hợp xác nhận từng bước và ghi lý do. Sau timer, tải lại tác vụ để duyệt quyết định cuối. Nút **Đồng bộ với Flowable** tiếp tục ca đã cách ly khi kết nối gián đoạn.
+
 Dùng stack thử nghiệm và lô tổng hợp. [Workflow CI](../.github/workflows/third-party-core.yml) tạo credential tạm, chạy APISIX, Core, Flowable, PostgreSQL và [kịch bản HTTP](../selfhost/scripts/third-party-smoke.mjs). Tại mỗi bước giữ mã incident, instance và mã lô.
 
 | Thao tác | Kết quả cần quan sát |

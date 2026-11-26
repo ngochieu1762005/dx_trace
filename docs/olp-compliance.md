@@ -12,3 +12,7 @@ Mốc điểm lấy từ [thể lệ VFOSSA 2026, mục I](https://www.vfossa.vn
 | 6. Tài liệu và giao tiếp | 10 | [README](../README.md), [hướng dẫn demo](demo-guide.md), [CHANGELOG](../CHANGELOG.md), [Issues](https://github.com/ngochieu1762005/dx_trace/issues), [mẫu báo lỗi](../.github/ISSUE_TEMPLATE/bug_report.md), [đóng góp](../CONTRIBUTING.md) | Chạy lại hướng dẫn, mở bug tracker và kiểm changelog tương ứng từng phiên bản. |
 
 Chỉ tự xác nhận một hàng sau khi kiểm đủ các điều kiện trên bản nộp. Lưu URL run, Git SHA, checksum, ngày kiểm và kết quả vào hồ sơ nghiệm thu. [Checklist vận hành và SSO](ACCEPTANCE-2026.md)
+
+## Kết quả kiểm thử trên pull request 38
+
+Commit `f6173c2` đã qua job verify (REUSE, build, chạy ngoài cây source), supply-chain (SBOM), container và PostgreSQL migration. Job tích hợp ghi nhận lô bị chặn xuất, phê duyệt độc lập trong Flowable và route bảo trì trả HTML qua APISIX. Đây là kết quả trên runner thử nghiệm. Đối chiếu lại run của chính tag khi phát hành. [CI và log clean install](https://github.com/ngochieu1762005/dx_trace/actions/runs/45832626685) · [Log APISIX và Flowable](https://github.com/ngochieu1762005/dx_trace/actions/runs/45832626735)

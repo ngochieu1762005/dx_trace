@@ -9,3 +9,9 @@ CREATE TABLE IF NOT EXISTS app_package_models (
  workspace TEXT NOT NULL, model TEXT NOT NULL, package TEXT NOT NULL, archived TEXT,
  PRIMARY KEY(workspace,model)
 );
+
+CREATE TABLE IF NOT EXISTS native_review_requests (
+ workspace TEXT NOT NULL, business_key TEXT NOT NULL, fingerprint TEXT NOT NULL,
+ creator TEXT NOT NULL, reference TEXT NOT NULL, instance_id TEXT UNIQUE,
+ PRIMARY KEY(workspace,business_key)
+);
