@@ -16,6 +16,14 @@ Food traceability, warehouse operations and recall coordination.
 
 **Main-branch status (unreleased):** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows retain their legacy runtime. PR #35 integration CI passed; production acceptance remains separate. [Architecture](docs/en/third-party-core-migration.md) · [DX-OS governance](docs/DXOS-GOVERNANCE.md).
 
+## Evidence Engine · Business Decision Proof
+
+The **Unreleased** upgrade binds a business decision to its actor, authorisation, policy and workflow versions, input lineage and before/after states. Evidence is sealed when the decision occurs. An independent `.tar.gz` contains the manifest, decision, events, policy, BPMN, lineage, proof and Ed25519 signature for offline verification.
+
+Open **Nhật ký → DX-TRACE Evidence Engine** to export signed decisions from the selected workspace. Verification requires an independently trusted public key or checkpoint; hashes or a key supplied only inside the archive do not establish trust. The browser also provides a clearly labeled **RC-2026-001 synthetic demonstration** with an inspection-tamper action. Its results are not production acceptance evidence.
+
+[Signing, export and offline verification](docs/en/business-decision-proof.md) · [Ten fault scenarios](docs/en/fault-tolerance.md) · [H-P-D-I and four principles](docs/en/hdpi.md)
+
 ## Start here
 
 | Goal | Guide |
@@ -26,18 +34,27 @@ Food traceability, warehouse operations and recall coordination.
 
 DX-TRACE is an open-source platform for warehouse traceability, food quality and recall coordination. It connects lots, shipments, storage conditions, incidents and reconciliation. The reusable headless Core supports declarative business applications and an independently deployed Quality Portal.
 
-## HDPI in DX-TRACE
+## H-P-D-I in DX-TRACE
 
 Two stores have received chilled stock when a temperature excursion is discovered. The warehouse can follow one lot across all four H–P–D–I dimensions.
 
 | Dimension | Where it appears |
 | --- | --- |
-| **H · Human** | Warehouse staff record deliveries, a reviewer assesses quality and a manager authorises quarantine and recall. |
-| **P · Process** | A failed inspection can lead to an incident. Staff cancel outstanding reservations and collect delivered goods before closing it. |
-| **D · Data** | The lot links supplier, expiry, readings, shipments, destinations and returns. Several lots can share one product barcode. |
-| **I · Intelligence** | Temperature rules flag suspect stock. Delivery and return figures identify destinations with outstanding quantities. A manager owns the recall decision. |
+| **H · Human** | Role-specific screens, QR, task inbox and notifications; evidence binds actors to checked permissions. |
+| **P · Process** | Inspection, quarantine and recall BPMN, approvals and timer/SLA steps; evidence retains the workflow version. |
+| **D · Data** | Lots, dashboards, sensor readings, lineage and captured decision inputs. |
+| **I · Intelligence** | Threshold detection, recall impact and outstanding-return calculations support an authorised human decision. |
 
-[Work through the HDPI case](docs/en/hdpi.md)
+The [VFOSSA OLP 2026 open-source competition specification, sections 1 and 4](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html) also informs this four-principle mapping:
+
+| Principle | Repository evidence | Boundary |
+| --- | --- | --- |
+| Data lifecycle tiers | Indexed sensor history and monthly archive manifests | No automatic purge/tiering or WORM guarantee |
+| IT/OT convergence | Device HTTPS ingestion, duplicate checks, limits and quarantine | The 12.4°C sender is a labeled fixture, not certified hardware |
+| Lineage governance | Sensor lineage and Business Decision Proof | A signature does not certify the physical truth of a reading |
+| Zero Trust + GitOps | APISIX, Core RBAC/tenant checks, versioned Compose and CI | No continuous GitOps reconciliation controller |
+
+[Work through the H-P-D-I case](docs/en/hdpi.md). This is a capability map with limits, not certification of full competition compliance.
 
 ## Follow a lot through a recall
 
@@ -63,6 +80,8 @@ After installing dependencies, run these from the repository root.
 | Inspection review and quarantine boundaries | `node --test tests/quality-portal.test.mjs` |
 | Parallel tasks and persisted timers | `node --test tests/process-platform.test.mjs tests/process-timer.test.mjs` |
 | Verification of exported audit evidence | `node --test tests/audit-proof.test.mjs` |
+| Decision tampering and offline trust boundaries | `node --test tests/business-evidence.test.mjs` |
+| Interactive synthetic evidence verification | `node --test tests/evidence-demo.test.mjs` |
 
 Use a printed label and an HTTPS camera session to test scanning on a phone. Use two distinct Keycloak accounts to verify SSO and review permissions on a deployment. [Acceptance guide](docs/en/acceptance.md)
 

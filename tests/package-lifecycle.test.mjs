@@ -23,6 +23,9 @@ test('package compatibility, tenancy, record preservation and stale writes',asyn
   const change=(action,revision,input,status=200)=>call('packages/maintenance/'+action,{revision,package:input},'owner',status);
   const bad=structuredClone(pkg);bad.manifest.spec.requiresCore='>=2.0.0 <3.0.0';assert.throws(()=>compilePackage(bad));
   const badPath=structuredClone(pkg);badPath.manifest.spec.schemas[0]='../other.json';assert.throws(()=>compilePackage(badPath));
+  const badPermission=structuredClone(pkg);badPermission.manifest.spec.permissions.push('core:admin');
+  await change('install',0,badPermission,422);
+  assert.equal((await call('packages/maintenance/status')).revision,0);
   await change('install',0,pkg);
   await call('members',{email:'staff@example.test',role:'warehouse'});
   await call('packages/maintenance/uninstall',{revision:1},'staff',403);

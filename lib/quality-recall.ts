@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2026 DX-TRACE contributors */
 import {change,read,hash} from './server.ts';
-import {nativeReview} from './native-review.ts';
+import {nativeReview,nativeReviewEvidence} from './native-review.ts';
 import {PlatformError} from './platform.mjs';
 
 export async function qualityRecall(c:any,req:Request,key:string,action:string){
@@ -37,7 +37,13 @@ export async function qualityRecall(c:any,req:Request,key:string,action:string){
  }
  if(workflow.status==='ended'){
    if(!['accepted','rejected'].includes(workflow.outcome))throw new PlatformError('Unknown engine outcome; lot held for reconciliation',409);
-   if(!review.outcome)await change(c,'quality.project',{id:key,instance:workflow.id,outcome:workflow.outcome},'project-'+review.ticket);
+   if(!review.outcome){
+    const captured=await nativeReviewEvidence(c,workflow.id);
+    const workflowEvidence={workflow:{id:captured.definition.key,version:String(captured.definition.version),bpmn:captured.bpmn,
+     instanceId:captured.instanceId,engine:captured.engine,provenance:'Deployed Flowable resource and persisted engine history at projection'},
+     history:captured,decisions:captured.decisions,policy:captured.policy};
+    await change(c,'quality.project',{id:key,instance:workflow.id,outcome:workflow.outcome},'project-'+review.ticket,{workflowEvidence});
+   }
  }
  return {incident:key,lot:incident.lot,workflow};
 }

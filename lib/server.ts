@@ -32,6 +32,8 @@ import {withWorkspace} from './workspace-queue.mjs';
 import {env, getSessionUser} from '../selfhost/runtime.mjs';
 import {seedDemo,expandTraining} from './demo.mjs';
 import {initial,apply,DomainError,insights} from './domain.mjs';
+import {decisionSnapshot} from './evidence-capture.mjs';
+import {evidenceInsert} from './evidence-store.ts';
 export const db=()=>{if(!env.DB)throw new DomainError('Cơ sở dữ liệu chưa sẵn sàng',503);return env.DB};
 export const q=(sql:string,...args:any[])=>db().prepare(sql).bind(...args);
 export const hash=async(value:string|ArrayBuffer)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',typeof value==='string'?new TextEncoder().encode(value):value))].map(x=>x.toString(16).padStart(2,'0')).join('');
@@ -63,14 +65,16 @@ export async function ctx(request:Request){
 }
 export async function read(workspace:string){const r:any=await q('SELECT * FROM workspaces WHERE id=?',workspace).first();if(!r)throw new DomainError('Không gian không tồn tại',404);return {...r,data:JSON.parse(r.state)}}
 export async function snapshot(c:any){const r=await read(c.workspace);const s=r.data;delete s.requests;delete s.models;delete s.records;return {...s,revision:r.revision,me:{name:c.name,email:c.email,role:c.role},members:(await q('SELECT id,name,email,role FROM members WHERE workspace=?',c.organization).all()).results,alerts:insights(s),capabilities:{storage:true,uploads:!!env.BUCKET,ai:!!(env as any).AI_API_KEY,scanner:!!(env as any).FILE_SCAN_URL},serverTime:new Date().toISOString()}}
-export async function change(c:any,cmd:string,b:any,key:string){
- return withWorkspace(c.workspace,()=>changeUnlocked(c,cmd,b,key));
+export async function change(c:any,cmd:string,b:any,key:string,evidenceContext:any={}){
+ return withWorkspace(c.workspace,()=>changeUnlocked(c,cmd,b,key,evidenceContext));
 }
-async function changeUnlocked(c:any,cmd:string,b:any,key:string){
+async function changeUnlocked(c:any,cmd:string,b:any,key:string,evidenceContext:any){
  if(!key||key.length>100)throw new DomainError('Thiếu mã yêu cầu duy nhất',400);
  const fingerprint=await hash(cmd+JSON.stringify(b));const entity=cmd.split('.')[0].slice(0,3).toUpperCase()+'-'+crypto.randomUUID().slice(0,8).toUpperCase();
  for(let attempt=0;attempt<6;attempt++){
-  const r=await read(c.workspace);const previous=r.data.requests[key];if(previous){if(previous.fingerprint!==fingerprint)throw new DomainError('Mã yêu cầu đã dùng cho thao tác khác',409);return previous.result}
+  const r=await read(c.workspace),actor=c.id||c.email||c.name;
+  const previous:any=await q('SELECT actor,fingerprint,result FROM warehouse_commands WHERE workspace=? AND key=?',c.workspace,key).first();
+  if(previous){if(previous.fingerprint!==fingerprint||(previous.actor&&previous.actor!==actor))throw new DomainError('Mã yêu cầu đã dùng cho thao tác khác',409);return JSON.parse(previous.result)}
   const sensorKey=JSON.stringify([c.workspace,b.device,b.id]);
   if(cmd==='sensor.ingest'){
    const old:any=await q('SELECT fingerprint,payload FROM sensor_history WHERE key=?',sensorKey).first();
@@ -79,13 +83,26 @@ async function changeUnlocked(c:any,cmd:string,b:any,key:string){
     return {id:JSON.parse(old.payload).id,duplicate:true};
    }
   }
-  const out=apply(r.data,cmd,b,{role:c.role,actor:c.email||c.name,now:new Date().toISOString(),entity});
-  out.state.requests[key]={fingerprint,result:out.result};const keys=Object.keys(out.state.requests);while(keys.length>600)delete out.state.requests[keys.shift()!];
+  const created=new Date().toISOString();
+  const out=apply(r.data,cmd,b,{role:c.role,actor:c.email||c.name,now:created,entity});
+  if(cmd==='sensor.ingest'&&process.env.DX_FLOWABLE_URL){
+   const alarm=out.state.incidents.find((i:any)=>!r.data.incidents.some((old:any)=>old.id===i.id));
+   if(alarm){
+    alarm.review={engine:'Flowable',ticket:await hash(JSON.stringify(['cold-chain',c.workspace,b.device,b.id])),
+     reporter:'device:'+b.device,instance:null,outcome:null,trigger:'cold-chain'};
+    out.result={...out.result,incident:alarm.id,workflowPending:true};
+   }
+  }
+  out.state.requests[key]={fingerprint,result:out.result,actor};const keys=Object.keys(out.state.requests);while(keys.length>600)delete out.state.requests[keys.shift()!];
   const last:any=await q('SELECT hash FROM audit_ledger WHERE workspace=? ORDER BY seq DESC LIMIT 1',c.workspace).first();
-  const previousHash=last?.hash||'0'.repeat(64),created=new Date().toISOString();
+  const previousHash=last?.hash||'0'.repeat(64);
   const payload=JSON.stringify({action:cmd,actor:c.email||c.name,entity:out.result.id,created,...(cmd.startsWith('quality.')?{quality:b}:{})});
   const digest=await hash(previousHash+'\n'+(r.revision+1)+'\n'+payload);
   const ledger=q('INSERT INTO audit_ledger(workspace,seq,previous,hash,payload,created) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',c.workspace,r.revision+1,previousHash,digest,payload,created,c.workspace,r.revision);
+  const command=q('INSERT INTO warehouse_commands(workspace,key,actor,fingerprint,result,created) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',c.workspace,key,actor,fingerprint,JSON.stringify(out.result),created,c.workspace,r.revision);
+  const evidence=await evidenceInsert(c,decisionSnapshot({context:c,command:cmd,body:b,before:r.data,after:out.state,result:out.result,
+   seq:r.revision+1,created,...evidenceContext}),{seq:r.revision+1,previous:previousHash,hash:digest,payload},r.revision);
+  const statements=[command,ledger,...(evidence?[evidence]:[])];
   const revisionUpdate=()=>q('UPDATE workspaces SET state=?,revision=revision+1 WHERE id=? AND revision=?',JSON.stringify(out.state),c.workspace,r.revision);
   if(cmd==='sensor.ingest'&&!('duplicate' in out.result)){
    const reading=out.state.readings.find((v:any)=>v.id===out.result.id);
@@ -96,9 +113,9 @@ async function changeUnlocked(c:any,cmd:string,b:any,key:string){
    if(out.state.incidents.length===r.data.incidents.length)out.state.events.shift();
    const insert=q('INSERT INTO sensor_history(key,workspace,device,recorded,fingerprint,payload) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',
     sensorKey,c.workspace,b.device,reading.recorded,fingerprint,JSON.stringify(reading),c.workspace,r.revision);
-   const results=await db().batch([insert,ledger,revisionUpdate()]);
-   if(results[2].meta.changes===1)return out.result;
-  }else if((await db().batch([ledger,revisionUpdate()]))[1].meta.changes===1)return out.result;
+   const results=await db().batch([insert,...statements,revisionUpdate()]);
+   if(results.at(-1).meta.changes===1)return out.result;
+  }else if((await db().batch([...statements,revisionUpdate()])).at(-1).meta.changes===1)return out.result;
  }
  throw new DomainError('Dữ liệu đang được cập nhật đồng thời. Vui lòng thử lại.',409)
 }

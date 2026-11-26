@@ -10,7 +10,7 @@
       [
         "hdpi",
         "docs/en/hdpi.md",
-        "HDPI in warehouse operations"
+        "H-P-D-I in warehouse operations"
       ],
       [
         "quickstart",
@@ -271,6 +271,16 @@
         "audit",
         "docs/en/audit.md",
         "Audit evidence"
+      ],
+      [
+        "business-decision-proof",
+        "docs/en/business-decision-proof.md",
+        "Business Decision Proof"
+      ],
+      [
+        "fault-tolerance",
+        "docs/en/fault-tolerance.md",
+        "Fault tolerance"
       ],
       [
         "supply-chain",

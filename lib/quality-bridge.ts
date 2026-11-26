@@ -5,6 +5,8 @@ import {withWorkspace} from './workspace-queue.mjs';
 import {q,db,hash,read} from './server.ts';
 import {canRead} from './platform.mjs';
 import {apply,DomainError} from './domain.mjs';
+import {decisionSnapshot} from './evidence-capture.mjs';
+import {evidenceInsert} from './evidence-store.ts';
 
 const fail=(message:string,status=409):never=>{throw new DomainError(message,status)};
 
@@ -27,7 +29,7 @@ export async function escalateQuality(c:any,id:string,body:any,key:string){
    if(!model||!JSON.parse(model.payload).definition.permissions.read.includes(c.role))fail('Không tìm thấy mô hình kiểm định',404);
    const stored=await q('SELECT payload FROM platform_records WHERE workspace=? AND model=? AND id=?',c.workspace,'quality',id).first();
    if(!stored)fail('Không tìm thấy hồ sơ kiểm định',404);
-   const record=JSON.parse(stored.payload);
+   const record=JSON.parse(stored.payload),sourceRecord=structuredClone(record);
    if(!canRead(JSON.parse(model.payload).definition,record,{role:c.role,actor:who}))fail('Không có quyền đọc hồ sơ kiểm định',403);
    if(record.version!==body.version)fail('Hồ sơ đã thay đổi, hãy tải lại');
    if(record.status!=='rejected')fail('Chỉ chuyển hồ sơ đã thẩm định không đạt');
@@ -57,14 +59,18 @@ export async function escalateQuality(c:any,id:string,body:any,key:string){
    const previous=(await q('SELECT hash FROM audit_ledger WHERE workspace=? ORDER BY seq DESC LIMIT 1',c.workspace).first())?.hash||'0'.repeat(64);
    const payload=JSON.stringify({action:command,actor:who,entity:id,incident:incidentId,lot:lot.id,reason,created:now});
    const digest=await hash(previous+'\n'+(revision+1)+'\n'+payload);
+   const evidence=await evidenceInsert(c,decisionSnapshot({context:c,command,body:{...body,id},before:workspace.data,after:state,
+    result:{id:incidentId},eventEntity:id,seq:revision+1,created:now,extraSources:[{id:'quality-record',kind:'reviewed-quality-record',origin:'platform_records/quality/'+id,data:sourceRecord}]}),
+    {seq:revision+1,previous,hash:digest,payload},revision);
    const guard=' WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)';
    const statements=[
     q('UPDATE platform_records SET payload=?,updated=? WHERE workspace=? AND model=? AND id=? AND EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)',content,now,c.workspace,'quality',id,c.workspace,revision),
     q('INSERT INTO platform_commands(workspace,key,actor,fingerprint,result,created) SELECT ?,?,?,?,?,?'+guard,c.workspace,key,who,fingerprint,JSON.stringify(result),now,c.workspace,revision),
     q('INSERT INTO audit_ledger(workspace,seq,previous,hash,payload,created) SELECT ?,?,?,?,?,?'+guard,c.workspace,revision+1,previous,digest,payload,now,c.workspace,revision),
+    ...(evidence?[evidence]:[]),
     q('UPDATE workspaces SET state=?,revision=revision+1 WHERE id=? AND revision=?',warehouseContent,c.workspace,revision)
    ];
-   if((await db().batch(statements))[3].meta.changes===1)return result;
+   if((await db().batch(statements)).at(-1).meta.changes===1)return result;
   }
   fail('Kho đang thay đổi, hãy tải lại');
  });

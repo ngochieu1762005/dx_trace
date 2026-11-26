@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# Explicit opt-in; provision and retain the verification key independently.
+services:
+  core:
+    environment:
+      DX_EVIDENCE_PRIVATE_KEY_FILE: /run/secrets/dxtrace-evidence.pem
+    volumes:
+      - type: bind
+        source: ${DX_EVIDENCE_KEY_FILE:?Set the absolute path of the Ed25519 signing key}
+        target: /run/secrets/dxtrace-evidence.pem
+        read_only: true

@@ -35,6 +35,7 @@ FROM node:24-bookworm-slim
 WORKDIR /app
 COPY --from=build /app/selfhost/generated selfhost/generated
 COPY --from=build /app/selfhost/*.mjs selfhost/
+COPY --from=build /app/selfhost/flowable selfhost/flowable
 COPY --from=build /app/lib lib
 COPY --from=build /app/apps apps
 COPY --from=build /app/app/api app/api

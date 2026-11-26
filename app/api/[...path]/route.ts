@@ -51,15 +51,44 @@ import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
 import {qualityRecall} from '../../../lib/quality-recall.ts';
 import {packages,portal,portalLinks} from '../../../lib/package-store.ts';
 import {nativeReview} from '../../../lib/native-review.ts';
+import {evidenceRoute} from '../../../lib/evidence-store.ts';
+import {outboxStatus,retryDeadOutbox} from '../../../lib/reliable-outbox.mjs';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
  if(kind==='health')return json({status:'ok',version:'0.0.7',database:!!env.DB});
  if(kind==='ingest'&&req.method==='POST'){
   const token=req.headers.get('authorization')?.replace(/^Bearer /,'');if(!token)throw new DomainError('Thiếu khóa thiết bị',401);
   const d:any=await q('SELECT * FROM device_keys WHERE hash=? AND active=1',await hash(token)).first();if(!d)throw new DomainError('Khóa thiết bị không hợp lệ',401);
-  const b:any=await req.json();return json(await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id]))));
+  const b:any=await req.json();
+  const result=await change({workspace:d.workspace,role:'device',name:d.device},'sensor.ingest',{...b,device:d.device},await hash(JSON.stringify([d.device,b.id])));
+  if(result.incident&&result.workflowPending){
+   // The device can only trigger review for the incident this ingest committed.
+   // It receives no user credentials and cannot approve any task.
+   try{
+    const workflow=await qualityRecall({workspace:d.workspace,id:'service:cold-chain',role:'manager',name:'dxtrace:cold-chain'},
+     new Request(req.url,{method:'POST',body:'{}'}),result.incident,'sync');
+    return json({...result,workflowPending:false,workflow:workflow.workflow.id});
+   }catch(error){
+    if(error instanceof PlatformError||error instanceof DomainError)return json({...result,workflowPending:true,workflowMessage:'Lô đã cách ly; quản lý có thể đồng bộ lại quy trình kiểm định.'},202);
+    throw error;
+   }
+  }
+  return json(result);
  }
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
+ if(kind==='evidence')return await evidenceRoute(c,req,key,action);
+ if(kind==='outbox'){
+  manager(c);
+  if(req.method==='GET'&&!key){const status=outboxStatus(db(),c.workspace);return json({counts:status.counts,deadLetters:status.dead});}
+  if(req.method==='POST'&&action==='retry'){
+   if(c.role!=='owner')throw new DomainError('Chỉ chủ không gian được thử lại thông báo lỗi',403);
+   const seq=z.coerce.number().int().positive().max(Number.MAX_SAFE_INTEGER).parse(key);
+   const {expectedAttempts}=z.object({expectedAttempts:z.number().int().positive().max(100)}).parse(await req.json());
+   if(!retryDeadOutbox(db(),{workspace:c.workspace,seq,expectedAttempts}))throw new DomainError('Thông báo không tồn tại hoặc đã thay đổi',409);
+   return json({queued:true,seq});
+  }
+  throw new DomainError('Không tìm thấy thao tác outbox',404);
+ }
  if(kind==='quality-recalls')return json(await qualityRecall(c,req,key,action));
  if(kind==='packages')return json(await packages(c,req,key,action));
  if(kind==='portals'&&key&&!action&&req.method==='GET')return json(portal(c,key));

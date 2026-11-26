@@ -22,9 +22,13 @@ const tables={
 const optionalTables={
  app_packages:['workspace','name','revision','active','versions'],
  app_package_models:['workspace','model','package','archived'],
- native_review_requests:['workspace','business_key','fingerprint','creator','reference','instance_id']
+ native_review_requests:['workspace','business_key','fingerprint','creator','reference','instance_id'],
+ warehouse_commands:['workspace','key','actor','fingerprint','result','created'],
+ evidence_decisions:['workspace','id','seq','kind','subject_id','actor','occurred_at','policy_version','workflow_version','signing_status','public_key','checkpoint','payload'],
+ native_review_actions:['workspace','task_id','instance_id','actor','subject','actor_label','role','fingerprint','step','approved','reason','status','created','completed'],
+ event_outbox:['workspace','seq','topic','payload','state','attempts','due_at','lease_token','lease_until','last_error','last_status','created','delivered_at']
 };
-const integer=new Set(['expires','active','revision','seq','attempts','next_attempt','last_status']);
+const integer=new Set(['expires','active','revision','seq','attempts','next_attempt','last_status','approved','due_at','lease_until']);
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const ident=s=>'"'+s+'"';
 const hex=s=>Buffer.from(s,'utf8').toString('hex');
@@ -40,7 +44,7 @@ function sqlValue(value,column){
 const rowDigest=(row,columns)=>sha(columns.map(c=>row[c]===null?'-':hex(String(row[c]))).join(':'));
 const pgDigest=columns=>"encode(sha256(convert_to("+columns.map(c=>"COALESCE(encode(convert_to("+ident(c)+"::text,'UTF8'),'hex'),'-')").join("||':'||")+",'UTF8')),'hex')";
 function schema(){
- return ['0000_watery_mad_thinker.sql','0001_sensor_history.sql','0002_audit_ledger.sql','0003_platform_records.sql','0004_app_packages.sql']
+ return ['0000_watery_mad_thinker.sql','0001_sensor_history.sql','0002_audit_ledger.sql','0003_platform_records.sql','0004_app_packages.sql','0005_decision_evidence.sql']
   .map(name=>readFileSync(new URL('../drizzle/'+name,import.meta.url),'utf8')
     .replace(/^\s*--.*$/gm,'').replaceAll('`','"').replace(/\binteger\b/gi,'BIGINT')).join('\n');
 }

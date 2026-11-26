@@ -121,7 +121,10 @@ const final=await poll(async()=>{const v=await api(path,manager);return v.tasks.
 const ended=await api(path+'/complete',manager,decision(final));
 assert.equal(ended.status,'ended');
 assert.equal(ended.tasks.length,0);
-await api(path+'/complete',manager,decision(final),randomUUID(),409);
+const repeated=await api(path+'/complete',manager,decision(final));
+assert.equal(repeated.status,'ended');
+assert.equal(repeated.outcome,ended.outcome);
+await api(path+'/complete',manager,{...decision(final),approved:false},randomUUID(),409);
 console.log('PASS native Flowable API: idempotent start, tenant denial, roles, no self-approval, parallel join, timer, final approval');
 
 
@@ -135,7 +138,7 @@ const send=async(body,token=device.token,status=200)=>{
  assert.equal(result.status,status,'sensor ingest status');
  return result.json();
 };
-const reading={id:'sample-'+randomUUID(),temperature:12,recorded:new Date().toISOString()};
+const reading={id:'sample-'+randomUUID(),temperature:12,recorded:new Date().toISOString(),synthetic:true};
 await send(reading,'invalid',401);
 const initial=await send(reading);
 assert.equal((await send(reading)).id,initial.id);
@@ -223,3 +226,36 @@ assert.equal(rejected.outcome,'rejected');
 const held=(await api('state')).lots.find(l=>l.id===qcLot.id);
 assert.equal(held.status,'quarantine');
 console.log('PASS Quality Portal inspection escalation, Flowable rejection and retained quarantine');
+
+// Verify captured production-code proofs offline using an independently mounted
+// test public key. No API key or running Core is used by the verifier itself.
+const {verifyEvidenceArchive,readEvidenceArchive,encodeEvidenceArchive,canonicalEvidenceJSON}=await import('/checks/business-evidence.mjs');
+const publicKey=await readFile('/checks/evidence-public.pem');
+const evidence=await api('evidence');
+assert.equal(evidence.signing.configured,true);
+assert.ok(evidence.decisions.some(d=>d.kind==='sensor.ingest'));
+assert.ok(evidence.decisions.filter(d=>d.kind==='sensor.ingest').every(d=>d.simulated===true));
+const projections=evidence.decisions.filter(d=>d.kind==='quality.project');
+assert.ok(projections.length>=2,'accepted and rejected Flowable outcomes are captured');
+for(const proofDecision of projections){
+ const response=await fetchSafe(gateway+'/api/evidence/'+proofDecision.id+'/export',{headers:{...headers,
+  'x-forwarded-user':owner,'x-forwarded-email':owner+'@example.invalid'}});
+ assert.equal(response.status,200,'signed evidence export');
+ const bytes=Buffer.from(await response.arrayBuffer());
+ const checked=verifyEvidenceArchive(bytes,{publicKey});
+ assert.equal(checked.valid,true,JSON.stringify(checked));
+ assert.equal(verifyEvidenceArchive(bytes).valid,false,'embedded key is never sufficient');
+ const parts=readEvidenceArchive(bytes),decision=JSON.parse(parts['decision.json']);
+ assert.equal(decision.workflow.engine,'Flowable OSS');
+ assert.equal(decision.workflow.id,'dxtrace_native_review_v1');
+ const sources=JSON.parse(parts['data-lineage.json']);
+ assert.ok(sources.sources.find(s=>s.id==='reviewer-decisions').data.length>=2);
+ decision.transition.after='tampered';parts['decision.json']=Buffer.from(canonicalEvidenceJSON(decision)+'\n');
+ assert.equal(verifyEvidenceArchive(encodeEvidenceArchive(parts),{publicKey}).valid,false);
+}
+const thermalIncident=(await api('state')).incidents.find(i=>i.lot===lot.id);
+assert.equal(thermalIncident.review.trigger,'cold-chain');
+const thermalWorkflow=(await api('quality-recalls/'+thermalIncident.id,manager)).workflow;
+assert.ok(thermalWorkflow?.id,'sensor quarantine triggers a real Flowable review');
+assert.deepEqual(thermalWorkflow.tasks.map(t=>t.step).sort(),['inventory','quality']);
+console.log('PASS signed Business Decision Proof, deployed BPMN, reviewer provenance, offline trust anchor, tamper rejection and cold-chain workflow');

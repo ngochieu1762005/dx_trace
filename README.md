@@ -28,6 +28,14 @@ Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi
 
 [Cài ứng dụng bảo trì, nâng cấp và rollback](docs/demo-guide.md) · [Build và chạy ngoài source](docs/build-from-source.md) · [Đối chiếu 6 tiêu chí PoF](docs/olp-compliance.md) · [Nguồn trạng thái giữa Core và Flowable](docs/architecture.md)
 
+## Evidence Engine · Business Decision Proof
+
+Bản nâng cấp **Unreleased** bổ sung hồ sơ quyết định nghiệp vụ: **ai quyết định, quyền nào được kiểm tra, phiên bản chính sách/quy trình, dữ liệu đầu vào và trạng thái trước–sau**. Snapshot được đóng dấu khi quyết định phát sinh; gói `recall-evidence.tar.gz` chứa manifest, quyết định, sự kiện, policy, BPMN, lineage, proof và chữ ký Ed25519 để kiểm tra offline.
+
+Mở **Nhật ký → DX-TRACE Evidence Engine** để tải các quyết định đã ký trong đúng kho. Nguồn tin cậy phải là khóa công khai hoặc checkpoint nhận độc lập; hash hay khóa nằm trong chính gói bằng chứng không ngăn được việc viết lại toàn bộ gói. Giao diện có mẫu **RC-2026-001** và nút sửa kết quả kiểm định, được ghi nhãn **MÔ PHỎNG**. Kiểm chứng mẫu không thay thế nghiệm thu hệ thống thật.
+
+[**Cấu hình ký, xuất và xác minh offline**](docs/BUSINESS-DECISION-PROOF.md) · [**10 kịch bản chịu lỗi và cách tái lập**](docs/FAULT-TOLERANCE.md) · [**H-P-D-I và bốn nguyên lý**](website/content/hdpi.md)
+
 
 ## Bắt đầu theo nhu cầu
 
@@ -42,18 +50,27 @@ DX-TRACE kết nối **lô hàng → giao nhận → điều kiện bảo quản
 
 Đây không chỉ là giao diện quản lý kho: **DX-TRACE có lõi API headless**, mô hình nghiệp vụ có thể khai báo, ứng dụng thứ hai triển khai độc lập và hạ tầng danh tính dùng chung. Các khẳng định kỹ thuật đều được liên kết tới mã nguồn, kiểm thử hoặc tài liệu nghiệm thu; những hạng mục chưa xác minh được ghi rõ.
 
-## HDPI trong DX-TRACE
+## H-P-D-I trong DX-TRACE
 
 Một lô sữa chua đã giao đến hai cửa hàng thì bị phát hiện bảo quản sai nhiệt độ. Bốn thành phần H–P–D–I cùng xuất hiện trong cách kho xử lý lô này.
 
 | Thành phần | Biểu hiện trong ứng dụng |
 | --- | --- |
-| **H · Human · Con người** | Nhân viên kho ghi nhận giao hàng, người thẩm định kết luận chất lượng, quản lý quyết định cách ly và duyệt thu hồi. |
-| **P · Process · Quy trình** | Từ phiếu kiểm định không đạt, quản lý mở sự cố, xử lý phiếu chưa giao và thu hàng đã giao trước khi đóng hồ sơ. |
-| **D · Data · Dữ liệu** | Mã lô nối nhà cung cấp, hạn dùng, số đo, phiếu giao, điểm nhận và lượng đã trả. Mã sản phẩm có thể dùng chung cho nhiều lô. |
-| **I · Intelligence · Hỗ trợ quyết định** | Quy tắc nhiệt độ giúp phát hiện lô có vấn đề. Số liệu giao và nhận trả cho biết điểm nào còn thiếu hàng. Người quản lý chịu trách nhiệm về quyết định thu hồi. |
+| **H · Human · Con người số** | Giao diện theo vai trò, QR, task inbox và thông báo; Evidence gắn người quyết định với quyền được kiểm tra. |
+| **P · Process · Quy trình số** | BPMN kiểm định, cách ly, phê duyệt thu hồi và timer/SLA; lưu phiên bản quy trình trong bằng chứng. |
+| **D · Data · Dữ liệu số** | Mã lô, dashboard, số đo, nguồn dữ liệu và snapshot đầu vào quyết định. |
+| **I · Intelligence · Trí tuệ số** | Phát hiện vượt ngưỡng, tính phạm vi thu hồi và lượng còn phải thu để hỗ trợ người có quyền quyết định. |
 
-[Thực hành HDPI với một lô hàng](website/content/hdpi.md)
+Theo [đề thi PMNM OLP 2026 do VFOSSA công bố, mục 1 và 4](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html), DX-TRACE đối chiếu thêm bốn nguyên lý:
+
+| Nguyên lý | Minh chứng trong repo | Giới hạn |
+| --- | --- | --- |
+| Phân tầng vòng đời dữ liệu | Lịch sử cảm biến có chỉ mục và archive tháng kèm manifest | Chưa tự động phân tầng/xóa hay bảo đảm WORM |
+| Hội tụ IT/OT | HTTPS ingestion với khóa thiết bị, chống trùng, ngưỡng và cách ly | Bộ phát 12,4°C là fixture được ghi nhãn; chưa chứng nhận phần cứng |
+| Quản trị nguồn gốc | Sensor lineage và gói Business Decision Proof | Chữ ký không tự chứng minh số đo phản ánh sự thật ngoài đời |
+| Zero Trust + GitOps | APISIX, RBAC/tenant tại Core, Compose trong Git và kiểm CI | Chưa có bộ đồng bộ GitOps liên tục |
+
+[Thực hành H-P-D-I với một lô hàng](website/content/hdpi.md) · [Chi tiết bốn nguyên lý](docs/DXOS-GOVERNANCE.md). Đây là bản đồ năng lực và giới hạn, không phải chứng nhận đáp ứng toàn bộ đề thi.
 
 ## Theo dấu một lô hàng
 
@@ -79,6 +96,8 @@ Sau khi cài các gói phụ thuộc, chạy từng lệnh tại thư mục ch�
 | Phiếu không đạt có được cách ly đúng kho và đúng quyền? | `node --test tests/quality-portal.test.mjs` |
 | Hai nhánh quy trình và bộ hẹn giờ chạy thế nào? | `node --test tests/process-platform.test.mjs tests/process-timer.test.mjs` |
 | Có thể phát hiện thay đổi trong gói nhật ký đã xuất? | `node --test tests/audit-proof.test.mjs` |
+| Bằng chứng quyết định có phát hiện sửa tệp, thay khóa và viết lại chuỗi? | `node --test tests/business-evidence.test.mjs` |
+| Mẫu tương tác có phân biệt chữ ký manifest với dữ liệu bị sửa? | `node --test tests/evidence-demo.test.mjs` |
 
 Kiểm tra camera bằng tem in và điện thoại qua HTTPS. Kiểm tra đăng nhập bằng hai tài khoản trên bản triển khai có Keycloak. Hai phép thử này cần thiết bị hoặc phiên đăng nhập thật. [Quy trình nghiệm thu](docs/ACCEPTANCE-2026.md)
 

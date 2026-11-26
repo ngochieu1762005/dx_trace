@@ -10,7 +10,7 @@
       [
         "hdpi",
         "website/content/hdpi.md",
-        "HDPI trong vận hành kho"
+        "H-P-D-I trong vận hành kho"
       ],
       [
         "quickstart",
@@ -271,6 +271,16 @@
         "audit",
         "docs/AUDIT-EVIDENCE.md",
         "Kiểm chứng audit"
+      ],
+      [
+        "business-decision-proof",
+        "docs/BUSINESS-DECISION-PROOF.md",
+        "Evidence Engine · Quyết định"
+      ],
+      [
+        "fault-tolerance",
+        "docs/FAULT-TOLERANCE.md",
+        "Chịu lỗi và phục hồi"
       ],
       [
         "supply-chain",
