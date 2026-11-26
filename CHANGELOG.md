@@ -4,6 +4,12 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+- Evidence Engine: snapshot quyết định cùng giao dịch, ký Ed25519 tại thời điểm ghi, gói tám tệp `.tar.gz` và CLI `evidence export/verify/keygen/demo`. Verify chạy offline và bắt buộc khóa công khai hoặc checkpoint độc lập; không ký hồi tố lịch sử.
+- Gói Flowable ràng buộc BPMN đã triển khai, lịch sử engine, subject/vai trò tại lúc duyệt, cấm tự duyệt, dữ liệu đầu vào và kết quả chiếu sang kho. Giao diện có danh sách bằng chứng và demo sửa kết quả kiểm định được ghi nhãn mô phỏng.
+- Transactional outbox cho mọi audit producer, lease có fencing token, retry/backoff, dead-letter queue và API thử lại theo quyền. Khóa idempotency kho được lưu bền vững qua việc loại cache 600 yêu cầu.
+- Phục hồi task Flowable khi phản hồi bị mất dựa trên intent đã lưu và lịch sử engine; không tạo lại quy trình khi kết quả start chưa rõ. Có kiểm thử worker SIGKILL, hai người duyệt, cách ly tenant, EICAR qua scanner mô phỏng và upgrade app thất bại.
+- Cold chain: ba số đo vượt ngưỡng cách ly lô và kích hoạt Flowable khi bật overlay; sự cố engine giữ cách ly và trả `workflowPending`. Nhãn dữ liệu mô phỏng được giữ qua các quyết định tiếp theo. README và tài liệu song ngữ đối chiếu H-P-D-I cùng bốn nguyên lý DX-OS.
+
 - AppKit nhận gói Application YAML, schema và BPMN. CLI hỗ trợ init, validate, install, list, upgrade, rollback và uninstall. Demo bảo trì dùng hai loại hồ sơ và portal cùng SSO.
 - Luồng quality-recalls cách ly lô ngay khi báo cáo không đạt. Quyết định thu hồi được chiếu từ kết quả Flowable, có API đồng bộ lại và audit liên kết instance.
 - Các sơ đồ dùng ký hiệu chức năng tự vẽ cho năm công nghệ, giữ thông báo MIT cho bộ icon Devicon.
@@ -34,6 +40,8 @@ Nhật ký thay đổi của DX-TRACE.
 ### Compatibility
 
 Thêm bảng mapping native_review_requests theo cách additive; không đặt lại dữ liệu kho. Cấu hình Gateway của v0.0.7 vẫn bắt buộc; đọc [hướng dẫn chuyển đổi](docs/GATEWAY-AND-SSO.md) nếu nâng từ bản cũ.
+
+Evidence/outbox thêm migration `0005_decision_evidence.sql`, không xóa volume hay dựng lại dữ liệu cũ. Khóa ký là opt-in qua `compose.evidence.yaml`; đọc [Evidence Engine](docs/BUSINESS-DECISION-PROOF.md) về quyền đọc khóa trong container và giới hạn archive. Quy trình Flowable đang chạy trước nâng cấp có thể thiếu intent người duyệt; không tự dựng lại vai trò quá khứ để cấp bằng chứng. Nghiệm thu trên workspace thử nghiệm trước khi bật ký cho vận hành.
 
 ## [0.0.7] — 2026-11-23 — Parallel Workflow & External OIDC API
 

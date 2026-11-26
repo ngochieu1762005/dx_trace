@@ -37,3 +37,4 @@ selfhost/external-clients.json
 
 # Ephemeral CI realm and TLS material
 selfhost/.sso-test/
+selfhost/.evidence-test/

@@ -12,3 +12,5 @@ warehouse-*/
 selfhost/local-demo-data/
 
 selfhost/.sso-test/
+selfhost/.evidence-test/
+**/*-private.pem

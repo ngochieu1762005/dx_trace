@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors -->
+<!-- Documentary state machine. Execution is by lib/domain.mjs, not a BPMN engine. -->
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="https://dxtrace.hieuds.com/evidence">
+ <process id="dxtrace_warehouse_decision_v1" name="Warehouse quarantine and recall rules" isExecutable="false">
+  <startEvent id="active"/>
+  <serviceTask id="quarantine" name="Quarantine after a reported failure or three temperature excursions"/>
+  <userTask id="review" name="Manager reviews recall decision"/>
+  <serviceTask id="recall" name="Approve recall; deny outbound shipment"/>
+  <userTask id="reconcile" name="Reconcile shipments and returns"/>
+  <endEvent id="closed"/>
+  <sequenceFlow id="a" sourceRef="active" targetRef="quarantine"/>
+  <sequenceFlow id="b" sourceRef="quarantine" targetRef="review"/>
+  <sequenceFlow id="c" sourceRef="review" targetRef="recall"/>
+  <sequenceFlow id="d" sourceRef="recall" targetRef="reconcile"/>
+  <sequenceFlow id="e" sourceRef="reconcile" targetRef="closed"/>
+ </process>
+</definitions>

@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# Disposable CI keys only; this overlay is never a production key configuration.
+services:
+  core:
+    environment:
+      DX_EVIDENCE_PRIVATE_KEY_FILE: /run/secrets/evidence-private.pem
+    volumes:
+      - ./.evidence-test/evidence-private.pem:/run/secrets/evidence-private.pem:ro
+  migration-smoke:
+    volumes:
+      - ../lib/business-evidence.mjs:/checks/business-evidence.mjs:ro
+      - ../lib/evidence-archive.mjs:/checks/evidence-archive.mjs:ro
+      - ./.evidence-test/evidence-public.pem:/checks/evidence-public.pem:ro

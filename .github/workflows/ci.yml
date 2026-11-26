@@ -37,6 +37,41 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  evidence-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm install --global pnpm@11.25.0
+      - run: pnpm install --frozen-lockfile
+      - run: python -m pip install playwright==1.62.0
+      - run: python -m playwright install --with-deps chromium
+      - run: node selfhost/build.mjs
+      - name: Verify evidence interaction and mobile layout in a real browser
+        shell: bash
+        run: |
+          node selfhost/local-demo.mjs > "$RUNNER_TEMP/evidence-ui.log" 2>&1 &
+          demo_pid=$!
+          trap 'kill "$demo_pid" 2>/dev/null || true' EXIT
+          for i in {1..80}; do
+            kill -0 "$demo_pid"
+            if curl -fsS http://127.0.0.1:8080/api/health >/dev/null; then break; fi
+            sleep .25
+          done
+          DX_EVIDENCE_SCREENSHOT_DIR="$RUNNER_TEMP/evidence-ui" python selfhost/scripts/evidence-browser-smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidence-ui-screenshots
+          path: |
+            ${{ runner.temp }}/evidence-ui/*.png
+            ${{ runner.temp }}/evidence-ui.log
   supply-chain:
     runs-on: ubuntu-latest
     permissions:

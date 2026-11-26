@@ -30,6 +30,7 @@
  */
 import {DatabaseSync} from 'node:sqlite';
 import {migratePlatform} from './migrate-platform.mjs';
+import {migrateEvidence} from './migrate-evidence.mjs';
 import {AsyncLocalStorage} from 'node:async_hooks';
 import {mkdirSync, readFileSync} from 'node:fs';
 import {readFile,writeFile,rename} from 'node:fs/promises';
@@ -46,6 +47,7 @@ sql.exec(readFileSync(new URL('../drizzle/0002_audit_ledger.sql',import.meta.url
 sql.exec(readFileSync(new URL('../drizzle/0003_platform_records.sql',import.meta.url),'utf8'));
 sql.exec(readFileSync(new URL('../drizzle/0004_app_packages.sql',import.meta.url),'utf8'));
 migratePlatform(sql);
+migrateEvidence(sql);
 function bound(query,args=[]){
  const stmt=sql.prepare(query);
  return {bind:(...values)=>bound(query,values),first:()=>stmt.get(...args)??null,

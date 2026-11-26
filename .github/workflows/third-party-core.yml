@@ -6,6 +6,8 @@ on:
       - 'selfhost/compose.yaml'
       - 'selfhost/compose.third-party.yaml'
       - 'selfhost/compose.sso-test.yaml'
+      - 'selfhost/compose.evidence-test.yaml'
+      - 'selfhost/migrate-evidence.mjs'
       - 'selfhost/scripts/*sso*'
       - 'lib/**'
       - 'apps/model-portal/**'
@@ -63,18 +65,22 @@ jobs:
           node ../tools/verify-stack.mjs -f compose.yaml -f compose.third-party.yaml
           node --test ../tests/cold-archive.test.mjs
           node --check ../tools/sensor-client.mjs
+      - name: Provision disposable evidence signing material
+        run: |
+          node ../tools/evidence-cli.mjs keygen --out .evidence-test
+          sudo chown 1000:1000 .evidence-test/evidence-private.pem
       - name: Validate and start isolated services
         run: |
-          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test config --quiet
-          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml up -d --build core gateway-api flowable
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.evidence-test.yaml --profile migration-test config --quiet
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.evidence-test.yaml up -d --build core gateway-api flowable
       - name: Exercise real gateway and BPMN engine
-        run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml --profile migration-test run --rm migration-smoke
+        run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.evidence-test.yaml --profile migration-test run --rm migration-smoke
       - name: Verify three portals through real Keycloak and OAuth2 Proxy sessions
         run: |
           python3 -m venv "$RUNNER_TEMP/sso-venv"
           "$RUNNER_TEMP/sso-venv/bin/pip" -q install PyYAML==6.0.3
           "$RUNNER_TEMP/sso-venv/bin/python" scripts/prepare-sso-test.py
-          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.sso-test.yaml --profile migration-test run --rm sso-smoke
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.evidence-test.yaml -f compose.sso-test.yaml --profile migration-test run --rm sso-smoke
       - name: Container status on failure
         if: failure()
         run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml ps -a
@@ -85,4 +91,5 @@ jobs:
             docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml down -v --remove-orphans
             rm -f .env
             rm -rf .sso-test
+            sudo rm -rf .evidence-test
           fi
