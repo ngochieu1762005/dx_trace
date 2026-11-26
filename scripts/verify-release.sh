@@ -31,5 +31,15 @@ dxtrace app upgrade maintenance
 dxtrace app rollback maintenance
 dxtrace app uninstall maintenance
 test "$(curl -s -o /dev/null -w '%{http_code}' "$PUBLIC_ORIGIN/maintenance")" = 404
-echo "PASS source archive, clean build, installed UI, CLI lifecycle and private data outside source"
+kill "$child"
+wait "$child" || true
+child=''
+export DXTRACE_URL=https://offline-verifier.invalid
+dxtrace evidence demo --out evidence-demo >/dev/null
+dxtrace evidence verify evidence-demo/recall-evidence.tar.gz --public-key evidence-demo/evidence-public.pem
+if dxtrace evidence verify evidence-demo/recall-evidence-tampered.tar.gz --public-key evidence-demo/evidence-public.pem; then
+  echo "Tampered evidence was incorrectly accepted" >&2
+  exit 1
+fi
+echo "PASS source archive, clean build, installed UI, CLI lifecycle, offline evidence and private data outside source"
 sha256sum "$archive"

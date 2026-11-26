@@ -269,8 +269,9 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #42
 /* Warehouse workspace */
 :root{--ink:#17283b;--muted:#516276;--line:#d7dfe6;--bg:#f5f6f7;--blue-ink:#174fad}
 body{background:var(--bg)}
-.warehouse-skip{position:fixed;top:8px;left:8px;z-index:1000;transform:translateY(-160%);background:white;color:#174fad;padding:10px 16px}
-.warehouse-skip:focus{transform:none}
+.warehouse-skip{position:fixed;top:8px;left:8px;z-index:1000;transform:translateY(-160%);clip-path:inset(50%);background:white;color:#174fad;padding:10px 16px}
+.warehouse-skip:focus{transform:none;clip-path:none}
+.device-card>.text-link+.text-link{margin-left:12px}
 #warehouse-content:focus,#workspace-title:focus{outline:none}
 .sidebar{background:#15283d;color:#f5f7fb;border:0;padding:22px 14px 12px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#657589 #15283d}
 .sidebar .brand{color:white;margin:0 0 16px;padding:0 10px;gap:10px}

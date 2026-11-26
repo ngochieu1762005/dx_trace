@@ -9,7 +9,7 @@ Một lô sữa chua đã giao đến hai cửa hàng thì bị phát hiện b�
 | **D · Data · Dữ liệu số** | Mã lô nối nhà cung cấp, số đo, phiếu giao, điểm nhận và lượng trả. Evidence giữ snapshot đầu vào và nguồn gốc được quan sát; mã sản phẩm không thay thế mã lô. |
 | **I · Intelligence · Trí tuệ số** | Quy tắc nhiệt độ phát hiện rủi ro, tính phạm vi thu hồi và lượng còn phải thu để hỗ trợ người có quyền quyết định. Các phép tính này không cần mô hình AI và không tự chứng nhận an toàn thực phẩm. |
 
-Đây là đối chiếu năng lực triển khai với [mô hình DX-OS và chủ đề OLP 2026 do VFOSSA giới thiệu](https://www.vfossa.vn/tin-tuc/gioi-thieu-mo-hinh-dx-os-va-chu-de-cuoc-thi-phan-mem-nguon-mo-olp-2026-761.html), không phải chứng nhận đáp ứng toàn bộ đề thi.
+Đây là đối chiếu năng lực triển khai với [đề thi PMNM OLP 2026 do VFOSSA công bố, mục 1 về H-P-D-I và mục 4 về bốn nguyên lý](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html), không phải chứng nhận đáp ứng toàn bộ đề thi.
 
 ## Một quyết định, bảy thành phần kiểm chứng
 

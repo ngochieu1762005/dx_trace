@@ -1,5 +1,7 @@
 # DX-OS governance and evidence
 
+This capability mapping follows [section 4 of the VFOSSA OLP 2026 open-source competition specification](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html). It describes implementation and boundaries, not certification of full compliance.
+
 ## Hot / cold
 The hot workspace retains recent sensor samples; indexed sensor_history retains the complete history. Export a completed month from a consistent verified SQLite backup to a new gzip JSON Lines directory:
 ```sh

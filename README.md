@@ -61,7 +61,7 @@ Một lô sữa chua đã giao đến hai cửa hàng thì bị phát hiện b�
 | **D · Data · Dữ liệu số** | Mã lô, dashboard, số đo, nguồn dữ liệu và snapshot đầu vào quyết định. |
 | **I · Intelligence · Trí tuệ số** | Phát hiện vượt ngưỡng, tính phạm vi thu hồi và lượng còn phải thu để hỗ trợ người có quyền quyết định. |
 
-Theo [mô hình DX-OS của VFOSSA](https://www.vfossa.vn/tin-tuc/gioi-thieu-mo-hinh-dx-os-va-chu-de-cuoc-thi-phan-mem-nguon-mo-olp-2026-761.html), DX-TRACE đối chiếu thêm bốn nguyên lý:
+Theo [đề thi PMNM OLP 2026 do VFOSSA công bố, mục 1 và 4](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html), DX-TRACE đối chiếu thêm bốn nguyên lý:
 
 | Nguyên lý | Minh chứng trong repo | Giới hạn |
 | --- | --- | --- |

@@ -1,5 +1,7 @@
 # Bốn nguyên lý DX-OS
 
+Đối chiếu theo [đề thi PMNM OLP 2026 do VFOSSA công bố, mục 4](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html). Các mục dưới mô tả phần đã triển khai và giới hạn; không phải chứng nhận đáp ứng toàn bộ đề thi.
+
 ## Dữ liệu nóng/lạnh
 
 Core giữ các số đo gần nhất và lịch sử có chỉ mục. Xuất tháng đã kết thúc từ bản sao SQLite nhất quán, theo workspace, sang JSONL gzip kèm manifest SHA-256:

@@ -138,7 +138,7 @@ const send=async(body,token=device.token,status=200)=>{
  assert.equal(result.status,status,'sensor ingest status');
  return result.json();
 };
-const reading={id:'sample-'+randomUUID(),temperature:12,recorded:new Date().toISOString()};
+const reading={id:'sample-'+randomUUID(),temperature:12,recorded:new Date().toISOString(),synthetic:true};
 await send(reading,'invalid',401);
 const initial=await send(reading);
 assert.equal((await send(reading)).id,initial.id);
@@ -234,6 +234,7 @@ const publicKey=await readFile('/checks/evidence-public.pem');
 const evidence=await api('evidence');
 assert.equal(evidence.signing.configured,true);
 assert.ok(evidence.decisions.some(d=>d.kind==='sensor.ingest'));
+assert.ok(evidence.decisions.filter(d=>d.kind==='sensor.ingest').every(d=>d.simulated===true));
 const projections=evidence.decisions.filter(d=>d.kind==='quality.project');
 assert.ok(projections.length>=2,'accepted and rejected Flowable outcomes are captured');
 for(const proofDecision of projections){

@@ -9,7 +9,7 @@ Two stores have received chilled stock when a temperature excursion is discovere
 | **D · Data** | Lots connect suppliers, readings, shipments, destinations and returns. Evidence retains input snapshots and observed origin. A product barcode does not uniquely identify a lot. |
 | **I · Intelligence** | Temperature rules identify risk, while recall impact and outstanding quantities inform an authorised human decision. These calculations require no AI model and do not certify food safety. |
 
-This maps implemented capabilities to [VFOSSA's DX-OS and OLP 2026 introduction](https://www.vfossa.vn/tin-tuc/gioi-thieu-mo-hinh-dx-os-va-chu-de-cuoc-thi-phan-mem-nguon-mo-olp-2026-761.html). It is not a certification of full competition compliance.
+This maps implemented capabilities to [VFOSSA's OLP 2026 open-source competition specification: section 1 for H-P-D-I and section 4 for the four principles](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html). It is not a certification of full competition compliance.
 
 ## Seven parts of a verifiable decision
 

@@ -45,7 +45,7 @@ Two stores have received chilled stock when a temperature excursion is discovere
 | **D · Data** | Lots, dashboards, sensor readings, lineage and captured decision inputs. |
 | **I · Intelligence** | Threshold detection, recall impact and outstanding-return calculations support an authorised human decision. |
 
-The [VFOSSA DX-OS introduction](https://www.vfossa.vn/tin-tuc/gioi-thieu-mo-hinh-dx-os-va-chu-de-cuoc-thi-phan-mem-nguon-mo-olp-2026-761.html) also informs this four-principle mapping:
+The [VFOSSA OLP 2026 open-source competition specification, sections 1 and 4](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html) also informs this four-principle mapping:
 
 | Principle | Repository evidence | Boundary |
 | --- | --- | --- |
