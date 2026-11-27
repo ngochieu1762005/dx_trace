@@ -114,7 +114,7 @@ Kiểm tra camera bằng tem in và điện thoại qua HTTPS. Kiểm tra đăng
 
 [**Hướng dẫn quy trình**](docs/OPERATING-WORKFLOWS.md) · [**Kiểm chứng nhật ký**](docs/AUDIT-EVIDENCE.md) · [**Changelog**](CHANGELOG.md)
 
-Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của tag v0.0.7. Triển khai VPS và nghiệm thu SSO thực tế là bước riêng.
+Các bổ sung này được đóng gói trong [DX-TRACE v0.1.0](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.1.0). Triển khai VPS và nghiệm thu SSO thực tế là bước riêng.
 
 ## Điểm nổi bật
 
@@ -132,7 +132,8 @@ Các bổ sung trên thuộc `main` sau v0.0.7; chưa nằm trong archive của 
 
 | Phạm vi | Tình trạng | Cách kiểm tra |
 | --- | --- | --- |
-| **Release v0.0.7** | Gateway, workflow song song/timer và API OIDC tùy chọn; cần nghiệm thu VPS riêng | [Release v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
+| **Release v0.1.0** | AppKit CLI, APISIX, Flowable, SSO ba portal, Evidence Engine và outbox | [Ghi chú phát hành](docs/releases/RELEASE_NOTES_v0.1.0.md) |
+| Release v0.0.7 | Gateway, workflow song song/timer và API OIDC tùy chọn; cần nghiệm thu VPS riêng | [Release v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
 | **Nhánh main** | Thêm quy trình kiểm định–cách ly, bảng việc cần làm, giao diện tác vụ song song và minh chứng nhật ký độc lập | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
 | **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
 | **Nghiệm thu tiếp theo** | SSO trên VPS, phục hồi toàn stack, camera thật và đo tải qua HTTPS; API OIDC đọc-only đã có ở v0.0.7 | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |

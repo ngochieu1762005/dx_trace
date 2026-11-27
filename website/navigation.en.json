@@ -346,6 +346,11 @@
         "release-v0.0.7",
         "docs/en/release-v0.0.7.md",
         "v0.0.7"
+      ],
+      [
+        "release-v0.1.0",
+        "docs/en/release-v0.1.0.md",
+        "v0.1.0"
       ]
     ]
   ]

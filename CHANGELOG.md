@@ -4,6 +4,8 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+## [0.1.0] — 2026-11-27 — AppKit, Flowable và Evidence Engine
+
 - Evidence Engine: snapshot quyết định cùng giao dịch, ký Ed25519 tại thời điểm ghi, gói tám tệp `.tar.gz` và CLI `evidence export/verify/keygen/demo`. Verify chạy offline và bắt buộc khóa công khai hoặc checkpoint độc lập; không ký hồi tố lịch sử.
 - Gói Flowable ràng buộc BPMN đã triển khai, lịch sử engine, subject/vai trò tại lúc duyệt, cấm tự duyệt, dữ liệu đầu vào và kết quả chiếu sang kho. Giao diện có danh sách bằng chứng và demo sửa kết quả kiểm định được ghi nhãn mô phỏng.
 - Transactional outbox cho mọi audit producer, lease có fencing token, retry/backoff, dead-letter queue và API thử lại theo quyền. Khóa idempotency kho được lưu bền vững qua việc loại cache 600 yêu cầu.

@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+name: Start verified v0.1.0 release
+on:
+  push:
+    branches: [main]
+    paths: [docs/releases/RELEASE_NOTES_v0.1.0.md]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Pin tag and run the verified release pipeline
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag=v0.1.0
+          test "v$(node -p 'require("./package.json").version')" = "$tag"
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            test "$(git rev-parse "$tag^{commit}")" = "$GITHUB_SHA"
+          else
+            git tag "$tag" "$GITHUB_SHA"
+            git push origin "refs/tags/$tag"
+          fi
+          gh workflow run release.yml --ref "$tag" -f tag="$tag"
