@@ -83,6 +83,16 @@ jobs:
           "$RUNNER_TEMP/sso-venv/bin/pip" -q install PyYAML==6.0.3
           "$RUNNER_TEMP/sso-venv/bin/python" scripts/prepare-sso-test.py
           docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.evidence-test.yaml -f compose.sso-test.yaml --profile migration-test run --rm sso-smoke
+      - name: Restore the disposable warehouse, identity and workflow databases offline
+        run: |
+          compose=(docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml)
+          proof="$RUNNER_TEMP/restore-proof"
+          mkdir -m 700 "$proof"
+          "${compose[@]}" exec -T core node selfhost/backup.mjs /tmp/restore-proof
+          "${compose[@]}" cp core:/tmp/restore-proof "$proof/warehouse"
+          "${compose[@]}" exec -T identitydb pg_dump -U keycloak -d identity -Fc > "$proof/keycloak.dump"
+          "${compose[@]}" exec -T workflow-db pg_dump -U flowable -d flowable -Fc > "$proof/flowable.dump"
+          sudo bash ../tools/restore-drill.sh "$proof"
       - name: Container status on failure
         if: failure()
         run: |

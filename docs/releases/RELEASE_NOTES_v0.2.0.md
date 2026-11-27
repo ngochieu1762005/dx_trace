@@ -7,3 +7,5 @@
 - Website song ngữ có trang nền tảng, lập trình viên, ứng dụng, kiểm chữ ký, benchmark và minh chứng OLP.
 
 [API v2](../EXTERNAL-API-V2.md) · [Nghiệm thu môi trường](../ACCEPTANCE-2026.md)
+
+Tệp `synthetic-recall-evidence.tar.gz` và khóa công khai đi kèm dùng cho demo. `SHA256SUMS` bao phủ source, SDK, SBOM, gói mẫu, khóa mẫu và log clean install.

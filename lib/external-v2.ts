@@ -49,7 +49,12 @@ export async function externalV2(req:Request,legacy=false){
    components:{...source.components,securitySchemes:{bearer:{type:'http',scheme:'bearer',bearerFormat:'JWT'}}},
    security:[{bearer:[]}],paths:{[base+'/records']:source.paths[internal+'/records'],
     [base+'/records/{id}']:{get:{parameters:[{name:'id',in:'path',required:true,schema:{type:'string'}}],responses:{200:{description:'Visible record'},404:{description:'Not found'}}}},
-    [base+'/records/{id}/transition']:{post:transition}}
+    [base+'/records/{id}/transition']:{post:transition},
+    ...Object.fromEntries(['tasks','evidence'].map(name=>[base+'/records/{id}/'+name,{get:{
+     parameters:[{name:'id',in:'path',required:true,schema:{type:'string'}}],
+     description:name==='tasks'?'Permitted next tasks for this record':'Up to 100 decision metadata entries for this record. Owner or manager.',
+     'x-required-scope':'dxtrace.'+name+'.read',responses:{200:{description:'Scoped resource list'},403:{description:'Forbidden'},404:{description:'Record not found'}}
+    }}]))}
   }});
  }
  if(kind!=='records'||id&&!recordId.test(id))fail('Unknown route',404);

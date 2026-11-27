@@ -7,7 +7,9 @@ export default function AppStudio({source,onChange,disabled}:Props){
  let app;
  try{app=JSON.parse(source)}catch{return null}
  const model=app?.spec?.model;
- if(!model||!Array.isArray(model.fields)||!Array.isArray(model.workflow?.transitions)||!app.metadata)return null;
+ if(!model||!Array.isArray(model.fields)||!Array.isArray(model.workflow?.transitions)||!app.metadata ||
+    model.fields.some((f:any)=>!f||typeof f.key!=='string') ||
+    model.workflow.transitions.some((edge:any)=>!edge||!Array.isArray(edge.roles)))return null;
  function edit(change:()=>void){change();onChange(JSON.stringify(app,null,2))}
  return <fieldset disabled={disabled}><legend>App Studio</legend>
   <label>Tên ứng dụng<input value={model.name||''} onChange={e=>edit(()=>{model.name=e.target.value;app.metadata.name=e.target.value})}/></label>

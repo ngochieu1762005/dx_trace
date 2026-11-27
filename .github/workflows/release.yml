@@ -132,8 +132,12 @@ jobs:
       - name: Verify inventory and include checksum
         run: |
           node tools/validate-sbom.mjs DX-TRACE.spdx.json
+          node tools/dxtrace.mjs evidence demo --out "$RUNNER_TEMP/sample-proof" >/dev/null
+          cp "$RUNNER_TEMP/sample-proof/recall-evidence.tar.gz" synthetic-recall-evidence.tar.gz
+          cp "$RUNNER_TEMP/sample-proof/evidence-public.pem" sample-evidence-public.pem
+          node tools/dxtrace.mjs evidence verify synthetic-recall-evidence.tar.gz --public-key sample-evidence-public.pem
           npm pack ./sdk --ignore-scripts
-          sha256sum DX-TRACE.spdx.json dxtrace-sdk-*.tgz clean-install.log >> SHA256SUMS
+          sha256sum DX-TRACE.spdx.json dxtrace-sdk-*.tgz synthetic-recall-evidence.tar.gz sample-evidence-public.pem clean-install.log >> SHA256SUMS
       - name: Attest source archive provenance
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
@@ -171,5 +175,5 @@ jobs:
           gh release upload "$RELEASE_TAG" \
             "DX-TRACE-${RELEASE_TAG}.tar.gz" \
             DX-TRACE.spdx.json \
-            dxtrace-sdk-*.tgz clean-install.log SHA256SUMS \
+            dxtrace-sdk-*.tgz synthetic-recall-evidence.tar.gz sample-evidence-public.pem clean-install.log SHA256SUMS \
             --clobber
