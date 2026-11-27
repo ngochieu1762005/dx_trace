@@ -147,14 +147,11 @@ for testing an actual JWT minted by the deployed Keycloak realm.
 
 | Check | Status | Date (UTC) | Git SHA | Evidence |
 | --- | --- | --- | --- | --- |
-| CI Node/Python/container/SBOM | PASS · disposable CI | 2026-11-27 | 537f15a | [Run 45937764073](https://github.com/ngochieu1762005/dx_trace/actions/runs/45937764073) |
-| Keycloak two-user SSO | PASS · disposable CI | 2026-11-27 | 537f15a | [Run 45937764080](https://github.com/ngochieu1762005/dx_trace/actions/runs/45937764080) |
-| External OIDC client | PASS · disposable CI | 2026-11-27 | 537f15a | [Run 45937764080](https://github.com/ngochieu1762005/dx_trace/actions/runs/45937764080) |
-| TLS benchmark | TODO | — | — | JSON report (no secrets) |
-| Warehouse isolated restore | TODO | — | — | PASS/FAIL summary |
-| Keycloak isolated restore | TODO | — | — | PASS/FAIL summary |
-| Staging browser restore | TODO | — | — | QA checklist |
-| Public tagged release | TODO | — | — | Tag, checksum, SBOM |
+| CI Node/Python/container/SBOM | PASS · disposable CI | 2026-11-27 | PR head d8cefa8 | [CI](https://github.com/ngochieu1762005/dx_trace/actions/runs/45938563664) |
+| Keycloak two-user SSO and external OAuth client | PASS · disposable CI | 2026-11-27 | PR head d8cefa8 | [Three portals, API policy and maintenance handover](https://github.com/ngochieu1762005/dx_trace/actions/runs/45938563710) |
+| SQLite warehouse, Keycloak and Flowable isolated restores | PASS · disposable CI | 2026-11-27 | PR head d8cefa8 | [Offline snapshot check and PostgreSQL restores](https://github.com/ngochieu1762005/dx_trace/actions/runs/45938563710) |
+| VPS TLS benchmark, restored browser login and signed production decision | Pending operator environment | — | — | Record a sanitized acceptance run on the deployed SHA |
+| Public tagged release | Check published assets for the submission tag | — | — | [Release and checksums](https://github.com/ngochieu1762005/dx_trace/releases) |
 
 Never pre-fill TODO as PASS before observing the corresponding test.
 

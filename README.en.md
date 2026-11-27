@@ -1,17 +1,16 @@
 <div align="center">
 
-[Developer Platform v0.2.0 · External API, SDK and record-scoped evidence](docs/en/external-api-v2.md)
-
-
 [Tiếng Việt](README.md) · **English**
 
 # DX-TRACE
 
-Food traceability, warehouse operations and recall coordination.
+An open-source headless DX-OS for building digital applications and verifying business decisions. Trace, Quality and Maintenance share identity, data, workflow and evidence services.
 
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-21834d)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace)](https://github.com/ngochieu1762005/dx_trace/releases)
+
+[Developer Platform v0.2.0 · External API, SDK and record-scoped evidence](docs/en/external-api-v2.md)
 
 [Product](https://dxtrace.hieuds.com/en/) · [Application](https://app.dxtrace.hieuds.com/) · [Documentation](https://dxtrace.hieuds.com/docs/en/) · [API Reference](https://dxtrace.hieuds.com/docs/en/api-reference/)
 

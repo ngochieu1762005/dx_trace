@@ -5,7 +5,7 @@
 
 # DX-TRACE
 
-Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi.
+Nền tảng DX-OS mã nguồn mở để xây ứng dụng số và kiểm chứng quyết định nghiệp vụ. Trace Portal, Quality Portal và Maintenance App dùng chung danh tính, dữ liệu, workflow và Evidence Engine.
 
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases)
