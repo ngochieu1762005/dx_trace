@@ -53,6 +53,7 @@ import {qualityRecall} from '../../../lib/quality-recall.ts';
 import {packages,portal,portalLinks} from '../../../lib/package-store.ts';
 import {nativeReview} from '../../../lib/native-review.ts';
 import {evidenceRoute} from '../../../lib/evidence-store.ts';
+import {externalV2} from '../../../lib/external-v2.ts';
 import {outboxStatus,retryDeadOutbox} from '../../../lib/reliable-outbox.mjs';
 async function route(req:Request){try{
  const [kind,key,action]=new URL(req.url).pathname.replace(/^\/api\//,'').split('/');
@@ -76,6 +77,7 @@ async function route(req:Request){try{
   }
   return json(result);
  }
+ if(kind==='external-v2')return await externalV2(req);
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
  if(kind==='evidence')return await evidenceRoute(c,req,key,action);
  if(kind==='outbox'){

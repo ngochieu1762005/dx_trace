@@ -1,12 +1,12 @@
-/* DX-TRACE | Versioned read-only external OIDC API.
+/* DX-TRACE | Versioned external OIDC API (v1 read-only; v2 opt-in).
  * SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE.
  *
  * Separate from the browser gateway. No static bearer tokens, forwarded
- * identity headers from callers, write endpoints, or Core token exposure.
+ * identity headers from callers, unrestricted writes, or Core token exposure.
  */
 import {createServer} from 'node:http';
-import {createPublicKey, verify as verifySignature, randomUUID} from 'node:crypto';
+import {createPublicKey, verify as verifySignature, randomUUID, createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -36,8 +36,8 @@ export function externalConfig(env=process.env,read=readFileSync){
  if(!filename||!filename.startsWith('/'))hardFail('absolute client policy file required');
  let doc;
  try{doc=JSON.parse(read(filename,'utf8'))}catch{hardFail('client policy file missing or invalid JSON')}
- if(!doc||doc.version!==1||!Array.isArray(doc.clients)||!doc.clients.length||doc.clients.length>100)
-   hardFail('client policy version 1 with 1–100 clients required');
+ if(!doc||![1,2].includes(doc.version)||!Array.isArray(doc.clients)||!doc.clients.length||doc.clients.length>100)
+   hardFail('client policy version 1 or 2 with 1–100 clients required');
  const clients=new Map();
  for(const entry of doc.clients){
   if(!entry||!CLIENT.test(entry.clientId)||clients.has(entry.clientId)||
@@ -45,7 +45,12 @@ export function externalConfig(env=process.env,read=readFileSync){
      entry.models.some(m=>!MODEL.test(m))||new Set(entry.models).size!==entry.models.length||
      !Number.isSafeInteger(entry.requestsPerMinute)||entry.requestsPerMinute<1||entry.requestsPerMinute>1000)
      hardFail('invalid or duplicate client policy');
-  clients.set(entry.clientId,{models:new Set(entry.models),limit:entry.requestsPerMinute});
+  const scopes=new Set(entry.scopes||[]);
+  if(doc.version===2 && (!Array.isArray(entry.scopes)||!entry.scopes.includes('dxtrace.records.read')||
+    entry.scopes.some(s=>!['dxtrace.records.read','dxtrace.records.create','dxtrace.records.transition'].includes(s))||
+    typeof entry.workspace!=='string'||!/^[A-Za-z0-9:_-]{1,128}$/.test(entry.workspace))) hardFail('v2 requires an explicit workspace and scopes');
+  clients.set(entry.clientId,{models:new Set(entry.models),limit:entry.requestsPerMinute,
+    v2:doc.version===2,workspace:entry.workspace,scopes});
  }
  return {appToken,issuer,audience,upstream:url,clients};
 }
@@ -102,20 +107,28 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
   if(!(p.scope||'').split(/\s+/).includes('dxtrace.records.read'))throw Error('Read scope required');
   const policy=config.clients.get(p.azp);
   if(!policy)throw Error('Client not registered');
-  return {clientId:p.azp,subject:p.sub,email:p.email,policy};
+  return {clientId:p.azp,subject:p.sub,email:p.email,policy,scopes:new Set(p.scope.split(/\s+/))};
  };
  return createServer(async(req,res)=>{
   const requestId=randomUUID(),started=clock();
   let clientId='unverified',status=500,route='unknown';
   try{
-   if(req.method!=='GET'){status=405;return json(res,status,'Read-only API',requestId,{allow:'GET'});}
+   if(!['GET','POST'].includes(req.method)){status=405;return json(res,status,'Method not allowed',requestId,{allow:'GET, POST'});}
    if(!req.url?.startsWith('/')||req.url.startsWith('//')||req.url.length>1024){status=400;return json(res,status,'Invalid target',requestId);}
    const url=new URL(req.url,'http://external.internal');
    route=url.pathname;
    if(url.origin!=='http://external.internal'){status=400;return json(res,status,'Invalid target',requestId);}
    const match=/^\/v1\/models\/([a-z][a-z0-9_]{0,39})\/records$/.exec(url.pathname);
-   if(!match&&url.pathname!=='/v1/health'){status=404;return json(res,status,'Unknown version or route',requestId);}
-   if([...url.searchParams.keys()].some(k=>!['limit','offset','q','status'].includes(k))||
+   const v2=/^\/v2\/models\/([a-z][a-z0-9_]{0,39})\/(schema|records)(?:\/(REC-[a-f0-9-]{36})(\/transition)?)?$/.exec(url.pathname);
+   const apps=url.pathname==='/v2/apps';
+   if(!match&&!v2&&!apps&&url.pathname!=='/v1/health'){status=404;return json(res,status,'Unknown version or route',requestId);}
+   if(!v2&&!apps&&req.method!=='GET'){status=405;return json(res,status,'Read-only API',requestId,{allow:'GET'});}
+   if(v2&&v2[2]==='schema'&&v2[3]){status=404;return json(res,status,'Unknown route',requestId);}
+   const create=!!v2&&v2[2]==='records'&&!v2[3]&&req.method==='POST';
+   const transition=!!v2&&!!v2[4]&&req.method==='POST';
+   if((v2||apps)&&!(create||transition||req.method==='GET'&&!v2?.[4])){status=405;return json(res,status,'Method not allowed',requestId);}
+   const list=!!match||!!v2&&v2[2]==='records'&&!v2[3]&&req.method==='GET';
+   if([...url.searchParams.keys()].some(k=>!(list?['limit','offset','q','status']:[]).includes(k))||
       [...url.searchParams.keys()].some(k=>url.searchParams.getAll(k).length!==1)){
       status=400;return json(res,status,'Invalid query parameter',requestId);
    }
@@ -123,7 +136,13 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
    if(!identity){status=401;return json(res,status,'Unauthorized',requestId,
     {'www-authenticate':'Bearer realm="dxtrace", error="invalid_token"'});}
    clientId=identity.clientId;
-   if(match&&!identity.policy.models.has(match[1])){status=403;return json(res,status,'Model not authorized for client',requestId);}
+   if((v2||apps)&&!identity.policy.v2){status=404;return json(res,status,'Unknown version or route',requestId);}
+   const model=match?.[1]||v2?.[1];
+   if(model&&!identity.policy.models.has(model)){status=403;return json(res,status,'Model not authorized for client',requestId);}
+   if(v2||apps){
+    const scope=create?'dxtrace.records.create':transition?'dxtrace.records.transition':'dxtrace.records.read';
+    if(!identity.scopes.has(scope)||!identity.policy.scopes.has(scope)){status=403;return json(res,status,'Scope not authorized for client',requestId);}
+   }
    if(url.pathname!=='/v1/health'){
     let q=quota.get(clientId);
     if(!q||clock()-q.start>=60000){q={start:clock(),count:0};quota.set(clientId,q);}
@@ -131,11 +150,28 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
      {'retry-after':String(Math.max(1,Math.ceil((60000-(clock()-q.start))/1000)))});
     }
    }
-   const corePath=match?'/api/models/'+match[1]+'/records'+url.search:'/api/health';
+   let corePath=match?'/api/models/'+match[1]+'/records'+url.search:'/api/health';
    const upstreamHeaders={'x-dx-core-token':config.appToken,'x-forwarded-user':identity.subject,
     'x-forwarded-email':identity.email,'x-request-id':requestId};
+   let body;
+   if(v2||apps){
+    const params=new URLSearchParams(url.search);
+    params.set('workspace',identity.policy.workspace);
+    if(apps)params.set('models',[...identity.policy.models].join(','));
+    corePath='/api/external-v2'+url.pathname.slice(3)+'?'+params;
+    if(create||transition){
+     const key=req.headers['idempotency-key'];
+     if(typeof key!=='string'||!/^[A-Za-z0-9._:-]{1,100}$/.test(key)){status=400;return json(res,status,'Idempotency-Key required',requestId);}
+     if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||'')){status=415;return json(res,status,'JSON required',requestId);}
+     const chunks=[];let size=0;
+     for await(const chunk of req){size+=chunk.length;if(size>65536){status=413;return json(res,status,'Request too large',requestId);}chunks.push(chunk);}
+     try{body=JSON.stringify(JSON.parse(Buffer.concat(chunks).toString('utf8')));}catch{status=400;return json(res,status,'Invalid JSON',requestId);}
+     upstreamHeaders['content-type']='application/json';
+     upstreamHeaders['idempotency-key']=createHash('sha256').update(JSON.stringify([identity.clientId,identity.subject,key])).digest('hex');
+    }
+   }
    const upstream=await fetcher(new URL(corePath,config.upstream),{
-    method:'GET',headers:upstreamHeaders,redirect:'manual',signal:AbortSignal.timeout(10000)
+    method:req.method,headers:upstreamHeaders,body,redirect:'manual',signal:AbortSignal.timeout(10000)
    });
    if(upstream.status>=300&&upstream.status<400){status=502;return json(res,status,'Unexpected upstream redirect',requestId);}
    if(Number(upstream.headers.get('content-length')||0)>RESPONSE_LIMIT){status=502;return json(res,status,'Response too large',requestId);}
@@ -158,5 +194,5 @@ const invoked=process.argv[1]&&pathToFileURL(resolve(process.argv[1])).href===im
 if(invoked){
  const config=externalConfig();
  createExternalApi(config).listen(Number(process.env.PORT||8093),process.env.BIND_ADDRESS||'127.0.0.1',
-  ()=>console.log('DX-TRACE external OIDC API ready (read-only v1)'));
+  ()=>console.log('DX-TRACE external OIDC API ready (v1 read-only; v2 opt-in)'));
 }
