@@ -98,7 +98,7 @@ Migration `0002_audit_ledger.sql` tạo sổ nhật ký. `0003_platform_records.
 
 ## Giới hạn và hướng tiếp theo
 
-- Đây là engine trạng thái hữu hạn hỗ trợ nhập/xuất [tập con BPMN 2.0](BPMN.md); **không** phải BPMN/Flowable executor tổng quát, chưa có nhánh song song, tác vụ nền theo lịch hay thiết kế kéo thả. Ứng dụng mới có thể đóng gói bằng [AppKit khai báo](APPKIT.md).
+- Đây là engine trạng thái hữu hạn hỗ trợ nhập/xuất [tập con BPMN 2.0](BPMN.md); mô hình cần nhánh song song hoặc bộ đếm giờ có thể gắn [quy trình khai báo mở rộng](PROCESS-RUNTIME.md). Dịch vụ Flowable có [luồng thẩm định riêng](NATIVE-REVIEW.md). Ứng dụng mới có thể đóng gói bằng [AppKit khai báo](APPKIT.md).
 - Hồ sơ mở rộng lưu từng dòng trong SQLite với chỉ mục workspace/model/actor/status; không còn chung giới hạn 1,8 MB của JSON kho. Mỗi payload hồ sơ/mô hình tối đa 512 KiB. Dữ liệu kho truyền thống vẫn còn giới hạn JSON hiện có. Chưa sinh bảng SQL riêng theo mỗi mô hình, chưa hỗ trợ PostgreSQL nghiệp vụ hoặc nhiều bản Core chạy HA.
 - Chưa có cụm HA, object storage phân tán, dịch vụ quét virus tích hợp hoặc dashboard giám sát ngoài. FILE_SCAN_URL/TOKEN chỉ nối với dịch vụ quét do đơn vị triển khai cung cấp.
 - OpenAPI bao phủ hợp đồng cơ bản; chưa có OAuth service account SDK, trình sinh client hoặc kiểm thử trình duyệt tự động cho toàn bộ sản phẩm.

@@ -4,7 +4,7 @@ DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 -->
 # Chuyển đổi Apache APISIX và Flowable OSS
 
-**Cấu hình trong v0.2.0:** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [English](en/third-party-core-migration.md).
+**Cấu hình trong v0.2.0:** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. [Kiểm thử tích hợp v0.2.0](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) đã đạt; nghiệm thu VPS chưa xác nhận. [English](en/third-party-core-migration.md).
 
 ## Kiến trúc mục tiêu
 
@@ -25,7 +25,7 @@ flowchart TD
 | API Gateway | APISIX standalone mặc định | Node gateway giữ cho kiểm thử cũ |
 | Workflow | Engine cũ cho kho/AppKit | Overlay Flowable REST cho thẩm định độc lập |
 | SSO | Keycloak + OAuth2 Proxy | Giữ nguyên |
-| Dữ liệu nghiệp vụ | SQLite và kho tệp | Giữ nguyên; PostgreSQL mới chỉ phục vụ Flowable |
+| Dữ liệu nghiệp vụ | SQLite và kho tệp | Giữ nguyên; Keycloak và Flowable dùng cơ sở PostgreSQL riêng |
 
 Flowable điều phối hồ sơ thẩm định độc lập qua API; chưa điều phối toàn bộ hồ sơ kho. Quyền theo kho, chống tự duyệt, audit và tính toàn vẹn giao dịch vẫn thuộc Core. Các API công khai và sơ đồ kiến trúc hiện hành chưa thay đổi.
 
@@ -42,7 +42,7 @@ docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml 
 docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml down
 ```
 
-Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không xóa volume production. Kịch bản kiểm engine thật, API thẩm định, app độc lập, IT/OT và lineage. Không chạy trên production. [CI PR #35](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792).
+Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không xóa volume production. Kịch bản kiểm engine thật, API thẩm định, app độc lập, IT/OT và lineage. Không chạy trên production. [CI tích hợp v0.2.0](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418).
 
 ## Điều kiện chuyển sang vận hành
 
@@ -55,6 +55,6 @@ Chỉ chạy trên môi trường thử nghiệm có project name riêng. Không
 
 ## Nguồn và giấy phép
 
-[Apache APISIX](https://github.com/apache/apisix) 3.21.0 và [Flowable OSS](https://github.com/flowable/flowable-engine) 7.2.0 dùng Apache-2.0. PostgreSQL 17 dùng PostgreSQL License. Tag image đã chạy trong CI tích hợp PR #35; chưa khóa digest và chưa xác nhận production.
+[Apache APISIX](https://github.com/apache/apisix) 3.21.0 và [Flowable OSS](https://github.com/flowable/flowable-engine) 7.2.0 dùng Apache-2.0. PostgreSQL 17 dùng PostgreSQL License. Tag image đã chạy trong CI tích hợp v0.2.0; chưa khóa digest và chưa xác nhận production.
 
 [Cấu hình triển khai](../selfhost/compose.third-party.yaml) · [CI tích hợp](../.github/workflows/third-party-core.yml) · [Kiến trúc hiện tại](HEADLESS-CORE.md).

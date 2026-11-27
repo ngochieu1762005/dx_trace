@@ -4,7 +4,7 @@ DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 -->
 # Kiến trúc Headless Core
 
-Áp dụng cho kiến trúc từ v0.0.7 và nhánh main. Các nâng cấp liên thông nghiệp vụ sau v0.0.7 được ghi riêng trong Changelog; AppKit/BPMN có từ v0.0.6. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
+Kiến trúc bản ứng viên v0.2.0 gồm Core, các cổng ứng dụng, APISIX và Flowable tùy chọn. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).
 
 ## Phân tách trách nhiệm
 
@@ -52,12 +52,12 @@ Tệp lưu theo SHA-256; metadata nằm trong kho. Tệp chưa có kết quả q
 
 ## Các loại workflow
 
-- **Flowable OSS (overlay tùy chọn):** quy trình thẩm định độc lập, PostgreSQL riêng, fork/join, timer và phê duyệt; không tự chuyển trạng thái nghiệp vụ kho. [API](NATIVE-REVIEW.md).
+- **Flowable OSS (overlay tùy chọn):** quy trình thẩm định, thu hồi và bàn giao bảo trì dùng PostgreSQL riêng cho Flowable. Core kiểm quyền và ghi kết quả vào hồ sơ nghiệp vụ. [API](NATIVE-REVIEW.md).
 
 - **Nghiệp vụ kho / đề xuất nội bộ:** quy tắc trong `domain.mjs` và `workflow.mjs`.
 - **Nghiệp vụ mở rộng:** định nghĩa JSON, plan/apply, kiểu trường, vai trò, phạm vi đọc, điều kiện và version. [PLATFORM](PLATFORM.md) mô tả chi tiết.
 
-Đây là máy trạng thái hữu hạn có **BPMN 2.0 interchange cho tập con được định nghĩa** ([đặc tả](BPMN.md)), chưa có BPMN executor tổng quát, nhánh song song, lịch tác vụ tự động hoặc designer kéo thả. Tái sử dụng hiện được thể hiện qua bốn mô hình dùng cùng API/lưu trữ/phân quyền, không phải nền tảng triển khai tùy ý mọi ứng dụng.
+Đây là máy trạng thái hữu hạn có **BPMN 2.0 interchange cho tập con được định nghĩa** ([đặc tả](BPMN.md)), với [bộ thực thi nhánh song song và bộ đếm giờ tùy chọn](PROCESS-RUNTIME.md). Chỉ các phần tử BPMN được mô tả trong đặc tả mới được hỗ trợ. Tái sử dụng hiện được thể hiện qua bốn mô hình dùng cùng API/lưu trữ/phân quyền, không phải nền tảng triển khai tùy ý mọi ứng dụng.
 
 ## Cách kiểm chứng
 

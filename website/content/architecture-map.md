@@ -4,7 +4,7 @@ DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 -->
 # Kiến trúc hệ thống DX-TRACE
 
-**Cấu hình trong v0.2.0:** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+**Cấu hình trong v0.2.0:** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. [Kiểm thử tích hợp v0.2.0](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 ![Sơ đồ triển khai DX-TRACE với các tuyến người dùng, đầu dò và tích hợp](../../docs/assets/architecture-current.svg)
 
