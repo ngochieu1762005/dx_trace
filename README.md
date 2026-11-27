@@ -189,6 +189,8 @@ Một lô sữa đã được phân phối đến nhiều cửa hàng. Đầu d�
 
 ### Ví dụ dữ liệu mẫu
 
+Kho thực hành mới có **64 lô, 184 phiếu giao nhận và 22 đối tác**. Trên Tổng quan, chọn **Mở hướng dẫn diễn tập** để theo dõi một lô dâu đang cách ly, lô sữa đang thu hồi hoặc lô tôm đã đối soát xong. [Hướng dẫn và số liệu mẫu](docs/DEMO.md#khám-phá-kho-mẫu-mở-rộng).
+
 Trong bộ mẫu SUA-005: Long Biên đã nhận 30 hộp và trả 17; Tây Hồ nhận 20 chưa trả; Thanh Xuân có phiếu 12 hộp chưa giao. Tổng còn phải thu là **33 hộp**, còn phiếu giữ 12 hộp phải xử lý riêng. Các con số thay đổi khi người dùng thao tác. Kho thực hành là dữ liệu mô phỏng, không phải minh chứng triển khai tại doanh nghiệp.
 
 ### Mở rộng sang nghiệp vụ khác

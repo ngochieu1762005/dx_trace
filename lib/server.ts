@@ -34,7 +34,7 @@
  */
 import {withWorkspace} from './workspace-queue.mjs';
 import {env, getSessionUser} from '../selfhost/runtime.mjs';
-import {seedDemo,expandTraining} from './demo.mjs';
+import {seedDemo,expandTraining,TRAINING_EDITION} from './demo.mjs';
 import {initial,apply,DomainError,insights} from './domain.mjs';
 import {decisionSnapshot} from './evidence-capture.mjs';
 import {evidenceInsert} from './evidence-store.ts';
@@ -54,7 +54,7 @@ export async function memberArea(m:any,request:Request){
  const training=new URL(request.url).searchParams.get('area')==='training';
  const useBase=Boolean(base.data.demo)===training;
  const workspace=useBase?m.workspace:m.workspace+(training?':training':':live');
- if(!useBase){
+ if(!useBase && !await q('SELECT id FROM workspaces WHERE id=?', workspace).first()){
    const now=new Date().toISOString();
    const fresh=training?seedDemo(initial(),now):initial();
    await q('INSERT OR IGNORE INTO workspaces(id,owner,state,created) VALUES(?,?,?,?)',workspace,base.owner,JSON.stringify(fresh),now).run();
@@ -62,7 +62,7 @@ export async function memberArea(m:any,request:Request){
  if(training){
    for(let attempt=0;attempt<6;attempt++){
      const row=await read(workspace);
-     if(!row.data.demo || row.data.trainingEdition>=2)break;
+     if(!row.data.demo || row.data.trainingEdition>=TRAINING_EDITION)break;
      const next=expandTraining(row.data,new Date().toISOString());
      const result=await q('UPDATE workspaces SET state=?,revision=revision+1 WHERE id=? AND revision=?',JSON.stringify(next),workspace,row.revision).run();
      if(result.meta.changes)break;

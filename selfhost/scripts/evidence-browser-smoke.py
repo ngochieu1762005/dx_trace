@@ -35,6 +35,20 @@ def main():
             page.set_default_timeout(10000)
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto(origin + "/?area=training#overview", wait_until="domcontentloaded")
+            expect(page.locator(".dispatch-chart")).to_be_visible()
+            expect(page.locator(".dispatch-plot li")).to_have_count(7)
+            expect(page.locator(".dispatch-next li a")).to_have_count(3)
+            page.screenshot(path=str(output / "warehouse-desktop.png"))
+            page.set_viewport_size({"width": 390, "height": 844})
+            if not page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 1"):
+                raise AssertionError("Warehouse overview overflows the mobile viewport")
+            page.screenshot(path=str(output / "warehouse-mobile.png"))
+            page.get_by_role("link", name="Mở hướng dẫn diễn tập").click()
+            page.locator(".training-paths a").filter(has_text="TOM-102").click()
+            expect(page.locator(".lot-dossier")).to_contain_text("Tôm sú đông lạnh")
+            page.set_viewport_size({"width": 1280, "height": 1000})
+
             page.goto(origin + "/?area=training#audit", wait_until="domcontentloaded")
             proof = page.get_by_role("region", name="Bằng chứng quyết định nghiệp vụ")
             expect(proof).to_be_visible()

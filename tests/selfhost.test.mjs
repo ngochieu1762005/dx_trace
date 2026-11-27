@@ -49,7 +49,7 @@ test('self-host HTTP workspace isolation, RBAC, concurrent reservation and resto
  await start(root+'/data');
  assert.equal((await fetch(url+'/api/state')).status,401);
  const live=await (await call('state')).json();assert.deepEqual(live.lots,[]);
- const demo=await (await call('state?area=training')).json();assert.equal(demo.lots.length,16);
+ const demo=await (await call('state?area=training')).json();assert.equal(demo.lots.length,64);
  assert.equal((await call('members',{email:'viewer@example.test',role:'viewer'})).status,200);
  assert.equal((await call('documents',{title:'x',content:'y'},'viewer')).status,403);
  const partner=await (await call('partners',{kind:'supplier',name:'Supplier'})).json();
