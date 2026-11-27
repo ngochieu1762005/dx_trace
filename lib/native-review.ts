@@ -125,8 +125,12 @@ export async function nativeReviewEvidence(c:any,id:string){
   variables:variableRows.map((v:any)=>({name:v.variable?.name,value:v.variable?.value,taskId:v.taskId||null})),
   decisions:await decisions(c,id),policy:nativeReviewPolicy};
 }
-export async function nativeReview(c:any,req:Request,key:string,action:string,recall?:{incident:string,reporter:string}){
+export async function nativeReview(c:any,req:Request,key:string,action:string,recall?:{incident:string,reporter:string},appReference?:string){
  if(!['owner','manager','warehouse'].includes(c.role))fail(403,'Review access denied');base();
+ if(key && key!=='start'){
+  const binding=await visible(c,key);
+  if(binding.reference.startsWith('appkit/') && binding.reference!==appReference)fail(404,'Review not found');
+ }
  if(req.method==='GET'&&key&&!action)return view(c,key);
  if(req.method!=='POST')return fail(404,'Unknown review route');
  return withWorkspace(c.workspace,async()=>{
@@ -135,8 +139,9 @@ export async function nativeReview(c:any,req:Request,key:string,action:string,re
    const idem=req.headers.get('idempotency-key')||'';
    const reference=typeof body?.reference==='string'?body.reference.trim():'';
    if(!idem||idem.length>100||!reference||reference.length>120)fail(422,'Reference and idempotency key required');
+   if(reference.startsWith('appkit/')&&reference!==appReference)fail(403,'Use the record handover endpoint');
    const who=await actor(recall?{...c,id:recall.reporter}:c);
-   const businessKey=recall?await hash(JSON.stringify(['quality-recall',c.workspace,recall.incident])):await hash(c.workspace+'\n'+who+'\n'+idem);
+   const businessKey=appReference?await hash(JSON.stringify([c.workspace,appReference])):recall?await hash(JSON.stringify(['quality-recall',c.workspace,recall.incident])):await hash(c.workspace+'\n'+who+'\n'+idem);
    const fingerprint=await hash(reference);
    const row:any=await q('SELECT * FROM native_review_requests WHERE workspace=? AND business_key=?',c.workspace,businessKey).first();
    if(row){

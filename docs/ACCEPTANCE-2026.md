@@ -147,9 +147,9 @@ for testing an actual JWT minted by the deployed Keycloak realm.
 
 | Check | Status | Date (UTC) | Git SHA | Evidence |
 | --- | --- | --- | --- | --- |
-| CI Node/Python/container/SBOM | TODO | — | — | Workflow URL |
-| Keycloak two-user SSO | TODO | — | — | Sanitized test output |
-| External OIDC client | TODO | — | — | Redacted statuses/audit IDs |
+| CI Node/Python/container/SBOM | PASS · disposable CI | 2026-11-27 | 537f15a | [Run 45937764073](https://github.com/ngochieu1762005/dx_trace/actions/runs/45937764073) |
+| Keycloak two-user SSO | PASS · disposable CI | 2026-11-27 | 537f15a | [Run 45937764080](https://github.com/ngochieu1762005/dx_trace/actions/runs/45937764080) |
+| External OIDC client | PASS · disposable CI | 2026-11-27 | 537f15a | [Run 45937764080](https://github.com/ngochieu1762005/dx_trace/actions/runs/45937764080) |
 | TLS benchmark | TODO | — | — | JSON report (no secrets) |
 | Warehouse isolated restore | TODO | — | — | PASS/FAIL summary |
 | Keycloak isolated restore | TODO | — | — | PASS/FAIL summary |

@@ -51,6 +51,7 @@ import {escalateQuality} from '../../../lib/quality-bridge.ts';
 import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
 import {qualityRecall} from '../../../lib/quality-recall.ts';
 import {packages,portal,portalLinks} from '../../../lib/package-store.ts';
+import {appReview} from '../../../lib/app-review.ts';
 import {nativeReview} from '../../../lib/native-review.ts';
 import {evidenceRoute} from '../../../lib/evidence-store.ts';
 import {externalV2} from '../../../lib/external-v2.ts';
@@ -92,6 +93,7 @@ async function route(req:Request){try{
   }
   throw new DomainError('Không tìm thấy thao tác outbox',404);
  }
+ if(kind==='app-handover')return json(await appReview(c,req,key,action));
  if(kind==='quality-recalls')return json(await qualityRecall(c,req,key,action));
  if(kind==='packages')return json(await packages(c,req,key,action));
  if(kind==='portals'&&key&&!action&&req.method==='GET')return json(portal(c,key));

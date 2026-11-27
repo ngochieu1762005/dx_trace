@@ -36,7 +36,7 @@ test('package compatibility, tenancy, record preservation and stale writes',asyn
   await call(model+'transition',{id:record.id,version:1,target:'submitted'},'staff');
   await call(model+'transition',{id:record.id,version:2,target:'approved'},'staff',403);
   await call(model+'transition',{id:record.id,version:2,target:'approved'});
-  const next=structuredClone(pkg);next.manifest.metadata.version='1.1.0';
+  const next=structuredClone(pkg);next.manifest.metadata.version='1.2.0';
   const broken=structuredClone(next);const schemaKey='schemas/maintenance.json';
   const schema=JSON.parse(broken.files[schemaKey]);schema.fields[0].type='boolean';broken.files[schemaKey]=JSON.stringify(schema);
   await change('upgrade',1,broken,409);

@@ -29,7 +29,7 @@ export function portal(c:any,name:string) {
  const app=compilePackage(JSON.parse(row.versions).at(-1));
  const models=app.models.filter(m=>m.permissions.read.includes(c.role));
  if(!models.length) fail('Portal not found',404);
- return {name,route:app.route,models:models.map(m=>({id:m.id,name:m.name}))};
+ return {name,route:app.route,handover:app.handover&&process.env.DX_FLOWABLE_URL?{model:'pkg_'+name+'_'+app.handover.resource,after:app.handover.after}:null,models:models.map(m=>({id:m.id,name:m.name}))};
 }
 export async function packages(c:any,req:Request,name:string,action:string) {
  if(c.role!=='owner') fail('Only workspace owners manage packages',403);

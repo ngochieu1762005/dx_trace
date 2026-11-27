@@ -3,6 +3,8 @@ name: Third-party core acceptance
 on:
   pull_request:
     paths:
+      - 'selfhost/external-*.mjs'
+      - 'sdk/**'
       - 'selfhost/compose.yaml'
       - 'selfhost/compose.third-party.yaml'
       - 'selfhost/compose.sso-test.yaml'

@@ -152,6 +152,29 @@ assert created["id"] in [r["id"] for r in request(owner, "/api/models/" + model 
 for version in ("/v1", "/v2"):
     external(access_token("dx-other"), version + records, expected=403)
     external(access_token("dx-training"), version + records, expected=404)
+# A completed maintenance record can start its own Flowable handover review.
+record_id = created["id"]
+request(manager, "/api/models/" + model + "/transition",
+        {"id": record_id, "version": 2, "target": "approved"})
+request(owner, "/api/models/" + model + "/transition",
+        {"id": record_id, "version": 3, "target": "done", "reason": "P-17 serviced"})
+handover = "/api/app-handover/" + model + "/" + record_id
+assert request(owner, handover)["status"] == "new"
+started = request(owner, handover, {"action": "start"})
+assert started["engine"] == "Flowable OSS"
+assert request(owner, handover, {"action": "start"})["id"] == started["id"]
+request(manager, "/api/flowable-review/" + started["id"], expected=404)
+for _ in range(24):
+    review = request(manager, handover)
+    if review["status"] == "ended":
+        assert review["outcome"] == "accepted"
+        break
+    for task in review["tasks"]:
+        request(manager, handover, {"action": "complete", "taskId": task["id"], "approved": True, "reason": "Fixture sign-off"})
+    time.sleep(1)
+else:
+    raise RuntimeError("Maintenance handover did not complete")
+print("PASS record-scoped maintenance handover in real tenant Flowable")
 print("PASS Keycloak token, external API v1/v2, APISIX, SQLite read/write, signed decision and workspace boundaries")
 request(owner, "/api/packages/maintenance/uninstall", {"revision": 1})
 request(manager, "/maintenance", expected=404)

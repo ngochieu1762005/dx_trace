@@ -2541,5 +2541,206 @@
     "idempotency": false,
     "live": true,
     "multipart": false
+  },
+  {
+    "id": "external-applications",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "GET",
+    "path": "/v2/apps",
+    "title": {
+      "vi": "Ứng dụng",
+      "en": "Applications"
+    },
+    "auth": "oauth2",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-model-schema",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "GET",
+    "path": "/v2/models/{model}/schema",
+    "title": {
+      "vi": "Schema mô hình",
+      "en": "Model schema"
+    },
+    "auth": "oauth2",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-list-records",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "GET",
+    "path": "/v2/models/{model}/records",
+    "title": {
+      "vi": "Danh sách hồ sơ",
+      "en": "List records"
+    },
+    "auth": "oauth2",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-create-a-record",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "POST",
+    "path": "/v2/models/{model}/records",
+    "title": {
+      "vi": "Tạo hồ sơ",
+      "en": "Create a record"
+    },
+    "auth": "oauth2",
+    "body": {
+      "data": {
+        "equipment": "Pump",
+        "description": "Inspect",
+        "priority": "Thường"
+      }
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-read-record",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "GET",
+    "path": "/v2/models/{model}/records/{id}",
+    "title": {
+      "vi": "Đọc hồ sơ",
+      "en": "Read record"
+    },
+    "auth": "oauth2",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-transition",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "POST",
+    "path": "/v2/models/{model}/records/{id}/transition",
+    "title": {
+      "vi": "Chuyển bước",
+      "en": "Transition"
+    },
+    "auth": "oauth2",
+    "body": {
+      "version": 1,
+      "target": "submitted"
+    },
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": true,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-executable-tasks",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "GET",
+    "path": "/v2/models/{model}/records/{id}/tasks",
+    "title": {
+      "vi": "Tác vụ được phép",
+      "en": "Executable tasks"
+    },
+    "auth": "oauth2",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
+  },
+  {
+    "id": "external-decision-evidence",
+    "group": {
+      "en": "External API v2",
+      "vi": "External API v2"
+    },
+    "method": "GET",
+    "path": "/v2/models/{model}/records/{id}/evidence",
+    "title": {
+      "vi": "Bằng chứng quyết định",
+      "en": "Decision evidence"
+    },
+    "auth": "oauth2",
+    "body": null,
+    "query": {},
+    "response": null,
+    "note": {
+      "vi": "Thay external.example.org bằng origin External API đã đăng ký và dùng access token có đúng scope.",
+      "en": "Replace external.example.org with the registered External API origin and use a scoped access token."
+    },
+    "idempotency": false,
+    "live": false,
+    "multipart": false
   }
 ]

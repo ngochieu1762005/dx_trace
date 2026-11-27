@@ -104,3 +104,15 @@ test('v2 opt-in requires client workspace and explicit scopes; writes cannot wid
   assert.match(calls.at(-1).target,/external-v1.*workspace=ws-test/);
  }finally{await close(srv);}
 });
+
+test('replicas share the client quota in a local SQLite volume',async()=>{
+ const {clientQuota}=await import('../selfhost/external-quota.mjs');
+ const {mkdtemp,rm}=await import('node:fs/promises');
+ const {tmpdir}=await import('node:os');
+ const dir=await mkdtemp(tmpdir()+'/dxquota-');
+ try{
+  const a=clientQuota(dir+'/quota.sqlite'),b=clientQuota(dir+'/quota.sqlite');
+  assert.equal(a('alpha',10).count,1);assert.equal(b('alpha',11).count,2);
+  assert.equal(b('beta',11).count,1);assert.equal(a('alpha',60010).count,1);
+ }finally{await rm(dir,{recursive:true,force:true})}
+});

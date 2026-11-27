@@ -60,6 +60,25 @@ chmod 600 .env
 target=(-f compose.yaml -f compose.ubuntu-edge.yaml)
 if (( FLOW )); then target+=(-f compose.third-party.yaml); fi
 if (( EVIDENCE )); then
+ # Never replace an operator key or silently switch an existing signer.
+ if ! grep -Eq '^[[:space:]]*(export[[:space:]]+)?DX_EVIDENCE_KEY_FILE[[:space:]]*=' .env && [[ -z ${DX_EVIDENCE_KEY_FILE:-} ]]; then
+  [[ "$CONFIG" != *compose.evidence.yaml* ]] || { echo "Restore the existing Evidence key path"; exit 1; }
+  if old exec -T core node -e 'process.exit(process.env.DX_EVIDENCE_PRIVATE_KEY_FILE?0:1)'; then
+   echo "Existing custom signer detected; configure DX_EVIDENCE_KEY_FILE to reuse it"; exit 1
+  fi
+  keydir=/opt/dx-trace-keys/$PROJECT
+  install -d -m 0700 "$keydir"
+  if [[ ! -e "$keydir/signing.pem" ]]; then
+   temporary_key=$(mktemp "$keydir/.signing.XXXXXX")
+   openssl genpkey -algorithm Ed25519 -out "$temporary_key"
+   chown 1000:1000 "$temporary_key"
+   ln "$temporary_key" "$keydir/signing.pem"
+   rm "$temporary_key"
+  fi
+  openssl pkey -in "$keydir/signing.pem" -pubout -out "$keydir/public.pem"
+  printf '\nDX_EVIDENCE_KEY_FILE=%s/signing.pem\n' "$keydir" >> .env
+  echo "Evidence public key: $keydir/public.pem. Back up the signing key in restricted operator storage."
+ fi
  target+=(-f compose.evidence.yaml)
 fi
 new() { docker compose -p "$PROJECT" "${target[@]}" "$@"; }

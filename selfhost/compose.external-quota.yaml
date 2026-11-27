@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT
+# Share a local volume among external-api replicas in the same Compose project.
+services:
+  external-api:
+    environment:
+      DX_EXTERNAL_QUOTA_DB: /app/data/external-quota.sqlite
+    volumes:
+      - external-quota:/app/data
+volumes:
+  external-quota: {}

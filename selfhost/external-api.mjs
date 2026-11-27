@@ -5,6 +5,7 @@
  * Separate from the browser gateway. No static bearer tokens, forwarded
  * identity headers from callers, unrestricted writes, or Core token exposure.
  */
+import {clientQuota} from './external-quota.mjs';
 import {createServer} from 'node:http';
 import {createPublicKey, verify as verifySignature, randomUUID, createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -53,7 +54,7 @@ export function externalConfig(env=process.env,read=readFileSync){
   clients.set(entry.clientId,{models:new Set(entry.models),limit:entry.requestsPerMinute,
     v2:doc.version===2,workspace:entry.workspace,area:entry.area||'live',scopes});
  }
- return {appToken,issuer,audience,upstream:url,clients};
+ return {appToken,issuer,audience,upstream:url,clients,quotaPath:env.DX_EXTERNAL_QUOTA_DB};
 }
 const json=(res,status,error,requestId,extra={})=>{
  res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store',
@@ -68,7 +69,7 @@ const decode=(part)=>{
  return JSON.parse(bytes.toString('utf8'));
 };
 export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=console.log}={}){
- const quota=new Map();
+ const quota=clientQuota(config.quotaPath);
  let cachedKeys=new Map(),updated=0;
  const jwksUrl=config.issuer+'/protocol/openid-connect/certs';
  const refresh=async()=>{
@@ -145,9 +146,9 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
     if(!identity.scopes.has(scope)||!identity.policy.scopes.has(scope)){status=403;return json(res,status,'Scope not authorized for client',requestId);}
    }
    if(url.pathname!=='/v1/health'){
-    let q=quota.get(clientId);
-    if(!q||clock()-q.start>=60000){q={start:clock(),count:0};quota.set(clientId,q);}
-    if(++q.count>identity.policy.limit){status=429;return json(res,status,'Client quota exceeded',requestId,
+    let q;
+    try{q=quota(clientId,clock())}catch{status=503;return json(res,status,'Client quota store unavailable',requestId)}
+    if(q.count>identity.policy.limit){status=429;return json(res,status,'Client quota exceeded',requestId,
      {'retry-after':String(Math.max(1,Math.ceil((60000-(clock()-q.start))/1000)))});
     }
    }

@@ -1,3 +1,3 @@
-# Sau v0.1.0
+# Sau v0.2.0
 
-Các thay đổi mới được ghi trong mục Unreleased của [CHANGELOG](../../CHANGELOG.md).
+[Developer Platform v0.2.0](RELEASE_NOTES_v0.2.0.md) · [Changelog](../../CHANGELOG.md)

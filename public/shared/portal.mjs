@@ -14,7 +14,7 @@ async function api(path,body){
  return data;
 }
 const node=(tag,text)=>Object.assign(document.createElement(tag),{textContent:text});
-let role,actor,offset=0;
+let handover,role,actor,offset=0;
 let pending;
 async function refresh(append=false){
  const id=el('model').value;
@@ -42,6 +42,25 @@ async function refresh(append=false){
        await api('models/'+id+'/transition',{id:record.id,version:record.version,target:transition.to,reason});await refresh();
      });card.append(button);
    }
+   if(handover?.model===id&&handover.after===record.status){
+     const path='app-handover/'+id+'/'+record.id;
+     const show=node('button','Biên bản bàn giao · Flowable');
+     show.onclick=()=>perform(async()=>{
+       const view=await api(path);const panel=node('section','');show.replaceWith(panel);
+       panel.append(node('p',view.outcome||view.status));
+       if(['new','pending'].includes(view.status)&&record.createdBy===actor){
+         const start=node('button','Yêu cầu bàn giao');start.onclick=()=>perform(async()=>{await api(path,{action:'start'});await refresh()});panel.append(start);
+       }
+       for(const task of view.tasks.filter(t=>t.canComplete)){
+         for(const approved of [true,false]){
+           const button=node('button',task.name+' · '+(approved?'Đồng ý':'Từ chối'));
+           button.onclick=()=>perform(async()=>{const reason=prompt('Lý do quyết định');if(reason?.trim()){
+             await api(path,{action:'complete',taskId:task.id,approved,reason});await refresh()
+           }});panel.append(button);
+         }
+       }
+     });card.append(show);
+   }
    el('records').append(card);
  }
  if(!append&&!result.records.length)el('records').append(node('p','Chưa có hồ sơ.'));
@@ -56,7 +75,7 @@ el('create').onsubmit=e=>{e.preventDefault();perform(async()=>{
 });};
 await perform(async()=>{
  const [portal,state]=await Promise.all([api('portals/'+location.pathname.split('/')[1]),api('state')]);
- role=state.me.role;actor=state.me.email;el('title').textContent=portal.models[0].name;
+ handover=portal.handover;role=state.me.role;actor=state.me.email;el('title').textContent=portal.models[0].name;
  for(const model of portal.models)el('model').add(new Option(model.name,model.id));
  await refresh();
 });

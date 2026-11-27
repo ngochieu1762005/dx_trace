@@ -141,3 +141,7 @@ node --test tests/business-evidence.test.mjs tests/evidence-api.test.mjs tests/e
 ## Bằng chứng cho ứng dụng AppKit
 
 Trong manifest Application, khai báo `spec.evidence: {signing: required, resources: [maintenance]}`. Chọn `optional` để cho phép ghi trạng thái unsigned khi chưa có khóa. Mỗi tài nguyên phải có workflow và quyền approve. Core chụp model đang thực thi, hồ sơ trước/sau và lệnh chuyển bước, rồi lưu cùng audit và revision trong một transaction. CLI xác minh bằng cách chạy lại quy tắc của model với vai trò, người thao tác và thời gian đã ghi. Khóa required thiếu hoặc sai khiến quyết định bị từ chối trước commit. Để kiểm gói AppKit, dùng bản cài CLI đầy đủ.
+
+## Bàn giao sau bảo trì
+
+Manifest Maintenance khai báo `spec.handover: {provider: flowable, resource: maintenance, after: done}`. Sau khi hồ sơ hoàn tất, người tạo mở biên bản bàn giao từ portal. Flowable giữ trạng thái bàn giao và kết quả kiểm tra kỹ thuật, vật tư và phê duyệt cuối. Trạng thái sửa chữa thuộc AppKit. API của biên bản kiểm tra quyền đọc model và hồ sơ trong workspace cho từng thao tác. Tắt overlay Flowable sẽ ẩn thao tác bàn giao trong portal.

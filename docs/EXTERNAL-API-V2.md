@@ -20,3 +20,5 @@ Cả URL v1 và v2 dùng workspace, model và vùng do operator cấp cho client
 
 
 Dùng endpoint schema để lấy OpenAPI của model. Tải gói SDK từ release hoặc thư mục sdk của bản cài. [Ví dụ gọi SDK](../sdk/README.md). Gói bằng chứng đầy đủ có lịch sử ledger của workspace và được xuất trong portal quản lý.
+
+Khi chạy nhiều replica trên cùng VPS, dùng overlay `compose.external-quota.yaml` để dùng chung bộ đếm trong volume riêng. Với nhiều máy chủ, đặt bộ giới hạn tập trung ở upstream.
