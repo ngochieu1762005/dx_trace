@@ -43,6 +43,9 @@ export async function ctx(request:Request){
  if(!m){const invite:any=await q('SELECT * FROM invitations WHERE email=?',u.email.toLowerCase()).first();const wid=invite?.workspace||'ws-'+await hash(u.userId);
  await db().batch([...(invite?[]:[q('INSERT OR IGNORE INTO workspaces(id,owner,state,created) VALUES(?,?,?,?)',wid,u.userId,JSON.stringify(initial()),new Date().toISOString())]),q('INSERT OR IGNORE INTO members(id,workspace,email,name,role) VALUES(?,?,?,?,?)',u.userId,wid,u.email,u.displayName,invite?.role||'owner')]);m=await q('SELECT * FROM members WHERE id=?',u.userId).first()}
  if(m.role==='disabled')throw new DomainError('Quyền truy cập đã bị thu hồi. Liên hệ chủ không gian.',403);
+ return memberArea(m,request);
+}
+export async function memberArea(m:any,request:Request){
  const base=await read(m.workspace);
  const training=new URL(request.url).searchParams.get('area')==='training';
  const useBase=Boolean(base.data.demo)===training;

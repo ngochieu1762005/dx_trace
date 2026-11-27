@@ -47,10 +47,11 @@ export function externalConfig(env=process.env,read=readFileSync){
      hardFail('invalid or duplicate client policy');
   const scopes=new Set(entry.scopes||[]);
   if(doc.version===2 && (!Array.isArray(entry.scopes)||!entry.scopes.includes('dxtrace.records.read')||
-    entry.scopes.some(s=>!['dxtrace.records.read','dxtrace.records.create','dxtrace.records.transition'].includes(s))||
+    entry.scopes.some(s=>!['dxtrace.records.read','dxtrace.records.create','dxtrace.records.transition','dxtrace.tasks.read','dxtrace.evidence.read'].includes(s))||
     typeof entry.workspace!=='string'||!/^[A-Za-z0-9:_-]{1,128}$/.test(entry.workspace))) hardFail('v2 requires an explicit workspace and scopes');
+  if(entry.area!==undefined && !['live','training'].includes(entry.area))hardFail('Expected live or training area');
   clients.set(entry.clientId,{models:new Set(entry.models),limit:entry.requestsPerMinute,
-    v2:doc.version===2,workspace:entry.workspace,scopes});
+    v2:doc.version===2,workspace:entry.workspace,area:entry.area||'live',scopes});
  }
  return {appToken,issuer,audience,upstream:url,clients};
 }
@@ -119,14 +120,14 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
    route=url.pathname;
    if(url.origin!=='http://external.internal'){status=400;return json(res,status,'Invalid target',requestId);}
    const match=/^\/v1\/models\/([a-z][a-z0-9_]{0,39})\/records$/.exec(url.pathname);
-   const v2=/^\/v2\/models\/([a-z][a-z0-9_]{0,39})\/(schema|records)(?:\/(REC-[a-f0-9-]{36})(\/transition)?)?$/.exec(url.pathname);
+   const v2=/^\/v2\/models\/([a-z][a-z0-9_]{0,39})\/(schema|records)(?:\/(REC-[a-f0-9-]{36})(\/(?:transition|tasks|evidence))?)?$/.exec(url.pathname);
    const apps=url.pathname==='/v2/apps';
    if(!match&&!v2&&!apps&&url.pathname!=='/v1/health'){status=404;return json(res,status,'Unknown version or route',requestId);}
    if(!v2&&!apps&&req.method!=='GET'){status=405;return json(res,status,'Read-only API',requestId,{allow:'GET'});}
    if(v2&&v2[2]==='schema'&&v2[3]){status=404;return json(res,status,'Unknown route',requestId);}
    const create=!!v2&&v2[2]==='records'&&!v2[3]&&req.method==='POST';
-   const transition=!!v2&&!!v2[4]&&req.method==='POST';
-   if((v2||apps)&&!(create||transition||req.method==='GET'&&!v2?.[4])){status=405;return json(res,status,'Method not allowed',requestId);}
+   const transition=v2?.[4]==='/transition'&&req.method==='POST';
+   if((v2||apps)&&!(create||transition||req.method==='GET'&&v2?.[4]!=='/transition')){status=405;return json(res,status,'Method not allowed',requestId);}
    const list=!!match||!!v2&&v2[2]==='records'&&!v2[3]&&req.method==='GET';
    if([...url.searchParams.keys()].some(k=>!(list?['limit','offset','q','status']:[]).includes(k))||
       [...url.searchParams.keys()].some(k=>url.searchParams.getAll(k).length!==1)){
@@ -140,7 +141,7 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
    const model=match?.[1]||v2?.[1];
    if(model&&!identity.policy.models.has(model)){status=403;return json(res,status,'Model not authorized for client',requestId);}
    if(v2||apps){
-    const scope=create?'dxtrace.records.create':transition?'dxtrace.records.transition':'dxtrace.records.read';
+    const scope=create?'dxtrace.records.create':transition?'dxtrace.records.transition':v2?.[4]==='/tasks'?'dxtrace.tasks.read':v2?.[4]==='/evidence'?'dxtrace.evidence.read':'dxtrace.records.read';
     if(!identity.scopes.has(scope)||!identity.policy.scopes.has(scope)){status=403;return json(res,status,'Scope not authorized for client',requestId);}
    }
    if(url.pathname!=='/v1/health'){
@@ -150,15 +151,16 @@ export function createExternalApi(config,{fetcher=fetch,clock=Date.now,audit=con
      {'retry-after':String(Math.max(1,Math.ceil((60000-(clock()-q.start))/1000)))});
     }
    }
-   let corePath=match?'/api/models/'+match[1]+'/records'+url.search:'/api/health';
+   let corePath='/api/health';
    const upstreamHeaders={'x-dx-core-token':config.appToken,'x-forwarded-user':identity.subject,
     'x-forwarded-email':identity.email,'x-request-id':requestId};
    let body;
-   if(v2||apps){
+   if(match||v2||apps){
     const params=new URLSearchParams(url.search);
-    params.set('workspace',identity.policy.workspace);
+    if(identity.policy.v2)params.set('workspace',identity.policy.workspace);
+    if(identity.policy.area==='training')params.set('area','training');
     if(apps)params.set('models',[...identity.policy.models].join(','));
-    corePath='/api/external-v2'+url.pathname.slice(3)+'?'+params;
+    corePath=(match?'/api/external-v1':'/api/external-v2')+url.pathname.slice(3)+(params.size?'?'+params:'');
     if(create||transition){
      const key=req.headers['idempotency-key'];
      if(typeof key!=='string'||!/^[A-Za-z0-9._:-]{1,100}$/.test(key)){status=400;return json(res,status,'Idempotency-Key required',requestId);}

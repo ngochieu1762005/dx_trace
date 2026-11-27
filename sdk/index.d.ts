@@ -14,5 +14,7 @@ export class DXTraceClient {
   get<T extends Data = Data>(model: string, id: string): Promise<DXRecord<T>>;
   create(model: string, data: Data, idempotencyKey: string): Promise<WriteResult>;
  };
+ tasks: { list(model:string,id:string):Promise<{tasks:{id:string;reasonRequired:boolean;process:boolean}[]}> };
+ evidence: { list(model:string,id:string):Promise<{decisions:{id:string;occurred_at:string;signing_status:string;checkpoint:string|null}[]}> };
  workflow: { transition(model: string, id: string, input: {version: number; target: string; reason?: string}, idempotencyKey: string): Promise<WriteResult> };
 }

@@ -18,6 +18,14 @@ services:
       OAUTH2_PROXY_PROVIDER_CA_FILES: /run/test-ca.crt
     volumes:
       - ./.sso-test/tls/server.crt:/run/test-ca.crt:ro
+  external-api:
+    profiles: [migration-test]
+    environment:
+      NODE_EXTRA_CA_CERTS: /run/test-ca.crt
+    volumes:
+      - ./.sso-test/external-clients.json:/run/config/external-clients.json:ro
+      - ./.sso-test/tls/server.crt:/run/test-ca.crt:ro
+    networks: [appnet, edge]
   sso-smoke:
     profiles: [migration-test]
     image: python:3.13-alpine
@@ -29,4 +37,4 @@ services:
       - ./.sso-test/manifest.json:/checks/manifest.json:ro
     command: ["python","/checks/sso-smoke.py"]
     networks: [edge]
-    depends_on: [gateway, signin, identity]
+    depends_on: [gateway, signin, identity, external-api]

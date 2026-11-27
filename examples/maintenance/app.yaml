@@ -20,5 +20,8 @@ spec:
   routes:
     - path: /maintenance
       service: maintenance-portal
+  evidence:
+    signing: optional
+    resources: [maintenance]
   audit:
     enabled: true

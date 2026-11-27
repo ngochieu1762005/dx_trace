@@ -1,25 +1,31 @@
 /* SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors */
 import {getSessionUser} from '../selfhost/runtime.mjs';
-import {q} from './server.ts';
+import {q,ctx,memberArea} from './server.ts';
 import {models,queryRecords,changePlatform} from './platform-store.ts';
 import {PlatformError,platformView,modelOpenApi} from './platform.mjs';
+import {executableTasks} from './task-view.mjs';
+import {portalLinks} from './package-store.ts';
 import {listedApplication} from './appkit.mjs';
 const fail=(message:string,status=422):never=>{throw new PlatformError(message,status)};
 const json=(data:any)=>Response.json(data,{headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}});
 const modelId=/^[a-z][a-z0-9_]{0,39}$/;
 const recordId=/^REC-[a-f0-9-]{36}$/;
 const keys=(value:any,allowed:string[])=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(k=>allowed.includes(k));
-export async function externalV2(req:Request){
+export async function externalV2(req:Request,legacy=false){
  const url=new URL(req.url),parts=url.pathname.split('/').slice(3);
  if(req.method!=='GET'&&(req.headers.get('sec-fetch-site')==='cross-site'||req.headers.get('origin')&&req.headers.get('origin')!==url.origin))fail('Invalid origin',403);
- // Never auto-provision or resolve an invitation via the external API.
+ if(legacy && (req.method!=='GET'||parts.length!==3||parts[0]!=='models'||parts[2]!=='records'))fail('Unknown route',404);
+ const bound=!legacy||url.searchParams.has('workspace');
+ async function boundContext(){
  const user=await getSessionUser();
  if(!user)fail('Authentication required',401);
  const member=await q('SELECT * FROM members WHERE id=?',user.userId).first();
  if(!member||member.role==='disabled'||member.workspace!==url.searchParams.get('workspace')||
     member.email.toLowerCase()!==user.email.toLowerCase())fail('Explicit workspace membership required',403);
- const c={...member,organization:member.workspace,workspace:member.workspace};
+ return memberArea(member,req);
+ }
+ const c=bound?await boundContext():await ctx(req);
  const visible=(await models(c)).filter((m:any)=>m.definition.permissions.read.includes(c.role));
  if(parts.length===1&&parts[0]==='apps'&&req.method==='GET'){
   const allowed=(url.searchParams.get('models')||'').split(',');
@@ -50,6 +56,10 @@ export async function externalV2(req:Request){
  if(req.method==='GET'&&parts.length===3){
   const params=new URLSearchParams(url.search);params.set('model',model);
   const view=await queryRecords(c,params);
+  if(legacy){
+   const models=view.models.filter((item:any)=>item.id===model);
+   return json({models,records:view.records,summary:view.summary,page:view.page,portals:portalLinks(c,models)});
+  }
   return json({records:view.records,summary:view.summary,page:view.page});
  }
  const findRecord=async()=>{
@@ -58,6 +68,19 @@ export async function externalV2(req:Request){
   if(!view.records.length)fail('Record not found',404);
   return view.records[0];
  };
+ if(req.method==='GET'&&parts.length===5){
+  const record=await findRecord();
+  if(action==='tasks')return json({tasks:executableTasks(m.definition,record,c.role,c.email||c.name)});
+  if(action==='evidence'){
+   if(!['owner','manager'].includes(c.role))fail('Management role required',403);
+   const rows=(await q(`SELECT e.id,e.occurred_at,e.signing_status,e.checkpoint FROM evidence_decisions e
+    JOIN audit_ledger a ON a.workspace=e.workspace AND a.seq=e.seq
+    WHERE e.workspace=? AND e.kind='platform.transition' AND e.subject_id=? AND json_extract(a.payload,'$.model')=?
+    ORDER BY e.seq DESC LIMIT 100`,c.workspace,id,model).all()).results;
+   return json({decisions:rows});
+  }
+  fail('Unknown route',404);
+ }
  if(req.method==='GET'&&parts.length===4)return json(await findRecord());
  if(req.method!=='POST')fail('Unknown route',404);
  const key=req.headers.get('idempotency-key')||'';

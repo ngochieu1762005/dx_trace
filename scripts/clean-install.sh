@@ -12,6 +12,8 @@ mkdir -p "$(dirname "$dest")"
 stage=$(mktemp -d "$(dirname "$dest")/.dx-install.XXXXXX")
 trap 'rm -rf "$stage"' EXIT
 mkdir -p "$stage"/{bin,app,selfhost/flowable,tools,node_modules,examples/maintenance}
+mkdir -p "$stage/sdk"
+npm pack ./sdk --ignore-scripts --pack-destination "$stage/sdk" >/dev/null
 cp -R lib drizzle apps "$stage/"
 cp -R app/api "$stage/app/"
 cp -R selfhost/generated "$stage/selfhost/"

@@ -90,6 +90,41 @@ request(manager, "/api/packages/maintenance/uninstall", {"revision": 1}, 403)
 # Anonymous navigation may show the proxy's sign-in page or go to Keycloak.
 with session().open(app + "/maintenance", timeout=15) as page:
     assert b"portal.mjs" not in page.read()
+def access_token(client):
+    form = urlencode({"client_id": client, "grant_type": "password", "username": "inspector",
+                      "password": users["inspector"], "scope": "openid email"}).encode()
+    with session().open(issuer + "/realms/warehouse/protocol/openid-connect/token", data=form, timeout=10) as response:
+        return json.load(response)["access_token"]
+
+
+def external(token, path, data=None, expected=200):
+    headers = {"Authorization": "Bearer " + token, "Idempotency-Key": str(uuid.uuid4()), "Content-Type": "application/json"}
+    req = Request("http://external-api:8093" + path, headers=headers, data=None if data is None else json.dumps(data).encode())
+    try:
+        with session().open(req, timeout=12) as response:
+            assert response.status == expected
+            return json.load(response)
+    except HTTPError as error:
+        assert error.code == expected, f"{path} returned {error.code}, expected {expected}"
+
+
+model = "pkg_maintenance_maintenance"
+records = "/models/" + model + "/records"
+token = access_token("dx-ci")
+created = external(token, "/v2" + records, {"data": {"equipment": "P-17", "description": "CI inspection", "priority": "Thường"}})
+record_path = "/v2" + records + "/" + created["id"]
+assert external(token, record_path)["data"]["equipment"] == "P-17"
+assert external(token, record_path + "/tasks")["tasks"]
+external(token, record_path + "/transition", {"version": 1, "target": "submitted"})
+decision = external(token, record_path + "/evidence")["decisions"][0]
+assert decision["signing_status"] == "signed"
+visible = external(token, "/v1" + records)
+assert [m["id"] for m in visible["models"]] == [model]
+assert created["id"] in [r["id"] for r in request(owner, "/api/models/" + model + "/records")["records"]]
+for version in ("/v1", "/v2"):
+    external(access_token("dx-other"), version + records, expected=403)
+    external(access_token("dx-training"), version + records, expected=404)
+print("PASS Keycloak token, external API v1/v2, APISIX, SQLite read/write, signed decision and workspace boundaries")
 request(owner, "/api/packages/maintenance/uninstall", {"revision": 1})
 request(manager, "/maintenance", expected=404)
 print("PASS two Keycloak logins, three portals, shared tenant, protected route and owner-only uninstall")

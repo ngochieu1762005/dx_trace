@@ -17,6 +17,9 @@ export class DXTraceClient {
    get:(m,id)=>this.request(modelPath(m)+'/records/'+segment(id)),
    create:(m,data,key)=>this.request(modelPath(m)+'/records',{data},key)
   };
+  const recordPath=(m,id)=>modelPath(m)+'/records/'+segment(id);
+  this.tasks={list:(m,id)=>this.request(recordPath(m,id)+'/tasks')};
+  this.evidence={list:(m,id)=>this.request(recordPath(m,id)+'/evidence')};
   this.workflow={transition:(m,id,input,key)=>this.request(modelPath(m)+'/records/'+segment(id)+'/transition',input,key)};
  }
  async request(path,body,key){

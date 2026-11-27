@@ -21,6 +21,8 @@ for i in {1..80}; do
   sleep .25
 done
 curl -fsS "$PUBLIC_ORIGIN/" | grep -q '<html'
+mkdir sdk-consumer
+(cd sdk-consumer && npm install --offline --no-audit --no-fund --ignore-scripts "$temp/install"/sdk/*.tgz && node --input-type=module -e 'import {DXTraceClient} from "@dxtrace/sdk"; if(typeof DXTraceClient !== "function")process.exit(1)')
 dxtrace app init maintenance
 dxtrace app validate ./maintenance
 dxtrace app install ./maintenance

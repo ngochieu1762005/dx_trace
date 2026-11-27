@@ -1,5 +1,8 @@
 /* DX-TRACE | Indexed, transactional model storage. SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */
+import {appDecisionSnapshot} from './app-evidence.mjs';
+import {canonicalEvidenceJSON} from './business-evidence.mjs';
+import {evidenceInsert} from './evidence-store.ts';
 import {withWorkspace} from './workspace-queue.mjs';
 import {q,db,hash} from './server.ts';
 import {applyPlatform,planModel,platformView,PlatformError,recordScope} from './platform.mjs';
@@ -54,11 +57,24 @@ async function changePlatformUnlocked(c:any,cmd:string,b:any,key:string){
   const value=cmd==='platform.apply'?state.models.find((m:any)=>m.id===result.id):state.records.find((r:any)=>r.id===result.id);
   const content=JSON.stringify(value);if(Buffer.byteLength(content)>524288)fail('Hồ sơ hoặc lịch sử mô hình vượt 512 KiB');
   const previous=(await q('SELECT hash FROM audit_ledger WHERE workspace=? ORDER BY seq DESC LIMIT 1',c.workspace).first())?.hash||'0'.repeat(64);
-  const payload=JSON.stringify({action:cmd,actor:who,entity:result.id,created:now}),digest=await hash(previous+'\n'+(revision+1)+'\n'+payload);
+  let snapshot=null,required=false;
+  if(cmd==='platform.transition'){
+   const owner=q('SELECT p.name,p.versions FROM app_package_models m JOIN app_packages p ON p.workspace=m.workspace AND p.name=m.package WHERE m.workspace=? AND m.model=? AND p.active=1',c.workspace,b.model).first();
+   const config=owner && JSON.parse(owner.versions).at(-1).manifest.spec.evidence;
+   if(config?.resources.some((resource:string)=>b.model==='pkg_'+owner.name+'_'+resource)){
+    required=config.signing==='required';
+    snapshot=appDecisionSnapshot({context:c,model:all.find((item:any)=>item.id===b.model),before:JSON.parse(records[0].payload),
+      after:value,body:b,seq:revision+1,now,simulated:!!q("SELECT json_extract(state,'$.demo') AS demo FROM workspaces WHERE id=?",c.workspace).first().demo});
+   }
+  }
+  const binding=snapshot?{model:b.model,inputHash:await hash(canonicalEvidenceJSON(snapshot.lineage.sources))}:{};
+  const payload=JSON.stringify({action:cmd,actor:who,entity:result.id,created:now,...binding}),digest=await hash(previous+'\n'+(revision+1)+'\n'+payload);
   const guard=' WHERE EXISTS (SELECT 1 FROM workspaces WHERE id=? AND revision=?)';
   const write=cmd==='platform.apply'?q('INSERT INTO platform_models(workspace,id,payload) SELECT ?,?,?'+guard+' ON CONFLICT(workspace,id) DO UPDATE SET payload=excluded.payload',c.workspace,result.id,content,c.workspace,revision):q('INSERT INTO platform_records(workspace,model,id,actor,status,updated,due_at,payload) SELECT ?,?,?,?,?,?,?,?'+guard+' ON CONFLICT(workspace,model,id) DO UPDATE SET status=excluded.status,updated=excluded.updated,due_at=excluded.due_at,payload=excluded.payload',c.workspace,value.model,value.id,value.createdBy,value.status,value.updated,value.dueAt||null,content,c.workspace,revision);
   const statements=[write,q('INSERT INTO platform_commands(workspace,key,actor,fingerprint,result,created) SELECT ?,?,?,?,?,?'+guard,c.workspace,key,who,fingerprint,JSON.stringify(result),now,c.workspace,revision),q('INSERT INTO audit_ledger(workspace,seq,previous,hash,payload,created) SELECT ?,?,?,?,?,?'+guard,c.workspace,revision+1,previous,digest,payload,now,c.workspace,revision),q('UPDATE workspaces SET revision=revision+1 WHERE id=? AND revision=?',c.workspace,revision)];
-  if((await db().batch(statements))[3].meta.changes===1)return result;
+  const evidence=await evidenceInsert(c,snapshot,{seq:revision+1,previous,hash:digest,payload},revision,required);
+  if(evidence)statements.splice(-1,0,evidence);
+  if((await db().batch(statements)).at(-1).meta.changes===1)return result;
  }
  fail('Dữ liệu đang thay đổi, hãy tải lại',409);
 }
