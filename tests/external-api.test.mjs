@@ -80,3 +80,25 @@ test('Keycloak RS256 signature, audience, scope and model ACL guard external rea
   assert.equal(JSON.stringify(audits).includes('staff@example.test'),false);
  }finally{await close(srv);}
 });
+
+test('v2 opt-in requires client workspace and explicit scopes; writes cannot widen proxy target',async()=>{
+ const policy=JSON.stringify({version:2,clients:[{clientId:'licensed-integrator',workspace:'ws-test',models:['maintenance'],requestsPerMinute:20,scopes:['dxtrace.records.read','dxtrace.records.create','dxtrace.records.transition']}]});
+ const calls=[],srv=createExternalApi(makeConfig({},policy),{fetcher:fakeFetch(calls),clock:()=>now,audit:()=>{}});
+ const base=await start(srv),url=base+'/v2/models/maintenance/records';
+ const auth={authorization:'Bearer '+jwt({scope:'dxtrace.records.read dxtrace.records.create dxtrace.records.transition'}),'content-type':'application/json','idempotency-key':'create-1'};
+ try{
+  assert.equal((await fetch(url,{method:'POST',headers:{...auth,authorization:'Bearer '+jwt()},body:'{"data":{}}'})).status,403);
+  assert.equal((await fetch(url,{method:'POST',headers:{...auth,'idempotency-key':''},body:'{"data":{}}'})).status,400);
+  assert.equal((await fetch(url+'?workspace=other',{headers:auth})).status,400);
+  assert.equal((await fetch(url,{method:'POST',headers:auth,body:'{"data":{"equipment":"Pump"}}'})).status,200);
+  assert.equal(calls[0].target,'http://gateway-api:8082/api/external-v2/models/maintenance/records?workspace=ws-test');
+  assert.equal(calls[0].opts.method,'POST');
+  assert.equal(calls[0].opts.body,'{"data":{"equipment":"Pump"}}');
+  assert.match(calls[0].opts.headers['idempotency-key'],/^[a-f0-9]{64}$/);
+  await fetch(url,{method:'POST',headers:auth,body:'{"data":{"equipment":"Pump"}}'});
+  assert.equal(calls[0].opts.headers['idempotency-key'],calls[1].opts.headers['idempotency-key']);
+  assert.equal((await fetch(base+'/v2/models/secret/records',{headers:auth})).status,403);
+  assert.equal((await fetch(base+'/v2/apps',{headers:auth})).status,200);
+  assert.match(calls.at(-1).target,/models=maintenance/);
+ }finally{await close(srv);}
+});
