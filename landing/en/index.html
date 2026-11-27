@@ -19,7 +19,7 @@ DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
   <link rel="alternate" hreflang="vi" href="https://dxtrace.hieuds.com/">
   <link rel="alternate" hreflang="en" href="https://dxtrace.hieuds.com/en/">
   <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/site.css?v=12">
+  <link rel="stylesheet" href="/assets/site.css?v=14">
   <script defer src="/assets/site.js?v=11"></script>
 </head>
 <body>
@@ -44,8 +44,13 @@ DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
         <p class="intro">A self-hosted digital platform with shared identity, declarative data, workflows and verifiable decision evidence.</p>
         <div class="hero-actions"><a class="button" href="/en/olp/">View competition entry</a><a class="underlink" href="/en/developers/">Developer docs</a></div>
       </div>
-      <div class="capability-grid"><a href="/en/platform/"><strong>Identity &amp; Access</strong><span>Keycloak · RBAC</span></a><a href="/en/platform/"><strong>Workflow</strong><span>BPMN · Flowable</span></a><a href="/en/applications/"><strong>AppKit</strong><span>Manifest · CLI</span></a><a href="/en/evidence/"><strong>Evidence Engine</strong><span>Ed25519 · SHA-256</span></a><a href="/en/developers/"><strong>Developer API</strong><span>OAuth2 · TypeScript SDK</span></a><a href="/en/platform/#data"><strong>Data Platform</strong><span>Models · Records</span></a></div>
+      <figure class="field-photo">
+        <img src="/assets/food-distribution.webp" width="1440" height="961" fetchpriority="high" alt="A forklift moves between storage racks at Houston Food Bank">
+        <figcaption>Houston Food Bank · Lance Cheung / USDA</figcaption>
+        <a class="case-tab" href="#quy-trinh"><div><small>Training case</small><strong>SUA-005</strong></div><div><strong>17 of 50 units returned</strong><span>Explore recall <b aria-hidden="true"></b></span></div></a>
+      </figure>
     </section>
+    <nav class="capability-band wrap" aria-label="Explore the platform"><a href="/en/platform/"><strong>Identity &amp; Access</strong><span>Keycloak · RBAC</span></a><a href="/en/platform/"><strong>Workflow</strong><span>BPMN · Flowable</span></a><a href="/en/applications/"><strong>AppKit</strong><span>Manifest · CLI</span></a><a href="/en/evidence/"><strong>Evidence Engine</strong><span>Ed25519 · SHA-256</span></a><a href="/en/developers/"><strong>Developer API</strong><span>OAuth2 · TypeScript SDK</span></a><a href="/en/platform/#data"><strong>Data Platform</strong><span>Models · Records</span></a></nav>
     <section class="case-section" id="quy-trinh" aria-labelledby="case-title"><div class="wrap case-layout">
       <div class="case-story">
         <p class="section-label">Practice warehouse · Sample record</p>
@@ -56,7 +61,7 @@ DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
           <details name="lot-story"><summary>Trace two delivery destinations</summary><p>Long Biên received 30 boxes and Tây Hồ received 20. A separate reservation of 12 boxes is still at the warehouse.</p></details>
           <details name="lot-story"><summary>Reconcile each return</summary><p>Long Biên has returned 17 boxes. Staff reconcile the remaining 13 there and 20 at Tây Hồ before closing the incident.</p></details>
         </div>
-        <a class="underlink" href="/docs/en/recall-guide/">Read the recall procedure</a>
+        <div class="hero-actions"><a class="button" href="/docs/en/demo/">Explore the training warehouse</a><a class="underlink" href="/docs/en/recall-guide/">Read the recall procedure</a></div>
       </div>
       <article class="manifest" aria-labelledby="manifest-title">
         <header class="manifest-head"><span>Recall reconciliation</span><span class="lot-code">SUA-005</span></header>

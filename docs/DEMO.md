@@ -29,6 +29,19 @@ Kịch bản dành cho người lần đầu xem DX-TRACE, dự kiến 12–15 p
 
 Mẫu AppKit nằm tại [bảo trì](../examples/maintenance/app.json) và [mua sắm](../examples/purchase/app.json). Không cài lại định nghĩa lên mô hình có hồ sơ đang chạy mà bỏ qua cảnh báo kế hoạch. Quy tắc `differentActor` cần người duyệt khác người tạo; một tài khoản owner không thay thế được minh chứng hai người.
 
+## Khám phá kho mẫu mở rộng
+
+Kho thực hành phiên bản dữ liệu 3 có 64 lô, 184 phiếu giao nhận, 22 đối tác, 17 đầu dò và 344 lần đo khi khởi tạo. Các ngày nhập, hạn dùng và bàn giao được tính từ ngày tạo bộ mẫu. Với kho đã dùng, dữ liệu ban đầu và thao tác của người dùng được giữ lại khi nâng cấp.
+
+| Mở hồ sơ | Thao tác diễn tập |
+| --- | --- |
+| **DAU-101 · Dâu tây Đà Lạt** | Trong Thiết bị, xem ba lần đo cuối vượt 6 °C. Mở hồ sơ lô để đối chiếu trạng thái cách ly và điểm nhận. |
+| **SUA-005 · Sữa chua dâu** | Trong Sự cố & thu hồi, kiểm tra 33 hộp còn phải thu và phiếu giữ 12 hộp. |
+| **TOM-102 · Tôm sú đông lạnh** | Xem hai điểm đã trả đủ, phiếu chưa giao đã hủy và hồ sơ đã đóng. Lô vẫn bị chặn xuất. |
+| **TRA-101 đến TRA-104 · Trà xanh sao khô** | Tìm mã vạch nội bộ của một lô trong mục Lô hàng để xem cả bốn đợt nhập. So sánh hạn dùng trước khi chọn lô xuất. |
+
+Trong Tổng quan, chọn **Mở hướng dẫn diễn tập** để đến ba hồ sơ đầu. Biểu đồ giao nhận đếm số phiếu được lập theo ngày UTC. Danh sách ưu tiên xuất chỉ lấy các lô đang hoạt động, còn hàng và còn hạn.
+
 ## Minh chứng ứng dụng độc lập trong v0.2.0
 
 Mở `/apps/quality/` khi đã triển khai service `quality-portal` sau lớp đăng nhập. Chủ không gian cài ứng dụng từ manifest; nhân viên nhập phiếu, gửi thẩm định; tài khoản người tạo bị chặn tự phê duyệt và tài khoản quản lý **khác người** duyệt được. Đối chiếu hồ sơ trong **Nghiệp vụ mở rộng**, trên môi trường thử cô lập có thể dừng riêng giao diện thứ hai và xác nhận Core vẫn trả API thành công. [Từng bước](QUALITY-PORTAL.md).

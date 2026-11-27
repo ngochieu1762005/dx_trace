@@ -18,6 +18,19 @@ Use tag `v0.2.0` at `00990ecd272648cbb6da808ab30a83d48ec163cd`. Record the outpu
 6. Open the [competition entry](https://dxtrace.hieuds.com/en/olp/) and verify the synthetic release sample. Expect Ed25519 and six matching hashes. Verify the modified sample and identify the mismatch in `decision.json`.
 7. Run `dxtrace app list`, open `/maintenance` and show the installed version. The CLI manages the package and the JavaScript SDK accesses records through the external API.
 
+## Explore the expanded training warehouse
+
+Training data edition 3 starts with 64 lots, 184 shipments, 22 partners, 17 probes and 344 readings. Dates are relative to the initial seed or upgrade. Existing practice records and operator changes are retained.
+
+| Open a case | Follow the records |
+| --- | --- |
+| **DAU-101 · Strawberries** | Find the last three readings above 6 °C, then inspect the quarantine and destinations. |
+| **SUA-005 · Strawberry yoghurt** | Reconcile 33 units outstanding and a separate reservation of 12 units. |
+| **TOM-102 · Frozen prawns** | Check the two completed returns, cancelled reservation and closed incident. The lot remains blocked. |
+| **TRA-101 through TRA-104 · Green tea** | Search for the internal product barcode to find all four batches and compare expiry dates. |
+
+From the warehouse overview, **Mở hướng dẫn diễn tập** opens the case guide. The seven-day chart counts shipment records by UTC creation date. The dispatch shortlist shows the earliest-expiring active lots with stock available.
+
 ## Evidence
 
 Record commit, roles, actual results and failures. A local demo does not establish production SSO or throughput.

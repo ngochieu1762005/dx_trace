@@ -35,6 +35,7 @@
 'use client';
 import {signInUrl, sessionRequest} from '../public/shared/session.mjs';
 import Impact from './impact';
+import DispatchOverview from './dispatch-overview';
 import WorkspaceDialog from './workspace-dialog';
 import {recallImpact} from '../lib/impact.mjs';
 import Platform from './platform';
@@ -177,10 +178,17 @@ export default function Console(){
        <a href="/?area=training#overview" aria-current={s.demo?'page':undefined}>Kho thực hành</a>
      </nav>
      <div className="page-heading"><div><h1 id="workspace-title" tabIndex={-1}>{page==='overview'?'Tổng quan kho':title}</h1>
-       {page==='overview'?<p>{s.demo?'Dữ liệu mẫu của kho thực hành.':'Tồn kho, giao nhận và các hồ sơ cần xử lý.'}</p>:subtitles[page]&&<p>{subtitles[page]}</p>}
+       {page==='overview'?<p>{s.demo?<>Dữ liệu mẫu của kho thực hành. <a className="lot-link" href="#guide">Mở hướng dẫn diễn tập</a></>:'Tồn kho, giao nhận và các hồ sơ cần xử lý.'}</p>:subtitles[page]&&<p>{subtitles[page]}</p>}
      </div><div className="actions">{['overview','lots','trace','shipments'].includes(page)&&<button className="secondary" onClick={()=>setScanning(true)}><ScanLine size={17}/>Quét mã</button>}
        {page==='overview'&&can&&<><button className="secondary" onClick={()=>shipmentForm()}><Truck size={16}/>Lập phiếu xuất</button><button onClick={lotForm}><Plus size={17}/>Nhập lô hàng</button></>}
        {page==='audit'&&<a href={areaUrl("export")} className="button secondary"><Download size={15}/>Xuất dữ liệu</a>}{page==='lots'&&<button className="secondary" onClick={exportLots}><Download size={16}/>Xuất CSV</button>}{page==='lots'&&can&&<button onClick={lotForm}><Plus size={16}/>Nhập lô hàng</button>}{page==='shipments'&&can&&<button onClick={()=>shipmentForm()}><Plus size={16}/>Lập phiếu xuất</button>}{page==='incidents'&&can&&<button onClick={()=>incidentForm()}><Plus size={16}/>Ghi nhận sự cố</button>}{page==='requests'&&can&&<button onClick={()=>form('Tạo đề xuất nội bộ','Ví dụ: đề nghị bổ sung thiết bị kho hoặc kiểm tra lô hàng.','workflow',[f('title','Tiêu đề'),f('content','Nội dung','textarea')])}><Plus size={16}/>Tạo đề xuất</button>}{page==='partners'&&can&&<button onClick={()=>partnerForm()}><Plus size={16}/>Thêm đối tác</button>}{page==='devices'&&manager&&<button onClick={deviceForm}><Plus size={16}/>Kết nối thiết bị</button>}{page==='documents'&&can&&<button onClick={documentForm}><Plus size={16}/>Thêm tài liệu</button>}</div></div>{err&&<div className="notice danger">{err}</div>}
+ {page==='guide'&&s.demo&&<section className="training-paths" aria-label="Hồ sơ thực hành">
+   {[
+     ['NET-LOT-DAU-101','Kiểm tra chuỗi lạnh','Xem nhiệt độ và các điểm đã nhận khay dâu.'],
+     ['DX-LOT-SUA-005','Đối soát thu hồi','Đối chiếu số hộp đã trả và phiếu còn giữ trong kho.'],
+     ['NET-LOT-TOM-102','Rà soát hồ sơ đã đóng','Lần theo đường đi của lô tôm và kiểm tra từng lần trả.'],
+   ].map(([id,title,detail])=>{const lot=s.lots.find((x:any)=>x.id===id);return lot&&<a key={id} href={'#trace/'+id}><small>{lot.code}</small><h2>{title}</h2><p>{detail}</p><ArrowUpRight size={18} aria-hidden="true"/></a>})}
+ </section>}
  {page==='guide'&&<section className="panel guide"><div className="panel-head"><h2>Hướng dẫn thao tác</h2><a className="text-link" href="https://dxtrace.hieuds.com/docs/" target="_blank" rel="noreferrer">Tài liệu DX-TRACE <ExternalLink size={13}/></a></div>{[
  ['Nhập lô hàng đầu tiên','Thêm một nhà cung cấp trong Đối tác. Vào Lô hàng, chọn Nhập lô hàng, điền số lượng, hạn dùng và vị trí kho.','partners'],
  ['Xuất hàng đến cửa hàng','Thêm đối tác loại Điểm nhận. Trong Giao nhận, lập phiếu xuất, chọn đúng lô và xác nhận giao khi hàng đến nơi.','shipments'],
@@ -189,6 +197,7 @@ export default function Console(){
  ['Gửi đề xuất cho quản lý','Tạo đề xuất nội bộ, nhập nội dung rồi gửi duyệt. Người có vai trò quản lý hoặc chủ không gian có thể phê duyệt.','requests']
  ].map(([name,desc,target])=><article key={target}><div><h3>{name}</h3><p>{desc}</p></div><button className="secondary" onClick={()=>go(target)} aria-label={name}>Mở <ArrowRight size={14}/></button></article>)}</section>}
  {page==='overview'&&<><div className="stats"><Stat label="Lô khả dụng" value={eligibleLots(s.lots,s.shipments).length} detail={`${s.lots.length} lô đang quản lý`} icon={Boxes}/><Stat label="Chờ giao hàng" value={s.shipments.filter((sh:any)=>sh.status==='reserved').length} detail="Phiếu đã giữ hàng trong kho" icon={Truck}/><Stat label="Sự cố chưa đóng" value={open.length} detail={`${s.incidents.filter((i:any)=>i.status==='pending').length} sự cố chờ duyệt`} icon={ShieldAlert}/><Stat label="Thiết bị hoạt động" value={s.devices.filter((d:any)=>d.active).length} detail="Theo dõi theo từng lô" icon={Radio}/></div>{!s.lots.length&&<section className="onboarding"><div><span className="eyebrow">BẮT ĐẦU VẬN HÀNH</span><h2>Thiết lập dữ liệu đầu tiên</h2><p>Không gian đã sẵn sàng. Thêm đối tác và lô hàng để theo dõi chuỗi cung ứng của bạn.</p><small>{s.partners.length?1:0} / 3 bước đã hoàn thành</small></div><div className="setup-steps">{[[1,'Thêm nhà cung cấp','Lưu thông tin nguồn hàng',()=>partnerForm()],[2,'Nhập lô hàng đầu tiên','Mã lô, số lượng và hạn sử dụng',lotForm],[3,'Lập phiếu giao nhận','Theo dõi hàng đến từng điểm nhận',()=>shipmentForm()]].map(([n,t,d,fn]:any)=><button disabled={!can} key={n} onClick={fn}><span className="step-number">{n===1&&s.partners.length?<Check size={14}/>:String(n).padStart(2,'0')}</span><span className="step-copy"><strong>{t}</strong><span>{d}</span></span><ChevronRight size={16}/></button>)}</div></section>}
+ {s.lots.length>0&&<DispatchOverview lots={s.lots} shipments={s.shipments} asOf={s.serverTime}/>}
  {recall&&incident&&<section className="recall-summary" aria-labelledby="active-recall">
    <div className="recall-info"><span className="recall-label"><ShieldAlert size={15}/>Đang thu hồi</span>
      <h2 id="active-recall"><a href={'#incidents/'+incident.id}>{recall.code} <span>·</span> {recall.product}</a></h2>

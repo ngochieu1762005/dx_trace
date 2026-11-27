@@ -76,7 +76,7 @@ def publish(out):
             dest.mkdir(parents=True,exist_ok=True)
             alternate=("/" if en else "/en/")+route+"/"
             nav="".join(link(base+k+"/",v) for k,v in titles.items() if k!=route)
-            page=f'''<!doctype html><html lang="{language}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title} · DX-TRACE</title><link rel="stylesheet" href="/assets/site.css?v=13"><header class="masthead"><div class="wrap masthead-inner"><a class="brand" href="{base}"><img width="154" height="32" src="/assets/brand-lockup.svg" alt="DX-TRACE"></a><a href="{alternate}">{tr("English","Tiếng Việt")}</a></div></header><main class="wrap product-page"><h1>{title}</h1>{content[route]}<nav>{nav}</nav></main></html>'''
+            page=f'''<!doctype html><html lang="{language}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title} · DX-TRACE</title><link rel="stylesheet" href="/assets/site.css?v=14"><header class="masthead"><div class="wrap masthead-inner"><a class="brand" href="{base}"><img width="154" height="32" src="/assets/brand-lockup.svg" alt="DX-TRACE"></a><a href="{alternate}">{tr("English","Tiếng Việt")}</a></div></header><main class="wrap product-page"><header class="product-heading"><a href="{base}">{tr("Trang chủ","Home")}</a><h1>{title}</h1></header>{content[route]}<nav>{nav}</nav></main></html>'''
             (dest/"index.html").write_text(page, encoding="utf-8")
 
     write_sitemap(out, titles)
