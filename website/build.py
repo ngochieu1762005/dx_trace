@@ -195,3 +195,6 @@ if __name__=="__main__":
     vi.mkdir()
     (vi/"index.html").write_text('<!doctype html><html lang="vi"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../intro/"><a href="../intro/">Tiếng Việt</a></html>',encoding="utf-8")
     (out/"docs/en/index.html").write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=intro/"><a href="intro/">English documentation</a></html>',encoding="utf-8")
+
+    from platform_pages import publish
+    publish(out)

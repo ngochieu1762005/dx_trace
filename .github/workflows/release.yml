@@ -132,7 +132,8 @@ jobs:
       - name: Verify inventory and include checksum
         run: |
           node tools/validate-sbom.mjs DX-TRACE.spdx.json
-          sha256sum DX-TRACE.spdx.json >> SHA256SUMS
+          npm pack ./sdk --ignore-scripts
+          sha256sum DX-TRACE.spdx.json dxtrace-sdk-*.tgz clean-install.log >> SHA256SUMS
       - name: Attest source archive provenance
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
@@ -170,5 +171,5 @@ jobs:
           gh release upload "$RELEASE_TAG" \
             "DX-TRACE-${RELEASE_TAG}.tar.gz" \
             DX-TRACE.spdx.json \
-            SHA256SUMS \
+            dxtrace-sdk-*.tgz clean-install.log SHA256SUMS \
             --clobber

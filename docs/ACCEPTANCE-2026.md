@@ -157,3 +157,9 @@ for testing an actual JWT minted by the deployed Keycloak realm.
 | Public tagged release | TODO | — | — | Tag, checksum, SBOM |
 
 Never pre-fill TODO as PASS before observing the corresponding test.
+
+## Developer Platform v0.2.0
+
+The disposable integration job provisions Keycloak flows, OAuth scopes and client policies, writes a Maintenance record through the external gateway and APISIX, checks it in the portal and verifies a signed decision and tenant isolation. [Test script](../selfhost/scripts/sso-smoke.py) · [Workflow runs](https://github.com/ngochieu1762005/dx_trace/actions/workflows/third-party-core.yml).
+
+For VPS acceptance record the deployed Git SHA, public signing-key fingerprint, two-user SSO result, external API profile, and a restore into isolated volumes. On 27 November 2026 the operator log showed commit 18bc70b and the base, Ubuntu edge and third-party overlays. Production signing, restoration and latency measurements still require a dated run.

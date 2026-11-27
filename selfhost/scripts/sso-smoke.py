@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Exercise two real OIDC code flows through the TLS edge. Never print cookies."""
 import json
+import os
 import ssl
 import time
 import uuid
@@ -108,6 +109,33 @@ def external(token, path, data=None, expected=200):
         assert error.code == expected, f"{path} returned {error.code}, expected {expected}"
 
 
+# Add custom scopes after the vanilla realm has its built-in profile/email mappers.
+def provision_external_clients():
+    payload = urlencode({"client_id": "admin-cli", "grant_type": "password", "username": "admin",
+                         "password": os.environ["FIXTURE_ADMIN_PASSWORD"]}).encode()
+    with session().open(issuer + "/realms/master/protocol/openid-connect/token", data=payload, timeout=15) as res:
+        admin = json.load(res)["access_token"]
+
+    def realm_api(path, method="GET", obj=None):
+        req = Request(issuer + "/admin/realms/warehouse/" + path, method=method,
+                      headers={"Authorization": "Bearer " + admin, "Content-Type": "application/json"},
+                      data=None if obj is None else json.dumps(obj).encode())
+        with session().open(req, timeout=15) as res:
+            raw = res.read()
+            return json.loads(raw) if raw else None
+
+    fixtures = json.loads(Path("/checks/oidc-fixtures.json").read_text())
+    for name in fixtures["scopes"]:
+        realm_api("client-scopes", "POST", {"name": name, "protocol": "openid-connect",
+                  "attributes": {"include.in.token.scope": "true"}})
+    ids = {s["name"]: s["id"] for s in realm_api("client-scopes")}
+    for client in fixtures["clients"]:
+        realm_api("clients", "POST", client)
+        cid = realm_api("clients?clientId=" + client["clientId"])[0]["id"]
+        for name in fixtures["scopes"]:
+            realm_api("clients/" + cid + "/default-client-scopes/" + ids[name], "PUT")
+
+provision_external_clients()
 model = "pkg_maintenance_maintenance"
 records = "/models/" + model + "/records"
 token = access_token("dx-ci")

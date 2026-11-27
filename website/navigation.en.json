@@ -98,6 +98,11 @@
         "External OIDC API"
       ],
       [
+        "external-api-v2",
+        "docs/en/external-api-v2.md",
+        "External API v2 · SDK"
+      ],
+      [
         "quality-portal",
         "docs/en/quality-portal.md",
         "Quality Portal"
@@ -351,6 +356,11 @@
         "release-v0.1.0",
         "docs/en/release-v0.1.0.md",
         "v0.1.0"
+      ],
+      [
+        "release-v0.2.0",
+        "docs/en/release-v0.2.0.md",
+        "v0.2.0"
       ]
     ]
   ]

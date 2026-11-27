@@ -1,5 +1,8 @@
 <div align="center">
 
+[Developer Platform v0.2.0 · External API, SDK and record-scoped evidence](docs/en/external-api-v2.md)
+
+
 [Tiếng Việt](README.md) · **English**
 
 # DX-TRACE

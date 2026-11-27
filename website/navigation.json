@@ -98,6 +98,11 @@
         "API tích hợp qua OIDC"
       ],
       [
+        "external-api-v2",
+        "docs/EXTERNAL-API-V2.md",
+        "External API v2 · SDK"
+      ],
+      [
         "quality-portal",
         "docs/QUALITY-PORTAL.md",
         "Cổng kiểm định chất lượng"

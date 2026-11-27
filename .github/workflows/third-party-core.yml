@@ -83,7 +83,9 @@ jobs:
           docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml -f compose.evidence-test.yaml -f compose.sso-test.yaml --profile migration-test run --rm sso-smoke
       - name: Container status on failure
         if: failure()
-        run: docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml ps -a
+        run: |
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml ps -a
+          docker compose -p dxtrace-migration -f compose.yaml -f compose.third-party.yaml logs --tail=30 identity signin
       - name: Cleanup disposable stack
         if: always()
         run: |

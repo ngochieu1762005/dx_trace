@@ -137,3 +137,7 @@ node --test tests/business-evidence.test.mjs tests/evidence-api.test.mjs tests/e
 ```
 
 [Engine](../lib/business-evidence.mjs) · [Bộ đọc archive](../lib/evidence-archive.mjs) · [CLI](../tools/evidence-cli.mjs). Các bài kiểm sử dụng fixture và tấn công sửa gói, không thay kiểm SSO, khóa ký, restore và quyết định thật trên môi trường triển khai.
+
+## Bằng chứng cho ứng dụng AppKit
+
+Trong manifest Application, khai báo `spec.evidence: {signing: required, resources: [maintenance]}`. Chọn `optional` để cho phép ghi trạng thái unsigned khi chưa có khóa. Mỗi tài nguyên phải có workflow và quyền approve. Core chụp model đang thực thi, hồ sơ trước/sau và lệnh chuyển bước, rồi lưu cùng audit và revision trong một transaction. CLI xác minh bằng cách chạy lại quy tắc của model với vai trò, người thao tác và thời gian đã ghi. Khóa required thiếu hoặc sai khiến quyết định bị từ chối trước commit. Để kiểm gói AppKit, dùng bản cài CLI đầy đủ.

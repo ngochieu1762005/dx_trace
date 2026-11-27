@@ -29,9 +29,12 @@ services:
   sso-smoke:
     profiles: [migration-test]
     image: python:3.13-alpine
+    environment:
+      FIXTURE_ADMIN_PASSWORD: ${ADMIN_PASSWORD:?}
     volumes:
       - ./scripts/sso-smoke.py:/checks/sso-smoke.py:ro
       - ./.sso-test/tls/server.crt:/checks/ca.crt:ro
+      - ./.sso-test/oidc-fixtures.json:/checks/oidc-fixtures.json:ro
       - ./.sso-test/users.json:/checks/users.json:ro
       - ../examples/maintenance:/checks/package:ro
       - ./.sso-test/manifest.json:/checks/manifest.json:ro

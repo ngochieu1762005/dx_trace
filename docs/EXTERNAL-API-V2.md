@@ -1,9 +1,12 @@
-# External API v2 (development, not released)
-v1 remains read-only and accepts policy version 1. To opt in on isolated staging, use policy version 2:
+# External API v2 và SDK
+
+Đăng ký client trong Keycloak với audience của external-api, email đã xác minh, scope đọc hồ sơ và các scope ghi cần dùng. Khai báo client trong policy phiên bản 2. Người dùng phải là thành viên hiện hữu của workspace.
+
 ```json
-{"version":2,"clients":[{"clientId":"my-integrator","workspace":"ws-EXAMPLE","models":["pkg_maintenance_maintenance"],"requestsPerMinute":30,"scopes":["dxtrace.records.read","dxtrace.records.create","dxtrace.records.transition"]}]}
+{"version":2,"clients":[{"clientId":"maintenance-reader","workspace":"ws-EXAMPLE","area":"live","models":["pkg_maintenance_maintenance"],"requestsPerMinute":30,"scopes":["dxtrace.records.read","dxtrace.tasks.read"]}]}
 ```
-Provision the user/service account as an existing member before enabling this API; v2 does not accept invitations or create workspaces. Use the exact stored workspace and model IDs. Configure corresponding Keycloak scopes, audience and verified email. Each write needs JSON and a stable Idempotency-Key. Model/tenant permission, actor separation and optimistic version checks remain in Core. The gateway namespaces keys by client and JWT subject. v2 currently uses the member's base workspace; training/live aliases are not automatically selected.
+
+Cả URL v1 và v2 dùng workspace, model và vùng do operator cấp cho client. Vùng mặc định là live. Với vùng thực hành, đặt `area` thành `training` trong policy. Dùng khóa Idempotency-Key ổn định cho mỗi lần tạo hồ sơ hoặc chuyển trạng thái. Truy vấn task cần scope `dxtrace.tasks.read`. Metadata bằng chứng cần scope `dxtrace.evidence.read`, vai trò owner/manager và quyền đọc đúng hồ sơ.
 
 | Method | Route |
 |---|---|
@@ -12,5 +15,8 @@ Provision the user/service account as an existing member before enabling this AP
 | GET/POST | /v2/models/{model}/records |
 | GET | /v2/models/{model}/records/{id} |
 | POST | /v2/models/{model}/records/{id}/transition |
+| GET | /v2/models/{model}/records/{id}/tasks |
+| GET | /v2/models/{model}/records/{id}/evidence |
 
-The schema endpoint includes model-derived OpenAPI. The SDK lives in [sdk](../sdk/README.md). No arbitrary proxying, core credentials, task API or Evidence archive exposure. Evidence archives currently include a ledger prefix and require a separate disclosure design before allowing external clients to export them. Do not deploy publicly before end-to-end Keycloak and tenant isolation tests on staging. No external API v2 claims apply to v0.1.0.
+
+Dùng endpoint schema để lấy OpenAPI của model. Tải gói SDK từ release hoặc thư mục sdk của bản cài. [Ví dụ gọi SDK](../sdk/README.md). Gói bằng chứng đầy đủ có lịch sử ledger của workspace và được xuất trong portal quản lý.

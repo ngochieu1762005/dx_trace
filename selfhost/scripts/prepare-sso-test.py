@@ -31,17 +31,17 @@ realm["users"] = [
 owner_id = realm["users"][0]["id"]
 workspace = "ws-" + hashlib.sha256(("oidc:" + owner_id).encode()).hexdigest()
 scopes = ["dxtrace.records.read", "dxtrace.records.create", "dxtrace.tasks.read", "dxtrace.evidence.read", "dxtrace.records.transition"]
-realm["clientScopes"] = [{"name": scope, "protocol": "openid-connect",
-    "attributes": {"include.in.token.scope": "true"}} for scope in scopes]
+clients = []
 policies = []
 for client, org, area in [("dx-ci", workspace, "live"), ("dx-other", "ws-unrelated", "live"), ("dx-training", workspace, "training")]:
-    realm["clients"].append({"clientId": client, "enabled": True, "publicClient": True,
+    clients.append({"clientId": client, "enabled": True, "publicClient": True,
         "protocol": "openid-connect", "directAccessGrantsEnabled": True, "standardFlowEnabled": False,
-        "defaultClientScopes": ["profile", "email", *scopes], "protocolMappers": [
+        "protocolMappers": [
             {"name": "resource", "protocol": "openid-connect", "protocolMapper": "oidc-audience-mapper",
              "config": {"included.custom.audience": "dx-trace-external-api", "access.token.claim": "true"}}]})
     policies.append({"clientId": client, "workspace": org, "area": area, "models": ["pkg_maintenance_maintenance"],
                      "requestsPerMinute": 60, "scopes": scopes})
+(target / "oidc-fixtures.json").write_text(json.dumps({"clients": clients, "scopes": scopes}))
 (target / "external-clients.json").write_text(json.dumps({"version": 2, "clients": policies}))
 (target / "warehouse.json").write_text(json.dumps(realm))
 (target / "users.json").write_text(json.dumps(users))

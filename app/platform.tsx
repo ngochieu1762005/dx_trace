@@ -1,6 +1,7 @@
 /* DX-TRACE | Model-based operations console. SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */
 import React,{useEffect,useState,useRef} from 'react';
+import AppStudio from './app-studio';
 import ProcessTasks from './process-tasks';
 import parallel from '../examples/maintenance/process.parallel.json';
 import {executableTasks} from '../lib/task-view.mjs';
@@ -60,6 +61,7 @@ export default function Platform({api,role,actor,selection=''}:any){
   <label>Gói ứng dụng mẫu <select defaultValue="maintenance" onChange={e=>{setAppSource(JSON.stringify(e.target.value==='purchase'?purchaseApp:maintenanceApp,null,2));setAppPlan(null)}}>
    <option value="maintenance">Bảo trì thiết bị</option><option value="purchase">Yêu cầu mua sắm</option>
   </select></label>
+  <AppStudio source={appSource} disabled={busy} onChange={value=>{setAppSource(value);setAppPlan(null)}}/>
   <label>Manifest JSON<textarea className="model-source" value={appSource} spellCheck={false} onChange={e=>{setAppSource(e.target.value);setAppPlan(null)}}/></label>
   <div className="actions">
    <button className="secondary" disabled={busy} onClick={()=>run(async()=>setAppPlan(await api('apps/plan',{manifest:JSON.parse(appSource)})))}>Xem kế hoạch cài đặt</button>
