@@ -22,6 +22,8 @@ Nền tảng DX-OS mã nguồn mở để xây ứng dụng số và kiểm ch�
 
 </div>
 
+DX-TRACE do **Đặng Nhật Minh** và **Nguyễn Ngọc Hiếu** cùng phát triển. Cả hai là sinh viên ngành Khoa học dữ liệu tại **Trường Đại học Khoa học và Công nghệ Hà Nội (USTH)**.
+
 ## Kiểm tra bản phát hành v0.2.0
 
 Bản v0.2.0 dùng APISIX làm cổng API mặc định. Dịch vụ Flowable tùy chọn xử lý quy trình thẩm định. Có thể chạy thử kho trên máy cá nhân bằng Node.js 24. Để kiểm tra đăng nhập một lần và phân quyền giữa hai người, dùng bản triển khai Docker Compose với Keycloak.

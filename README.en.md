@@ -16,6 +16,8 @@ An open-source headless DX-OS for building digital applications and verifying bu
 
 </div>
 
+**Đặng Nhật Minh** and **Nguyễn Ngọc Hiếu** developed DX-TRACE together. Both study Data Science at the **University of Science and Technology of Hanoi (USTH)**.
+
 ## Verify the v0.2.0 release
 
 1. Download all the assets listed in `SHA256SUMS` from the [v0.2.0 release](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.2.0). Run `sha256sum -c SHA256SUMS` in the download directory.

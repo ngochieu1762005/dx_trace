@@ -1,8 +1,10 @@
 # Tác giả và người duy trì
 
-**Nguyễn Ngọc Hiếu** — tác giả và người duy trì DX-TRACE.
+DX-TRACE do **Đặng Nhật Minh** và **Nguyễn Ngọc Hiếu** cùng phát triển. Cả hai là sinh viên ngành Khoa học dữ liệu tại **Trường Đại học Khoa học và Công nghệ Hà Nội (USTH)**.
 
-- GitHub: [ngochieu1762005](https://github.com/ngochieu1762005)
+Nguyễn Ngọc Hiếu duy trì kho mã nguồn của dự án.
+
+- GitHub của người duy trì: [ngochieu1762005](https://github.com/ngochieu1762005)
 - Repository chính thức: [ngochieu1762005/dx_trace](https://github.com/ngochieu1762005/dx_trace)
 - Website dự án: [dxtrace.hieuds.com](https://dxtrace.hieuds.com/)
 
