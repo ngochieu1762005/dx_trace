@@ -1,6 +1,6 @@
 # Giao diện và router API
 
-DX-TRACE v0.0.5 dùng React/Vite, không phải ứng dụng Next.js. Thư mục `app/api` chứa router được máy chủ Node gọi trực tiếp. [Kiến trúc](../docs/HEADLESS-CORE.md) · [API](../docs/API.md).
+Giao diện kho được dựng bằng React và Vite. Thư mục `app/api` chứa router được máy chủ Node gọi trực tiếp. [Kiến trúc](../docs/HEADLESS-CORE.md) · [API](../docs/API.md).
 
 | Tệp | Trách nhiệm |
 | --- | --- |
@@ -34,3 +34,9 @@ Scanner giải mã trong browser rồi dùng `lib/scan.mjs` đối chiếu. Mộ
 - Khi mô hình yêu cầu người duyệt khác người tạo, dùng hai tài khoản; demo PC một danh tính không chứng minh được bước này.
 
 Build bằng `npm run build`; demo bằng `npm run demo`. Không có script dev/hot reload mặc định. [Đóng góp](../CONTRIBUTING.md).
+
+## Theo dõi một thao tác từ giao diện tới Core
+
+Khi người dùng gửi một phiếu, biểu mẫu thu thập dữ liệu và gọi API cùng nguồn. Router kiểm phiên và chuyển yêu cầu tới nghiệp vụ tương ứng. Lần tải lại phải đọc được trạng thái Core vừa ghi. Dùng [bài kiểm phiên](../tests/session.test.mjs) cho trường hợp hết hạn và [bài kiểm API mô hình](../tests/platform-api.test.mjs) cho quyền đọc, ghi và chuyển bước.
+
+Từ thư mục gốc, chạy `npm run build` để xác nhận giao diện biên dịch được, sau đó chạy `node --test tests/session.test.mjs tests/platform-api.test.mjs` để kiểm hai đường xử lý trên.

@@ -77,3 +77,25 @@ for path in (root/"docs").rglob("*.html"):
     parser.feed(path.read_text(encoding="utf-8"))
     assert all("/docs/api-explorer" not in link and "api-explorer/" not in link for link in parser.links), path
 print("Verified",len(en_entries),"English pages; public API Explorer omitted")
+
+# Public product pages must keep readers in the selected language, including
+# links into the handbook. The language switch is the one cross-locale link.
+for lang, prefix, alternate in (("vi", "", "/en"), ("en", "/en", "")):
+    for route in ("platform", "developers", "applications", "evidence", "benchmarks", "olp"):
+        page = root / prefix.strip("/") / route / "index.html"
+        content = page.read_text(encoding="utf-8")
+        assert f'<html lang="{lang}">' in content, page
+        parser = Links()
+        parser.feed(content)
+        switch = f"{alternate}/{route}/"
+        assert switch in parser.links, (page, switch)
+        for value in parser.links:
+            url = urlsplit(value)
+            if url.scheme or url.netloc or not url.path.startswith("/"):
+                continue
+            target = root / unquote(url.path.lstrip("/"))
+            assert target.exists(), (page, value)
+            if value == switch or url.path.startswith("/assets/"):
+                continue
+            assert url.path.startswith(("/en/", "/docs/en/")) == (lang == "en"), (page, value)
+print("Verified navigation for six product pages in each language")

@@ -1,4 +1,4 @@
-# Checklist triển khai
+# Danh sách kiểm tra trước khi triển khai
 
 ## Trước khi cài
 

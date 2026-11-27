@@ -1,30 +1,17 @@
 # Hướng dẫn nghiệm thu và trình diễn
 
-## Checklist đánh giá
+## Bằng chứng theo kịch bản
 
-| Kịch bản | Bằng chứng đạt |
+| Kịch bản | Kết quả cần quan sát |
 | --- | --- |
-| Cài mới từ mã nguồn | Commit/tag, lệnh cài, service health |
-| Hai ứng dụng chung Core | Portal và App truy cập cùng hồ sơ theo quyền |
-| SSO | Hai user thực, phiên hết hạn, role denial |
-| Cách ly và thu hồi | Lô bị chặn, phiếu hủy/nhận trả, số còn phải thu |
-| AppKit | Plan, install, biểu mẫu, workflow, audit |
-| Bundles | Một model sai → toàn gói từ chối, retry không trùng |
-| Data governance | Trường điều kiện, profile theo quyền |
-| Audit | Verify hợp lệ, checkpoint lưu riêng |
-| Backup | Phục hồi riêng và đối chiếu nghiệp vụ |
-| Supply chain | License MIT, release, SBOM và checksum |
+| Dựng từ mã nguồn | Gói phát hành khớp mã băm. Bản cài khởi động được ngoài thư mục nguồn. |
+| Đăng nhập và phân quyền | Hai người trong cùng kho mở được cổng truy xuất và cổng kiểm định. Máy chủ từ chối thao tác vượt quyền. |
+| Cách ly lô và thu hồi | Lô bị chặn giao. Số đã trả và số còn phải thu khớp từng điểm nhận. |
+| Mở rộng ứng dụng | Chủ kho xem kế hoạch, cài gói và mở được biểu mẫu. Mô hình không tương thích khiến cả giao dịch bị từ chối. |
+| Kiểm chứng quyết định | Khóa công khai xác minh được chữ ký. Khi sửa dữ liệu mẫu, kết quả kiểm tra đổi sang không hợp lệ. |
+| Sao lưu và phục hồi | Bản khôi phục trong môi trường riêng mở được hồ sơ và đối chiếu được dữ liệu. |
 
-## Kịch bản 15 phút
-
-- 2 phút: kiến trúc và ranh giới tin cậy.
-- 4 phút: truy xuất lô và xử lý thu hồi.
-- 3 phút: Quality Portal và hai tài khoản.
-- 3 phút: AppKit v2, plan/apply và hồ sơ.
-- 2 phút: audit, CI, release và backup.
-- 1 phút: giới hạn và kế hoạch phát triển.
-
-Không dùng dữ liệu thật để chứng minh lỗi bảo mật. Ghi commit, môi trường, điều kiện đo, kết quả đạt/chưa đạt. Không dùng kết quả benchmark loopback để suy ra sức chịu tải production. [Kịch bản demo](../../docs/DEMO.md) · [Ma trận minh chứng](../../docs/EVIDENCE.md) · [Acceptance](../../docs/ACCEPTANCE-2026.md).
+Ghi mã commit, môi trường và điều kiện kiểm cùng kết quả. [Kịch bản nghiệp vụ](../../docs/DEMO.md) · [Ma trận minh chứng](../../docs/EVIDENCE.md) · [Nghiệm thu bản triển khai](../../docs/ACCEPTANCE-2026.md)
 
 ## Một phép thử có thể lặp lại
 

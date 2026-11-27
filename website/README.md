@@ -1,16 +1,31 @@
-# DX-TRACE Documentation Portal
+# Website và cổng tài liệu DX-TRACE
 
-Custom static documentation website (no Docusaurus). Existing Markdown plus curated guides are compiled into an independently deployable docs directory.
+Trang chủ tiếng Việt nằm ở `/`, bản tiếng Anh ở `/en/`. Cổng tài liệu dùng `/docs/` và `/docs/en/`. Chọn ngôn ngữ trên một trang tài liệu để mở cùng chủ đề trong ngôn ngữ kia.
+
+## Dựng và xem trên máy
+
+Từ thư mục gốc của bản sao Git, dùng Python 3, tạo môi trường riêng rồi dựng vào một thư mục **chưa tồn tại**. Quá trình dựng đọc mã commit từ Git để liên kết trang với phiên bản nguồn.
 
 ```bash
+python3 -m venv .venv-docs
+. .venv-docs/bin/activate
 python -m pip install -r website/requirements.txt
-python website/build.py --out /tmp/dxtrace-docs
-python website/verify.py /tmp/dxtrace-docs
-python -m http.server 8000 --directory /tmp/dxtrace-docs
+preview=$(mktemp -d)
+python website/build.py --out "$preview/site"
+python website/verify.py "$preview/site"
+python -m http.server 8000 --bind 127.0.0.1 --directory "$preview/site"
 ```
 
-Open http://localhost:8000/docs/. For the existing Ubuntu host with Caddy serving /srv/dx-trace/landing, install python3-venv and run sudo bash website/deploy-vps.sh from the repository. Build and verify before replacing docs; backup is outside the public root. The script also updates the tracked landing index with a docs link; it does not modify Caddy or Docker. All documentation assets live within docs/assets.
+Mở `http://127.0.0.1:8000/` để xem trang chủ, hoặc thêm `docs/en/` để đọc tài liệu tiếng Anh. Tìm một thuật ngữ, mở một kết quả và chuyển ngôn ngữ ở chính trang đó để kiểm tra cả chỉ mục lẫn điều hướng.
 
-## GitHub Actions
+## Sửa nội dung ở đâu?
 
-The Documentation workflow builds and verifies both languages and uploads the `dxtrace-docs-preview` artifact. To also publish on GitHub Pages, select **GitHub Actions** in **Settings → Pages**, then set the repository Actions variable `DXTRACE_PUBLISH_GITHUB_PAGES` to `true`. The next push to `main` or a manual run on `main` publishes the output to Pages. The VPS deployment uses `website/deploy-vps.sh`.
+| Phần hiển thị | Nguồn |
+| --- | --- |
+| Trang chủ, điều hướng, minh họa đối soát | [Trang tiếng Việt](../landing/index.html), [trang tiếng Anh](../landing/en/index.html) |
+| Trang nền tảng, ứng dụng, lập trình viên, hiệu năng và OLP | [platform_pages.py](platform_pages.py) |
+| Chương tài liệu và thứ tự trong mục lục | [navigation.json](navigation.json), [navigation.en.json](navigation.en.json) |
+| Bản đọc tiếng Việt của một đặc tả kỹ thuật | Tệp `content/<mã-trang>.vi.md` dùng cùng mã trang, kèm liên kết đến tài liệu gốc |
+| Ô tìm kiếm, bộ lọc, phản hồi của nút | [Mã giao diện tài liệu](static/site.js) |
+
+Quy trình Documentation trên GitHub dựng lại website và cung cấp gói `dxtrace-docs-preview` cho từng pull request. [Quy trình xuất bản](content/docs-deploy.md) mô tả riêng bước đưa bản đã kiểm tra lên máy chủ.

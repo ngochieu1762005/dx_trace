@@ -1,4 +1,4 @@
-# Tutorial: xây dựng ứng dụng nghiệp vụ
+# Tạo ứng dụng nghiệp vụ
 
 Mục tiêu: cài một mô hình bảo trì từ manifest sẵn có, không sửa Core hay viết frontend mới. Thực hiện trong Kho thực hành với owner.
 

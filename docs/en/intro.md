@@ -1,6 +1,6 @@
 # DX-TRACE documentation
 
-**Main-branch status (unreleased):** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows keep their legacy runtime. PR #35 integration CI passed; production acceptance remains separate. [Integration](third-party-core-migration.md).
+DX-TRACE v0.2.0 uses Apache APISIX as its default Compose gateway. The optional Flowable service runs independent reviews. [Integration guide](third-party-core-migration.md).
 
 DX-TRACE is an MIT-licensed open-core platform for food supply-chain traceability, quality control and coordinated recalls. The same headless core serves a warehouse application and an independently deployed Quality Portal.
 

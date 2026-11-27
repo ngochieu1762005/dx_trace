@@ -1,6 +1,10 @@
 # English documentation
 
-**Migration status:** APISIX and Flowable OSS are being evaluated in an isolated stack. The architecture and API described here remain the current default until acceptance and business workflow migration are complete. [Migration guide](third-party-core-migration.md).
+## Start with a reproducible result
+
+Use the [quick start](quickstart.md) for a single-user warehouse, or [Docker deployment](selfhost.md) for shared sign-in. Follow the [warehouse guide](warehouse-guide.md) to receive and dispatch one lot. In the [recall guide](recall-guide.md), use the same lot to reconcile delivered and returned quantities.
+
+For an integration, start with [External API v2](external-api-v2.md), register the client and select its workspace and model. For a release review, check the [release files](releases.md), [supply chain](supply-chain.md) and [acceptance procedure](acceptance.md) against the same tag. APISIX is the default gateway. Flowable is optional.
 
 [English README](../../README.en.md) · [Vietnamese README](../../README.md) · [English portal](https://dxtrace.hieuds.com/docs/en/) · [Vietnamese portal](https://dxtrace.hieuds.com/docs/)
 

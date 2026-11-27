@@ -2,6 +2,8 @@
  * SPDX-FileCopyrightText: 2026 DX-TRACE contributors */
 import React from 'react';
 
+const roles = {owner: 'Chủ kho', manager: 'Quản lý', warehouse: 'Nhân viên kho', viewer: 'Người xem'};
+
 type Props = {source:string; onChange:(text:string)=>void; disabled:boolean};
 export default function AppStudio({source,onChange,disabled}:Props){
  let app;
@@ -11,7 +13,7 @@ export default function AppStudio({source,onChange,disabled}:Props){
     model.fields.some((f:any)=>!f||typeof f.key!=='string') ||
     model.workflow.transitions.some((edge:any)=>!edge||!Array.isArray(edge.roles)))return null;
  function edit(change:()=>void){change();onChange(JSON.stringify(app,null,2))}
- return <fieldset disabled={disabled}><legend>App Studio</legend>
+ return <fieldset disabled={disabled}><legend>Thiết kế ứng dụng</legend>
   <label>Tên ứng dụng<input value={model.name||''} onChange={e=>edit(()=>{model.name=e.target.value;app.metadata.name=e.target.value})}/></label>
   <label>Phiên bản<input value={app.metadata.version||''} onChange={e=>edit(()=>{app.metadata.version=e.target.value})}/></label>
   <h3>Trường dữ liệu</h3>
@@ -24,8 +26,8 @@ export default function AppStudio({source,onChange,disabled}:Props){
   })}>Thêm trường văn bản</button>
   <h3>Quy trình và quyền chuyển bước</h3>
   {model.workflow.transitions.map((edge:any,i:number)=><fieldset key={i}><legend>{edge.from} → {edge.to}</legend>
-   {['owner','manager','warehouse','viewer'].map(role=><label key={role}><input type="checkbox" checked={edge.roles?.includes(role)||false} onChange={e=>edit(()=>{
+   {Object.entries(roles).map(([role,label])=><label key={role}><input type="checkbox" checked={edge.roles?.includes(role)||false} onChange={e=>edit(()=>{
     const roles=new Set(edge.roles);if(e.target.checked)roles.add(role);else roles.delete(role);edge.roles=[...roles]
-   })}/>{role}</label>)}</fieldset>)}
+   })}/>{label}</label>)}</fieldset>)}
  </fieldset>;
 }

@@ -13,6 +13,6 @@ Mốc điểm lấy từ [thể lệ VFOSSA 2026, mục I](https://www.vfossa.vn
 
 Chỉ tự xác nhận một hàng sau khi kiểm đủ các điều kiện trên bản nộp. Lưu URL run, Git SHA, checksum, ngày kiểm và kết quả vào hồ sơ nghiệm thu. [Checklist vận hành và SSO](ACCEPTANCE-2026.md)
 
-## Kết quả kiểm thử trên pull request 38
+## Bằng chứng trên bản phát hành v0.2.0
 
-Commit `46cd4b7` đã qua job verify (REUSE, build và khởi chạy bản cài ngoài source), supply-chain (SBOM), container và PostgreSQL migration. Job tích hợp chạy hai phiên Keycloak qua OAuth2 Proxy để mở Trace Portal, Quality Portal và Maintenance App trong cùng workspace. Kịch bản kiểm định kiểm tra cả kết quả thu hồi được duyệt và kết quả bị từ chối. Đối chiếu lại run của chính tag khi phát hành. [CI và log clean install](https://github.com/ngochieu1762005/dx_trace/actions/runs/45833698874) · [Log APISIX, Flowable và SSO ba portal](https://github.com/ngochieu1762005/dx_trace/actions/runs/45833698955)
+Tag v0.2.0 trỏ tới commit `00990ecd272648cbb6da808ab30a83d48ec163cd`. [Quy trình phát hành](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898) ghi kết quả đóng gói, cài sạch và kiểm thử tích hợp. [CI cùng commit](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970856284) ghi kết quả kiểm giấy phép, phụ thuộc và container. Khi đánh giá một tag khác, đối chiếu lần chạy tương ứng với tag đó.

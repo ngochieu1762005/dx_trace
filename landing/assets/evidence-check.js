@@ -2,16 +2,17 @@
 // SPDX-FileCopyrightText: 2026 DX-TRACE contributors
 const form = document.querySelector('#verify-proof');
 const output = document.querySelector('#verification');
+const translate = (vi, en) => document.documentElement.lang === 'en' ? en : vi;
 const text = new TextDecoder();
 const hex = bytes => Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2,'0')).join('');
 const names = ['manifest.json','signature.sig','decision.json','events.jsonl','policy.json','workflow.bpmn','data-lineage.json','proof.json'];
 async function readArchive(file) {
-  if (file.size > 16*1024*1024) throw Error('Archive > 16 MiB');
+  if (file.size > 16*1024*1024) throw Error(translate('Gói vượt quá 16 MiB', 'Archive exceeds 16 MiB'));
   const chunks = [];
   let length = 0;
   for await (const chunk of file.stream().pipeThrough(new DecompressionStream('gzip'))) {
     length += chunk.length;
-    if (length > 32*1024*1024) throw Error('Expanded archive > 32 MiB');
+    if (length > 32*1024*1024) throw Error(translate('Dữ liệu giải nén vượt quá 32 MiB', 'Expanded archive exceeds 32 MiB'));
     chunks.push(chunk);
   }
   const tar = new Uint8Array(await new Blob(chunks).arrayBuffer());
@@ -23,11 +24,11 @@ async function readArchive(file) {
     const name=field(0,100), size=Number.parseInt(field(124,136),8);
     if (!names.includes(name)||files.has(name)||header[156]!==48||field(257,263)!=='ustar'||
         !/^[0-7]+$/.test(field(124,136))||size>12*1024*1024||offset+512+size>tar.length)
-      throw Error('Invalid archive entry');
+      throw Error(translate('Mục trong gói không hợp lệ', 'Invalid archive entry'));
     files.set(name,tar.slice(offset+512,offset+512+size));
     offset+=512+Math.ceil(size/512)*512;
   }
-  if(files.size!==names.length||tar.length-offset<1024||tar.subarray(offset).some(b=>b!==0))throw Error('Incomplete archive');
+  if(files.size!==names.length||tar.length-offset<1024||tar.subarray(offset).some(b=>b!==0))throw Error(translate('Gói thiếu tệp hoặc sai cấu trúc', 'Incomplete or malformed archive'));
   return files;
 }
 form.addEventListener('submit',async event=>{
@@ -36,22 +37,23 @@ form.addEventListener('submit',async event=>{
   button.disabled=true;
   try {
     const keyFile=form.elements.publicKey.files[0];
-    if(keyFile.size>16384)throw Error('Invalid public key');
+    if(keyFile.size>16384)throw Error(translate('Khóa công khai không hợp lệ', 'Invalid public key'));
     const pem=(await keyFile.text()).trim();
     const body=/^-----BEGIN PUBLIC KEY-----\s+([A-Za-z0-9+/=\s]+)-----END PUBLIC KEY-----$/.exec(pem);
-    if(!body)throw Error('Expected public SPKI PEM');
+    if(!body)throw Error(translate('Cần khóa công khai SPKI dạng PEM', 'Expected an SPKI public key in PEM format'));
     const key=await crypto.subtle.importKey('spki',Uint8Array.from(atob(body[1]),c=>c.charCodeAt(0)),{name:'Ed25519'},false,['verify']);
     const files=await readArchive(form.elements.archive.files[0]);
     const manifest=files.get('manifest.json');
     const signed=await new Blob(['DX-TRACE Business Decision Proof v1\n',manifest]).arrayBuffer();
-    if(!await crypto.subtle.verify('Ed25519',key,files.get('signature.sig'),signed))throw Error('Invalid signature');
+    if(!await crypto.subtle.verify('Ed25519',key,files.get('signature.sig'),signed))throw Error(translate('Chữ ký không hợp lệ', 'Invalid signature'));
     const info=JSON.parse(text.decode(manifest));
-    if(info.schema!=='dxtrace.business-decision-proof.v1'||Object.keys(info.files).length!==6)throw Error('Invalid manifest');
+    if(info.schema!=='dxtrace.business-decision-proof.v1'||Object.keys(info.files).length!==6)throw Error(translate('Bản kê không hợp lệ', 'Invalid manifest'));
     for(const name of names.slice(2)){
       const item=files.get(name), expected=info.files[name];
-      if(expected?.bytes!==item.length||expected.sha256!==hex(await crypto.subtle.digest('SHA-256',item)))throw Error(name);
+      if(expected?.bytes!==item.length||expected.sha256!==hex(await crypto.subtle.digest('SHA-256',item)))throw Error(translate('Tệp sai kích thước hoặc mã băm: ', 'Size or hash mismatch: ')+name);
     }
     output.textContent='✓ Ed25519 · 6/6 SHA-256 · '+info.decisionId;
-  } catch(error) {output.textContent='✗ '+error.message;}
+  } catch(error) {const message = error.constructor === Error ? error.message : translate('Kiểm tra định dạng gói và khóa công khai.', 'Check the archive format and public key.');
+    output.textContent='✗ '+message;}
   finally {button.disabled=false;}
 });

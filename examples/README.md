@@ -23,3 +23,15 @@ AppKit/BPMN được đóng gói từ v0.0.6. Không dán `app.json` vào ô đ�
 ## Ví dụ client quản trị
 
 [maintenance/client.mjs](maintenance/client.mjs) là ví dụ quản trị dùng kết nối loopback hoặc SSH tunnel đến Core, yêu cầu token nội bộ và danh tính thử được cho phép. Nó không phải SDK đăng nhập OAuth cho người dùng cuối. Không đưa token vào trình duyệt, manifest hoặc repository; không mở cổng Core ra Internet. Tích hợp qua phiên người dùng xem [API](../docs/API.md).
+
+## Chạy gói bảo trì có đường dẫn riêng
+
+Sau khi [dựng bản cài](../docs/build-from-source.md) và đưa `dxtrace` vào PATH, khởi động bản demo trên cổng 8080. Mở terminal ở thư mục gốc của repo và chạy:
+
+```sh
+dxtrace app validate ./examples/maintenance
+dxtrace app install ./examples/maintenance
+dxtrace app list
+```
+
+Mở `http://127.0.0.1:8080/maintenance` trong trình duyệt. Gói [app.yaml](maintenance/app.yaml) tham chiếu hai cấu trúc dữ liệu trong [schemas](maintenance/schemas/). Quan sát phiên bản trong danh sách ứng dụng trước khi thử nâng cấp. [Kịch bản đầy đủ](../docs/demo-guide.md) giải thích cách dùng hai tài khoản để lập và duyệt phiếu.
