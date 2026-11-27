@@ -71,7 +71,7 @@ export async function memberArea(m:any,request:Request){
  return {...m,organization:m.workspace,workspace};
 }
 export async function read(workspace:string){const r:any=await q('SELECT * FROM workspaces WHERE id=?',workspace).first();if(!r)throw new DomainError('Không gian không tồn tại',404);return {...r,data:JSON.parse(r.state)}}
-export async function snapshot(c:any){const r=await read(c.workspace);const s=r.data;delete s.requests;delete s.models;delete s.records;return {...s,revision:r.revision,me:{name:c.name,email:c.email,role:c.role},members:(await q('SELECT id,name,email,role FROM members WHERE workspace=?',c.organization).all()).results,alerts:insights(s),capabilities:{storage:true,uploads:!!env.BUCKET,ai:!!(env as any).AI_API_KEY,scanner:!!(env as any).FILE_SCAN_URL},serverTime:new Date().toISOString()}}
+export async function snapshot(c:any){const r=await read(c.workspace);const s=r.data;delete s.requests;delete s.models;delete s.records;return {...s,revision:r.revision,me:{name:c.name,email:c.email,role:c.role},members:(await q('SELECT id,name,email,role FROM members WHERE workspace=?',c.organization).all()).results,pendingInvitations:c.role==='owner'?(await q('SELECT i.email,i.role FROM invitations i WHERE i.workspace=? AND NOT EXISTS (SELECT 1 FROM members m WHERE lower(m.email)=i.email) ORDER BY i.email',c.organization).all()).results:[],alerts:insights(s),capabilities:{storage:true,uploads:!!env.BUCKET,ai:!!(env as any).AI_API_KEY,scanner:!!(env as any).FILE_SCAN_URL},serverTime:new Date().toISOString()}}
 export async function change(c:any,cmd:string,b:any,key:string,evidenceContext:any={}){
  return withWorkspace(c.workspace,()=>changeUnlocked(c,cmd,b,key,evidenceContext));
 }
