@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Hướng dẫn nghiệm thu và trình diễn
 
 ## Bằng chứng theo kịch bản

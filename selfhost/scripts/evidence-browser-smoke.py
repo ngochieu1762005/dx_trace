@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: 2026 DX-TRACE contributors
 """Exercise only a loopback, synthetic DX_LOCAL_DEMO instance with Playwright.

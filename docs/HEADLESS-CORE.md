@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Kiến trúc Headless Core
 
 Áp dụng cho kiến trúc từ v0.0.7 và nhánh main. Các nâng cấp liên thông nghiệp vụ sau v0.0.7 được ghi riêng trong Changelog; AppKit/BPMN có từ v0.0.6. [Tổng quan](../README.md#architecture) · [API](API.md) · [Vận hành](../selfhost/OPERATIONS.md).

@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Nghiệp vụ mở rộng và vận hành
 
-Tài liệu áp dụng cho **v0.0.5**. Không đặt lại kho hay tạo tài khoản mới khi nâng cấp. Đọc [quy trình backup/migration](../selfhost/OPERATIONS.md) trước khi thay phiên bản.
+Tài liệu áp dụng cho **v0.2.0**. Không đặt lại kho hay tạo tài khoản mới khi nâng cấp. Đọc [quy trình backup/migration](../selfhost/OPERATIONS.md) trước khi thay phiên bản.
 
 ## Tạo một nghiệp vụ
 

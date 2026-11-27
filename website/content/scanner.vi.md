@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quét tệp và tra cứu danh mục dữ liệu
 
 Cấu hình ClamAV bổ sung một dịch vụ quét riêng trong mạng nội bộ. Khi bật dịch vụ, Core chờ kết quả sạch trước khi lưu tệp tải lên. Tệp bị phát hiện trả HTTP 422. Khi dịch vụ quét không sẵn sàng, API trả 503. Các tệp đã lưu trước đó giữ kết quả cũ.

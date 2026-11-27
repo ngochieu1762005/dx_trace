@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Biên tin cậy
 
 OAuth2 Proxy xác thực người dùng qua Keycloak. App chuyển danh tính qua mạng riêng tới APISIX. Core kiểm workspace, role và phạm vi từng hồ sơ. Gateway giữ credential dịch vụ riêng giữa hai chặng. Cổng app, Core và container portal chỉ được mở theo cấu hình mạng riêng. [Gateway và SSO](GATEWAY-AND-SSO.md)

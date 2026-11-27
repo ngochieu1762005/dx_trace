@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Bảo mật và báo cáo lỗ hổng
 
-Phạm vi tài liệu: DX-TRACE main và nền v0.0.5; phần AppKit/BPMN có từ v0.0.6. Dự án chưa công bố chính sách LTS/SLA; hãy đối chiếu bản phát hành và changelog trước khi triển khai.
+Phạm vi tài liệu: DX-TRACE v0.2.0; phần AppKit/BPMN có từ v0.0.6. Dự án chưa công bố chính sách LTS/SLA; hãy đối chiếu bản phát hành và changelog trước khi triển khai.
 
 ## Báo cáo riêng
 

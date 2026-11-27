@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Ví dụ tích hợp API
 
 Ví dụ chạy trong DevTools của ứng dụng đã đăng nhập và đã chọn Kho thực hành. Không chạy trên trang tài liệu, không đưa cookie/token vào ví dụ công khai.

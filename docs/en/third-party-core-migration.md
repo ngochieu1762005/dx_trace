@@ -1,13 +1,15 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Apache APISIX and Flowable OSS migration
 
-Status: APISIX is default on main; optional Flowable executes an independent review. PR #35 integration CI passed; this is not a production rollout or migration of all existing workflows.
+Status: APISIX is the default gateway in v0.2.0; optional Flowable executes an independent review. PR #35 integration CI passed; this is not a production rollout or migration of all existing workflows.
 
 ## Architecture
 
 Browser → Caddy → OAuth2 Proxy / Keycloak → application → APISIX → DX-TRACE Core.
-Flowable REST and its PostgreSQL database run on private networks. The current
-business workflows still use the existing Core runtime until a separate
-migration connects them to Flowable. The acceptance process is independent.
+Flowable REST and its PostgreSQL database run on private networks. Core retains warehouse and AppKit state. When enabled, Flowable executes the recall review and maintenance handover processes; other model transitions continue in Core.
 
 ## Evaluate on an isolated test machine
 

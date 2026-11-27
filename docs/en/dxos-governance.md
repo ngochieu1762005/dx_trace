@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-OS governance and evidence
 
 This capability mapping follows [section 4 of the VFOSSA OLP 2026 open-source competition specification](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html). It describes implementation and boundaries, not certification of full compliance.

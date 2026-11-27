@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Giao diện và router API
 
 Giao diện kho được dựng bằng React và Vite. Thư mục `app/api` chứa router được máy chủ Node gọi trực tiếp. [Kiến trúc](../docs/HEADLESS-CORE.md) · [API](../docs/API.md).

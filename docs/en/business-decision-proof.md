@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE Evidence Engine
 
-**Business Decision Proof** binds a captured business decision to identity, authorisation, policy/workflow versions, input lineage, state transition and cryptographic integrity. This is an **Unreleased** feature, not part of the v0.0.7 archive. [Canonical detailed guide](../BUSINESS-DECISION-PROOF.md).
+**Business Decision Proof** binds a captured business decision to identity, authorisation, policy/workflow versions, input lineage, state transition and cryptographic integrity. Released in v0.1.0, this feature is included in the v0.2.0 candidate. [Canonical detailed guide](../BUSINESS-DECISION-PROOF.md).
 
 ## Capture, signing and export
 

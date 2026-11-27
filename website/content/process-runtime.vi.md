@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Thực thi nhánh song song và bộ đếm giờ
 
 Mô hình có thể khai báo `orchestration` cùng các trường, quyền và quy trình thông thường. Trong [ví dụ bảo trì](../../examples/maintenance/process.parallel.json), sau khi tiếp nhận, một nhánh thẩm định chất lượng và nhánh còn lại chờ đến hạn rồi chuyển chủ kho xác nhận. Quy trình chỉ đi tiếp khi cả hai nhánh hoàn tất.

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Observed cold-chain status, including synthetic-source labels.
  * SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */

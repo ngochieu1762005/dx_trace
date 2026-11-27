@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # H-P-D-I in DX-TRACE
 
 Two stores have received chilled stock when a temperature excursion is discovered. The warehouse can follow one lot across all four H–P–D–I dimensions.

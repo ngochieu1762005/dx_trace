@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # HTTP API — DX-TRACE
 
-Phạm vi: nhánh main sau v0.0.7. Các API mới bên dưới chưa nằm trong archive v0.0.7; dùng tag tương ứng khi tái lập bản phát hành.
+Phạm vi: API của bản v0.2.0. Khi tái lập kết quả, ghi phiên bản và mã commit đang chạy.
 
 Nguồn đối chiếu: [router](../app/api/%5B...path%5D/route.ts), [domain](../lib/domain.mjs), [platform](../lib/platform.mjs). API công khai dùng tiền tố `/api` trên cùng domain ứng dụng.
 
@@ -113,7 +117,7 @@ Lỗi nghiệp vụ trả JSON `{error: "..."}`. Lỗi proxy có thể trả HTM
 
 Các endpoint BPMN và AppKit được phát hành từ **v0.0.6**. [Tập con BPMN và ví dụ](BPMN.md) · [AppKit khai báo](APPKIT.md). Import BPMN từ chối phần tử không hỗ trợ, không dùng XML DTD/XXE. Cả hai cơ chế đều đi qua model plan/apply và audit-ledger; không cho phép thực thi JavaScript hoặc truy cập Core bằng token từ trình duyệt.
 
-## Kiểm định và minh chứng — main sau v0.0.7
+## Kiểm định và minh chứng — v0.2.0
 
 | Method | Path | Nội dung / quyền |
 | --- | --- | --- |

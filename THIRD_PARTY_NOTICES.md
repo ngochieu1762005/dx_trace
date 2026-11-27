@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Thành phần thứ ba và thông báo nguồn
 
-**Thành phần tích hợp ứng viên (chưa phát hành):** [Apache APISIX 3.21.0](https://github.com/apache/apisix) và [Flowable OSS 7.2.0](https://github.com/flowable/flowable-engine) — Apache-2.0; PostgreSQL 17 — PostgreSQL License. Dịch vụ được lấy từ image upstream, không nhúng mã vào Core; giữ LICENSE/NOTICE và kiểm kê phụ thuộc thực tế khi phân phối. Tag chưa xác minh digest; chưa đưa vào SBOM bản phát hành. [Kế hoạch chuyển đổi](docs/THIRD-PARTY-CORE-MIGRATION.md).
+**Thành phần tích hợp trong v0.2.0:** [Apache APISIX 3.21.0](https://github.com/apache/apisix) và [Flowable OSS 7.2.0](https://github.com/flowable/flowable-engine) — Apache-2.0; PostgreSQL 17 — PostgreSQL License. Dịch vụ được lấy từ image upstream, không nhúng mã vào Core; giữ LICENSE/NOTICE và kiểm kê phụ thuộc thực tế khi phân phối. Tag chưa xác minh digest; chưa đưa vào SBOM bản phát hành. [Kế hoạch chuyển đổi](docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 [Giấy phép dự án](LICENSE) · [Phụ thuộc](DEPENDENCIES.md) · [Tác giả](AUTHORS.md)
 

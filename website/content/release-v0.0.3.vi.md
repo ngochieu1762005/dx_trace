@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE v0.0.3 · Giao diện và khôi phục phiên
 
 Trang giới thiệu minh họa quy trình thu hồi lô SUA-005. Các lối vào đăng nhập, dùng thử và phê duyệt đưa người dùng đến đúng màn hình.

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Native Flowable review API. SPDX-License-Identifier: MIT */
 import {readFile} from 'node:fs/promises';
 import {q,hash} from './server.ts';

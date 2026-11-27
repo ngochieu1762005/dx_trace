@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Lộ trình sử dụng DX-TRACE
 
 Chọn đúng môi trường trước khi thao tác. Kho thực hành có dữ liệu mẫu, kho vận hành là dữ liệu thật. Không reset kho để tạo lại demo.

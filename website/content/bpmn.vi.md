@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Trao đổi quy trình bằng BPMN 2.0
 
 DX-TRACE xuất quy trình của một mô hình thành XML để đọc bằng công cụ BPMN. Khi nhập lại, Core chuyển phần XML được hỗ trợ thành định nghĩa quy trình có phiên bản.

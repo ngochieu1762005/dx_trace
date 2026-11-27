@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* SPDX-License-Identifier: MIT */
 const el=id=>document.getElementById(id);
 const area=new URL(location.href).searchParams.get('area')==='training'?'training':'live';

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # SPDX-License-Identifier: MIT
 """Generate one disposable Keycloak realm, accounts and test certificate."""
 import hashlib

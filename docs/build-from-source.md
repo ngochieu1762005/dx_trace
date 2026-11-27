@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Build và cài từ source archive
 
 Cần Linux với Bash, GNU tar/coreutils, curl, Node.js 24 và pnpm 11.25.0. Tại thư mục chứa các tệp tải từ cùng một release, kiểm SHA256SUMS rồi giải nén tar.gz. Với bản có AppKit lifecycle, từ thư mục vừa giải nén chạy:

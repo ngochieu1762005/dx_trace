@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Phạm vi đọc hồ sơ theo vai trò
 
 Trong mô hình, `permissions.scopeByRole` chỉ định vai trò nào xem tất cả hồ sơ và vai trò nào chỉ xem hồ sơ tự tạo. Ví dụ, `{"manager":"own","warehouse":"all"}` giới hạn quản lý ở hồ sơ của mình và cho nhân viên kho xem mọi hồ sơ của mô hình trong cùng kho. Các vai trò này phải có sẵn quyền đọc.

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Platform assurance and metadata catalog
 
 This change adds an optional isolated ClamAV stack and a read-authorized metadata catalog. It does not replace the existing Core database or workflow engine.

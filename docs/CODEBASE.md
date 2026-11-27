@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Bản đồ mã nguồn — DX-TRACE main
 
 [Tài liệu](README.md) · [Phụ thuộc](DEPENDENCIES.md) · [Giao diện](../app/README.md) · [Nghiệp vụ](../lib/README.md). Các đường dẫn dưới thuộc source; `selfhost/generated/`, `node_modules/` và dữ liệu chạy là đầu ra, không chỉnh trực tiếp để phát hành.

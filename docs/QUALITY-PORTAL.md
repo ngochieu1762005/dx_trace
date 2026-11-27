@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quality Control Portal — independent DX-OS application
 
-> Frontend độc lập có từ **v0.0.6**. Phần liên thông kiểm định–cách ly dưới đây thuộc **main sau v0.0.7**, chưa có trong archive v0.0.7.
+> Frontend độc lập có từ **v0.0.6**. Phần liên thông kiểm định–cách ly dưới đây có trong **v0.2.0**.
 
 ## Purpose and architecture
 
@@ -34,7 +38,7 @@ and optional BPMN subset interchange.
 
 ## Run from source
 
-Requirements: Node.js 24, a clean checkout of tag v0.0.6 or a documented later commit.
+Requirements: Node.js 24, a clean checkout of tag v0.2.0 for the candidate demonstration.
 To serve the static frontend by itself:
 
 ```sh

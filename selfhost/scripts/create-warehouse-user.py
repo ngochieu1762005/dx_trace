@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 """Create the first DX-TRACE warehouse user through Keycloak Admin REST.
 
 Run locally on the VPS: python3 selfhost/scripts/create-warehouse-user.py

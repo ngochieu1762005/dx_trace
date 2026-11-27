@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Verified, non-destructive cold telemetry export. SPDX-License-Identifier: MIT */
 import {DatabaseSync} from 'node:sqlite';
 import {createReadStream,createWriteStream} from 'node:fs';

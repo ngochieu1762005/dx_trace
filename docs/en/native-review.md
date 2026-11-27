@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Native Flowable review — staging candidate
 
 APISIX is the private gateway in base Compose on main. Integration CI passed for PR #35; production acceptance is separate. Existing workflows keep their current state engine. The Flowable overlay adds an executable BPMN process for an independent release review; it does not release a warehouse lot or migrate existing records.

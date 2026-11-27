@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Model-specific record access
 
 Existing models retain their legacy all/own scopes. A model may optionally declare permissions.scopeByRole, for example {"manager":"own","warehouse":"all"}. This mapping is limited to existing read-authorized roles; the workspace owner retains full access to models they can read. Unknown roles, owner overrides and invalid scopes are rejected.

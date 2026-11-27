@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 """Check or fix DX-TRACE OAuth2 redirect URIs using Keycloak's Admin REST API.
 
 Uses the local Keycloak port already published on 127.0.0.1:8181.

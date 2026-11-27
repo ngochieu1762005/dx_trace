@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Kiểm tra chất lượng dữ liệu của mô hình
 
 Trường văn bản có thể khai báo `minLength` và `maxLength` trong khoảng 1–4.000 ký tự. Điều kiện `requiredWhen` cho phép bắt buộc nhập một trường theo giá trị trường khác. Ví dụ, mô hình có thể yêu cầu lý do khi mức ưu tiên bằng “Khẩn cấp”.

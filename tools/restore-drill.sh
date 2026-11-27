@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # DX-TRACE | Isolated restore drill: SQLite objects + Keycloak PostgreSQL.
 # SPDX-License-Identifier: MIT. Copyright (c) 2026 DX-TRACE contributors.
 # Usage: bash tools/restore-drill.sh /opt/dx-trace-backups/YYYYMMDD-HHMMSS

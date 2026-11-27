@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Cổng kiểm định chất lượng
 
 Cổng kiểm định chạy trong dịch vụ riêng tại `/apps/quality/`. Người dùng mở cổng bằng phiên đăng nhập của ứng dụng kho. Giao diện gửi yêu cầu qua API dùng chung. Core giữ dữ liệu, kiểm quyền và ghi quyết định.

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Tài liệu DX-TRACE
 
 DX-TRACE v0.2.0 dùng Apache APISIX làm cổng API mặc định. Dịch vụ Flowable tùy chọn thực thi quy trình thẩm định. [Kiến trúc tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
@@ -28,7 +32,7 @@ Nền tảng chuyển đổi số nguồn mở cho chuỗi cung ứng, truy xu�
 
 ## Phiên bản và minh chứng
 
-Tài liệu được dựng từ mã nguồn hiện tại, không đồng nghĩa mọi tính năng thuộc bản phát hành v0.0.7 hoặc đã được triển khai trên VPS. PostgreSQL có công cụ chuyển đổi được kiểm thử; runtime vẫn dùng SQLite. SSO thực tế và vận hành ClamAV cần nghiệm thu riêng. Xem [ma trận minh chứng](../../docs/EVIDENCE.md), [CI](https://github.com/ngochieu1762005/dx_trace/actions) và [releases](https://github.com/ngochieu1762005/dx_trace/releases).
+Tài liệu được dựng từ mã nguồn hiện tại, không đồng nghĩa mọi thay đổi trên main đã có trong v0.2.0 hoặc đã được triển khai trên VPS. PostgreSQL có công cụ chuyển đổi được kiểm thử; runtime vẫn dùng SQLite. SSO thực tế và vận hành ClamAV cần nghiệm thu riêng. Xem [ma trận minh chứng](../../docs/EVIDENCE.md), [CI](https://github.com/ngochieu1762005/dx_trace/actions) và [releases](https://github.com/ngochieu1762005/dx_trace/releases).
 
 ## Giấy phép
 

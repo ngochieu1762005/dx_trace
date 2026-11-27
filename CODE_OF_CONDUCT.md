@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quy tắc cộng tác
 
 DX-TRACE chào đón báo lỗi, câu hỏi và đóng góp kỹ thuật. Quy tắc này áp dụng trong Issues, pull request và các kênh cộng tác của dự án.

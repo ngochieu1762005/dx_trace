@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE documentation
 
 DX-TRACE v0.2.0 uses Apache APISIX as its default Compose gateway. The optional Flowable service runs independent reviews. [Integration guide](third-party-core-migration.md).

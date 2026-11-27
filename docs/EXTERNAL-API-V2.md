@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # External API v2 và SDK
 
 Đăng ký client trong Keycloak với audience của external-api, email đã xác minh, scope đọc hồ sơ và các scope ghi cần dùng. Khai báo client trong policy phiên bản 2. Người dùng phải là thành viên hiện hữu của workspace.

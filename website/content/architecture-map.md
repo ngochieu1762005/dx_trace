@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Kiến trúc hệ thống DX-TRACE
 
-**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+**Cấu hình trong v0.2.0:** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 ![Sơ đồ triển khai DX-TRACE với các tuyến người dùng, đầu dò và tích hợp](../../docs/assets/architecture-current.svg)
 

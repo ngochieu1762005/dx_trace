@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Đối chiếu PoF · OLP PMNM 2026
 
 Mốc điểm lấy từ [thể lệ VFOSSA 2026, mục I](https://www.vfossa.vn/tin-tuc/the-le-olp-phan-mem-nguon-mo-nam-2026-760.html). Dùng bảng theo đúng tag nộp thi. CI trên nhánh phát triển chỉ chứng minh commit được kiểm thử. Điểm do BGK xác định.

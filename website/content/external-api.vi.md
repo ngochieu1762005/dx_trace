@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # API tích hợp qua OAuth2
 
 API phiên bản 1 cho phép ứng dụng đã đăng ký đọc hồ sơ. Ứng dụng lấy mã truy cập ngắn hạn từ Keycloak. Dịch vụ kiểm chữ ký, nơi cấp, đối tượng nhận, thời hạn và quyền đọc trước khi chuyển yêu cầu đến Core.

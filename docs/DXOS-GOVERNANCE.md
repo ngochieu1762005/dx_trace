@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Bốn nguyên lý DX-OS
 
 Đối chiếu theo [đề thi PMNM OLP 2026 do VFOSSA công bố, mục 4](https://vfossa.vn/tin-tuc/de-thi-phan-mem-nguon-mo-olp-2026-798.html). Các mục dưới mô tả phần đã triển khai và giới hạn; không phải chứng nhận đáp ứng toàn bộ đề thi.

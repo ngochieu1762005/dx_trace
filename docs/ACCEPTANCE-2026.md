@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Acceptance checklist for OLP 2026 — real services, not mock claims
 
 This file separates **source-code and CI proof** from **staging/VPS proof**.

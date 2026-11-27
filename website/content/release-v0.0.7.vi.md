@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE v0.0.7 · Cổng API và quy trình song song
 
 Bản v0.0.7 tách cổng chính sách khỏi Core, bổ sung bộ thực thi quy trình có nhánh song song và bộ đếm giờ. API OIDC phiên bản 1 cho phép ứng dụng ngoài đọc các mô hình được quản trị viên cấp quyền.

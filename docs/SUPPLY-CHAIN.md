@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE software supply chain and verifiable releases
 
-Status: **proposed for the next release after v0.0.6**. Previous release assets do not retroactively acquire an SBOM or attestation.
+Status: **available in the v0.2.0 release**. Previous release assets do not retroactively acquire an SBOM or attestation.
 
 ## Source of truth
 
@@ -8,9 +12,9 @@ The repository uses a pnpm lockfile, GitHub Actions, an MIT project license and 
 
 The validator at tools/validate-sbom.mjs checks SPDX version, namespace and nonempty packages with identifiers, names and versions. A passing validator means the output has basic expected structure; it does **not** independently prove that every transitive dependency, native binary or Docker base layer is included.
 
-## Future tagged releases
+## Tagged release workflow
 
-After code review and passing CI, the standard .github/workflows/release.yml will:
+After code review and passing CI, the standard .github/workflows/release.yml runs these steps:
 
 1. Checkout and verify the requested existing Git tag.
 2. Build/test the exact tagged source and create its tar.gz.
@@ -22,7 +26,7 @@ The source archive is created with git archive; it is a tagged source snapshot, 
 
 ## Verify a published release
 
-Install the GitHub CLI (gh) and the platform's sha256sum utility. Download the source archive, DX-TRACE.spdx.json and SHA256SUMS from the **same** GitHub release, then run:
+Install the GitHub CLI (gh) and the platform's sha256sum utility. Download all files listed in SHA256SUMS and the checksum file itself from the **same** GitHub release, then run:
 
 ~~~bash
 sha256sum -c SHA256SUMS

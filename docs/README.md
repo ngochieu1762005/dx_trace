@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Tài liệu DX-TRACE
 
 [Cổng tài liệu tiếng Việt](https://dxtrace.hieuds.com/docs/) · [English documentation](en/README.md) · [README dự án](../README.md)

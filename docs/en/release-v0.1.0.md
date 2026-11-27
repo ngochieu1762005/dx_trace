@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE v0.1.0
 
 This release includes the AppKit lifecycle and maintenance application, three-portal SSO, APISIX routing, native Flowable recalls, signed decision evidence with offline verification, durable outbox delivery and recovery, and source archive installation checks.

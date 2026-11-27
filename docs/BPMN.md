@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # BPMN 2.0 interchange for DX-TRACE
 
 DX-TRACE executes **declarative, server-enforced state-machine workflows**. This

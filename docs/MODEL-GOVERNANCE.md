@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Model governance and data quality
 
 Models now support optional minLength/maxLength (text only, 1–4000 characters) and requiredWhen: {"field":"priority","equals":"Khẩn cấp"}. The server validates references and exact values, and rejects incompatible changes during the existing model plan. There is no arbitrary expression execution. OpenAPI exports conditional requirements as a vendor extension because the existing contract is OpenAPI 3.0.

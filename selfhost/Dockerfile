@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # DX-TRACE | Multi-stage Node.js application image
 #
 # @Project DX-TRACE

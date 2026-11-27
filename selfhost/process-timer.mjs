@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Durable BPMN timer polling with DB-backed optimistic locking.
  * SPDX-License-Identifier: MIT. Copyright (c) 2026 DX-TRACE contributors. */
 export async function scanDueTimers({select,apply,now=new Date().toISOString(),limit=25,logger=console}){

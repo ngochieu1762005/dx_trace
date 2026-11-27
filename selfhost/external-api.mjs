@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Versioned external OIDC API (v1 read-only; v2 opt-in).
  * SPDX-License-Identifier: MIT
  * Copyright (c) 2026 DX-TRACE contributors. See LICENSE.

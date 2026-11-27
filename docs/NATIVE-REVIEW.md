@@ -1,8 +1,12 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quy trình thẩm định Flowable OSS
 
 APISIX mặc định trên main; Flowable OSS là overlay tùy chọn. CI tích hợp PR #35 đã đạt; chưa xác nhận production.
 
-## Flowable OSS và truy vết cảm biến (main, chưa phát hành)
+## Flowable OSS và truy vết cảm biến (v0.2.0)
 
 | Method / path | Quyền | Body / kết quả |
 | --- | --- | --- |

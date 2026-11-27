@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Demonstrating fault tolerance
 
 DX-TRACE's tests exercise business invariants under duplicate requests, concurrent users and interrupted dependencies. Test results belong to a specific commit and environment; passing CI does not establish production acceptance. [Detailed canonical guide](../FAULT-TOLERANCE.md).

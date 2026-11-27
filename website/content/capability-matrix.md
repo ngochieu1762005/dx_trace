@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Ma trận năng lực và giới hạn
 
 Bảng mô tả mã nguồn main, không tự khẳng định mọi tính năng đã triển khai trên VPS hoặc đạt chứng nhận.

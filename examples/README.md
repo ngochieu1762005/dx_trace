@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Mẫu nghiệp vụ mở rộng
 
 [AppKit](../docs/APPKIT.md) · [Mô hình JSON](../docs/PLATFORM.md) · [BPMN](../docs/BPMN.md)

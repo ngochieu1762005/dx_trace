@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Ubuntu: Caddy trên host và ba tên miền
 
-Áp dụng cho mã nguồn sau v0.0.6, máy đã dùng Caddy hệ thống. Không khởi động service `gateway` (Caddy Docker) cạnh tranh cổng 80/443. Service `gateway-api` mới là lớp policy nội bộ, không công bố cổng. Máy đang hoạt động phải xem [hướng dẫn migration](../docs/GATEWAY-AND-SSO.md) trước khi cập nhật.
+Áp dụng cho bản v0.2.0, máy đã dùng Caddy hệ thống. Không khởi động service `gateway` (Caddy Docker) cạnh tranh cổng 80/443. Service `gateway-api` mới là lớp policy nội bộ, không công bố cổng. Máy đang hoạt động phải xem [hướng dẫn migration](../docs/GATEWAY-AND-SSO.md) trước khi cập nhật.
 
 | Domain ví dụ | Đích |
 | --- | --- |

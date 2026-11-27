@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Website và cổng tài liệu DX-TRACE
 
 Trang chủ tiếng Việt nằm ở `/`, bản tiếng Anh ở `/en/`. Cổng tài liệu dùng `/docs/` và `/docs/en/`. Chọn ngôn ngữ trên một trang tài liệu để mở cùng chủ đề trong ngôn ngữ kia.

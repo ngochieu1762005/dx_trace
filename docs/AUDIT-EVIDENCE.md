@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Kiểm chứng nhật ký độc lập
 
-Phạm vi: nhánh `main`, phần nâng cấp sau v0.0.7. Không áp dụng ngược cho archive v0.0.7.
+Phạm vi: v0.2.0.
 
 DX-TRACE có thể xuất các sự kiện trong ledger dưới dạng JSON và kiểm tra chuỗi SHA-256 mà không cần kết nối Core. Chủ không gian hoặc quản lý mở **Nhật ký → Kiểm tra & chuẩn bị gói minh chứng**. Trình duyệt kiểm tra lại nội dung trả về trước khi cho tải gói nhật ký và mốc đối chiếu.
 

@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE: isolated API Gateway and live OIDC acceptance
 
-Status: **APISIX default on main, unreleased**. Integration CI passed for PR #35; production SSO still requires live verification.
+Status: **APISIX is the default gateway in v0.2.0**. Integration CI passed for PR #35; production SSO still requires live verification.
 
 ## Architecture and trust boundary
 
