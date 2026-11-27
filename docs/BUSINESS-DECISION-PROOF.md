@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE Evidence Engine
 
-**Business Decision Proof** là gói bằng chứng độc lập về một quyết định nghiệp vụ được Core ghi nhận. Nó gắn danh tính, kiểm quyền, chính sách, quy trình, nguồn dữ liệu và thay đổi trạng thái với sự kiện audit có chữ ký. Đây là tính năng **Unreleased**; các archive v0.0.7 không có tính năng này.
+**Business Decision Proof** là gói bằng chứng độc lập về một quyết định nghiệp vụ được Core ghi nhận. Nó gắn danh tính, kiểm quyền, chính sách, quy trình, nguồn dữ liệu và thay đổi trạng thái với sự kiện audit có chữ ký. Tính năng đã phát hành từ v0.1.0 và có trong bản ứng viên v0.2.0.
 
 [English](en/business-decision-proof.md) · [Kiểm chứng audit cũ](AUDIT-EVIDENCE.md) · [Chịu lỗi](FAULT-TOLERANCE.md) · [H-P-D-I](../website/content/hdpi.md)
 

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # SPDX-License-Identifier: MIT
 # Candidate migration overlay. Do not apply to production until acceptance passes.
 services:

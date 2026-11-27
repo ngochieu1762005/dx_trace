@@ -1,9 +1,12 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 version = 1
 
 [[annotations]]
 path = ["**"]
 precedence = "closest"
-SPDX-FileCopyrightText = "2026 DX-TRACE contributors"
+SPDX-FileCopyrightText = "2026 Đặng Nhật Minh, Nguyễn Ngọc Hiếu and DX-TRACE contributors"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]

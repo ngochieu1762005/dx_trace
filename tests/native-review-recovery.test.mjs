@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Native review fault injection (fake Flowable transport, real SQLite).
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2026 DX-TRACE contributors

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quy tắc nghiệp vụ và lưu trữ
 
 Các quy tắc được thực thi ở Core, không chỉ ở giao diện. [Router HTTP](../app/api/%5B...path%5D/route.ts) · [Kiến trúc](../docs/HEADLESS-CORE.md).

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Declarative application bundles (v2)
 
 An application bundle groups up to 12 existing v1 manifests into one transactional workspace operation. It reuses the model validator, workflow engine, version history, permissions and record storage. It does not run code from a manifest. Individual v1 application APIs remain unchanged.

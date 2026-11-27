@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Tham chiếu API
 
 Danh mục endpoint dựa trên router hiện tại. Các route dưới đây có tiền tố /api. **Session** là phiên cùng nguồn; **Device** là Bearer token của thiết bị. Quyền chi tiết vẫn được kiểm tra ở Core và model. Tài liệu cung cấp hợp đồng HTTP, tham số và ví dụ tích hợp. Website tài liệu không thực thi yêu cầu API.
@@ -92,7 +96,7 @@ Apply và lệnh record cần khóa lệnh. OpenAPI hiện sinh theo từng mode
 
 [Ví dụ gọi API](api-examples.md) · [Xác thực và lỗi](api-auth.md) · [Router nguồn](../../app/api/%5B...path%5D/route.ts).
 
-## Flowable OSS và truy vết cảm biến (main, chưa phát hành)
+## Flowable OSS và truy vết cảm biến (v0.2.0)
 
 | Phương thức và đường dẫn | Quyền | Body / kết quả |
 | --- | --- | --- |

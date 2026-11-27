@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE — Ghi chú phát hành
 
 **Bản phát hành gần nhất: v0.2.0.** Xem [changelog](../../CHANGELOG.md) để đối chiếu thay đổi giữa các tag.

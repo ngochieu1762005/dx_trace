@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Tác giả và người duy trì
 
 DX-TRACE do **Đặng Nhật Minh** và **Nguyễn Ngọc Hiếu** cùng phát triển. Cả hai là sinh viên ngành Khoa học dữ liệu tại **Trường Đại học Khoa học và Công nghệ Hà Nội (USTH)**.

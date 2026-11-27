@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # SPDX-License-Identifier: MIT
 # No public port or administrative API. OAuth2 Proxy remains the browser SSO boundary.
 consumers:

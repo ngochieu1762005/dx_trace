@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE system architecture
 
-**Main-branch status (unreleased):** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows keep their legacy runtime. PR #35 integration CI passed; production acceptance remains separate. [Integration](third-party-core-migration.md).
+**Release v0.2.0:** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows keep their legacy runtime. The [v0.2.0 integration job](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) passed; production acceptance remains separate. [Integration](third-party-core-migration.md).
 
 ![Deployment architecture with browser, sensor and integration routes](../../docs/assets/architecture-current-en.svg)
 

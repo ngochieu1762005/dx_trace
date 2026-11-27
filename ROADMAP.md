@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Lộ trình phát triển
 
 **Ưu tiên chuyển đổi hạ tầng:** thay gateway bằng Apache APISIX, chuyển thực thi BPMN sang Flowable OSS, nghiệm thu bảo mật và tương thích, di chuyển workflow đang chạy, sau đó cập nhật cấu hình mặc định và phát hành. Chưa hoàn tất. [Kế hoạch chi tiết](docs/THIRD-PARTY-CORE-MIGRATION.md).
@@ -24,12 +28,14 @@
 
 Các mục này được đóng gói trong v0.0.6; dùng tag tương ứng để tái lập.
 
-## Đã bổ sung trên main sau v0.0.7
+## Các thay đổi đã có trong v0.2.0
 
 - Liên thông kiểm định không đạt với cách ly lô, sự cố và ledger trong một transaction.
 - Việc cần làm theo vai trò và giao diện user task/timer cho quy trình song song.
 - Kiểm chứng nhật ký offline với mốc đối chiếu giữ độc lập, không tuyên bố chữ ký số hoặc witness công khai.
 - Giữ vùng kho khi chuyển ứng dụng; Quality Portal có tìm kiếm, phân trang và lịch sử.
+
+Bản v0.2.0 bổ sung SDK đóng gói độc lập, API v2 theo phạm vi mô hình, bằng chứng quyết định AppKit và bàn giao bảo trì bằng Flowable. [Ghi chú phát hành](docs/releases/RELEASE_NOTES_v0.2.0.md)
 
 ## Ưu tiên tiếp theo
 

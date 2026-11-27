@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Vận hành, nâng cấp và phục hồi
 
-Áp dụng cho mã nguồn sau v0.0.6. Chạy Bash từ thư mục `selfhost/`. Gateway mới yêu cầu bổ sung một khóa mới; đọc [hướng dẫn migration](../docs/GATEWAY-AND-SSO.md) trước khi chạy lệnh trên VPS. Không đặt bản sao lưu trong repository hoặc document root. [Cài mới](README.md) · [Ubuntu Caddy](DEPLOY_SAAS_UBUNTU.md).
+Áp dụng cho bản v0.2.0. Chạy Bash từ thư mục `selfhost/`. Gateway mới yêu cầu bổ sung một khóa mới; đọc [hướng dẫn migration](../docs/GATEWAY-AND-SSO.md) trước khi chạy lệnh trên VPS. Không đặt bản sao lưu trong repository hoặc document root. [Cài mới](README.md) · [Ubuntu Caddy](DEPLOY_SAAS_UBUNTU.md).
 
 ## 1. Chọn đúng cấu hình Compose
 

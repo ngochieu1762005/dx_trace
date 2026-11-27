@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Cài nhiều mô hình trong một giao dịch
 
 Một gói AppKit v2 chứa tối đa 12 manifest v1. [Gói vận hành mẫu](../../examples/bundles/operations.json) cài mô hình bảo trì và duyệt mua sắm cùng lúc. Mỗi mô hình xuất hiện riêng trong danh sách ứng dụng của kho.

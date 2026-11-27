@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 DX-TRACE contributors
 """Static DX-TRACE documentation site; no frontend framework required."""
@@ -23,7 +26,12 @@ def slug(text):
     return "".join(c for c in text if c.isalnum() or c in " _-").replace(" ", "-") or "section"
 
 def render(source, current, routes, revision):
-    tokens = MD.parse((ROOT / source).read_text(encoding="utf-8"))
+    markdown = (ROOT / source).read_text(encoding="utf-8")
+    if markdown.startswith("<!-- SPDX-FileCopyrightText:"):
+        _, end, body = markdown.partition("-->")
+        if end:
+            markdown = body.lstrip("\n")
+    tokens = MD.parse(markdown)
     headings, used, words = [], {}, []
     sections = []
     section = None

@@ -1,6 +1,10 @@
-# Native Flowable review — staging candidate
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
+# Native Flowable review in v0.2.0
 
-APISIX is the private gateway in base Compose on main. Integration CI passed for PR #35; production acceptance is separate. Existing workflows keep their current state engine. The Flowable overlay adds an executable BPMN process for an independent release review; it does not release a warehouse lot or migrate existing records.
+APISIX is the private gateway in the v0.2.0 base Compose configuration. The [v0.2.0 integration job](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) passed; production acceptance is separate. Existing workflows keep their current state engine. The Flowable overlay adds an executable BPMN process for an independent release review; it does not release a warehouse lot or migrate existing records.
 
 All requests use the authenticated session through APISIX. POST requires same-origin; start requires Idempotency-Key.
 - POST /api/flowable-review/start: {"reference":"review-001"}.
@@ -17,7 +21,7 @@ Use a separate checkout and separate Compose project with disposable volumes; ne
 
 ```sh
 cd /opt
- git clone --branch main https://github.com/ngochieu1762005/dx_trace.git dxtrace-acceptance
+git clone --branch v0.2.0 https://github.com/ngochieu1762005/dx_trace.git dxtrace-acceptance
 cd dxtrace-acceptance/selfhost
 umask 077
 node setup.mjs app.example.invalid id.example.invalid

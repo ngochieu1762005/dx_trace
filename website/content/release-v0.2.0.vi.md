@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE v0.2.0 · Công cụ phát triển ứng dụng
 
 Ứng dụng khách có thể dùng SDK JavaScript để đọc cấu trúc dữ liệu, tạo hồ sơ và chuyển bước qua API phiên bản 2. Quyền truy cập phụ thuộc vào ứng dụng khách, vai trò người dùng, mô hình và kho đã cấp.

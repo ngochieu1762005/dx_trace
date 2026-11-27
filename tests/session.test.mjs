@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Authentication recovery regression tests. SPDX-License-Identifier: MIT. Copyright (c) 2026 DX-TRACE contributors. See LICENSE. */
 import test from 'node:test';
 import assert from 'node:assert/strict';

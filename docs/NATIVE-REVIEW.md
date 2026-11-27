@@ -1,8 +1,12 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quy trình thẩm định Flowable OSS
 
-APISIX mặc định trên main; Flowable OSS là overlay tùy chọn. CI tích hợp PR #35 đã đạt; chưa xác nhận production.
+APISIX là cổng mặc định trong v0.2.0; Flowable OSS là overlay tùy chọn. [Kiểm thử tích hợp v0.2.0](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) đã đạt; chưa xác nhận production.
 
-## Flowable OSS và truy vết cảm biến (main, chưa phát hành)
+## Flowable OSS và truy vết cảm biến (v0.2.0)
 
 | Method / path | Quyền | Body / kết quả |
 | --- | --- | --- |
@@ -17,4 +21,4 @@ Hai tác vụ kiểm kê và chất lượng chạy song song; cả hai đạt m
 
 ## Nghiệm thu
 
-[CI PR #35](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792) đã đạt. Chạy smoke trên môi trường riêng, không dùng dữ liệu thật. [Hướng dẫn staging](THIRD-PARTY-CORE-MIGRATION.md) · [English](en/native-review.md).
+[CI tích hợp v0.2.0](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) đã đạt. Chạy smoke trên môi trường riêng, không dùng dữ liệu thật. [Hướng dẫn staging](THIRD-PARTY-CORE-MIGRATION.md) · [English](en/native-review.md).

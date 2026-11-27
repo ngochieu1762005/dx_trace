@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Ma trận minh chứng kỹ thuật
 
-Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm thử Python. Từ v0.0.6 đến v0.0.7, phải xem số lượng thực tế trong GitHub Actions; không dùng các số lịch sử làm kết quả hiện tại. Tài liệu phân biệt mã đã có, bài kiểm tự động và việc cần xác nhận trên môi trường triển khai. Số bài kiểm không phải phần trăm độ bao phủ hay cam kết không có lỗi.
+Bản ứng viên v0.2.0 dùng commit `00990ecd`. [CI đúng commit](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970856284) và [lần chạy phát hành](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898) ghi kết quả dựng, cài sạch và tích hợp. Các phép đo có ngày, phiên bản và môi trường riêng.
 
 | Năng lực | Mã / tài liệu | Minh chứng | Giới hạn |
 | --- | --- | --- | --- |
@@ -17,7 +21,7 @@ Các số liệu **v0.0.5** trước đây: 40 kiểm thử Node.js và 3 kiểm
 | Chức năng kho | domain, impact, scanner, inventory-view | Các test nghiệp vụ, thu hồi, đối chiếu mã và CSV trong `tests/` | Camera thật cần kiểm trên từng thiết bị |
 | Hiệu năng | `tools/benchmark-platform.mjs` | [Kết quả và phạm vi đo](BENCHMARK.md) | Không đo SSO/TLS/gateway, không so trực tiếp với hệ thống khác |
 
-## Ứng dụng độc lập và ranh giới chịu lỗi (main Unreleased, ngoài v0.0.5)
+## Ứng dụng độc lập và ranh giới chịu lỗi trong v0.2.0
 
 | Hạng mục | Mã / tài liệu | Kiểm chứng tự động | Chưa được chứng minh |
 | --- | --- | --- | --- |
@@ -82,7 +86,7 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 - Các thay đổi này được phát hành trong v0.0.6. Kiểm chứng theo commit và kết quả CI tương ứng; không ghép số liệu main vào báo cáo của tag cũ. Xem [hướng dẫn kiểm thử](TESTING.md).
 
 
-## Gateway tách khóa và kiểm chứng OIDC (chưa phát hành)
+## Gateway tách khóa và kiểm chứng OIDC (v0.2.0)
 
 | Hạng mục | Bằng chứng trong repository | Bằng chứng cần thu thập sau deploy |
 | --- | --- | --- |
@@ -92,7 +96,7 @@ Các thay đổi kho truyền thống và hồ sơ mở rộng dùng chung hàng
 | Hướng dẫn rollback | [Gateway and SSO](GATEWAY-AND-SSO.md), [Vận hành](../selfhost/OPERATIONS.md) | Diễn tập trên máy test và ghi thời gian phục hồi |
 
 **Lưu ý:** Source code và test giả lập chỉ chứng minh logic. Không báo cáo Keycloak hoặc VPS đã kiểm thành công khi chưa thực sự chạy.
-## Liên thông nghiệp vụ — main sau v0.0.7
+## Liên thông nghiệp vụ — v0.2.0
 
 | Năng lực | Minh chứng có thể chạy lại | Phạm vi |
 | --- | --- | --- |

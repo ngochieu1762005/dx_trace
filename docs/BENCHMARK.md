@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Đo HTTP cục bộ cho hồ sơ mở rộng
 
 Đo ngày 22/11/2026 trên dữ liệu tổng hợp, ở mã tính năng được đưa vào v0.0.5 trước commit đổi version phát hành. JSON gốc giữ SHA-256 đúng mã đã đo; không khẳng định hash trùng mọi commit tài liệu/version về sau. Đây là phép đo ngắn phục vụ tìm lỗi và kiểm tra thay đổi, **không phải công bố sức chứa người dùng thực hoặc so sánh trực tiếp với dự án khác**.

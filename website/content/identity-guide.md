@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Tài khoản, SSO và phân quyền
 
 Keycloak xác thực danh tính; OAuth2 Proxy tạo phiên; Core kiểm tra thành viên và quyền. Quản trị Keycloak và chủ kho là hai vai trò khác nhau.

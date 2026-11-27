@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Xuất bản cổng tài liệu
 
 Website tự xây dựng bằng Python, HTML/CSS/JavaScript; không dùng Docusaurus. Nguồn chính là Markdown repository.

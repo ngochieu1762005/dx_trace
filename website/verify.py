@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 # SPDX-License-Identifier: MIT
 import json
 import sys
@@ -120,3 +123,11 @@ for entry in entries:
     route = entry["path"].removesuffix("index.html")
     assert alternates[site+"/docs/"+route]["en"] == site+"/docs/en/"+route
 print("Verified", len(alternates), "paired sitemap URLs")
+
+# Both published walkthroughs must identify the candidate shown on the OLP page.
+from platform_pages import TAG, COMMIT
+
+for edition in (root/"docs", root/"docs/en"):
+    demo = (edition/"demo/index.html").read_text(encoding="utf-8")
+    assert f"<code>{TAG}</code>" in demo and COMMIT in demo, (edition, "outdated walkthrough")
+    assert "<!-- SPDX-FileCopyrightText:" not in demo and "&lt;!-- SPDX-FileCopyrightText:" not in demo

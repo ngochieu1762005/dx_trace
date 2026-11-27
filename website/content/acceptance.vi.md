@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Nghiệm thu bản phát hành
 
 Mỗi kết quả cần gắn với tag, mã commit, ngày chạy và môi trường. Từ cùng một tag, có thể kiểm lại một bản cài cục bộ, một lần chạy CI và một hệ thống triển khai riêng.

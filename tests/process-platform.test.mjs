@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Process engine integrated into transactional platform records.
  * SPDX-License-Identifier: MIT. Copyright (c) 2026 DX-TRACE contributors. */
 import test from 'node:test';

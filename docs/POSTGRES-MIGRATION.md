@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # PostgreSQL migration readiness
 
 The current runtime remains SQLite. This tool prepares a verified, transactional import of all 11 application tables into PostgreSQL 17, not Keycloak's database. It is an offline migration rehearsal, not a production cutover or an asynchronous replication mechanism.

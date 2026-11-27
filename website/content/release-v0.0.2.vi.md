@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE v0.0.2 · Lõi dùng chung và dịch vụ đăng nhập
 
 Tách dịch vụ Core sở hữu dữ liệu nghiệp vụ. Ứng dụng kho và ứng dụng phê duyệt dùng chung danh tính, quyền và quy trình.

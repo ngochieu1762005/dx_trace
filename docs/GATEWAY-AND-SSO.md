@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE: isolated API Gateway and live OIDC acceptance
 
-Status: **APISIX default on main, unreleased**. Integration CI passed for PR #35; production SSO still requires live verification.
+Status: **APISIX is the default gateway in v0.2.0**. The [v0.2.0 integration job](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) passed; production SSO still requires live verification.
 
 ## Architecture and trust boundary
 
@@ -74,7 +78,7 @@ Substitute the actual HTTPS origins. Do not put cookie values into shell history
 
 ## Reproducible proof for the judges
 
-- Code: selfhost/api-gateway.mjs, selfhost/compose.yaml, selfhost/verify-oidc.mjs.
+- Code: selfhost/apisix/apisix.yaml, selfhost/compose.yaml, selfhost/verify-oidc.mjs.
 - Regression tests: tests/api-gateway.test.mjs, tests/verify-oidc.test.mjs, tests/headless-core.test.mjs.
 - Docker CI: app, Gateway and Core use separate test networks. From the app container, directly contacting Core must fail while the Gateway path succeeds.
 - Capture a dated report with Git SHA, passed/failed results, user roles (not personal email or secrets), and deployment environment.

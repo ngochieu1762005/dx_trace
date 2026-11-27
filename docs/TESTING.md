@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Kiểm thử và tái lập kết quả
 
 [Ma trận minh chứng](EVIDENCE.md) · [Benchmark](BENCHMARK.md) · [CI](../.github/workflows/ci.yml)
@@ -16,7 +20,7 @@ python3 -m unittest discover -s tests -p '*_test.py'
 
 Secret gate đọc các tệp được Git theo dõi; chạy trong checkout Git để kiểm đúng phạm vi. Build tạo giao diện; bộ kiểm thử dùng dữ liệu thử. Không trỏ script thử nghiệm vào database hoặc tài khoản vận hành.
 
-## Kiểm chứng ứng dụng độc lập (main Unreleased)
+## Kiểm chứng ứng dụng độc lập trong v0.2.0
 
 ```sh
 node --check apps/quality-portal/server.mjs

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Executable parallel process runtime (opt-in)
 
 DX-TRACE retains its existing **versioned JSON state-machine workflow** and
@@ -99,6 +103,6 @@ checks in `applyPlatform`, record version conflicts, persistence via
 serialization, and bounded timer retries. They do not replace a real Keycloak
 two-account acceptance test or an isolated restore drill.
 
-## Operations UI — main after v0.0.7
+## Operations UI in v0.2.0
 
 The operations console now offers **Bảo trì · kiểm tra song song** as a separate model template (`maintenance_parallel`). Record details show active user tasks, timers, partial joins and process history. Buttons respect role and creator separation; Core rechecks all conditions on completion. The work queue links directly to a model and record while retaining the selected workspace. Existing state-machine templates are unchanged.

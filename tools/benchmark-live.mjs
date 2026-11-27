@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | Authenticated HTTPS full-stack smoke/load benchmark.
  * SPDX-License-Identifier: MIT. Copyright (c) 2026 DX-TRACE contributors.
  * No writes, cookies, bearer tokens, or raw responses included in report.

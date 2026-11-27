@@ -4,6 +4,10 @@ about: Mô tả lỗi có thể tái hiện bằng dữ liệu thử
 title: '[Bug] '
 labels: bug
 ---
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 ## Môi trường
 
 - Phiên bản / commit:

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Danh mục phiên bản khóa — DX-TRACE
 
 [Lý do lựa chọn, giấy phép và dịch vụ ngoài](../DEPENDENCIES.md). Bảng dưới đối chiếu lockfile hiện tại; không bổ sung gói chỉ vì tính năng được nhắc trong tài liệu.

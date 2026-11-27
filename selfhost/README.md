@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Triển khai DX-TRACE bằng Docker Compose
 
 Hướng dẫn này dành cho **máy chủ mới**. Cấu hình cơ sở khởi chạy ứng dụng kho, Core, cổng API, Keycloak và các dịch vụ phụ thuộc. Nếu Caddy đang phục vụ nhiều website trên máy, chọn [cấu hình Ubuntu dùng Caddy sẵn có](DEPLOY_SAAS_UBUNTU.md). Với hệ thống đã có người dùng, làm theo [quy trình nâng cấp và sao lưu](OPERATIONS.md).

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Tài sản trong sơ đồ
 
 Các biểu tượng React, Vite, Docker, PostgreSQL, Node.js, SQLite, Git, GitHub Actions và pnpm được lấy từ bộ Devicon. Bản phân phối giữ nguyên [thông báo MIT của Devicon](DEVICON-LICENSE.txt). [Kho nguồn Devicon](https://github.com/devicons/devicon/tree/master/icons)

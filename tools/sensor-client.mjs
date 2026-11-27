@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* DX-TRACE | HTTPS telemetry fixture sender. SPDX-License-Identifier: MIT
  * Only use a dedicated synthetic device in an isolated training workspace.
  * A sample outside the configured limit may quarantine a lot.

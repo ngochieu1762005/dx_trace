@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Quy trình vận hành liên thông
 
-Phạm vi: nhánh `main`, các thay đổi sau v0.0.7. Giữ nguyên dữ liệu và hai vùng **Kho thực hành / Kho vận hành**; không nạp lại dữ liệu khi nâng cấp.
+Phạm vi: v0.2.0. Giữ nguyên dữ liệu và hai vùng **Kho thực hành / Kho vận hành**; không nạp lại dữ liệu khi nâng cấp.
 
 ## 1. Từ kiểm định không đạt đến cách ly
 

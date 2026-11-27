@@ -1,13 +1,15 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Apache APISIX and Flowable OSS migration
 
-Status: APISIX is default on main; optional Flowable executes an independent review. PR #35 integration CI passed; this is not a production rollout or migration of all existing workflows.
+Status: APISIX is the default gateway in v0.2.0; optional Flowable executes an independent review. The [v0.2.0 integration job](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418) passed; this is not a production rollout or migration of all existing workflows.
 
 ## Architecture
 
 Browser → Caddy → OAuth2 Proxy / Keycloak → application → APISIX → DX-TRACE Core.
-Flowable REST and its PostgreSQL database run on private networks. The current
-business workflows still use the existing Core runtime until a separate
-migration connects them to Flowable. The acceptance process is independent.
+Flowable REST and its PostgreSQL database run on private networks. Core retains warehouse and AppKit state. When enabled, Flowable executes the recall review and maintenance handover processes; other model transitions continue in Core.
 
 ## Evaluate on an isolated test machine
 
@@ -54,4 +56,4 @@ Upstream: Apache APISIX 3.21.0 and Flowable OSS 7.2.0 (Apache-2.0). PostgreSQL
 17 (PostgreSQL License). Image tags are pinned, not digest-verified; review
 upstream security advisories and pin digests before production.
 
-See [native review](native-review.md) and [governance](dxos-governance.md). [Integration CI](https://github.com/ngochieu1762005/dx_trace/actions/runs/45645226792).
+See [native review](native-review.md) and [governance](dxos-governance.md). [Integration CI for v0.2.0](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898/job/140410713418).

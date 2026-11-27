@@ -1,6 +1,10 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Giao diện đăng nhập Keycloak
 
-Áp dụng cho Keycloak 26.4.7 trong cấu hình v0.0.5. **Theme mặc định của Keycloak dùng được đầy đủ**; theme `dxtrace` là lựa chọn trình bày, không phải cơ chế đăng nhập khác.
+Áp dụng cho Keycloak 26.4.7 trong cấu hình v0.2.0. **Theme mặc định của Keycloak dùng được đầy đủ**; theme `dxtrace` là lựa chọn trình bày, không phải cơ chế đăng nhập khác.
 
 Theme nằm tại [themes/dxtrace/login](themes/dxtrace/login). Nó kế thừa biểu mẫu Keycloak; không thay thế quy trình xác thực. Không đồng nhất theme login với giao diện Admin Console sau đăng nhập.
 

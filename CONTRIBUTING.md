@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Đóng góp cho DX-TRACE
 
 [Đặng Nhật Minh và Nguyễn Ngọc Hiếu](AUTHORS.md) cùng phát triển dự án. Nguyễn Ngọc Hiếu duy trì kho mã và xem xét các đề xuất đóng góp. Tuân thủ [quy tắc ứng xử](CODE_OF_CONDUCT.md).
@@ -55,3 +59,9 @@ Nêu vấn đề cụ thể, hành vi sau sửa, kiểm thử và ảnh hưởng
 Workflow `release.yml` kiểm tag `v*` hoặc workflow_dispatch rồi đóng gói tarball/checksum. `publish-v0.0.5.yml` là workflow xuất bản riêng cho v0.0.5, có thêm ZIP và kiểm container; không dùng nó để phát hành version khác. Các workflow cũ là lịch sử, không phải đường mặc định.
 
 Tải các asset trong cùng thư mục và chạy `sha256sum -c SHA256SUMS`. Đọc cảnh báo migration trước nâng cấp. Phát hành GitHub không cập nhật VPS; xem [OPERATIONS](selfhost/OPERATIONS.md).
+
+## Ghi công và giấy phép theo tệp
+
+Nhóm tác giả dự án gồm Đặng Nhật Minh và Nguyễn Ngọc Hiếu. Đối với mã và tài liệu mới do dự án viết, đặt thông báo bản quyền, định danh giấy phép SPDX và tên nhóm tác giả trong phần chú thích đầu tệp. Giữ shebang, khai báo XML, doctype và phần đầu của mẫu GitHub ở vị trí mà định dạng yêu cầu. Giữ nguyên thông báo của các tác giả đóng góp trước đó.
+
+Với JSON, tệp nhị phân, tài sản bên thứ ba, bản đo, tệp đã ký và đầu vào cần giữ nguyên từng byte, khai báo trong [REUSE.toml](REUSE.toml) hoặc tệp đi kèm có đuôi `.license`. Các ghi chú phát hành đã công bố và cấu hình kích hoạt phát hành cũ dùng metadata REUSE. Chạy `reuse lint` tại thư mục gốc trước khi gửi thay đổi. Xem [nhóm tác giả](AUTHORS.md) và [giấy phép bên thứ ba](THIRD_PARTY_NOTICES.md).

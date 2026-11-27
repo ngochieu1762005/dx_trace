@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # API: xác thực, lỗi và retry
 
 API nghiệp vụ có tiền tố /api trên domain ứng dụng, không phải domain tài liệu. Phiên trình duyệt dùng Keycloak/OAuth2 Proxy; external API tùy chọn có chính sách riêng. Không gửi token Core, header X-Forwarded giả hoặc mật khẩu từ browser.

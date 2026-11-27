@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Hướng dẫn trình diễn và kiểm chứng
 
 [Trang chủ tài liệu](README.md) · [Ma trận minh chứng](EVIDENCE.md) · [Kiểm thử](TESTING.md)
@@ -6,7 +10,7 @@ Kịch bản dành cho người lần đầu xem DX-TRACE, dự kiến 12–15 p
 
 ## Chuẩn bị
 
-1. Chọn bản cần trình diễn: tag v0.0.6 cho bản phát hành, hoặc commit `main` để kiểm nhánh phát triển. Ghi lại `git rev-parse HEAD`.
+1. Chọn bản cần trình diễn: dùng tag `v0.2.0` cho bản ứng viên. Trong bản sao Git, chạy `git rev-parse HEAD` và đối chiếu với commit `00990ecd272648cbb6da808ab30a83d48ec163cd`. Trang tài liệu có thể được dựng từ một commit mới hơn.
 2. Chạy theo [README](../README.md#quick-setup). Demo cục bộ có danh tính owner, không cần Keycloak và không chứng minh SSO.
 3. Nếu trình diễn SSO/quyền, dùng bản Docker đã cấu hình và tài khoản thực của ít nhất hai vai trò. Không đưa mật khẩu vào slide hoặc repository.
 4. Kiểm tra camera/HTTPS trước buổi trình diễn. Chuẩn bị ảnh QR do chính hệ thống tạo để có phương án thay thế.
@@ -20,16 +24,22 @@ Kịch bản dành cho người lần đầu xem DX-TRACE, dự kiến 12–15 p
 | 2 phút | Mở Truy xuất, tạo tem QR cho lô đang có và quét lại | Đúng lô, đúng lịch sử giao nhận; mã sản phẩm có thể khớp nhiều lô |
 | 4 phút | Mở sự cố SUA-005, xem điểm đã nhận/đã trả/phiếu chưa giao | Hàng cần thu hồi và hàng giữ trong kho được đối soát riêng; các bước xử lý có quyền |
 | 2 phút | Dùng hai vai trò phù hợp trên bản SSO, xem đề xuất và nhật ký | Người dùng chỉ thực hiện hành động được cấp quyền; thao tác có người và thời gian |
-| 3 phút | Trên main: vào Nghiệp vụ mở rộng, cài manifest bảo trì hoặc mua sắm | Plan trước install, biểu mẫu sinh từ mô hình, quy trình dùng chung Core |
+| 3 phút | Vào Nghiệp vụ mở rộng, cài manifest bảo trì hoặc mua sắm | Plan trước install, biểu mẫu sinh từ mô hình, quy trình dùng chung Core |
 | 1 phút | Trình bày kiến trúc và giới hạn | Core độc lập, dữ liệu tự lưu; BPMN là tập con, không có HA mặc định |
 
 Mẫu AppKit nằm tại [bảo trì](../examples/maintenance/app.json) và [mua sắm](../examples/purchase/app.json). Không cài lại định nghĩa lên mô hình có hồ sơ đang chạy mà bỏ qua cảnh báo kế hoạch. Quy tắc `differentActor` cần người duyệt khác người tạo; một tài khoản owner không thay thế được minh chứng hai người.
 
-## Minh chứng ứng dụng độc lập (main Unreleased, ngoài v0.0.5)
+## Minh chứng ứng dụng độc lập trong v0.2.0
 
-Mở `/apps/quality/` khi đã triển khai service `quality-portal` sau lớp đăng nhập. Chủ không gian cài ứng dụng từ manifest; nhân viên nhập phiếu, gửi thẩm định; tài khoản người tạo bị chặn tự phê duyệt và tài khoản quản lý **khác người** duyệt được. Đối chiếu hồ sơ trong **Nghiệp vụ mở rộng**, sau đó dừng duy nhất frontend thứ hai và xác nhận lõi vẫn trả API thành công. [Từng bước](QUALITY-PORTAL.md).
+Mở `/apps/quality/` khi đã triển khai service `quality-portal` sau lớp đăng nhập. Chủ không gian cài ứng dụng từ manifest; nhân viên nhập phiếu, gửi thẩm định; tài khoản người tạo bị chặn tự phê duyệt và tài khoản quản lý **khác người** duyệt được. Đối chiếu hồ sơ trong **Nghiệp vụ mở rộng**, trên môi trường thử cô lập có thể dừng riêng giao diện thứ hai và xác nhận Core vẫn trả API thành công. [Từng bước](QUALITY-PORTAL.md).
 
 Nếu chỉ chạy `npm run demo` cục bộ, chưa có service thứ hai và không được tuyên bố đã kiểm SSO. Các lệnh kiểm tự động chạy trên loopback dùng identity giả lập có chủ đích; cần trình diễn Keycloak bằng tài khoản thật khi báo cáo.
+
+## Kiểm chứng quyết định và gói bảo trì
+
+Từ [hồ sơ dự thi](https://dxtrace.hieuds.com/olp/), mở trang kiểm chữ ký. Kiểm gói mẫu v0.2.0 để thấy chữ ký Ed25519 hợp lệ và 6/6 tệp khớp SHA-256. Chọn kiểm bản mẫu đã sửa và chỉ ra tệp `decision.json` sai mã băm. Gói này chứa dữ liệu tổng hợp.
+
+Trên bản cài v0.2.0, dùng [kịch bản AppKit CLI](demo-guide.md) để cài gói bảo trì, mở `/maintenance` và đối chiếu phiên bản bằng `dxtrace app list`. SDK JavaScript dùng để đọc hoặc ghi hồ sơ qua API khi ứng dụng có quyền.
 
 ## Đối soát bộ mẫu
 

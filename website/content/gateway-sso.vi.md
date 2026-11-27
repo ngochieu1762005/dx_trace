@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Cổng API và đăng nhập một lần
 
 Trình duyệt truy cập ứng dụng qua HTTPS. Caddy chuyển yêu cầu qua OAuth2 Proxy để xác thực phiên với Keycloak. Sau khi người dùng đăng nhập, ứng dụng gọi Core qua Apache APISIX. Core xác định người dùng thuộc kho nào và được làm gì với từng hồ sơ.

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # API Reference
 
 ## Endpoint catalog
@@ -98,7 +102,7 @@ Browser clients use the application domain and session. Lot-bound devices send m
 
 This English edition is a curated guide, not a line-for-line translation. For exact implementation details, see the [canonical source](../../website/content/api-reference.md).
 
-## Native Flowable and telemetry lineage (unreleased main)
+## Native Flowable and telemetry lineage (v0.2.0)
 
 | Method / path | Access | Input / output |
 | --- | --- | --- |

@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+ * SPDX-License-Identifier: MIT
+ * DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+ */
 /* SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2026 DX-TRACE contributors */
 import {change,read,hash} from './server.ts';

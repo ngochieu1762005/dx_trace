@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Chứng minh DX-TRACE chịu lỗi
 
 Mục tiêu là giữ đúng bất biến nghiệp vụ khi yêu cầu lặp, người dùng thao tác đồng thời hoặc một thành phần bị gián đoạn. Các bài kiểm sử dụng dữ liệu tổng hợp và môi trường cô lập; kết quả phải đi cùng commit và lệnh chạy. CI xanh không tự chứng minh VPS đã nghiệm thu. [English](en/fault-tolerance.md).

@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Chạy thử chuyển dữ liệu sang PostgreSQL
 
 Core lưu dữ liệu nghiệp vụ trong SQLite. Công cụ xuất tạo bản SQL để thử nhập vào một cơ sở PostgreSQL 17 độc lập. Dịch vụ Keycloak sử dụng cơ sở dữ liệu riêng.

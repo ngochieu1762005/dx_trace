@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Đóng gói ứng dụng bằng AppKit
 
 Manifest mô tả mã ứng dụng, phiên bản, mô hình dữ liệu và quy trình. Core dùng khai báo này để tạo biểu mẫu, kiểm quyền và lưu hồ sơ trong đúng kho. Gói bảo trì minh họa cách thêm ứng dụng mà không sửa mã Core.

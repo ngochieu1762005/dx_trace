@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+# SPDX-License-Identifier: MIT
+# DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
 """Safely migrate a Caddy installation to DX-TRACE landing + app + SSO.
 
 Requires explicit site names; never assumes the operator uses the project's demo

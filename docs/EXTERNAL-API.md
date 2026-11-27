@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # External API: Keycloak OIDC / OAuth 2.0 (read-only v1)
 
 [External API v2 · SDK, scopes, records, tasks and evidence](EXTERNAL-API-V2.md)

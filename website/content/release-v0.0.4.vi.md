@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # DX-TRACE v0.0.4 · Điều hướng kho và quét mã
 
 Các thao tác phê duyệt được đưa về cùng giao diện kho. Bộ quét hỗ trợ camera, ảnh và lựa chọn kết quả khi một mã khớp nhiều lô.

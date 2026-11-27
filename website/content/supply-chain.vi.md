@@ -1,3 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 DX-TRACE contributors
+SPDX-License-Identifier: MIT
+DX-TRACE project authors: Đặng Nhật Minh, Nguyễn Ngọc Hiếu
+-->
 # Kiểm tra nguồn gốc bản phát hành
 
 Mỗi bản phát hành có phiên bản Git tương ứng. Quy trình đóng gói tạo tệp nguồn bằng `git archive`, dựng bản cài ở bên ngoài thư mục nguồn và xuất danh mục thành phần phần mềm (SBOM) theo định dạng SPDX JSON.
