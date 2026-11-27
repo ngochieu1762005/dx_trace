@@ -51,7 +51,12 @@ test('self-host HTTP workspace isolation, RBAC, concurrent reservation and resto
  const live=await (await call('state')).json();assert.deepEqual(live.lots,[]);
  const demo=await (await call('state?area=training')).json();assert.equal(demo.lots.length,64);
  assert.equal((await call('members',{email:'viewer@example.test',role:'viewer'})).status,200);
+ assert.deepEqual((await (await call('state?area=training')).json()).pendingInvitations,[{email:'viewer@example.test',role:'viewer'}]);
+ assert.deepEqual((await (await call('state',undefined,'viewer')).json()).pendingInvitations,[]);
  assert.equal((await call('documents',{title:'x',content:'y'},'viewer')).status,403);
+ const joined=await (await call('state')).json();
+ assert.deepEqual(joined.pendingInvitations,[]);
+ assert.ok(joined.members.some(member=>member.email==='viewer@example.test'&&member.role==='viewer'));
  const partner=await (await call('partners',{kind:'supplier',name:'Supplier'})).json();
  const dest=await (await call('partners',{kind:'destination',name:'Store'})).json();
  const lot=await (await call('lots',{code:'L1',product:'Milk',supplier:partner.id,unit:'box',quantity:10,expiry:'2099-12-31',location:'A',min_temp:1,max_temp:8})).json();
