@@ -1,6 +1,6 @@
 # Đóng góp cho DX-TRACE
 
-Người duy trì: [Nguyễn Ngọc Hiếu](AUTHORS.md). Tuân thủ [quy tắc ứng xử](CODE_OF_CONDUCT.md).
+[Đặng Nhật Minh và Nguyễn Ngọc Hiếu](AUTHORS.md) cùng phát triển dự án. Nguyễn Ngọc Hiếu duy trì kho mã và xem xét các đề xuất đóng góp. Tuân thủ [quy tắc ứng xử](CODE_OF_CONDUCT.md).
 
 [Kiến trúc](docs/HEADLESS-CORE.md) · [Bản đồ mã nguồn](docs/CODEBASE.md) · [Bảo mật](SECURITY.md).
 
