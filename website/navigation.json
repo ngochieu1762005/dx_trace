@@ -100,7 +100,7 @@
       [
         "external-api-v2",
         "docs/EXTERNAL-API-V2.md",
-        "External API v2 · SDK"
+        "API tích hợp phiên bản 2 và SDK"
       ],
       [
         "quality-portal",
@@ -115,7 +115,7 @@
       [
         "app-tutorial",
         "website/content/app-tutorial.md",
-        "Tutorial · Tạo ứng dụng"
+        "Hướng dẫn tạo ứng dụng"
       ],
       [
         "manifest-reference",
@@ -185,12 +185,12 @@
     ]
   ],
   [
-    "Triển khai & vận hành",
+    "Triển khai và vận hành",
     [
       [
         "deployment-checklist",
         "website/content/deployment-checklist.md",
-        "Checklist triển khai"
+        "Kiểm tra trước khi triển khai"
       ],
       [
         "selfhost",
@@ -200,17 +200,17 @@
       [
         "ubuntu",
         "selfhost/DEPLOY_SAAS_UBUNTU.md",
-        "Ubuntu & Caddy"
+        "Ubuntu và Caddy"
       ],
       [
         "operations",
         "selfhost/OPERATIONS.md",
-        "Vận hành & khôi phục"
+        "Vận hành và khôi phục"
       ],
       [
         "scanner",
         "docs/PLATFORM-ASSURANCE.md",
-        "ClamAV & Catalog"
+        "Quét tệp và danh mục dữ liệu"
       ],
       [
         "postgres",
@@ -230,7 +230,7 @@
       [
         "backup-restore",
         "website/content/backup-restore.md",
-        "Backup & Restore"
+        "Sao lưu và khôi phục"
       ],
       [
         "docs-deploy",
@@ -240,7 +240,7 @@
     ]
   ],
   [
-    "Kiểm chứng & nguồn mở",
+    "Kiểm chứng và nguồn mở",
     [
       [
         "capability-matrix",
@@ -275,7 +275,7 @@
       [
         "audit",
         "docs/AUDIT-EVIDENCE.md",
-        "Kiểm chứng audit"
+        "Kiểm chứng nhật ký"
       ],
       [
         "business-decision-proof",
@@ -290,7 +290,7 @@
       [
         "supply-chain",
         "docs/SUPPLY-CHAIN.md",
-        "SBOM & Supply Chain"
+        "SBOM và chuỗi cung ứng"
       ],
       [
         "dependencies",
@@ -315,7 +315,7 @@
       [
         "changelog",
         "CHANGELOG.md",
-        "Changelog"
+        "Lịch sử thay đổi"
       ],
       [
         "releases",

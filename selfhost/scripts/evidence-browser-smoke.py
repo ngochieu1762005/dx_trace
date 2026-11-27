@@ -47,8 +47,8 @@ def main():
             proof.get_by_role("button", name="Mô phỏng sửa kết quả kiểm định", exact=True).click()
             expect(proof.get_by_text("Phát hiện bằng chứng mẫu đã bị sửa", exact=True)).to_be_visible()
             expect(proof.locator(".evidence-checks .invalid")).to_have_count(3)
-            signature = proof.locator(".evidence-checks > div").filter(has_text="Digital signature").locator("strong")
-            expect(signature).to_have_text("VALID")
+            signature = proof.locator(".evidence-checks > div").filter(has_text="Chữ ký số").locator("strong")
+            expect(signature).to_have_text("HỢP LỆ")
             expect(proof.locator(".evidence-demo-note")).to_contain_text("toàn bộ bằng chứng bị từ chối")
             proof.screenshot(path=str(output / "evidence-desktop-tampered.png"))
 

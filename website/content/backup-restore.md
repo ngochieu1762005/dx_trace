@@ -1,4 +1,4 @@
-# Backup và Restore
+# Sao lưu và khôi phục
 
 ## Phạm vi dữ liệu
 
@@ -21,7 +21,7 @@
 
 Không restore đè DB production, không dùng --clean trên DB đang phục vụ. Backup DB kho và identity không phải một giao dịch chung. Thay tag không hoàn tác migration hoặc dữ liệu mới.
 
-## PostgreSQL migration
+## Chuyển dữ liệu sang PostgreSQL
 
 [Hướng dẫn migration](../../docs/POSTGRES-MIGRATION.md) xuất từ backup hoàn chỉnh, xác minh row count và digest từng bảng trong PostgreSQL. Runtime chưa chuyển sang PostgreSQL; không trỏ app vào schema import.
 

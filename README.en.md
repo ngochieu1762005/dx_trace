@@ -16,11 +16,17 @@ An open-source headless DX-OS for building digital applications and verifying bu
 
 </div>
 
-**Main-branch status (unreleased):** Apache APISIX 3.21.0 is the default Compose gateway. Optional Flowable OSS 7.2.0 executes an independent review process; existing warehouse and AppKit workflows retain their legacy runtime. PR #35 integration CI passed; production acceptance remains separate. [Architecture](docs/en/third-party-core-migration.md) · [DX-OS governance](docs/DXOS-GOVERNANCE.md).
+## Verify the v0.2.0 release
+
+1. Download all the assets listed in `SHA256SUMS` from the [v0.2.0 release](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.2.0). Run `sha256sum -c SHA256SUMS` in the download directory.
+2. Extract `DX-TRACE-v0.2.0.tar.gz`. From the extracted directory, run `bash scripts/verify-release.sh ../DX-TRACE-v0.2.0.tar.gz` on Linux with Node.js 24, pnpm 11.25.0 and port 8080 available. The check builds a separate installation and exercises the UI, CLI package lifecycle and offline evidence verification after removing the temporary source.
+3. Compare the result with the [tagged release run](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898). The [acceptance guide](docs/en/acceptance.md) describes the additional checks for a deployed system.
+
+The default Compose gateway is Apache APISIX. Flowable is an optional service for review processes. The local demo uses a single practice identity. Use a Keycloak deployment to verify sign-in and role separation with two people.
 
 ## Evidence Engine · Business Decision Proof
 
-The **Unreleased** upgrade binds a business decision to its actor, authorisation, policy and workflow versions, input lineage and before/after states. Evidence is sealed when the decision occurs. An independent `.tar.gz` contains the manifest, decision, events, policy, BPMN, lineage, proof and Ed25519 signature for offline verification.
+The evidence engine introduced in **v0.1.0** binds a business decision to its actor, authorisation, policy and workflow versions, input lineage and before/after states. Evidence is sealed when the decision occurs. An independent `.tar.gz` contains the manifest, decision, events, policy, BPMN, lineage, proof and Ed25519 signature for offline verification.
 
 Open **Nhật ký → DX-TRACE Evidence Engine** to export signed decisions from the selected workspace. Verification requires an independently trusted public key or checkpoint; hashes or a key supplied only inside the archive do not establish trust. The browser also provides a clearly labeled **RC-2026-001 synthetic demonstration** with an inspection-tamper action. Its results are not production acceptance evidence.
 

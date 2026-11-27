@@ -12,6 +12,6 @@ export default function ColdChainStatus({reading,lot,incident,synthetic,onIncide
   {(synthetic||incident?.synthetic)&&<span className="cold-chain-fixture"><FlaskConical size={13} aria-hidden="true"/>Dữ liệu cảm biến mô phỏng</span>}
   {outside&&<p className="cold-chain-excursion"><AlertTriangle size={15} aria-hidden="true"/><span>Phát hiện nhiệt độ vượt ngưỡng{!held&&' · chờ đủ chuỗi số đo để kích hoạt cách ly'}</span></p>}
   {held&&<p className="cold-chain-hold"><ShieldAlert size={15} aria-hidden="true"/>{lot.status==='recall'?'Lô đang thu hồi · đã chặn giao':'Lô đã cách ly · đã chặn giao'}</p>}
-  {incident&&<div className="cold-chain-review"><button className="text-link" onClick={onIncident}>Mở sự cố {incident.id}</button>{incident.review&&<small>{incident.review.outcome?'Flowable đã có kết quả: '+incident.review.outcome:incident.review.instance?'Flowable đang thẩm định':'Đã giữ lô; đang chờ đồng bộ Flowable'}</small>}{onEvidence&&<button className="text-link" onClick={onEvidence}>Đối chiếu hồ sơ Evidence</button>}</div>}
+  {incident&&<div className="cold-chain-review"><button className="text-link" onClick={onIncident}>Mở sự cố {incident.id}</button>{incident.review&&<small>{incident.review.outcome?'Flowable đã có kết quả: '+incident.review.outcome:incident.review.instance?'Flowable đang thẩm định':'Đã giữ lô; đang chờ đồng bộ Flowable'}</small>}{onEvidence&&<button className="text-link" onClick={onEvidence}>Đối chiếu bằng chứng</button>}</div>}
  </div>;
 }

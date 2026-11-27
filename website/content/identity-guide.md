@@ -1,18 +1,18 @@
 # Tài khoản, SSO và phân quyền
 
-Keycloak xác thực danh tính; OAuth2 Proxy tạo phiên; Core kiểm tra thành viên và quyền. Quản trị Keycloak khác owner của kho.
+Keycloak xác thực danh tính; OAuth2 Proxy tạo phiên; Core kiểm tra thành viên và quyền. Quản trị Keycloak và chủ kho là hai vai trò khác nhau.
 
 | Vai trò | Phạm vi điển hình |
 | --- | --- |
-| owner | Thành viên, cấu hình, mô hình, nghiệp vụ |
-| manager | Duyệt sự cố, thiết bị, nghiệp vụ theo model |
-| warehouse | Nhập, giao, nhận trả và tác vụ được cấp |
-| viewer | Tra cứu; model phải cho phép đọc |
+| Chủ kho (`owner`) | Thành viên, cấu hình, mô hình, nghiệp vụ |
+| Quản lý (`manager`) | Duyệt sự cố, thiết bị, nghiệp vụ theo model |
+| Nhân viên kho (`warehouse`) | Nhập, giao, nhận trả và tác vụ được cấp |
+| Người xem (`viewer`) | Tra cứu; model phải cho phép đọc |
 
 ## Tạo tài khoản chung kho
 
 1. Quản trị viên tạo người dùng trong realm warehouse, email hợp lệ.
-2. Owner mời đúng email trước lần đăng nhập đầu tiên.
+2. Chủ kho mời đúng email trước lần đăng nhập đầu tiên.
 3. Người dùng đăng nhập qua ứng dụng.
 4. Kiểm kho, vai trò và quyền bằng thao tác thực.
 
@@ -26,7 +26,7 @@ permissions.read và permissions.create quy định vai trò. scope là all ho�
 
 Dùng ít nhất hai tài khoản thực; thử viewer ghi dữ liệu, người tạo tự duyệt khi differentActor bật, user ngoài workspace đọc model, thu hồi quyền. Không giả header danh tính trên Internet.
 
-[Gateway và SSO](../../docs/GATEWAY-AND-SSO.md) · [Model access](../../docs/MODEL-ACCESS.md).
+[Cổng API và đăng nhập một lần](../../docs/GATEWAY-AND-SSO.md) · [Phân quyền mô hình](../../docs/MODEL-ACCESS.md).
 
 ## Khi hai người thấy hai kho khác nhau
 

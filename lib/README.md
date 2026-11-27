@@ -1,6 +1,6 @@
 # Quy tắc nghiệp vụ và lưu trữ
 
-Phạm vi main trên nền v0.0.5; AppKit/BPMN có từ v0.0.6. Các quy tắc được thực thi ở Core, không chỉ ở giao diện. [Router HTTP](../app/api/%5B...path%5D/route.ts) · [Kiến trúc](../docs/HEADLESS-CORE.md).
+Các quy tắc được thực thi ở Core, không chỉ ở giao diện. [Router HTTP](../app/api/%5B...path%5D/route.ts) · [Kiến trúc](../docs/HEADLESS-CORE.md).
 
 | Module | Trách nhiệm |
 | --- | --- |
@@ -32,3 +32,11 @@ Tách số đã giao, đã trả, còn phải thu và hàng giữ trên phiếu 
 ## Migration và kiểm thử
 
 `selfhost/migrate-platform.mjs` tách dữ liệu JSON cũ trong transaction. Không đổi trực tiếp schema production bằng sửa JSON hoặc SQL tùy ý. Thay migration cần kiểm giữ dữ liệu, chạy lại và rollback xung đột. Xem tests domain, platform, platform-storage, platform-api và workspace-queue trong [bản đồ mã](../docs/CODEBASE.md).
+
+## Chọn bài kiểm theo thay đổi
+
+| Thay đổi | Lệnh chạy từ thư mục gốc | Kết quả cần đối chiếu |
+| --- | --- | --- |
+| Giao và thu hồi lô | `node --test tests/domain.test.mjs tests/impact.test.mjs` | Số đã giao, số trả và lượng còn phải thu khớp từng điểm nhận |
+| Cài, nâng cấp hoặc gỡ ứng dụng | `node --test tests/package-lifecycle.test.mjs` | Kiểm phiên bản, dữ liệu giữ lại và quyền truy cập theo kho |
+| Ghi lại một quyết định | `node --test tests/business-evidence.test.mjs` | Gói xuất kiểm được bằng khóa công khai và phát hiện dữ liệu đã bị sửa |

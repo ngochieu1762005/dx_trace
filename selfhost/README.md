@@ -1,6 +1,6 @@
-# Triển khai DX-TRACE từ mã nguồn phát triển sau v0.0.6
+# Triển khai DX-TRACE bằng Docker Compose
 
-Hướng dẫn cài mới bằng Docker Compose trên nhánh đã tích hợp Gateway; tag v0.0.6 chưa chứa những thay đổi này. [Nâng cấp VPS và xác minh SSO](../docs/GATEWAY-AND-SSO.md). Nếu máy đã có Caddy/Nginx chiếm cổng 80/443, dùng [hướng dẫn Ubuntu có Caddy](DEPLOY_SAAS_UBUNTU.md). Máy đang vận hành dùng [quy trình cập nhật và backup](OPERATIONS.md), không chạy lại setup.
+Hướng dẫn này dành cho **máy chủ mới**. Cấu hình cơ sở khởi chạy ứng dụng kho, Core, cổng API, Keycloak và các dịch vụ phụ thuộc. Nếu Caddy đang phục vụ nhiều website trên máy, chọn [cấu hình Ubuntu dùng Caddy sẵn có](DEPLOY_SAAS_UBUNTU.md). Với hệ thống đã có người dùng, làm theo [quy trình nâng cấp và sao lưu](OPERATIONS.md).
 
 ## Chuẩn bị
 
@@ -12,7 +12,7 @@ Hướng dẫn cài mới bằng Docker Compose trên nhánh đã tích hợp Ga
 ## Cài từ mã nguồn
 
 ```bash
-git clone https://github.com/ngochieu1762005/dx_trace.git
+git clone --branch v0.2.0 https://github.com/ngochieu1762005/dx_trace.git
 cd dx_trace
 node selfhost/setup.mjs app.example.org id.example.org
 cd selfhost
@@ -21,7 +21,7 @@ docker compose up -d --build
 docker compose ps
 ```
 
-Thay hai tên miền trước khi chạy. Ghi lại `git rev-parse HEAD`; khi có release chứa Gateway nên clone theo tag của **release đó**, không phải v0.0.6. Setup tạo `selfhost/.env` với quyền 0600 và không ghi đè tệp đã tồn tại. Container app không gắn DB; Core riêng giữ volume kho và không publish cổng host.
+Thay hai tên miền trước khi chạy. Ghi lại `git rev-parse HEAD`; lệnh trên chọn v0.2.0 để các lần cài dùng cùng phiên bản. Setup tạo `selfhost/.env` với quyền 0600 và không ghi đè tệp đã tồn tại. Container app không gắn DB; Core riêng giữ volume kho và không publish cổng host.
 
 | Biến bắt buộc | Vai trò |
 | --- | --- |
@@ -89,3 +89,9 @@ unset SENSOR_TOKEN
 ## Bước tiếp theo
 
 [Backup và nâng cấp](OPERATIONS.md) · [API](../docs/API.md) · [Mô hình và webhook](../docs/PLATFORM.md) · [Giới hạn kiến trúc](../docs/HEADLESS-CORE.md).
+
+## Kiểm tra sau lần cài đầu
+
+Mở tên miền ứng dụng bằng cửa sổ riêng tư. Truy cập kho phải chuyển sang Keycloak. Đăng nhập rồi mở cổng kiểm định trong cùng phiên. Kiểm tra tên kho và vai trò trước khi tạo một phiếu mẫu. Dùng thành viên thứ hai khi quy trình yêu cầu người duyệt khác người tạo.
+
+Để phân biệt lỗi dịch vụ với lỗi quyền, xem trạng thái bằng `docker compose ps` với cùng bộ tệp cấu hình đã dùng để khởi động. Khi dịch vụ đã chạy, đối chiếu mã trả về của API với [hướng dẫn xác thực](../website/content/api-auth.md). [Nghiệm thu bản triển khai](../website/content/acceptance.vi.md)

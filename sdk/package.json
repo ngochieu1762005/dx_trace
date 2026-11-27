@@ -12,7 +12,8 @@
   "files": [
     "index.mjs",
     "index.d.ts",
-    "README.md"
+    "README.md",
+    "README.en.md"
   ],
   "engines": {
     "node": ">=20"

@@ -1,10 +1,12 @@
 # Tài liệu DX-TRACE
 
-**Trạng thái chuyển đổi:** Apache APISIX và Flowable OSS đang được đánh giá trên stack cô lập. Kiến trúc và API hiện hành chưa thay đổi mặc định cho đến khi nghiệm thu và chuyển trạng thái quy trình hoàn tất. [Hướng dẫn chuyển đổi](THIRD-PARTY-CORE-MIGRATION.md).
+[Cổng tài liệu tiếng Việt](https://dxtrace.hieuds.com/docs/) · [English documentation](en/README.md) · [README dự án](../README.md)
 
-[Trang giới thiệu](https://dxtrace.hieuds.com/) · [Đọc tài liệu trực tuyến](https://dxtrace.hieuds.com/docs/) · [Tra cứu API](API.md) · [Về README](../README.md)
+## Tái lập một bản đánh giá
 
-Phần AppKit, BPMN và Quality Portal đã có ở **v0.0.6**. Từ **v0.0.7**, repository bổ sung Gateway tách mạng, process runtime song song/timer, External OIDC API tùy chọn và công cụ nghiệm thu. Mã đã qua CI; các bước Keycloak/khôi phục/tải thật trên VPS vẫn cần nghiệm thu riêng. Dùng tag riêng khi cần tái lập phiên bản cũ.
+Bắt đầu từ [hướng dẫn dịch và chạy ngoài thư mục nguồn](build-from-source.md). Sau khi bản cài hoạt động, chạy [kịch bản cài ứng dụng bảo trì](demo-guide.md) để kiểm tra quyền, đường dẫn ứng dụng và phiên bản trước/sau khi nâng cấp. Khi đánh giá hệ thống nhiều người dùng, theo dõi một lô thử qua [cổng kiểm định](../website/content/quality-portal.vi.md) và đối chiếu kết quả giữa hai vai trò.
+
+[Bảng tiêu chí PoF](olp-compliance.md) dẫn tới giấy phép, phụ thuộc, lịch sử và gói phát hành. [Nghiệm thu theo môi trường](../website/content/acceptance.vi.md) cho biết bằng chứng nào cần lấy từ CI và bằng chứng nào cần tài khoản thật trên máy chủ.
 
 | Nhu cầu | Tài liệu |
 | --- | --- |

@@ -22,7 +22,13 @@ Nền tảng DX-OS mã nguồn mở để xây ứng dụng số và kiểm ch�
 
 </div>
 
-**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định của Compose. Flowable OSS 7.2.0 tùy chọn thực thi quy trình thẩm định độc lập; hồ sơ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; production cần nghiệm thu riêng. [Kiến trúc](docs/THIRD-PARTY-CORE-MIGRATION.md) · [Quản trị DX-OS](docs/DXOS-GOVERNANCE.md).
+## Kiểm tra bản phát hành v0.2.0
+
+Bản v0.2.0 dùng APISIX làm cổng API mặc định. Dịch vụ Flowable tùy chọn xử lý quy trình thẩm định. Có thể chạy thử kho trên máy cá nhân bằng Node.js 24. Để kiểm tra đăng nhập một lần và phân quyền giữa hai người, dùng bản triển khai Docker Compose với Keycloak.
+
+1. Tải **tất cả tệp đính kèm** của [bản phát hành v0.2.0](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.2.0) vào cùng thư mục. Trên Linux, chạy `sha256sum -c SHA256SUMS`. Mỗi tệp trong bản kê phải có kết quả `OK`.
+2. Giải nén `DX-TRACE-v0.2.0.tar.gz`. Từ thư mục vừa giải nén, chạy `bash scripts/verify-release.sh ../DX-TRACE-v0.2.0.tar.gz` với Node.js 24, pnpm 11.25.0 và cổng 8080 trống. Phép thử dựng bản cài ở thư mục mới, xóa nguồn tạm rồi kiểm tra web, API và vòng đời ứng dụng.
+3. Đối chiếu kết quả với [lần chạy phát hành](https://github.com/ngochieu1762005/dx_trace/actions/runs/45970871898). Bằng chứng SSO của lần chạy này thuộc môi trường CI. Kết quả trên máy chủ triển khai cần ghi riêng theo [tiêu chí nghiệm thu](website/content/acceptance.vi.md).
 
 ## AppKit và minh chứng OLP 2026
 
@@ -135,23 +141,9 @@ Các bổ sung này được đóng gói trong [DX-TRACE v0.1.0](https://github.
 | **Developer Platform v0.2.0** | OAuth2 v2, SDK, Evidence cho AppKit và App Studio | [Hướng dẫn API v2](docs/EXTERNAL-API-V2.md) |
 | **Release v0.1.0** | AppKit CLI, APISIX, Flowable, SSO ba portal, Evidence Engine và outbox | [Ghi chú phát hành](docs/releases/RELEASE_NOTES_v0.1.0.md) |
 | Release v0.0.7 | Gateway, workflow song song/timer và API OIDC tùy chọn; cần nghiệm thu VPS riêng | [Release v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
-| **Nhánh main** | Thêm quy trình kiểm định–cách ly, bảng việc cần làm, giao diện tác vụ song song và minh chứng nhật ký độc lập | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |
-| **VPS / triển khai thực tế** | Chưa xác nhận bằng minh chứng công khai rằng cấu hình main mới đã được rollout và kiểm tra SSO end-to-end | [Danh sách nghiệm thu](https://github.com/ngochieu1762005/dx_trace/issues/20) |
-| **Nghiệm thu tiếp theo** | SSO trên VPS, phục hồi toàn stack, camera thật và đo tải qua HTTPS; API OIDC đọc-only đã có ở v0.0.7 | [Workflow](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API](https://github.com/ngochieu1762005/dx_trace/issues/19) |
+| **Triển khai thực tế** | Kiểm tra riêng đăng nhập một lần, vai trò, dữ liệu giữa hai kho và phục hồi trên cấu hình được triển khai | [Quy trình nghiệm thu](website/content/acceptance.vi.md) |
 
-> Khi nâng cấp VPS đang chạy, làm theo [quy trình chuyển đổi](docs/GATEWAY-AND-SSO.md) để sao lưu, bổ sung khóa dịch vụ nếu cần và kiểm tra trước khi đưa kho vào hoạt động.
-
-**Dự án được duy trì bởi [Nguyễn Ngọc Hiếu](AUTHORS.md).** Phần giới thiệu dành cho người dùng; các giới hạn kỹ thuật và kết quả thực nghiệm được công bố trong [tài liệu](docs/README.md), [bảng đối chiếu DX-OS](REQUIREMENTS.md) và [ma trận minh chứng](docs/EVIDENCE.md).
-
-### Nâng cấp v0.0.7 — mã nguồn đã kiểm thử, nghiệm thu VPS đang thực hiện
-
-| Nâng cấp | Trạng thái mã nguồn | Điều kiện để công bố đã nghiệm thu |
-| --- | --- | --- |
-| **Quy trình song song có thể thực thi** | Bổ sung fork/join tối đa 5 nhánh, userTask theo vai trò, timer được lưu vào hồ sơ và xử lý bởi Core; vẫn là **tập con thực thi**, chưa hỗ trợ toàn bộ BPMN XML | [Đặc tả và giới hạn](docs/PROCESS-RUNTIME.md) · [Unit tests](tests/process-platform.test.mjs) |
-| **API tích hợp bên ngoài v1** | Resource server tùy chọn cho JWT Keycloak RS256, danh sách client/model, quota và nhật ký; mặc định tắt, chỉ đọc | [Hướng dẫn OAuth client](docs/EXTERNAL-API.md) · [Tests](tests/external-api.test.mjs) |
-| **Nghiệm thu có thể tái lập** | Thêm công cụ kiểm SSO thật, bài đo HTTPS và thử phục hồi Keycloak+SQLite cô lập | [Bảng nghiệm thu](docs/ACCEPTANCE-2026.md) · Cần chạy trên VPS/staging với dữ liệu thật |
-
-**Lưu ý:** Các phần mới đã merge từ [PR #21](https://github.com/ngochieu1762005/dx_trace/pull/21) và thuộc mã nguồn v0.0.7. CI đã kiểm tra nhưng chưa xác nhận đầy đủ trên VPS. Không bật API bên ngoài khi chưa thiết lập chính sách và kiểm thử xác thực thật.
+Khi nâng cấp hệ thống đang sử dụng, [hướng dẫn vận hành](selfhost/OPERATIONS.md) mô tả cách sao lưu, chọn đúng cấu hình Compose và đối chiếu dữ liệu sau nâng cấp.
 
 <a id="contents"></a>
 ## Nội dung
@@ -298,7 +290,7 @@ Identity/SSO, biên API, dữ liệu có cấu trúc/phi cấu trúc và workflo
 <a id="quick-setup"></a>
 ## Cài đặt nhanh
 
-### Chạy ngay trên máy cá nhân
+### Chạy thử kho trên máy cá nhân
 
 Mở [trang phát hành](https://github.com/ngochieu1762005/dx_trace/releases), chọn phiên bản cần chạy và tải **Source code (zip)**. Giải nén rồi mở terminal tại thư mục chứa `package.json`.
 
@@ -382,7 +374,7 @@ Bài đo cục bộ 10.000 hồ sơ ban đầu, 1/10/25 client đồng thời, 1
 - Quét mã độc và AI là tích hợp tùy chọn; AI không tự quyết định thu hồi.
 - Ledger chưa có neo hash bên ngoài, không chống được quản trị viên viết lại toàn bộ DB.
 
-Ưu tiên tiếp theo: kiểm tra SSO hai ứng dụng với tài khoản Keycloak thật, khôi phục backup lên môi trường tách biệt, đo toàn stack có TLS/gateway, mở rộng BPMN timer/parallel và mô hình API client bên ngoài. [BPMN #18](https://github.com/ngochieu1762005/dx_trace/issues/18) · [API #19](https://github.com/ngochieu1762005/dx_trace/issues/19) · [VPS #20](https://github.com/ngochieu1762005/dx_trace/issues/20). Đây là **công việc đang mở**, không phải các tính năng đã nghiệm thu.
+Xem [ma trận minh chứng](docs/EVIDENCE.md) để đối chiếu phạm vi từng bài kiểm và [lộ trình](ROADMAP.md) để theo dõi công việc phát triển.
 
 <a id="contribution"></a>
 ## Đóng góp
@@ -397,7 +389,7 @@ Mã nguồn dự án dùng [MIT](LICENSE). Thư viện, biểu trưng và [phôn
 <a id="contact"></a>
 ## Liên hệ
 
-[Nguyễn Ngọc Hiếu — người duy trì](AUTHORS.md) · [Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Báo lỗi](https://github.com/ngochieu1762005/dx_trace/issues/new/choose) · [Lịch sử thay đổi](CHANGELOG.md).
+[Người đóng góp](https://github.com/ngochieu1762005/dx_trace/graphs/contributors) · [Báo lỗi](https://github.com/ngochieu1762005/dx_trace/issues/new/choose) · [Lịch sử thay đổi](CHANGELOG.md).
 
 ## Tài liệu theo nhu cầu
 

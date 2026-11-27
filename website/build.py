@@ -80,7 +80,19 @@ def build(out, lang='vi'):
         groups[-1][1].append(["release-"+version,source.relative_to(ROOT).as_posix(),version])
     entries = [item for _,items in groups for item in items]
     routes = {source:key for key,source,_ in entries}
+    # Keep links to the detailed source on the same route when a Vietnamese
+    # handbook chapter has its own text. Each language gets its own search index.
+    detailed_sources = {}
     if not en:
+        localized = []
+        for key, source, title in entries:
+            chapter = SITE/"content"/(key+".vi.md")
+            if chapter.is_file():
+                detailed_sources[key] = source
+                source = chapter.relative_to(ROOT).as_posix()
+                routes[source] = key
+            localized.append((key, source, title))
+        entries = localized
         routes["docs/README.md"] = "intro"
     if len({key for key,_,_ in entries}) != len(entries):
         raise ValueError("Duplicate route")
@@ -101,6 +113,9 @@ def build(out, lang='vi'):
         return "../"+key+"/index.html"
     for i,(key,source,title) in enumerate(entries):
         body,headings,plain,sections = render(source,key,routes,revision)
+        if key in detailed_sources:
+            reference = quote(detailed_sources[key], safe="/")
+            body += f'<p><a href="{REPO}/blob/{revision}/{reference}">Xem tài liệu kỹ thuật gốc trên GitHub</a></p>'
         section = next(group for group,items in groups if any(x[0]==key for x in items))
         sidebar = "".join('<details class="nav-group"'+(' open' if group==section else '')+'><summary>'+E(group)+"</summary>"+
             "".join('<a href="'+E(link(k))+'"'+(' aria-current="page"' if k==key else '')+">"+E(t)+"</a>" for k,_,t in items)+"</details>" for group,items in groups)
@@ -149,7 +164,7 @@ def build(out, lang='vi'):
         page = f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="{E(title)} · Tài liệu kỹ thuật DX-TRACE">
-<title>{E(title)} | DX-TRACE Docs</title>
+<title>{E(title)} | {"DX-TRACE Docs" if en else "Tài liệu DX-TRACE"}</title>
 <link rel="icon" type="image/svg+xml" href="../assets/brand.svg"><link rel="stylesheet" href="../assets/site.css"><script defer src="../assets/site.js"></script></head>
 <body data-root="../"><a class="skip" href="#content">Bỏ qua điều hướng</a>
 <header class="topbar"><button class="menu" id="menu" type="button" aria-label="Menu tài liệu" aria-controls="sidebar" aria-expanded="false"><span class="menu-lines" aria-hidden="true"></span></button>

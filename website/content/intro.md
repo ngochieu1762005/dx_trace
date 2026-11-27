@@ -1,6 +1,6 @@
 # Tài liệu DX-TRACE
 
-**Trạng thái main (chưa phát hành):** Apache APISIX 3.21.0 là gateway mặc định trong Compose. Overlay Flowable OSS 7.2.0 thực thi quy trình thẩm định độc lập; nghiệp vụ kho và AppKit hiện hữu vẫn dùng runtime cũ. CI tích hợp PR #35 đã đạt; nghiệm thu VPS chưa xác nhận. [Tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
+DX-TRACE v0.2.0 dùng Apache APISIX làm cổng API mặc định. Dịch vụ Flowable tùy chọn thực thi quy trình thẩm định. [Kiến trúc tích hợp](../../docs/THIRD-PARTY-CORE-MIGRATION.md).
 
 Nền tảng chuyển đổi số nguồn mở cho chuỗi cung ứng, truy xuất thực phẩm và điều phối thu hồi. Một lõi dùng chung cho danh tính, dữ liệu, phân quyền và quy trình nghiệp vụ.
 
