@@ -34,7 +34,9 @@ fi
 install -d -m 755 "$ROOT/assets" "$ROOT/assets/fonts" "$ROOT/en"
 install -m 644 landing/assets/{brand-lockup.svg,mark.svg,food-distribution.webp,site.css,site.js,evidence-check.js} "$ROOT/assets/"
 install -m 644 landing/assets/fonts/* "$ROOT/assets/fonts/"
-install -m 644 landing/{robots.txt,sitemap.xml} "$ROOT/"
+install -d -m 755 "$ROOT/assets/samples/v0.2.0"
+install -m 644 "$TMP/site/assets/samples/v0.2.0/"* "$ROOT/assets/samples/v0.2.0/"
+install -m 644 "$TMP/site/robots.txt" "$TMP/site/sitemap.xml" "$ROOT/"
 install -m 644 landing/404.html "$ROOT/404.html"
 for lang in "" en/; do
  for route in platform developers applications evidence benchmarks olp; do
