@@ -9,9 +9,10 @@ const authorize=(c:any)=>{if(!['owner','manager'].includes(c.role))throw new Dom
 const ledgerColumns='seq,previous,hash,payload';
 
 /** Called before the state batch; its INSERT uses the same revision guard as the decision. */
-export async function evidenceInsert(c:any,snapshot:any,row:any,revision:number){
+export async function evidenceInsert(c:any,snapshot:any,row:any,revision:number,required=false){
  if(!snapshot)return null;
  const signer=evidenceSigner();
+ if(required&&!signer)throw new DomainError('Application requires an Evidence signing key',503);
  let content:any={snapshot,simulated:snapshot.decision.simulated},publicKey=null,checkpoint=null;
  if(signer){
   const events=(await q('SELECT '+ledgerColumns+' FROM audit_ledger WHERE workspace=? AND seq<=? ORDER BY seq',c.workspace,revision).all()).results;

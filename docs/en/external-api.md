@@ -1,5 +1,7 @@
 # External OIDC API
 
+[External API v2 · SDK, scopes, records, tasks and evidence](external-api-v2.md)
+
 ## Optional resource server
 
 The external service is an opt-in integration surface with a configured issuer, audience and operator-maintained client policy. It uses its own gateway path and rejects invalid tokens. It is not the same as the browser cookie session.

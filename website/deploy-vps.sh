@@ -32,9 +32,15 @@ if ! mv -- "$STAGE" "$ROOT/docs"; then
 fi
 # Publish shared assets before either language points to the new edition.
 install -d -m 755 "$ROOT/assets" "$ROOT/assets/fonts" "$ROOT/en"
-install -m 644 landing/assets/{brand-lockup.svg,mark.svg,food-distribution.webp,site.css,site.js} "$ROOT/assets/"
+install -m 644 landing/assets/{brand-lockup.svg,mark.svg,food-distribution.webp,site.css,site.js,evidence-check.js} "$ROOT/assets/"
 install -m 644 landing/assets/fonts/* "$ROOT/assets/fonts/"
+install -m 644 landing/{robots.txt,sitemap.xml} "$ROOT/"
 install -m 644 landing/404.html "$ROOT/404.html"
+for lang in "" en/; do
+ for route in platform developers applications evidence benchmarks olp; do
+  install -D -m 644 "$TMP/site/$lang$route/index.html" "$ROOT/$lang$route/index.html"
+ done
+done
 install -m 644 landing/index.html "$ROOT/index.html"
 install -m 644 landing/en/index.html "$ROOT/en/index.html"
 echo "DX-TRACE Docs: https://dxtrace.hieuds.com/docs/"

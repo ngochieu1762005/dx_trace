@@ -4,6 +4,15 @@ Nhật ký thay đổi của DX-TRACE.
 
 ## [Unreleased]
 
+## [0.2.0] — Developer Platform
+
+- External API v1/v2 sử dụng policy workspace và vùng của portal. Truy vấn metadata và task theo model, hồ sơ và vai trò.
+- AppKit hỗ trợ bằng chứng giao dịch theo manifest, thực thi lại chính sách offline và chế độ bắt buộc ký.
+- SDK được đóng gói bằng npm pack, cài thử ngoài source. Giao diện App Studio chỉnh trường và vai trò chuyển bước.
+- Flowable quản lý bàn giao sau bảo trì theo manifest, tách trạng thái bàn giao khỏi trạng thái sửa chữa. Các replica External API trên một VPS có thể dùng quota chung qua volume SQLite.
+- Website song ngữ có trang nền tảng, lập trình viên, ứng dụng, kiểm chữ ký, benchmark và minh chứng OLP.
+
+
 ## [0.1.0] — 2026-11-27 — AppKit, Flowable và Evidence Engine
 
 - Evidence Engine: snapshot quyết định cùng giao dịch, ký Ed25519 tại thời điểm ghi, gói tám tệp `.tar.gz` và CLI `evidence export/verify/keygen/demo`. Verify chạy offline và bắt buộc khóa công khai hoặc checkpoint độc lập; không ký hồi tố lịch sử.

@@ -59,7 +59,7 @@ test('Keycloak RS256 signature, audience, scope and model ACL guard external rea
   assert.equal(ok.status,200);
   assert.equal(ok.headers.get('set-cookie'),null);
   assert.match(await ok.text(),/gateway/);
-  assert.equal(calls[0].target,'http://gateway-api:8082/api/models/maintenance/records?limit=2');
+  assert.equal(calls[0].target,'http://gateway-api:8082/api/external-v1/models/maintenance/records?limit=2');
   assert.equal(calls[0].opts.headers['x-forwarded-user'],'oidc-real-subject');
   assert.equal(calls[0].opts.headers['x-forwarded-email'],'staff@example.test');
   assert.equal(calls[0].opts.headers['x-dx-core-token'],INTERNAL);
@@ -100,5 +100,19 @@ test('v2 opt-in requires client workspace and explicit scopes; writes cannot wid
   assert.equal((await fetch(base+'/v2/models/secret/records',{headers:auth})).status,403);
   assert.equal((await fetch(base+'/v2/apps',{headers:auth})).status,200);
   assert.match(calls.at(-1).target,/models=maintenance/);
+  await fetch(base+'/v1/models/maintenance/records',{headers:auth});
+  assert.match(calls.at(-1).target,/external-v1.*workspace=ws-test/);
  }finally{await close(srv);}
+});
+
+test('replicas share the client quota in a local SQLite volume',async()=>{
+ const {clientQuota}=await import('../selfhost/external-quota.mjs');
+ const {mkdtemp,rm}=await import('node:fs/promises');
+ const {tmpdir}=await import('node:os');
+ const dir=await mkdtemp(tmpdir()+'/dxquota-');
+ try{
+  const a=clientQuota(dir+'/quota.sqlite'),b=clientQuota(dir+'/quota.sqlite');
+  assert.equal(a('alpha',10).count,1);assert.equal(b('alpha',11).count,2);
+  assert.equal(b('beta',11).count,1);assert.equal(a('alpha',60010).count,1);
+ }finally{await rm(dir,{recursive:true,force:true})}
 });

@@ -147,13 +147,16 @@ for testing an actual JWT minted by the deployed Keycloak realm.
 
 | Check | Status | Date (UTC) | Git SHA | Evidence |
 | --- | --- | --- | --- | --- |
-| CI Node/Python/container/SBOM | TODO | — | — | Workflow URL |
-| Keycloak two-user SSO | TODO | — | — | Sanitized test output |
-| External OIDC client | TODO | — | — | Redacted statuses/audit IDs |
-| TLS benchmark | TODO | — | — | JSON report (no secrets) |
-| Warehouse isolated restore | TODO | — | — | PASS/FAIL summary |
-| Keycloak isolated restore | TODO | — | — | PASS/FAIL summary |
-| Staging browser restore | TODO | — | — | QA checklist |
-| Public tagged release | TODO | — | — | Tag, checksum, SBOM |
+| CI Node/Python/container/SBOM | PASS · disposable CI | 2026-11-27 | PR head d8cefa8 | [CI](https://github.com/ngochieu1762005/dx_trace/actions/runs/45938563664) |
+| Keycloak two-user SSO and external OAuth client | PASS · disposable CI | 2026-11-27 | PR head d8cefa8 | [Three portals, API policy and maintenance handover](https://github.com/ngochieu1762005/dx_trace/actions/runs/45938563710) |
+| SQLite warehouse, Keycloak and Flowable isolated restores | PASS · disposable CI | 2026-11-27 | PR head d8cefa8 | [Offline snapshot check and PostgreSQL restores](https://github.com/ngochieu1762005/dx_trace/actions/runs/45938563710) |
+| VPS TLS benchmark, restored browser login and signed production decision | Pending operator environment | — | — | Record a sanitized acceptance run on the deployed SHA |
+| Public tagged release | Check published assets for the submission tag | — | — | [Release and checksums](https://github.com/ngochieu1762005/dx_trace/releases) |
 
 Never pre-fill TODO as PASS before observing the corresponding test.
+
+## Developer Platform v0.2.0
+
+The disposable integration job provisions Keycloak flows, OAuth scopes and client policies, writes a Maintenance record through the external gateway and APISIX, checks it in the portal and verifies a signed decision and tenant isolation. [Test script](../selfhost/scripts/sso-smoke.py) · [Workflow runs](https://github.com/ngochieu1762005/dx_trace/actions/workflows/third-party-core.yml).
+
+For VPS acceptance record the deployed Git SHA, public signing-key fingerprint, two-user SSO result, external API profile, and a restore into isolated volumes. On 27 November 2026 the operator log showed commit 18bc70b and the base, Ubuntu edge and third-party overlays. Production signing, restoration and latency measurements still require a dated run.

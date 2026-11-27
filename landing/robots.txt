@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://dxtrace.hieuds.com/sitemap.xml

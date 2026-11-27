@@ -123,3 +123,19 @@ It does not ingest arbitrary UI bundles from manifests or support executable
 plugins, dependency resolution, signatures, or third-party code sandboxes.
 Do not describe these as implemented until the corresponding code and
 acceptance tests exist.
+
+### Bằng chứng và bàn giao trong manifest
+
+Gói Maintenance 1.1.0 dùng Core 0.2.0 trở lên. Với workspace đã cài 1.0.0, chạy `dxtrace app upgrade maintenance ./examples/maintenance` bằng phiên owner của vùng cần nâng cấp. CLI giữ hồ sơ hiện có và kiểm tra tương thích trước khi áp dụng.
+
+```yaml
+evidence:
+  signing: required
+  resources: [maintenance]
+handover:
+  provider: flowable
+  resource: maintenance
+  after: done
+```
+
+Đặt hai khối trong `spec`. Quy tắc ký áp dụng cho từng chuyển bước của tài nguyên được chọn. Sau bước cuối, người tạo hồ sơ khởi động bàn giao từ Maintenance Portal. Flowable lưu instance, task, người duyệt và kết quả. [Quy tắc xác minh và bàn giao](BUSINESS-DECISION-PROOF.md)

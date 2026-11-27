@@ -12,7 +12,7 @@ const select=el('endpoint'), filter=el('filter'), method=el('method'), params=el
 let current=null, requestId=crypto.randomUUID();
 function choices(){
  const old=select.value,word=filter.value.trim().toLowerCase();select.replaceChildren();
- for(const e of catalog){if((method.value==='all'||method.value===e.method)&&(!livePage||e.live)&&[e.path,e.method,txt(e.title),txt(e.group)].join(' ').toLowerCase().includes(word))option(select,e.id,e.method+' /api'+e.path+' — '+txt(e.title))}
+ for(const e of catalog){if((method.value==='all'||method.value===e.method)&&(!livePage||e.live)&&[e.path,e.method,txt(e.title),txt(e.group)].join(' ').toLowerCase().includes(word))option(select,e.id,e.method+' '+(e.auth==='oauth2'?'':'/api')+e.path+' — '+txt(e.title))}
  if([...select.options].some(o=>o.value===old))select.value=old;
  choose();
 }
@@ -48,10 +48,12 @@ function request(){
  }
  const q=JSON.parse(query.value||'{}');
  if(!q||Array.isArray(q)||typeof q!=='object'||Object.values(q).some(v=>typeof v==='object'))throw Error(t('Query phải là object JSON phẳng.','Query must be a flat JSON object.'));
- const url=new URL('/api'+path,origin);
+ const external=current.auth==='oauth2';
+ const url=external?new URL(path,'https://external.example.org'):new URL('/api'+path,origin);
  for(const [k,v] of Object.entries(q))if(k!=='area'){if(livePage&&!['limit','offset','status','q','open','order','model','after'].includes(k))throw Error(t('Query không được hỗ trợ trong console thật.','Query parameter not allowed in live console.'));url.searchParams.set(k,String(v));}
- if(current.auth!=='device')url.searchParams.set('area','training');
+ if(!external&&current.auth!=='device')url.searchParams.set('area','training');
  const headers={};
+ if(external)headers.Authorization='Bearer OAUTH_ACCESS_TOKEN';
  if(current.auth==='device')headers.Authorization='Bearer DEVICE_TOKEN';
  if(current.idempotency)headers['Idempotency-Key']=requestId;
  let payload;
@@ -69,7 +71,7 @@ function generate(){
  let code;
  if(language.value==='curl'){
    const parts=['curl --fail-with-body -X '+current.method+' '+shell(url.href)];
-   if(current.auth!=='device'&&current.auth!=='public')parts.push('-b '+shell('SESSION_COOKIE_FILE'));
+   if(!['device','public','oauth2'].includes(current.auth))parts.push('-b '+shell('SESSION_COOKIE_FILE'));
    for(const [k,v] of Object.entries(headers))parts.push('-H '+shell(k+': '+v));
    if(current.multipart)parts.push('-F '+shell('file=@example.pdf'),'-F '+shell('entity=LOT_ID'));
    else if(payload!==undefined)parts.push('--data-raw '+shell(JSON.stringify(payload)));
@@ -83,7 +85,7 @@ function generate(){
  }else{
    code='// Run from the authenticated application origin, not the docs domain.\n';
    if(current.multipart)code+="const form = new FormData();\nform.append('file', document.querySelector('input[type=file]').files[0]);\nform.append('entity', 'LOT_ID');\n";
-   code+='const response = await fetch('+JSON.stringify(url.pathname+url.search)+', {\n  method: '+JSON.stringify(current.method)+',\n  headers: '+JSON.stringify(headers,null,2)+',\n  credentials: "same-origin"'+(current.multipart?',\n  body: form':payload!==undefined?',\n  body: '+JSON.stringify(JSON.stringify(payload)): '')+'\n});\nconsole.log(response.status, await response.text());';
+   code+='const response = await fetch('+JSON.stringify(current.auth==='oauth2'?url.href:url.pathname+url.search)+', {\n  method: '+JSON.stringify(current.method)+',\n  headers: '+JSON.stringify(headers,null,2)+',\n  credentials: "same-origin"'+(current.multipart?',\n  body: form':payload!==undefined?',\n  body: '+JSON.stringify(JSON.stringify(payload)): '')+'\n});\nconsole.log(response.status, await response.text());';
  }
  output.textContent=code;el('status').textContent=t('Lệnh mẫu đã sẵn sàng.','Example request ready.');
  el('run').disabled=!(livePage&&current.live&&current.method==='GET');

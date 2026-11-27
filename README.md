@@ -5,7 +5,7 @@
 
 # DX-TRACE
 
-Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi.
+Nền tảng DX-OS mã nguồn mở để xây ứng dụng số và kiểm chứng quyết định nghiệp vụ. Trace Portal, Quality Portal và Maintenance App dùng chung danh tính, dữ liệu, workflow và Evidence Engine.
 
 [![CI](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/ngochieu1762005/dx_trace?label=release&color=1769e0)](https://github.com/ngochieu1762005/dx_trace/releases)
@@ -30,7 +30,7 @@ Quản lý kho thực phẩm, truy xuất lô hàng và điều phối thu hồi
 
 ## Evidence Engine · Business Decision Proof
 
-Bản nâng cấp **Unreleased** bổ sung hồ sơ quyết định nghiệp vụ: **ai quyết định, quyền nào được kiểm tra, phiên bản chính sách/quy trình, dữ liệu đầu vào và trạng thái trước–sau**. Snapshot được đóng dấu khi quyết định phát sinh; gói `recall-evidence.tar.gz` chứa manifest, quyết định, sự kiện, policy, BPMN, lineage, proof và chữ ký Ed25519 để kiểm tra offline.
+Bản **v0.1.0** bổ sung hồ sơ quyết định nghiệp vụ: **ai quyết định, quyền nào được kiểm tra, phiên bản chính sách/quy trình, dữ liệu đầu vào và trạng thái trước–sau**. Snapshot được đóng dấu khi quyết định phát sinh; gói `recall-evidence.tar.gz` chứa manifest, quyết định, sự kiện, policy, BPMN, lineage, proof và chữ ký Ed25519 để kiểm tra offline.
 
 Mở **Nhật ký → DX-TRACE Evidence Engine** để tải các quyết định đã ký trong đúng kho. Nguồn tin cậy phải là khóa công khai hoặc checkpoint nhận độc lập; hash hay khóa nằm trong chính gói bằng chứng không ngăn được việc viết lại toàn bộ gói. Giao diện có mẫu **RC-2026-001** và nút sửa kết quả kiểm định, được ghi nhãn **MÔ PHỎNG**. Kiểm chứng mẫu không thay thế nghiệm thu hệ thống thật.
 
@@ -132,6 +132,7 @@ Các bổ sung này được đóng gói trong [DX-TRACE v0.1.0](https://github.
 
 | Phạm vi | Tình trạng | Cách kiểm tra |
 | --- | --- | --- |
+| **Developer Platform v0.2.0** | OAuth2 v2, SDK, Evidence cho AppKit và App Studio | [Hướng dẫn API v2](docs/EXTERNAL-API-V2.md) |
 | **Release v0.1.0** | AppKit CLI, APISIX, Flowable, SSO ba portal, Evidence Engine và outbox | [Ghi chú phát hành](docs/releases/RELEASE_NOTES_v0.1.0.md) |
 | Release v0.0.7 | Gateway, workflow song song/timer và API OIDC tùy chọn; cần nghiệm thu VPS riêng | [Release v0.0.7](https://github.com/ngochieu1762005/dx_trace/releases/tag/v0.0.7) |
 | **Nhánh main** | Thêm quy trình kiểm định–cách ly, bảng việc cần làm, giao diện tác vụ song song và minh chứng nhật ký độc lập | [Lịch sử nâng cấp](https://github.com/ngochieu1762005/dx_trace/pull/17) · [CI main](https://github.com/ngochieu1762005/dx_trace/actions/workflows/ci.yml?query=branch%3Amain) |

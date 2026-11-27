@@ -51,6 +51,7 @@ import {escalateQuality} from '../../../lib/quality-bridge.ts';
 import {auditBundle,verifyAuditBundle} from '../../../lib/audit-proof.mjs';
 import {qualityRecall} from '../../../lib/quality-recall.ts';
 import {packages,portal,portalLinks} from '../../../lib/package-store.ts';
+import {appReview} from '../../../lib/app-review.ts';
 import {nativeReview} from '../../../lib/native-review.ts';
 import {evidenceRoute} from '../../../lib/evidence-store.ts';
 import {externalV2} from '../../../lib/external-v2.ts';
@@ -77,7 +78,7 @@ async function route(req:Request){try{
   }
   return json(result);
  }
- if(kind==='external-v2')return await externalV2(req);
+ if(kind==='external-v2'||kind==='external-v1')return await externalV2(req,kind==='external-v1');
  const c=await ctx(req);if(req.method!=='GET'){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin||req.headers.get('sec-fetch-site')==='cross-site')throw new DomainError('Nguồn yêu cầu không hợp lệ',403)}
  if(kind==='evidence')return await evidenceRoute(c,req,key,action);
  if(kind==='outbox'){
@@ -92,6 +93,7 @@ async function route(req:Request){try{
   }
   throw new DomainError('Không tìm thấy thao tác outbox',404);
  }
+ if(kind==='app-handover')return json(await appReview(c,req,key,action));
  if(kind==='quality-recalls')return json(await qualityRecall(c,req,key,action));
  if(kind==='packages')return json(await packages(c,req,key,action));
  if(kind==='portals'&&key&&!action&&req.method==='GET')return json(portal(c,key));

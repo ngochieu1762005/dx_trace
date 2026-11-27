@@ -156,3 +156,7 @@ Lưu thành file override riêng, thêm `-f` vào mọi lệnh Compose tương �
 | Migration lỗi | Giữ backup, dừng ghi; đọc lỗi Core, không xóa DB hoặc volume |
 | File 423 | Chưa quét sạch; kiểm dịch vụ scanner, không bỏ chặn để tải xuống |
 | 409 / 503 | Tải lại hồ sơ hoặc thử lại có giãn cách đúng mã yêu cầu; không tự bỏ version guard |
+
+### Cập nhật dự án Ubuntu đang chạy và bật ký Evidence
+
+Từ checkout chứa release, dùng `sudo bash selfhost/scripts/update-ubuntu.sh --with-flowable --with-evidence`. Script đọc tên project thực tế, giữ overlay đang dùng, sao lưu dữ liệu và kiểm tra khóa trước khi ngừng app. Khi bật ký lần đầu mà chưa có DX_EVIDENCE_KEY_FILE, khóa riêng được tạo dưới /opt/dx-trace-keys/<project>/, quyền 0600 và mount chỉ đọc vào Core. Lưu bản sao khóa ở nơi bảo mật riêng và phân phối public.pem qua kênh tin cậy. Nếu đã dùng khóa tùy chỉnh, cấu hình đường dẫn hiện có trong selfhost/.env trước khi nâng cấp. Sau cập nhật, chạy `sudo bash tools/restore-drill.sh /đường/dẫn/backup` để phục hồi thử SQLite, Keycloak và dump Flowable (nếu có) trong container cô lập.

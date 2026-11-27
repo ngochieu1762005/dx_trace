@@ -1,5 +1,7 @@
 # External API: Keycloak OIDC / OAuth 2.0 (read-only v1)
 
+[External API v2 · SDK, scopes, records, tasks and evidence](EXTERNAL-API-V2.md)
+
 DX-TRACE has **two different gateway boundaries**:
 
 1. Internal `gateway-api` for the browser app: app-to-Core credential
