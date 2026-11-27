@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 import json
 import sys
+import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
@@ -99,3 +100,23 @@ for lang, prefix, alternate in (("vi", "", "/en"), ("en", "/en", "")):
                 continue
             assert url.path.startswith(("/en/", "/docs/en/")) == (lang == "en"), (page, value)
 print("Verified navigation for six product pages in each language")
+
+# Every published language pair must have reciprocal sitemap entries.
+site = "https://dxtrace.hieuds.com"
+namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9",
+             "x": "http://www.w3.org/1999/xhtml"}
+alternates = {}
+for element in ET.parse(root/"sitemap.xml").findall("s:url", namespace):
+    url = element.findtext("s:loc", namespaces=namespace)
+    assert url not in alternates and url.startswith(site + "/"), url
+    assert (root/urlsplit(url).path.lstrip("/")/"index.html").is_file(), url
+    links = {link.attrib["hreflang"]: link.attrib["href"]
+             for link in element.findall("x:link[@rel='alternate']", namespace)}
+    assert set(links) == {"vi", "en"} and url in links.values(), url
+    alternates[url] = links
+for links in alternates.values():
+    assert all(alternates[target] == links for target in links.values()), links
+for entry in entries:
+    route = entry["path"].removesuffix("index.html")
+    assert alternates[site+"/docs/"+route]["en"] == site+"/docs/en/"+route
+print("Verified", len(alternates), "paired sitemap URLs")
