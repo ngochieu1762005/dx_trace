@@ -70,7 +70,36 @@ export default function Console(){
  const [showAlerts,setShowAlerts]=useState(false);
  const [s,setS]=useState<any>(null),[err,setErr]=useState(''),[unauth,setUnauth]=useState(false),[loading,setLoading]=useState(true),[page,setPage]=useState('overview'),[selected,setSelected]=useState(''),[query,setQuery]=useState(''),[filter,setFilter]=useState('all'),[modal,setModal]=useState<any>(null),[formError,setFormError]=useState(''),[busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[mobile,setMobile]=useState(false),[barcode,setBarcode]=useState(''),[product,setProduct]=useState<any>(null),[messages,setMessages]=useState<any[]>([]),[question,setQuestion]=useState(''),[answering,setAnswering]=useState(false);
  const load=useCallback(async()=>{try{setS(await api('state'));setErr('');setUnauth(false)}catch(e:any){if(e.status===401||e.status===403)setS(null);setErr(e.message);setUnauth(e.status===401)}finally{setLoading(false)}},[]);
- useEffect(()=>{load();const t=setInterval(()=>{if(document.visibilityState==='visible')load()},60000);return()=>clearInterval(t)},[load]);
+ useEffect(()=>{load()},[load]);
+ const historyId = modal?.sensor?.offset === 0 ? modal.sensor.id : undefined;
+ const demoHistory = Boolean(s?.demo && historyId?.startsWith('DX-SENSOR-'));
+ useEffect(()=>{
+   let active = true;
+   let pending = false;
+   async function refresh(){
+     if (!active || pending || document.visibilityState !== 'visible') return;
+     pending = true;
+     try {
+       await Promise.all([
+         load(),
+         historyId && !demoHistory && api('sensor-history/'+encodeURIComponent(historyId)+'?offset=0')
+           .then(data=>{
+             if (active) setModal((current:any)=>
+               current?.sensor?.id === historyId && current.sensor.offset === 0
+                 ? {...current,sensor:{...current.sensor,...data}}
+                 : current);
+           }).catch(()=>{/* Keep the last readings until the next successful refresh. */})
+       ]);
+     } finally { pending = false; }
+   }
+   const timer = window.setInterval(refresh,page==='devices' || historyId ? 5000 : 60000);
+   document.addEventListener('visibilitychange',refresh);
+   return ()=>{
+     active = false;
+     window.clearInterval(timer);
+     document.removeEventListener('visibilitychange',refresh);
+   };
+ },[load,page,historyId,demoHistory]);
  useEffect(()=>{const update=()=>{let [p,...parts]=(location.hash.slice(1)||'overview').split('/');const id=parts.join('/');if(![...nav.map(x=>x[0]),'settings'].includes(p as any))p='overview';setPage(p);setSelected(id||'');setQuery('');setFilter('all');setLotFocus('all');setMobile(false)};update();addEventListener('hashchange',update);return()=>removeEventListener('hashchange',update)},[]);
  const ready=Boolean(s);
  const previousPage=useRef('');
